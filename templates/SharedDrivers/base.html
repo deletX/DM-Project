@@ -1,0 +1,30 @@
+<html>
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <link href='//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    {% comment %}
+    <link rel="stylesheet" href="{% static 'css/blog.css' %}">
+    {% endcomment %}
+</head>
+<body>
+<div class="page-header">
+    <h1><a href="/">{% block header %}Django Girls Blog{% endblock %}</a></h1>
+</div>
+
+<div class="content container">
+    <div class="row">
+        <div class="col-md-8">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
+</div>
+<footer>
+    <div class="footer-copyright text-center py-3">© 2020 Copyright:
+        <a href="https://localhost:8000/"> localhost:800.com</a>
+    </div>
+</footer>
+</body>
+</html>

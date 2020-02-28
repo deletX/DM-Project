@@ -1,0 +1,33 @@
+{% extends 'SharedDrivers/base.html' %}
+
+{% block title %}
+    {{ event.name }}
+{% endblock %}
+
+{% block header %}
+    {{ event.name }}
+{% endblock %}
+
+{% block content %}
+    <span id="description"> {{ event.description }}</span>
+    <br><br><br>
+
+    <h4>Participants</h4>
+    {{ event.participant_set }}
+    {% comment %}
+    <ul>
+        {% for participant in event.participant_set %}
+            <li> {{ participant.name }}</li>
+        {% endfor %}
+    </ul>
+{% endcomment %}
+    <br><br><br>
+    <h4>Destination:</h4> {{ event.destination }}
+    <br><br><br>
+
+    <h4>Date and Time:</h4> {{ event.date_time }}
+    <br><br><br>
+
+
+    <h5>Owner: </h5>{{ event.owner }}
+{% endblock %}
