@@ -2,29 +2,32 @@ from django.contrib import admin
 from .models import Profile, Event, Participant, Car
 
 
+class ParticipantInline(admin.StackedInline):
+    model = Participant
+    fields = ['user', 'car', 'starting_pos']
+    extra = 3
+
+
 class EventAdmin(admin.ModelAdmin):
+    inlines = [ParticipantInline]
     fields = ['name', 'description', 'destination', 'date_time', 'owner']
     list_filter = ['date_time']
     search_fields = ['name']
 
 
-class CarAdmin(admin.ModelAdmin):
+class CarInline(admin.StackedInline):
+    model = Car
     fields = ['name', 'tot_avail_seats', 'consumption', 'fuel']
-    list_filter = ['fuel', 'tot_avail_seats']
+    extra = 2
 
 
 class ProfileAdmin(admin.ModelAdmin):
     fields = ['score']
-
-
-class ParticipantAdmin(admin.ModelAdmin):
-    fields = ['car', 'starting_pos', 'event']
-    search_fields = ['event', 'user']
+    inlines = [CarInline]
 
 
 admin.site.register(Event, EventAdmin)
-admin.site.register(Car, CarAdmin)
+
 admin.site.register(Profile, ProfileAdmin)
-admin.site.register(Participant, ParticipantAdmin)
 
 # Register your models here.

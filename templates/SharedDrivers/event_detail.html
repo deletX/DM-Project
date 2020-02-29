@@ -13,7 +13,7 @@
     <br><br><br>
 
     <h4>Participants</h4>
-    {{ event.participant_set }}
+    {{ event.participant_set.all }}
     {% comment %}
     <ul>
         {% for participant in event.participant_set %}

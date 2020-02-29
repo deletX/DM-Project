@@ -6,6 +6,14 @@ from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 
 
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    score = models.FloatField(default=0)
+
+    def __str__(self):
+        return self.user.username
+
+
 class Car(models.Model):
     class FuelChoices(models.IntegerChoices):
         PETROL = 1
@@ -16,47 +24,47 @@ class Car(models.Model):
     name = models.CharField(max_length=50)
     tot_avail_seats = models.IntegerField(validators=[MinValueValidator(2), MaxValueValidator(9)])
     consumption = models.FloatField(default=10.0)
+    # l/100km
+    fuel = models.SmallIntegerField(choices=FuelChoices.choices, default=1)
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
-    # l/100km
-    fuel = models.SmallIntegerField(choices=FuelChoices.choices, default=1)
-
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-
-
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    score = models.FloatField(default=0)
-
-    def __str__(self):
-        return self.user.username
 
 
 class Event(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
     description = models.TextField(max_length=2000)
     destination = models.PointField()
     date_time = models.DateTimeField(default=timezone.now)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner = models.ForeignKey(Profile, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ['date_time', 'destination']
 
     def __str__(self):
         return self.name
 
 
 class Participant(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE)
     car = models.ForeignKey(Car, on_delete=models.CASCADE, null=True, blank=True)
     starting_pos = models.PointField()
     pickup_index = models.SmallIntegerField(default=-1)
     expense = models.FloatField(default=-1)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
 
+    class Meta:
+        unique_together = ['user', 'event']
+
     def clean_fields(self, exclude=None):
-        if self.car not in self.user.car_set:
-            raise ValidationError(_('Car should be one of the user\'s'))
+        # print(self.car_id)
+        # print(self.car.pk)
+        if self.car:
+            if not self.user.car_set.filter(pk=self.car.id).exists():
+                raise ValidationError(_('Car should be one of the user\'s'))
 
     def __str__(self):
-        return self.user.username
+        return self.user.user.username
 
 # Create your models here.
