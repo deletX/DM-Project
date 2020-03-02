@@ -13,16 +13,15 @@
     <br><br><br>
 
     <h4>Participants</h4>
-    {{ event.participant_set.all }}
-    {% comment %}
+
     <ul>
-        {% for participant in event.participant_set %}
-            <li> {{ participant.name }}</li>
+        {% for participant in event.participant_set.all %}
+            <li> {{ participant.user }}</li>
         {% endfor %}
     </ul>
-{% endcomment %}
+
     <br><br><br>
-    <h4>Destination:</h4> {{ event.destination }}
+    <h4>Destination:</h4> {{ event.adress }} <br> {{ event.destination }}
     <br><br><br>
 
     <h4>Date and Time:</h4> {{ event.date_time }}
