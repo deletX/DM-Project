@@ -60,3 +60,17 @@ INSTALLED_APPS = [
     'django.contrib.gis'
 ]
 ```
+
+## Back Ground Tasks
+Sono necessari __celery__, il motore che esegue in background i tasks e __redis__ che si occupa di gestire le comunicazioni tra django e celery.
+
+Package necessari li trovi in `requirements.txt`
+###redis
+Per installare redis bisogna installare il server `sudo apt install redis-server`
+
+Bisogna lanciare redis-server prima di poter lanciare tasks tramite  `redis-server`
+
+Nel caso la porta di default `6379` fosse occupata si può selezionare un'altra porta con `--port 6380`
+
+###celery
+Per installare celery sono sufficienti i packages e le impostazioni messe nei vari files.

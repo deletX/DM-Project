@@ -38,9 +38,10 @@ INSTALLED_APPS = [
 
     # gis
     'django.contrib.gis',
-    
+
     # our apps
     'SharedDrivers.apps.ShareddriversConfig',
+    'sharing_calc.apps.SharingCalcConfig',
 ]
 
 MIDDLEWARE = [
@@ -124,3 +125,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# celery
+CELERY_BROKER_URL = 'redis://localhost:6380'
+CELERY_RESULT_BACKEND = 'redis://localhost:6380'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'

@@ -10,7 +10,7 @@ class ParticipantInline(admin.StackedInline):
 
 class EventAdmin(admin.ModelAdmin):
     inlines = [ParticipantInline]
-    fields = ['name', 'description', 'destination', 'date_time', 'owner']
+    fields = ['name', 'description', 'address', 'destination', 'date_time', 'owner']
     list_filter = ['date_time']
     search_fields = ['name']
 

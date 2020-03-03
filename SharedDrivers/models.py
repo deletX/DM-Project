@@ -49,7 +49,8 @@ class Event(models.Model):
 
 class Participant(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    car = models.ForeignKey(Car, on_delete=models.CASCADE, null=True, blank=True)
+    car = models.ForeignKey(Car, on_delete=models.CASCADE, null=True, blank=True, default=None)
+    starting_address = models.CharField(max_length=100, blank=True)
     starting_pos = models.PointField()
     pickup_index = models.SmallIntegerField(default=-1)
     expense = models.FloatField(default=-1)

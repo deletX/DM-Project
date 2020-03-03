@@ -1,2 +1,6 @@
 Django
 psycopg2
+Celery
+redis
+celery[redis]
+geopy

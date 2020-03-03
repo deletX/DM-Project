@@ -20,4 +20,5 @@ from django.conf.urls import include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('events/', include('SharedDrivers.urls')),
+    path('testrun/', include('sharing_calc.urls')),
 ]
