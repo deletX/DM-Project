@@ -90,3 +90,5 @@ db.sqlite3
 
 # custom
 /venv/
+
+#/init_test/settings.py

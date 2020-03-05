@@ -22,7 +22,7 @@ class CarInline(admin.StackedInline):
 
 
 class ProfileAdmin(admin.ModelAdmin):
-    fields = ['score']
+    fields = ['score', 'user']
     inlines = [CarInline]
 
 

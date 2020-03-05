@@ -34,9 +34,10 @@ Per creare un utente:
 ```
 sudo -i -u postgres
 createdb tete_c
-psql django
+psql tete_c
 CREATE USER django WITH PASSWORD 'django_tete_c';
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO django;
+CREATE EXTENSION postgis;
 ```
 
 Bisognerà modificare le impostazioni in `settings.py`

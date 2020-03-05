@@ -1,6 +1,9 @@
+from itertools import count
 from celery import shared_task
 import logging
+import datetime
 from SharedDrivers.models import Participant, Event, Car, Profile
+from django.contrib.gis.db import models
 from django.contrib.gis.db.models import Q
 from django.contrib.gis.geos import Point
 from geopy.distance import distance
@@ -13,7 +16,7 @@ def test_background_task():
     test.driver_selection()
 
 
-class Algorithm():
+class Algorithm:
     class Participant:
         def __init__(self, id, car, starting_pos):
             self.id = id
@@ -22,6 +25,7 @@ class Algorithm():
             self.pickup_index = -1
             self.expense = 0
             self.score = 0
+            # self.is_passenger = False
 
         def save(self):
             real_participant = Participant.objects.get(self.id)
@@ -37,9 +41,10 @@ class Algorithm():
     def __init__(self, event_id):
         self.event_id = event_id
         self.destination = Event.objects.get(id=event_id).destination
-        self.participant_groups = [self.get_data() for i in range(0, 3)]
+        self.participant_groups = [self.get_data() for i in range(0, 3)]  # [[p1,p2,...][p1,p2,...][p1,p2,...]]
         self.groups_score = [0] * 3
 
+        # debug
         logging.info(
             "Algorithm.__init__  event_id: {}  destination: {}  participant_groups: {}  groups_score: {}".format(
                 event_id, self.destination, self.participant_groups, self.groups_score))
@@ -189,9 +194,46 @@ class Algorithm():
             data_1[i].score += self.participant_groups[0][i].score
             data_2[i].score += self.participant_groups[0][i].score
 
+        data_1.sort(key=lambda x: x.score, reverse=True)
+        data_2.sort(key=lambda x: x.score, reverse=True)
+
         self.pick_participants(data_1)
         self.pick_participants(data_2)
 
     def driver_selection(self):
         self.first_group()
         self.second_and_third_group()
+
+    def mock_APCA(self):
+        
+        self.driver_selection()
+        drivers = self.get_drivers(self.participant_groups[0])
+
+        # a tutti i partecipanti metto lo score = all'id così sono tutti diversi, mentre l'expense dipende dalla macchina così sarà uguale per ogni macchina ma diverso tra le macchine
+        # inizializzo i guidatori con pickup_index a 0
+        for participant in self.participant_groups[0]:
+            participant.score = participant.id
+            if participant.car is not None:
+                participant.pickup_index = 0
+                participant.expense = participant.car.consumption * 4.2
+        # scorrendo i guidatori metto riempio le macchine rispettando la disponibilità di posti, i passeggeri sono presi in ordine
+        # (il primo guidatore avrà i primi passeggeri fino ad esaurimento posti, il secondo avrà i successivi e così via)
+        for driver in drivers:
+            for i in range(driver.car.tot_avail_seats - 1):
+                for participant in self.participant_groups[0]:
+                    if participant.car is None:
+                        participant.car = driver.car
+                        participant.expense = driver.expense
+                        participant.pickup_index = i + 1
+                        break
+        for participant in self.participant_groups[0]:
+            participant.save()
+        # metto score diversi in ogni gruppo
+        # metto i dati come servono
+        # salvo un gruppo
+        # expense uguali per ogni macchina ma diversi tra loro
+        pass
+
+    def APCA(self):
+        # TODO
+        pass
