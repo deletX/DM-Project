@@ -2,6 +2,7 @@ from itertools import count
 from celery import shared_task
 import logging
 import datetime
+import time
 from SharedDrivers.models import Participant, Event, Car, Profile
 from django.contrib.gis.db import models
 from django.contrib.gis.db.models import Q
@@ -205,7 +206,8 @@ class Algorithm:
         self.second_and_third_group()
 
     def mock_APCA(self):
-        
+
+        time1 = datetime.datetime.now()
         self.driver_selection()
         drivers = self.get_drivers(self.participant_groups[0])
 
@@ -228,6 +230,11 @@ class Algorithm:
                         break
         for participant in self.participant_groups[0]:
             participant.save()
+
+        time2 = datetime.datetime.now()
+        timedelta = time2 - time1
+        if timedelta.seconds < 120:
+            time.sleep(120 - timedelta)
         # metto score diversi in ogni gruppo
         # metto i dati come servono
         # salvo un gruppo
