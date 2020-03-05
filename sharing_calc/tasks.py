@@ -50,6 +50,10 @@ class Algorithm:
             "Algorithm.__init__  event_id: {}  destination: {}  participant_groups: {}  groups_score: {}".format(
                 event_id, self.destination, self.participant_groups, self.groups_score))
 
+    def __str__(self):
+        return "event_id: {}  destination: {}  participant_groups: {}  groups_score: {}".format(
+            event_id, self.destination, self.participant_groups, self.groups_score)
+
     def get_drivers(self, data):
         drivers = []
         logging.info("get_drivers - data:{}".format(data))
