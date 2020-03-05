@@ -244,3 +244,11 @@ class Algorithm:
     def APCA(self):
         # TODO
         pass
+
+    def drivers_manager_algorithm(self):
+        self.driver_selection()
+        self.APCA()
+
+    def mock_drivers_manager_algorithm(self):
+        self.driver_selection()
+        self.mock_APCA()
