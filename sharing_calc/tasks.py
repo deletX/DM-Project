@@ -17,6 +17,14 @@ def test_background_task():
     test.driver_selection()
 
 
+@shared_task
+def mock_algorithm_task(event_id):
+    event = Event.objects.get(id=event_id)
+    # if event.status == Event.EventStatusChoices.JOINABLE:
+    algorithm = Algorithm(event_id)
+    algorithm.mock_drivers_manager_algorithm()
+
+
 class Algorithm:
     class Participant:
         def __init__(self, id, car, starting_pos):
@@ -29,11 +37,14 @@ class Algorithm:
             # self.is_passenger = False
 
         def save(self):
-            real_participant = Participant.objects.get(self.id)
-            real_participant.car = self.car.id
+            real_participant = Participant.objects.get(id=self.id)
+            real_participant.car = Car.objects.get(id=self.car)
             real_participant.pickup_index = self.pickup_index
             real_participant.expense = self.expense
             real_participant.save()
+
+        def __str__(self):
+            return "Participant({}), car:{}".format(self.id, self.car)
 
     def get_data(self):
         return [self.Participant(participant.id, participant.car_id, participant.starting_pos) for participant in
@@ -52,11 +63,11 @@ class Algorithm:
 
     def __str__(self):
         return "event_id: {}  destination: {}  participant_groups: {}  groups_score: {}".format(
-            event_id, self.destination, self.participant_groups, self.groups_score)
+            self.event_id, self.destination, self.participant_groups, self.groups_score)
 
     def get_drivers(self, data):
         drivers = []
-        logging.info("get_drivers - data:{}".format(data))
+        # logging.info("get_drivers - data:{}".format(data))
         for participant in data:
             if participant.car is not None:
                 drivers.append(participant)
@@ -160,11 +171,15 @@ class Algorithm:
                 driver.score += (score - min_) / max_
 
     def pick_participants(self, data):
+
         n_of_participants = len(data)
+
         for participant in data:
             if participant.car is not None:
                 if n_of_participants > 0:
-                    n_of_participants = n_of_participants - Car.objects.get(id=participant.car).tot_avail_seats
+                    car = Car.objects.get(id=participant.car)
+                    n_of_participants = n_of_participants - car.tot_avail_seats
+
                 else:
                     participant.car = None
 
@@ -212,7 +227,7 @@ class Algorithm:
     def mock_APCA(self):
 
         time1 = datetime.datetime.now()
-        self.driver_selection()
+
         drivers = self.get_drivers(self.participant_groups[0])
 
         # a tutti i partecipanti metto lo score = all'id così sono tutti diversi, mentre l'expense dipende dalla macchina così sarà uguale per ogni macchina ma diverso tra le macchine
@@ -221,24 +236,24 @@ class Algorithm:
             participant.score = participant.id
             if participant.car is not None:
                 participant.pickup_index = 0
-                participant.expense = participant.car.consumption * 4.2
+                consumption = Car.objects.get(id=participant.car).consumption
+                participant.expense = consumption * 4.2
         # scorrendo i guidatori metto riempio le macchine rispettando la disponibilità di posti, i passeggeri sono presi in ordine
         # (il primo guidatore avrà i primi passeggeri fino ad esaurimento posti, il secondo avrà i successivi e così via)
         for driver in drivers:
-            for i in range(driver.car.tot_avail_seats - 1):
+            tot_avail_seats = Car.objects.get(id=driver.car).tot_avail_seats
+            for i in range(tot_avail_seats - 1):
                 for participant in self.participant_groups[0]:
                     if participant.car is None:
                         participant.car = driver.car
                         participant.expense = driver.expense
                         participant.pickup_index = i + 1
                         break
-        for participant in self.participant_groups[0]:
-            participant.save()
 
         time2 = datetime.datetime.now()
         timedelta = time2 - time1
         if timedelta.seconds < 120:
-            time.sleep(120 - timedelta)
+            time.sleep(30 - timedelta.seconds)
         # metto score diversi in ogni gruppo
         # metto i dati come servono
         # salvo un gruppo
@@ -254,5 +269,19 @@ class Algorithm:
         self.APCA()
 
     def mock_drivers_manager_algorithm(self):
+        event = Event.objects.get(id=self.event_id)
+        event.status = Event.EventStatusChoices.COMPUTING
+        event.save()
+
+        logging.info("Starting Driver Selection")
         self.driver_selection()
+
+        logging.info("Starting Mock APCA")
         self.mock_APCA()
+
+        logging.info("Saving result into DB")
+        for participant in self.participant_groups[0]:
+            participant.save()
+
+        event.status = Event.EventStatusChoices.COMPUTED
+        event.save()

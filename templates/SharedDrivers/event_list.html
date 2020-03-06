@@ -9,30 +9,38 @@
 {% endblock %}
 
 {% block content %}
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th scope="col">id</th>
-            <th scope="col">Name</th>
-            <th scope="col">Date</th>
-            <th scope="col">Destination</th>
-            <th scope="col">Owner</th>
-            <th scope="col"/>
-        </tr>
-        </thead>
-        {% for event in event_list %}
+
+    {% for value,i in range.items %}
+        <h2>Status: {{ value }}</h2>
+        <table class="table table-striped">
+            <thead>
             <tr>
-                <th scope="row!">{{ event.id }}</th>
-                <td> {{ event.name }}</td>
-                <td> {{ event.date_time | date }}</td>
-                <td> {{ event.address }}</td>
-                <td> {{ event.owner }}</td>
-                <td>
-                    <form action="{% url 'event-detail' event.id %}">
-                        <button type="submit" class="btn btn-info btn-sm">Details</button>
-                    </form>
-                </td>
+                <th scope="col">id</th>
+                <th scope="col">Name</th>
+                <th scope="col">Date</th>
+                <th scope="col">Destination</th>
+                <th scope="col">Owner</th>
+                <th scope="col"/>
             </tr>
-        {% endfor %}
-    </table>
+            </thead>
+            {% for event in event_list %}
+                {% if event.status == i %}
+                    <tr>
+                        <th scope="row!">{{ event.id }}</th>
+                        <td> {{ event.name }}</td>
+                        <td> {{ event.date_time | date }}</td>
+                        <td> {{ event.address }}</td>
+                        <td> {{ event.owner }}</td>
+                        <td>
+                            <form action="{% url 'events:event-detail' event.id %}">
+                                <button type="submit" class="btn btn-info btn-sm">Details</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </table>
+        <br><br><br><br><br>
+    {% endfor %}
+
 {% endblock %}

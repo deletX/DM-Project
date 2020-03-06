@@ -4,3 +4,5 @@ Celery
 redis
 celery[redis]
 geopy
+djangorestframework
+social-auth-app-django

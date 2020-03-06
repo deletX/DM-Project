@@ -16,9 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import include
+from django.contrib.auth.views import LogoutView
+from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('events/', include('SharedDrivers.urls')),
-    path('testrun/', include('sharing_calc.urls')),
+    path('events/', include(('SharedDrivers.urls', 'sharedDrivers'), namespace='events')),
+    path('api/v0.1/', include('api.urls')),
+    path('', include('social_django.urls', namespace='social')),
+    path('logout/', LogoutView.as_view(), {'next_page': settings.LOGOUT_REDIRECT_URL}, name='logout'),
 ]

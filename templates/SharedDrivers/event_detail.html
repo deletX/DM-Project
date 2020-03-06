@@ -9,24 +9,61 @@
 {% endblock %}
 
 {% block content %}
-    <span id="description"> {{ event.description }}</span>
-    <br><br><br>
+    {% if event.status == 1 %}
+        <span id="description"> {{ event.description }}</span>
+        <br><br><br>
 
-    <h4>Participants</h4>
+        <h4>Participants</h4>
 
-    <ul>
-        {% for participant in event.participant_set.all %}
-            <li> {{ participant.user }}</li>
-        {% endfor %}
-    </ul>
+        <ul>
+            {% for participant in event.participant_set.all %}
+                <li> {{ participant.user }}</li>
+            {% endfor %}
+        </ul>
 
-    <br><br><br>
-    <h4>Destination:</h4> {{ event.adress }} <br> {{ event.destination }}
-    <br><br><br>
+        <br><br><br>
+        <h4>Destination:</h4> {{ event.adress }} <br> {{ event.destination }}
+        <br><br><br>
 
-    <h4>Date and Time:</h4> {{ event.date_time }}
-    <br><br><br>
+        <h4>Date and Time:</h4> {{ event.date_time }}
+        <br><br><br>
 
 
-    <h5>Owner: </h5>{{ event.owner }}
+        <h5>Owner: </h5>{{ event.owner }}
+
+        {% if user.id == event.owner.id %}
+            <form action="{% url 'events:calc-event' event.id %}">
+                <button type="submit" class="btn btn-info btn-sm">Run calc</button>
+            </form>
+        {% endif %}
+    {% elif event.status == 2 %}
+        <h2> Event under computation </h2>
+        <h4>Destination:</h4> {{ event.adress }} <br> {{ event.destination }}
+        <br><br><br>
+
+        <h4>Date and Time:</h4> {{ event.date_time }}
+        <br><br><br>
+
+
+    {% elif event.status == 3 %}
+        <span id="description"> {{ event.description }}</span>
+        <br><br><br>
+
+        <h4>Participants</h4>
+
+        <ul>
+            {% for participant in event.participant_set %}
+                <li> {{ participant.user }} : {{ participant.car }}, pickup #: {{ participant.pickup_index }},
+                    expense: {{ participant.expense }}€
+                </li>
+            {% endfor %}
+        </ul>
+
+        <br><br><br>
+        <h4>Destination:</h4> {{ event.adress }} <br> {{ event.destination }}
+        <br><br><br>
+
+        <h4>Date and Time:</h4> {{ event.date_time }}
+        <br><br><br>
+    {% endif %}
 {% endblock %}

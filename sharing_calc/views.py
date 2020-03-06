@@ -1,9 +1,6 @@
 from django.shortcuts import render
-from .tasks import test_background_task
-
-
-def run_test_view(request):
-    test_background_task.delay()
-    return render(request, template_name='sharing_calc/test_template.html')
+from .tasks import mock_algorithm_task
+from django.shortcuts import redirect
+import logging
 
 # Create your views here .

@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
+from django.contrib.gis.geos import Point
 
 
 class Profile(models.Model):
@@ -33,15 +34,24 @@ class Car(models.Model):
 
 
 class Event(models.Model):
+    class EventStatusChoices(models.IntegerChoices):
+        JOINABLE = 1
+        COMPUTING = 2
+        COMPUTED = 3
+
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(max_length=2000)
-    address = models.CharField(max_length=100, blank=True)
-    destination = models.PointField()
+    address = models.CharField(max_length=100)
+    destination = models.PointField(default=Point(44.629418, 10.948245))
     date_time = models.DateTimeField(default=timezone.now)
     owner = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    status = models.SmallIntegerField(choices=EventStatusChoices.choices, default=1)
 
     class Meta:
         unique_together = ['date_time', 'destination']
+
+    def participant_count(self):
+        return self.participant_set.count()
 
     def __str__(self):
         return self.name

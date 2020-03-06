@@ -77,3 +77,7 @@ Nel caso la porta di default `6379` fosse occupata si può selezionare un'altra 
 Per installare celery sono sufficienti i packages e le impostazioni messe nei vari files.
 
 Per far partire celery, prima di lanciare tasks: `celery worker -A init_test --loglevel=info`
+
+
+#Social Auth
+Bisogna fare la migrazione dopo aver installato i pacchetti
