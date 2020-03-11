@@ -5,10 +5,11 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 from django.contrib.gis.geos import Point
+from django.db.models.signals import post_save
 
 
 def validate_date_not_in_past(date):
-    if date < timezone.now().date():
+    if date.date() < timezone.now().date():
         raise ValidationError("Date cannot be in the past")
 
 
@@ -84,4 +85,11 @@ class Participant(models.Model):
     def __str__(self):
         return self.user.user.username
 
-# Create your models here.
+
+def create_profile(sender, **kwargs):
+    user = kwargs["instance"]
+    if kwargs["created"]:
+        profile = Profile.objects.create(user=user, score=0)
+
+
+post_save.connect(create_profile, sender=User)

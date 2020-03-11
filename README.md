@@ -81,3 +81,14 @@ Per far partire celery, prima di lanciare tasks: `celery worker -A init_test --l
 
 #Social Auth
 Bisogna fare la migrazione dopo aver installato i pacchetti
+
+
+#Authentication REST
+First get the token through google oauth through the front-end (no-idea how yet, but tested with oauth2 playground).
+
+do a POST on `/api/v0.1/auth/convert-token` with data: `grant_type=convert_token&client_id=p4qU0b0ACHWcjajdkYrpihJykmQTW2TELTQupwXx&client_secret=zT15kpJMkkC5b6BtZhSc9VjmVPHVLuCedk3J2h0J29YtRWOkjTwbCQjfVwCP8OdZs26h9s4E6uidZJ9hf6d0AsJr2L2j1z8wQ1QWgihEEvlfDxXdBtPH2mXcZGhWsHPl&backend=google-oauth2&token=<token>`
+
+This will return a `{"access_token":"<app-access-token>","expires_in":36000,"token_type":"Bearer","scope":"read write","refresh_token":"<app-refresh-token>"}`
+
+Access token can be used to provide authorization including `Authorization: Bearer <app-access-token>` header in the request.
+

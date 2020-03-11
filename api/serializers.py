@@ -17,7 +17,7 @@ class ParticipantSerializer(serializers.ModelSerializer):
 class EventSerializerShallow(serializers.ModelSerializer):
     participant_count = serializers.IntegerField(read_only=True, required=False)
     owner = serializers.PrimaryKeyRelatedField(required=False, queryset=Profile.objects.all())
-    destination = serializers.ReadOnlyField(required=False)
+    destination = serializers.CharField(read_only=True, required=False)
 
     class Meta:
         model = Event
@@ -28,8 +28,8 @@ class EventSerializerShallow(serializers.ModelSerializer):
 class EventSerializerDeep(serializers.ModelSerializer):
     participant_set = ParticipantSerializer(many=True, read_only=True)
     owner = serializers.PrimaryKeyRelatedField(required=False, queryset=Profile.objects.all())
-    destination = serializers.ReadOnlyField(required=False)
-    
+    destination = serializers.CharField(read_only=True, required=False)
+
     class Meta:
         model = Event
         fields = ['id', 'name', 'description', 'address', 'destination', 'date_time', 'status', 'owner',

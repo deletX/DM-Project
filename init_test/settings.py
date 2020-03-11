@@ -169,7 +169,12 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '283420556311-30r26g3mtt5odkqmit6u7onam3qrul16.a
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'KsSTbOaPDbxEbEGqkcyWl3-v'
 
 LOGIN_URL = '/login/google-oauth2/'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/events'
 LOGOUT_REDIRECT_URL = '/events'
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
-SOCIAL_AUTH_POSTGRES_JSONFIELD = True
+
+# Define SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE to get extra permissions from Google.
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
+    'https://www.googleapis.com/auth/userinfo.email',
+    'https://www.googleapis.com/auth/userinfo.profile',
+]
