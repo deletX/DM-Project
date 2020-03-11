@@ -7,6 +7,11 @@ from django.core.exceptions import ValidationError
 from django.contrib.gis.geos import Point
 
 
+def validate_date_not_in_past(date):
+    if date < timezone.now().date():
+        raise ValidationError("Date cannot be in the past")
+
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     score = models.FloatField(default=0)
@@ -24,7 +29,7 @@ class Car(models.Model):
 
     name = models.CharField(max_length=50)
     tot_avail_seats = models.IntegerField(validators=[MinValueValidator(2), MaxValueValidator(9)])
-    consumption = models.FloatField(default=10.0)
+    consumption = models.FloatField(default=10.0, validators=[MinValueValidator(0)])
     # l/100km
     fuel = models.SmallIntegerField(choices=FuelChoices.choices, default=1)
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
@@ -43,7 +48,7 @@ class Event(models.Model):
     description = models.TextField(max_length=2000)
     address = models.CharField(max_length=100)
     destination = models.PointField(default=Point(44.629418, 10.948245))
-    date_time = models.DateTimeField(default=timezone.now)
+    date_time = models.DateTimeField(default=timezone.now, validators=[validate_date_not_in_past])
     owner = models.ForeignKey(Profile, on_delete=models.CASCADE)
     status = models.SmallIntegerField(choices=EventStatusChoices.choices, default=1)
 

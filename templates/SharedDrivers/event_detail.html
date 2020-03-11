@@ -52,7 +52,7 @@
         <h4>Participants</h4>
 
         <ul>
-            {% for participant in event.participant_set %}
+            {% for participant in event.participant_set.all %}
                 <li> {{ participant.user }} : {{ participant.car }}, pickup #: {{ participant.pickup_index }},
                     expense: {{ participant.expense }}€
                 </li>

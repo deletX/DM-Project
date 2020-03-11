@@ -45,6 +45,8 @@ INSTALLED_APPS = [
 
     # social auth
     'social_django',
+    'oauth2_provider',
+    'rest_framework_social_oauth2',
 
     # api
     'rest_framework',
@@ -143,6 +145,10 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
 
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',  # django-oauth-toolkit >= 1.0.0
+        'rest_framework_social_oauth2.authentication.SocialAuthentication',
+    ],
     'DEFAULT_PERMISSION_CLASSES': [
         # This has to change when implementing authentication.
         'rest_framework.permissions.AllowAny',
@@ -150,15 +156,20 @@ REST_FRAMEWORK = {
 }
 
 AUTHENTICATION_BACKENDS = (
+
     'social_core.backends.google.GoogleOAuth2',
+    'rest_framework_social_oauth2.backends.DjangoOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '283420556311-30r26g3mtt5odkqmit6u7onam3qrul16.apps.googleusercontent.com'
+DRFSO2_PROPRIETARY_BACKEND_NAME = "Google"
+DRFSO2_URL_NAMESPACE = "rest-auth"
 
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '283420556311-30r26g3mtt5odkqmit6u7onam3qrul16.apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'KsSTbOaPDbxEbEGqkcyWl3-v'
 
 LOGIN_URL = '/login/google-oauth2/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/events'
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
+SOCIAL_AUTH_POSTGRES_JSONFIELD = True

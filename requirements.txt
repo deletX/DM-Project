@@ -6,3 +6,5 @@ celery[redis]
 geopy
 djangorestframework
 social-auth-app-django
+django-rest-framework-social-oauth2
+django-oauth-toolkit

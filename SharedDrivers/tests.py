@@ -4,8 +4,12 @@ from django.core.exceptions import ValidationError
 
 
 class ParticipantTestCase(TestCase):
+    # TODO participant test
+    pass
 
-    def test_participant_car_is_one_of_theirs(self):
-        participant = Participant()
-        self.assertRaises(ValidationError, participant.clean_fields())
+
+class EventTestCase(TestCase):
+    # TODO Event test
+    pass
+
 # Create your tests here.
