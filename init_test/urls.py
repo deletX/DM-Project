@@ -18,11 +18,13 @@ from django.urls import path
 from django.conf.urls import include
 from django.contrib.auth.views import LogoutView
 from django.conf import settings
+from django.views.generic import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('events/', include(('SharedDrivers.urls', 'sharedDrivers'), namespace='events')),
     path('api/v0.1/', include('api.urls')),
-    path('', include('social_django.urls', namespace='social')),
+    path('', TemplateView.as_view(template_name='react/index.html')),
+    path('social/', include('social_django.urls', namespace='social')),
     path('logout/', LogoutView.as_view(), {'next_page': settings.LOGOUT_REDIRECT_URL}, name='logout'),
 ]

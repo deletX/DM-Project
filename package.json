@@ -1,0 +1,42 @@
+{
+  "name": "shared_drivers_react",
+  "version": "0.0.1",
+  "dependencies": {
+    "es6-promise": "^4.2.8",
+    "isomorphic-fetch": "^2.2.1",
+    "lodash": "^4.17.15",
+    "prop-types": "^15.7.2",
+    "radium": "^0.26.0",
+    "react-cookie": "^4.0.3",
+    "react-dom": "^16.13.0",
+    "react-redux": "^6.0.1",
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0",
+    "uglifyjs-webpack-plugin": "^2.2.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.8.7",
+    "@babel/preset-env": "^7.8.7",
+    "@babel/preset-es2015": "^7.0.0-beta.53",
+    "@babel/preset-react": "^7.8.3",
+    "babel-loader": "^8.0.6",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "eslint": "^6.8.0",
+    "react": "^16.13.0",
+    "react-hot-loader": "^4.5.3",
+    "redux-devtools": "^3.5.0",
+    "sockjs": "^0.3.20",
+    "webpack": "^4.42.0",
+    "webpack-bundle-tracker": "^0.4.3",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3"
+  },
+  "main": "webpack.base.config.js",
+  "scripts": {
+    "dev": "webpack-dev-server --config webpack.local.config.js",
+    "build": "webpack --mode production --config webpack.prod.config.js"
+  },
+  "author": "dmproject",
+  "license": "ISC",
+  "description": "tete_c react client-side presentation"
+}

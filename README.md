@@ -92,3 +92,10 @@ This will return a `{"access_token":"<app-access-token>","expires_in":36000,"tok
 
 Access token can be used to provide authorization including `Authorization: Bearer <app-access-token>` header in the request.
 
+
+#REACT
+
+eseguire il comando `npm install` 
+
+e `npm run dev` per far partire il server che si occupa dell'*hot reload*; sostanzialmente è possibile lavorare sulle 
+pagine web con REACT ed al salvataggio le pagine che sono mostrate nel browser si refreshano atuomaticamente

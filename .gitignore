@@ -92,3 +92,5 @@ db.sqlite3
 /venv/
 
 #/init_test/settings.py
+/react/JS/node_modules/
+/node_modules/
