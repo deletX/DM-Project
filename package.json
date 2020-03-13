@@ -2,13 +2,16 @@
   "name": "shared_drivers_react",
   "version": "0.0.1",
   "dependencies": {
+    "bootstrap": "^4.4.1",
     "es6-promise": "^4.2.8",
     "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.17.15",
     "prop-types": "^15.7.2",
     "radium": "^0.26.0",
+    "react-bootstrap": "^1.0.0-beta.17",
     "react-cookie": "^4.0.3",
     "react-dom": "^16.13.0",
+    "react-google-login": "^5.1.2",
     "react-redux": "^6.0.1",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
@@ -38,5 +41,6 @@
   },
   "author": "dmproject",
   "license": "ISC",
-  "description": "tete_c react client-side presentation"
+  "description": "tete_c react client-side presentation",
+  "proxy": "http://localhost:8000"
 }

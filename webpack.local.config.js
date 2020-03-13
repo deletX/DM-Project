@@ -6,7 +6,7 @@ var config = require('./webpack.base.config.js');
 config.entry.App = [
     'webpack-dev-server/client?http://localhost:3000',
     'webpack/hot/only-dev-server',
-    './src/components/App.jsx',
+    './src/App.jsx',
 ];
 
 config.output.publicPath = 'http://localhost:3000' + '/assets/bundles/'
