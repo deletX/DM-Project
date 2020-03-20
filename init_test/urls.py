@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, re_path
 from django.conf.urls import include
 from django.contrib.auth.views import LogoutView
 from django.conf import settings
@@ -24,7 +24,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('events/', include(('SharedDrivers.urls', 'sharedDrivers'), namespace='events')),
     path('api/v0.1/', include('api.urls')),
-    path('', TemplateView.as_view(template_name='react/index.html')),
     path('social/', include('social_django.urls', namespace='social')),
     path('logout/', LogoutView.as_view(), {'next_page': settings.LOGOUT_REDIRECT_URL}, name='logout'),
+    path('', TemplateView.as_view(template_name='react/index.html')),
+    re_path(r'^(?:.*)/?$', TemplateView.as_view(template_name='react/index.html')),
 ]

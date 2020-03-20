@@ -16,19 +16,7 @@ class LoginLogoutButton extends React.Component {
 
     }
 
-    logout() {
-
-        var auth2 = window.gapi.auth2.getAuthInstance();
-        auth2.signOut().then(function () {
-            auth2.disconnect();
-            localStorage.clear();
-            this.props.logout();
-        }.bind(this));
-
-    }
-
     componentDidMount() {
-
         window.gapi.load('auth2', () => {
             window.gapi.auth2.init({
                 client_id: CLIENTID
@@ -67,14 +55,8 @@ class LoginLogoutButton extends React.Component {
 
 
     render() {
-
         if (this.props.access_token === undefined) {
-
             return <div id="loginBtn"/>
-        } else {
-
-            return <div id="logoutBtn" className="btn btn-outline-secondary my-2 my-sm-0" type="submit"
-                        onClick={this.logout.bind(this)}>Logout</div>
         }
     }
 

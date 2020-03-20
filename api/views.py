@@ -1,9 +1,14 @@
+import logging
+
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
+from oauth2_provider.models import AccessToken
+from rest_framework_social_oauth2.views import ConvertTokenView
+
 from SharedDrivers.models import Event, Profile, User, Participant
-from rest_framework import viewsets, mixins
+from rest_framework import viewsets, mixins, views, status
 from .serializers import EventSerializerShallow, EventSerializerDeep, ProfileSerializer, UserSerializer, \
-    ParticipantSerializer
+    ParticipantSerializer, ProfileSerializerShallow
 from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.decorators import permission_classes, authentication_classes
@@ -17,9 +22,12 @@ class EventViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Create
     queryset = Event.objects.all().order_by('-date_time')
 
     def get_queryset(self):
+        logging.warning("get_queryset")
         joined = self.queryset.filter(participant__user__user_id=self.request.user.id)
         joinable = self.queryset.filter(status=Event.EventStatusChoices.JOINABLE)
-        return joined | joinable
+
+        merged = joined.union(joinable)
+        return merged.order_by('status', '-date_time')
 
     # authentication_classes = [SocialAuthentication, ]
     # permission_classes = [IsAuthenticated, ]
@@ -95,9 +103,34 @@ class ParticipantView(viewsets.GenericViewSet,
     def create(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
-        participant = serializer.save()
-        participant.user = Profile.objects.get(user_id=request.user.id)
-        participant.save()
+
+        event = serializer.validated_data.get('event')
+
+        if (event.status == Event.EventStatusChoices.JOINABLE):
+            participant = serializer.save()
+            participant.user = Profile.objects.get(user_id=request.user.id)
+            participant.save()
+            return Response(serializer.data)
+        else:
+            return Response(data="Event not Joinable", status=status.HTTP_400_BAD_REQUEST)
+
+
+class ProfileView(viewsets.GenericViewSet, mixins.RetrieveModelMixin):
+    serializer_class = ProfileSerializer
+    queryset = Profile.objects.all()
+
+    def retrieve(self, request, pk=None, *args, **kwargs):
+        if request.user.id != pk:
+            self.serializer_class = ProfileSerializerShallow
+        obj = get_object_or_404(Profile, user_id=pk)
+        serializer = self.serializer_class(obj)
         return Response(serializer.data)
 
+
 # Create your views here.
+
+class SocialView(ConvertTokenView):
+    def post(self, request, *args, **kwargs):
+        response = super(SocialView, self).post(request, *args, **kwargs)
+        response.data['user'] = AccessToken.objects.get(token=response.data['access_token']).user_id
+        return response

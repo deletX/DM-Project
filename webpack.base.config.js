@@ -20,12 +20,17 @@ module.exports = {
     plugins: [], // add all common plugins here
 
     module: {
-        rules: []
+        rules: [
+            {
+                test: /\.css$/i,
+                use: ['style-loader', 'css-loader'],
+            },
+        ]
     },
 
     resolve: {
         modules: ["node_modules", "bower_components"],
-        extensions: ['.js', '.jsx']
+        extensions: ['.js', '.jsx', '.css']
     },
 
     optimization: {

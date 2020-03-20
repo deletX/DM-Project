@@ -1,30 +1,39 @@
 import React from "react"
 import LoginLogoutButton from "../components/LoginLogoutButton";
+import PropTypes from "prop-types";
+import {connect} from "react-redux";
+import {login, logout} from "../actions/userActions";
+import {Link} from "react-router-dom";
+import {urls} from "../constants";
 
-export default class NavBarContainer extends React.Component {
-
+class NavBarContainer extends React.Component {
 
     render() {
         return (
             <nav className="navbar navbar-expand-lg navbar-light bg-light">
-                <a className="navbar-brand" href="#">DMProject</a>
+                <Link className="navbar-brand" to={urls.events}>DMProject</Link>
                 <button className="navbar-toggler" type="button" data-toggle="collapse"
                         data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
-                    <span className="navbar-toggler-icon"></span>
+                    <span className="navbar-toggler-icon"/>
                 </button>
 
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul className="navbar-nav mr-auto">
                         <li className="nav-item active">
-                            <a className="nav-link" href="#">Events <span className="sr-only">(current)</span></a>
+                            <Link className="nav-link" to={urls.events}>Events <span
+                                className="sr-only">(current)</span></Link>
                         </li>
+                        {this.props.isSignedIn &&
                         <li className="nav-item">
-                            <a className="nav-link" href="#">Your Events</a>
+                            <Link className="nav-link" to={urls.myEvents}>Your Events</Link>
                         </li>
+                        }
+                        {this.props.isSignedIn &&
                         <li className="nav-item">
-                            <a className="nav-link disabled" href="#">Profile</a>
+                            <Link className="nav-link disabled" to={urls.profile}>Profile</Link>
                         </li>
+                        }
                     </ul>
                     <form className="form-inline my-2 my-lg-0">
                         <LoginLogoutButton/>
@@ -34,3 +43,13 @@ export default class NavBarContainer extends React.Component {
         )
     }
 }
+
+NavBarContainer.propTypes = {
+    isSignedIn: PropTypes.bool
+};
+
+const mapStateToProps = state => ({
+    isSignedIn: state.user.isSignedIn
+});
+
+export default connect(mapStateToProps, {})(NavBarContainer);
