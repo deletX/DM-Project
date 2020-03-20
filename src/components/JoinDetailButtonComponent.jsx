@@ -1,13 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
-import {fetchProfile, login} from "../actions/userActions";
+import {login} from "../actions/userActions";
 import {Redirect} from "react-router-dom";
-import {CLIENTID, urls} from "../constants";
-import LoadingComponent from "./LoadingComponent";
-import {hideJoinSuccessAlert} from "../actions/uiActions";
-
-// <button type="submit" className="btn btn-info btn-sm" onClick={this.onClick.bind(this)}>{text}</button>
+import {urls} from "../constants";
 
 /**
  * Button to Join or view Detail of an event
@@ -20,10 +16,7 @@ class JoinDetailButtonComponent extends React.Component {
         super(props);
         let text = "Join";
 
-        if (!this.props.profile_data.user_id && props.isSignedIn) {
-            if (!this.props.profile_data.isLoading)
-                this.props.fetchProfile(this.props.access_token);
-        } else if (this.props.event.participant_set.includes(this.props.profile_data.user_id)) {
+        if (this.props.event.participant_set.includes(this.props.id)) {
             text = "Detail"
         }
 
@@ -43,21 +36,15 @@ class JoinDetailButtonComponent extends React.Component {
     static getDerivedStateFromProps(props, state) {
         let text = "Join";
 
-        if (!props.profile_data.user_id && props.isSignedIn) {
-            if (!props.profile_data.isLoading)
-                props.fetchProfile(props.access_token);
-        } else if (props.event.participant_set.includes(props.profile_data.user_id)) {
+        if (props.event.participant_set.includes(props.id)) {
             text = "Detail"
         }
+
         return {...state, text: text}
     }
 
 
     render() {
-
-        if (this.props.profile_data.isLoading)
-            return (<LoadingComponent/>);
-        //
         return (
             <div id="detail-login-btn">
                 {this.redirect()}
@@ -75,44 +62,27 @@ class JoinDetailButtonComponent extends React.Component {
      */
     redirect() {
         if (this.state.renderRedirect) {
-            return (
-                <Redirect push to={`${urls.join_}/${this.props.event.id}`}/>
-            )
+            if (this.state.text === "Join")
+                return (
+                    <Redirect push to={`${urls.join_}/${this.props.event.id}`}/>
+                );
+            return <Redirect push to={`${urls.detail_}/${this.props.event.id}`}/>
         }
     }
 
     //If button is clicked then a redirection is due. If user is not signedIn it is prompted to do so before issuing a redirection.
     onClick() {
-        if (this.props.isSignedIn) {
-            this.setState({...this.state, renderRedirect: true})
-        } else {
-            window.gapi.load('auth2', () => {
-                window.gapi.auth2.init({
-                    client_id: CLIENTID
-                }).then(() => {
-                    window.gapi.auth2.getAuthInstance().signIn().then((res) => {
-                        this.props.login(res);
-                        this.onClick()
-                    })
-                })
-            })
-        }
+        this.setState({...this.state, renderRedirect: true})
     }
 }
 
 JoinDetailButtonComponent.propTypes = {
-    isSignedIn: PropTypes.bool,
-    login: PropTypes.func,
-    profile_data: PropTypes.object,
-    access_token: PropTypes.string,
-    fetchProfile: PropTypes.func,
+    id: PropTypes.number,
 };
 
 const
     mapStateToProps = state => ({
-        isSignedIn: state.user.isSignedIn,
-        access_token: state.user.access_token,
-        profile_data: state.user.profile_data,
+        id: state.user.user_data.id,
     });
 
-export default connect(mapStateToProps, {login, fetchProfile})(JoinDetailButtonComponent);
+export default connect(mapStateToProps, {login})(JoinDetailButtonComponent);

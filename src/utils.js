@@ -8,6 +8,15 @@ export function authHeader(token) {
     }
 }
 
+/**
+ * Util function that takes a url and different callbacks
+ * @param {string} url
+ * @param {function} success
+ * @param {function} error
+ * @param {function} failure
+ * @param {{}} options
+ * @returns {Promise<Response>}
+ */
 export async function request(url, success, error, failure, options = {}) {
 
     options["headers"] = {...options.headers, "Content-Type": "application/json", "Accept": "application/json"};

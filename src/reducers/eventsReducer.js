@@ -14,7 +14,7 @@ import {
     FETCH_EVENT_SUCCESS,
     FETCH_EVENT_ERROR,
     FETCH_EVENT_FAILURE,
-    FETCH_EVENT
+    FETCH_EVENT, RUN_EVENT
 } from "../actions/types";
 
 const initialState = {
@@ -53,6 +53,7 @@ export default function (state = initialState, action) {
         case POST_EVENT_FAILURE:
             return {...state, newEvent: {...state.newEvent, isLoading: false}};
 
+            
         case FETCH_EVENT:
             return {...state, newEvent: {...state.newEvent, isLoading: true}};
         case FETCH_EVENT_SUCCESS:

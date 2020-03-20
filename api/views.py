@@ -2,18 +2,19 @@ import logging
 
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
+from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from oauth2_provider.models import AccessToken
 from rest_framework_social_oauth2.views import ConvertTokenView
 
 from SharedDrivers.models import Event, Profile, User, Participant
 from rest_framework import viewsets, mixins, views, status
 from .serializers import EventSerializerShallow, EventSerializerDeep, ProfileSerializer, UserSerializer, \
-    ParticipantSerializer, ProfileSerializerShallow
+    ParticipantSerializer, ProfileSerializerShallow, ParticipantSerializerPost
 from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.decorators import permission_classes, authentication_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework_social_oauth2.authentication import SocialAuthentication
+from sharing_calc.tasks import mock_algorithm_task
 
 
 class EventViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin,
@@ -29,10 +30,10 @@ class EventViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Create
         merged = joined.union(joinable)
         return merged.order_by('status', '-date_time')
 
-    # authentication_classes = [SocialAuthentication, ]
+    # authentication_classes = [OAuth2Authentication, ]
     # permission_classes = [IsAuthenticated, ]
 
-    @authentication_classes(SocialAuthentication)
+    @authentication_classes(OAuth2Authentication)
     @permission_classes(IsAuthenticated)
     def retrieve(self, request, pk=None):
         if not self.queryset.get(id=pk).participant_set.filter(user__user_id=request.user.id).exists():
@@ -42,7 +43,7 @@ class EventViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Create
         serializer = EventSerializerDeep(data)
         return Response(serializer.data)
 
-    @authentication_classes(SocialAuthentication)
+    @authentication_classes(OAuth2Authentication)
     @permission_classes(IsAuthenticated)
     def create(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
@@ -54,7 +55,7 @@ class EventViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Create
         event.save()
         return Response(serializer.data)
 
-    @authentication_classes(SocialAuthentication)
+    @authentication_classes(OAuth2Authentication)
     @permission_classes(IsAuthenticated)
     def update(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
@@ -68,7 +69,7 @@ class EventViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Create
     def partial_update(self, request, *args, **kwargs):
         return self.update(request)
 
-    @authentication_classes(SocialAuthentication)
+    @authentication_classes(OAuth2Authentication)
     @permission_classes(IsAuthenticated)
     def destroy(self, request, *args, **kwargs):
         event = self.get_object()
@@ -81,7 +82,7 @@ class EventViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Create
 class EventDetailGetSet(viewsets.GenericViewSet, mixins.RetrieveModelMixin):
     queryset = Event.objects.all()
     serializer_class = EventSerializerDeep
-    authentication_classes = [SocialAuthentication, ]
+    authentication_classes = [OAuth2Authentication, ]
     permission_classes = [IsAuthenticated, ]
 
     def check_object_permissions(self, request, event):
@@ -91,9 +92,9 @@ class EventDetailGetSet(viewsets.GenericViewSet, mixins.RetrieveModelMixin):
 
 class ParticipantView(viewsets.GenericViewSet,
                       mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin):
-    serializer_class = ParticipantSerializer
+    serializer_class = ParticipantSerializerPost
     queryset = Participant.objects.all()
-    authentication_classes = [SocialAuthentication, ]
+    authentication_classes = [OAuth2Authentication, ]
     permission_classes = [IsAuthenticated, ]
 
     def check_object_permissions(self, request, participant):
@@ -105,7 +106,7 @@ class ParticipantView(viewsets.GenericViewSet,
         serializer.is_valid(raise_exception=True)
 
         event = serializer.validated_data.get('event')
-
+        if (event == None): return Response(data="Event not Found", status=status.HTTP_404_NOT_FOUND)
         if (event.status == Event.EventStatusChoices.JOINABLE):
             participant = serializer.save()
             participant.user = Profile.objects.get(user_id=request.user.id)
@@ -120,17 +121,30 @@ class ProfileView(viewsets.GenericViewSet, mixins.RetrieveModelMixin):
     queryset = Profile.objects.all()
 
     def retrieve(self, request, pk=None, *args, **kwargs):
-        if request.user.id != pk:
+        if str(request.user.id) != pk:
             self.serializer_class = ProfileSerializerShallow
         obj = get_object_or_404(Profile, user_id=pk)
         serializer = self.serializer_class(obj)
+        print(serializer.data)
         return Response(serializer.data)
 
-
-# Create your views here.
 
 class SocialView(ConvertTokenView):
     def post(self, request, *args, **kwargs):
         response = super(SocialView, self).post(request, *args, **kwargs)
         response.data['user'] = AccessToken.objects.get(token=response.data['access_token']).user_id
         return response
+
+
+class RunView(views.APIView):
+    authentication_classes = [OAuth2Authentication, ]
+    permission_classes = [IsAuthenticated, ]
+
+    def get(self, request, pk=None):
+        logging.warning("Running mock_algorithm_task")
+        event = get_object_or_404(Event, id=pk)
+        if event.owner.user_id != request.user.id: raise PermissionDenied()
+        event.status = Event.EventStatusChoices.COMPUTING
+        event.save()
+        mock_algorithm_task.delay(pk)
+        return Response({"result": "Task started"})

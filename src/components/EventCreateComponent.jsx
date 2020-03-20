@@ -35,7 +35,7 @@ class EventCreateComponent extends React.Component {
     submit() {
 
         let event = {
-            owner: this.props.profile_data.user_id,
+            owner: this.props.id,
             description: this.state.description,
             address: this.state.address,
             name: this.state.name,
@@ -46,26 +46,16 @@ class EventCreateComponent extends React.Component {
         this.props.postEvent(event, this.props.access_token)
     }
 
-    componentDidMount() {
-        if (this.props.access_token !== undefined)
-            this.props.fetchProfile(this.props.access_token);
-    }
-
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        if (this.props.access_token !== undefined && prevProps.access_token !== this.props.access_token) {
-            this.props.fetchProfile(this.props.access_token);
-        }
-    }
 
     render() {
-        if (this.props.access_token === undefined) {
+        if (this.props.access_token === undefined && !this.props.userIsLoading) {
             return (
                 <RequireLogin/>
             )
         }
 
         //if there's some loading going on show a Loading spinner
-        if (this.props.profile_data.isLoading || this.props.newEventIsLoading || this.props.isLoading) {
+        if (this.props.newEventIsLoading || this.props.isLoading || this.props.userIsLoading) {
             return (
                 <LoadingComponent/>
             )
@@ -75,7 +65,6 @@ class EventCreateComponent extends React.Component {
         if (this.props.showCreateSuccessAlert) {
             return <Redirect to={`${urls.events}`}/>
         }
-
 
         const isEnabled = (this.state.name.length > 0 && this.state.description.length > 0 &&
             this.state.destination.length > 0 && this.state.date_time !== undefined);
@@ -141,40 +130,27 @@ class EventCreateComponent extends React.Component {
     }
 }
 
-// <div className="form-row">
-//                 <div className="col">
-//                     <label htmlFor="event-date-input">Event Date</label>
-//                     <input className="form-control form-control-lg" id="event-date-input" type="text"
-//                            placeholder="gg/mmmm/yyyy"/>
-//                 </div>
-//                 <div className="col">
-//                     <label htmlFor="event-date-input">Event Time</label>
-//                     <input className="form-control form-control-lg" id="event-date-input" type="text"
-//                            placeholder="hh:mm"/>
-//                 </div>
-//             </div>
-
 EventCreateComponent.propTypes = {
     access_token: PropTypes.string,
-    fetchProfile: PropTypes.func,
-    profile_data: PropTypes.object,
     newEventIsLoading: PropTypes.bool,
     postParticipant: PropTypes.func,
     isLoading: PropTypes.bool,
+    id: PropTypes.number,
     showCreateErrorAlert: PropTypes.bool,
     showCreateSuccessAlert: PropTypes.bool,
+    userIsLoading: PropTypes.bool,
 };
 
 const mapStateToProps = state => ({
+    userIsLoading: state.user.isLoading,
     access_token: state.user.access_token,
-    profile_data: state.user.profile_data,
     newEventIsLoading: state.events.newEvent.isLoading,
     isLoading: state.events.isLoading,
+    id: state.user.user_data.id,
     showCreateErrorAlert: state.ui.showCreateErrorAlert,
     showCreateSuccessAlert: state.ui.showCreateSuccessAlert,
 });
 
 export default connect(mapStateToProps, {
-    fetchProfile,
     postEvent,
 })(EventCreateComponent);

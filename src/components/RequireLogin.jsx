@@ -1,5 +1,5 @@
 import React from "react";
-import {CLIENTID} from "../constants";
+import {CLIENTID, urls} from "../constants";
 import GoogleLogin from "react-google-login";
 import * as actions from "../actions/userActions"
 
@@ -8,56 +8,40 @@ import {connect} from 'react-redux';
 import {userActions} from '../actions/userActions';
 import {login} from "../actions/userActions";
 import {logout} from "../actions/userActions";
+import {Redirect} from "react-router-dom";
 
 class LoginLogoutButton extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            redirect: false,
+        }
+    }
 
     onSuccess(request) {
         this.props.login(request);
 
     }
 
-    componentDidMount() {
-        window.gapi.load('auth2', () => {
-            window.gapi.auth2.init({
-                client_id: CLIENTID
-            }).then(() => {
-                window.gapi.load('signin2', () => {
-                    window.gapi.signin2.render('loginBtn', {
-                        'scope': 'profile email',
-                        'width': 135,
-                        'height': 40,
-                        'longtitle': false,
-                        'theme': 'light',
-                        'onsuccess': this.onSuccess.bind(this),
-                    })
-                })
-
-            })
-        })
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.access_token !== undefined && this.props.access_token === undefined) {
+            this.setState({redirect: true})
+        }
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
-
+    componentDidMount() {
         if (this.props.access_token === undefined) {
-            localStorage.clear();
-            window.gapi.signin2.render('loginBtn', {
-                'scope': 'profile email',
-                'width': 135,
-                'height': 40,
-                'longtitle': false,
-                'theme': 'light',
-                'onsuccess': this.onSuccess.bind(this),
-            })
+            this.props.login();
         }
-
-
     }
 
 
     render() {
-        if (this.props.access_token === undefined) {
-            return <div id="loginBtn"/>
+        if (this.state.redirect) {
+            return <Redirect push to={urls.events}/>
         }
+        return <div id="loginBtn-req"/>
     }
 
 }

@@ -32,24 +32,28 @@ class EventJoinComponent extends React.Component {
 
     submit() {
         let participant = {
-            user: this.props.profile_data.user_id,
+            user: this.props.user_id,
             starting_address: this.state.address,
             starting_pos: this.state.pos,
             car: this.state.car,
             event: this.props.match.params.id,
         };
-
+        
         this.props.postParticipant(participant, this.props.access_token)
     }
 
     componentDidMount() {
-        if (this.props.access_token !== undefined)
-            this.props.fetchProfile(this.props.access_token);
+        if (this.props.user_id === undefined) {
+            this.props.login();
+        } else if (this.props.profile_data.cars === undefined) {
+            this.props.fetchProfile(this.props.access_token, this.props.user_id)
+        }
+
     }
 
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if (this.props.access_token !== undefined && prevProps.access_token !== this.props.access_token) {
-            this.props.fetchProfile(this.props.access_token);
+        if (this.props.access_token !== undefined && this.props.user_id !== undefined && prevProps.access_token !== this.props.access_token) {
+            this.props.fetchProfile(this.props.access_token, this.props.user_id);
         }
     }
 
@@ -63,26 +67,31 @@ class EventJoinComponent extends React.Component {
         })
     }
 
-    render() {
-        // Since login is required, through this component it either gets loaded or it is prompted
-        if (this.props.access_token === undefined) {
-            return (
-                <RequireLogin/>
-            )
-        }
+    /**
+     * Updates local state with the value
+     * @param {input-value} car
+     */
+    updateCar(car) {
+        this.setState({
+            car: car.target.value
+        })
+    }
 
+    render() {
+        console.log(this.props);
         //if there's some loading going on show a Loading spinner
-        if (this.props.profile_data.isLoading || this.props.newParticipantIsLoading || this.props.isLoading) {
+        if (this.props.access_token === undefined || this.props.userIsLoading || this.props.newParticipantIsLoading ||
+            this.props.isLoading || (this.props.profile_data.isLoading === undefined || this.props.profile_data.isLoading)) {
             return (
                 <LoadingComponent/>
             )
         }
 
+
         //if the successAlert is to be shown it means the request was successful and a Redirect is issued to urls.events
         if (this.props.showJoinSuccessAlert) {
             return <Redirect to={`${urls.events}`}/>
         }
-
 
         // if user alredy joined event redirect to the detail view of such.
         for (const index in this.props.events) {
@@ -90,11 +99,13 @@ class EventJoinComponent extends React.Component {
             console.log(event.id);
             console.log(this.state.event);
             if (event.id === parseInt(this.state.event)) {
-                if (event.participant_set.includes(this.props.profile_data.user_id)) {
+                console.log("MATCH")
+                if (event.participant_set.includes(this.props.user_id)) {
                     return <Redirect to={`${urls.detail_}/${event.id}`}/>
                 }
             }
         }
+
 
         let carItems = this.props.profile_data.cars.map(car => (
             <option key={car.id} id={car.id} value={car.id}>
@@ -155,6 +166,9 @@ EventJoinComponent.propTypes = {
     isLoading: PropTypes.bool,
     showJoinErrorAlert: PropTypes.bool,
     showJoinSuccessAlert: PropTypes.bool,
+    userIsLoading: PropTypes.bool,
+    user_id: PropTypes.number,
+    login: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
@@ -162,12 +176,15 @@ const mapStateToProps = state => ({
     profile_data: state.user.profile_data,
     newParticipantIsLoading: state.events.newParticipant.isLoading,
     events: state.events.events,
+    userIsLoading: state.user.isLoading,
     isLoading: state.events.isLoading,
     showJoinErrorAlert: state.ui.showJoinErrorAlert,
     showJoinSuccessAlert: state.ui.showJoinSuccessAlert,
+    user_id: state.user.user_data.id,
 });
 
 export default connect(mapStateToProps, {
+    login,
     fetchProfile,
     postParticipant,
     fetchEvents,

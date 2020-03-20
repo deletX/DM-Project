@@ -8,12 +8,6 @@ class CarSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class ParticipantSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Participant
-        fields = '__all__'
-
-
 class EventSerializerShallow(serializers.ModelSerializer):
     participant_count = serializers.IntegerField(read_only=True, required=False)
     owner = serializers.PrimaryKeyRelatedField(required=False, queryset=Profile.objects.all())
@@ -23,16 +17,6 @@ class EventSerializerShallow(serializers.ModelSerializer):
         model = Event
         fields = ['id', 'name', 'description', 'address', 'destination', 'date_time', 'status', 'owner',
                   'participant_count', 'participant_set']
-
-
-class EventSerializerDeep(serializers.ModelSerializer):
-    participant_set = ParticipantSerializer(many=True, read_only=True)
-    owner = serializers.PrimaryKeyRelatedField(required=False, queryset=Profile.objects.all())
-
-    class Meta:
-        model = Event
-        fields = ['id', 'name', 'description', 'address', 'destination', 'date_time', 'status', 'owner',
-                  'participant_set']
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -56,3 +40,27 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'profile']
+
+
+class ParticipantSerializerPost(serializers.ModelSerializer):
+    class Meta:
+        model = Participant
+        fields = '__all__'
+
+
+class ParticipantSerializer(serializers.ModelSerializer):
+    user = ProfileSerializerShallow(read_only=True, many=False)
+
+    class Meta:
+        model = Participant
+        fields = ['id', 'starting_address', 'starting_pos', 'pickup_index', 'expense', 'user', 'car', 'event']
+
+
+class EventSerializerDeep(serializers.ModelSerializer):
+    participant_set = ParticipantSerializer(many=True, read_only=True)
+    owner = serializers.PrimaryKeyRelatedField(required=False, queryset=Profile.objects.all())
+
+    class Meta:
+        model = Event
+        fields = ['id', 'name', 'description', 'address', 'destination', 'date_time', 'status', 'owner',
+                  'participant_set']

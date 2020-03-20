@@ -8,6 +8,7 @@ from django.contrib.gis.db import models
 from django.contrib.gis.db.models import Q
 from django.contrib.gis.geos import Point
 from geopy.distance import distance
+import sys
 
 
 # tobermoved
@@ -81,16 +82,19 @@ class Algorithm:
         return drivers
 
     def set_drivers_passengers_distance_score(self, data):
+
         drivers = self.get_drivers(data)
         passengers = self.get_passengers(data)
+
         drivers_score = [[driver, 0] for driver in drivers]
+
         for driver_score in drivers_score:
             for passenger in passengers:
                 driver_score[1] += distance(passenger.starting_pos, driver_score[0].starting_pos).kilometers
 
         scores = [score[1] for score in drivers_score]
 
-        max_ = max(scores)
+        max_ = max(scores) + sys.float_info.epsilon
         min_ = min(scores)
 
         if max_ != 0:
@@ -105,7 +109,7 @@ class Algorithm:
 
         scores = [score[1] for score in drivers_score]
 
-        max_ = max(scores)
+        max_ = max(scores) + sys.float_info.epsilon
         min_ = min(scores)
 
         if max_ != 0:
@@ -136,7 +140,7 @@ class Algorithm:
 
         if max_ != 0:
             for driver, score in drivers_score:
-                driver.score += (score - min_) / max_
+                driver.score += (score - min_) / (max_ + sys.float_info.epsilon)
 
     def set_habit_data(self, data):
         drivers = self.get_drivers(data)
@@ -153,7 +157,7 @@ class Algorithm:
 
         if max_ != 0:
             for driver, score in drivers_score:
-                driver.score += (score - min_) / max_
+                driver.score += (score - min_) / (max_ + sys.float_info.epsilon)
 
     def set_number_of_seats_score(self, data):
         drivers = self.get_drivers(data)
@@ -162,13 +166,12 @@ class Algorithm:
             driver_score[1] = Car.objects.get(id=driver_score[0].car).tot_avail_seats
 
         scores = [score[1] for score in drivers_score]
-
         max_ = max(scores)
         min_ = min(scores)
 
         if max_ != 0:
             for driver, score in drivers_score:
-                driver.score += (score - min_) / max_
+                driver.score += (score - min_) / (max_ + sys.float_info.epsilon)
 
     def pick_participants(self, data):
 
@@ -209,7 +212,7 @@ class Algorithm:
         max_ = max(scores)
 
         for i in range(0, len(drivers_score)):
-            data_1[i].score = drivers_score[i][1] / max_ * 5
+            data_1[i].score = drivers_score[i][1] / (max_ * 5 + sys.float_info.epsilon)
             data_2[i].score = 5 - data_1[i].score
             data_1[i].score += self.participant_groups[0][i].score
             data_2[i].score += self.participant_groups[0][i].score

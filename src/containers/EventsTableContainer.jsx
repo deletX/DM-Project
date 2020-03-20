@@ -28,7 +28,7 @@ class EventsTableContainer extends React.Component {
         ));
 
         if (this.state.createRedirect) {
-            return <Redirect to={urls.create}/>
+            return <Redirect push to={urls.create}/>
         }
 
         if (this.props.isLoading) {

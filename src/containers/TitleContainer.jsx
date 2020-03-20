@@ -32,7 +32,7 @@ class TitleContainer extends React.Component {
 
 TitleContainer.propTypes = {
     isSignedIn: PropTypes.bool,
-    name: PropTypes.string
+    name: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = state => ({

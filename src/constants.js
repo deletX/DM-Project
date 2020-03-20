@@ -11,3 +11,10 @@ export const urls = {
     detail: "/index/:id",
     create: "/create-event",
 };
+
+
+export const status = [
+    'Joinable',
+    'Computing',
+    'Computed'
+];
