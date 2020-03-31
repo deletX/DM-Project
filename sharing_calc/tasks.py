@@ -9,6 +9,7 @@ from django.contrib.gis.db.models import Q
 from django.contrib.gis.geos import Point
 from geopy.distance import distance
 import sys
+import copy
 
 
 # tobermoved
@@ -28,6 +29,11 @@ def mock_algorithm_task(event_id):
 
 class Algorithm:
     class Participant:
+        # APCA drivers data
+        pheromone_array = []
+        distance_array = []
+        time_array = []
+
         def __init__(self, id, car, starting_pos):
             self.id = id
             self.car = car
@@ -263,8 +269,24 @@ class Algorithm:
         # expense uguali per ogni macchina ma diversi tra loro
         pass
 
-    def APCA(self):
-        # TODO
+    def APCA(self, participants):
+        drivers = self.get_drivers(participants)
+        passengers = self.get_passengers(participants)
+        # Initialization phase
+        # pheromone arrays and pheromone matrix
+        for passenger in passengers:
+            passenger.pheromone_array = None
+        for driver in drivers:
+            driver.pheromone_array = [1] * (len(passengers) + 1)
+        pheromone_passengers_matrix = [[1 for col in range(len(passengers) + 1)] for row in range(len(passengers))]
+        # distance arrays and distance matrix
+        for passenger in passengers:
+            passenger.distance_array = None
+        for driver in drivers:
+            for passenger in passengers:
+                driver.distance_array.append(distance(driver.starting_pos, passenger.starting_pos))
+            driver.distance_array.append(distance(driver.starting_pos, self.destination))
+        distance_passengers_matrix = [[0 for col in range(len(passengers) + 1)] for row in range(len(passengers))]
         pass
 
     def drivers_manager_algorithm(self):
