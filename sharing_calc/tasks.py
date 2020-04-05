@@ -10,6 +10,7 @@ from django.contrib.gis.geos import Point
 from geopy.distance import distance
 import sys
 import copy
+import numpy as np
 
 
 # tobermoved
@@ -86,6 +87,9 @@ class Algorithm:
             if participant.car is None:
                 drivers.append(participant)
         return drivers
+
+    def get_time_cost(self, pos1, pos2):
+        return 1
 
     def set_drivers_passengers_distance_score(self, data):
 
@@ -273,21 +277,60 @@ class Algorithm:
         drivers = self.get_drivers(participants)
         passengers = self.get_passengers(participants)
         # Initialization phase
+        rows = len(passengers)
+        cols = rows + 1
         # pheromone arrays and pheromone matrix
         for passenger in passengers:
             passenger.pheromone_array = None
         for driver in drivers:
-            driver.pheromone_array = [1] * (len(passengers) + 1)
-        pheromone_passengers_matrix = [[1 for col in range(len(passengers) + 1)] for row in range(len(passengers))]
+            driver.pheromone_array = np.ones(shape=(len(passengers) + 1), dtype=float)
+        pheromone_passengers_matrix = np.ones(shape=(rows, cols), dtype=float)
         # distance arrays and distance matrix
         for passenger in passengers:
             passenger.distance_array = None
         for driver in drivers:
-            for passenger in passengers:
-                driver.distance_array.append(distance(driver.starting_pos, passenger.starting_pos))
-            driver.distance_array.append(distance(driver.starting_pos, self.destination))
-        distance_passengers_matrix = [[0 for col in range(len(passengers) + 1)] for row in range(len(passengers))]
-        pass
+            driver.distance_array = np.zeros(shape=(len(passengers) + 1), dtype=float)
+            for counter, passenger in enumerate(passengers):
+                driver.distance_array[counter] = distance(driver.starting_pos, passenger.starting_pos)
+            driver.distance_array[len(passengers) + 1] = distance(driver.starting_pos, self.destination)
+
+        distance_passengers_matrix = np.zeros(shape=(rows, cols), dtype=float)
+        for r in range(rows):
+            for c in range(cols):
+                if r == c:
+                    pass
+                else:
+                    if r > c:
+                        pass
+                    else:
+                        if r < c:
+                            distance_passengers_matrix[r][c] = distance(passengers[r].starting_pos,
+                                                                        passengers[c].starting_pos)
+                            distance_passengers_matrix[c][r] = distance_passengers_matrix[r][c]
+
+        # time arrays and time matrix
+        for passenger in passengers:
+            passenger.distance_array = None
+        for driver in drivers:
+            driver.time_array = np.ones(shape=(len(passengers) + 1), dtype=float)
+        #            for counter, passenger in enumerate(passengers):
+        #                driver.time_array[counter] = self.get_time_cost(driver.starting_pos, passenger.starting_pos)
+        #            driver.distance_array[len(passengers) + 1] = self.get_time_cost(driver.starting_pos, self.destination)
+
+        time_passengers_matrix = np.ones(shape=(rows, cols), dtype=float)
+
+    #        for r in range(rows):
+    #            for c in range(cols):
+    #                if r == c:
+    #                    pass
+    #                else:
+    #                    if r > c:
+    #                        pass
+    #                    else:
+    #                        if r < c:
+    #                            time_passengers_matrix[r][c] = self.get_time_cost(passengers[r].starting_pos,
+    #                                                                              passengers[c].starting_pos)
+    #                            time_passengers_matrix[c][r] = distance_passengers_matrix[r][c]
 
     def drivers_manager_algorithm(self):
         self.driver_selection()
