@@ -267,10 +267,6 @@ class Algorithm:
         timedelta = time2 - time1
         if timedelta.seconds < 120:
             time.sleep(30 - timedelta.seconds)
-        # metto score diversi in ogni gruppo
-        # metto i dati come servono
-        # salvo un gruppo
-        # expense uguali per ogni macchina ma diversi tra loro
         pass
 
     def APCA(self, participants):
@@ -284,7 +280,9 @@ class Algorithm:
             passenger.pheromone_array = None
         for driver in drivers:
             driver.pheromone_array = np.ones(shape=(len(passengers) + 1), dtype=float)
+
         pheromone_passengers_matrix = np.ones(shape=(rows, cols), dtype=float)
+
         # distance arrays and distance matrix
         for passenger in passengers:
             passenger.distance_array = None
@@ -332,6 +330,8 @@ class Algorithm:
     #                                                                              passengers[c].starting_pos)
     #                            time_passengers_matrix[c][r] = distance_passengers_matrix[r][c]
 
+    # end initialization
+    
     def drivers_manager_algorithm(self):
         self.driver_selection()
         self.APCA()
