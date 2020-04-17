@@ -5,7 +5,10 @@ redis
 celery[redis]
 geopy
 djangorestframework
+drf-nested-routers
 social-auth-app-django
 django-rest-framework-social-oauth2
 django-oauth-toolkit
-django-webpack-loader #Used to tell django the leatest bundle in order to do the hot-reloading during dev
+pillow
+django-extra-fields
+django-cors-headers

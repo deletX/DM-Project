@@ -1,0 +1,9 @@
+export const landingPage = "/";
+export const home = "/home";
+export const login = "/login";
+export const signup = "/signup";
+export const myProfile = "/my-profile";
+export const profile_id = "/profiles/:id";
+export const profile = "/profiles/";
+export const event_id = "/events/:id";
+export const event = "/events/";
