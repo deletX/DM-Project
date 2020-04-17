@@ -8,7 +8,7 @@ import AuthContainer from "./containers/AuthContainer";
 import SignupComponent from "./components/auth/SignupComponent";
 import LoginComponent from "./components/auth/LoginComponent";
 import HomeContainer from "./containers/HomeContainer";
-import MapContainer from "./containers/Map";
+import MapContainer from "./containers/MapContainer";
 
 const history = createBrowserHistory();
 

@@ -22,8 +22,8 @@ import {addAlert} from "../actions/alertActions";
 import axios from "axios";
 import PositionsDialog from "../components/map/PositionsDialog";
 import {nominatimToPrimarySecondary} from "../utils";
-import {Map, TileLayer, Marker, Popup} from "react-leaflet";
 import Box from "@material-ui/core/Box";
+import {Map, Marker, Popup, TileLayer} from "react-leaflet";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -40,6 +40,7 @@ const useStyles = makeStyles((theme) => ({
         marginRight: theme.spacing(1),
         marginBottom: theme.spacing(1),
     },
+
     map: {
         width: '200px',
         height: '200px'
@@ -53,67 +54,86 @@ const useStyles = makeStyles((theme) => ({
 
 const MapContainer = (props) => {
 
-        useEffect(() => {
-            if (pos === "" && navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition((position) => {
-                    setPos(`SRID=4326;POINT (${position.coords.latitude} ${position.coords.longitude})`)
-                    setLatitude(position.coords.latitude)
-                    setLongitude(position.coords.longitude)
-                })
-            }
-        })
+    useEffect(() => {
+        if (pos === "" && navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                setPos(`SRID=4326;POINT (${position.coords.latitude} ${position.coords.longitude})`)
+                setLatitude(position.coords.latitude)
+                setLongitude(position.coords.longitude)
+            })
+        }
+    })
 
-        //will be props
-        const [addr, setAddr] = useState("");
-        const [pos, setPos] = useState("");
+    //will be props
+    const [addr, setAddr] = useState("");
+    const [pos, setPos] = useState("");
 
-        const [latitude, setLatitude] = useState(44.629430);
-        const [longitude, setLongitude] = useState(10.948296);
-        const classes = useStyles();
-        let [addrError, setAddrError] = useState(false)
+    const [latitude, setLatitude] = useState(44.629430);
+    const [longitude, setLongitude] = useState(10.948296);
+    const classes = useStyles();
+    let [addrError, setAddrError] = useState(false)
 
-        const [lastRequest, setLastRequest] = useState(new Date())
+    const [lastRequest, setLastRequest] = useState(new Date())
 
-        const [open, setOpen] = useState(false);
-        const [positions, setPositions] = useState([]);
+    const [open, setOpen] = useState(false);
+    const [positions, setPositions] = useState([]);
 
-        const [zoom, setZoom] = useState(13)
+    const [zoom, setZoom] = useState(13)
 
-        const selectItem = (item) => {
-            let {primary, secondary} = nominatimToPrimarySecondary(item);
-            setAddr(`${primary} ${secondary}`);
-            setPos(`SRID=4326;POINT (${item.lat} ${item.lon})`)
-            setLatitude(parseInt(item.lat))
-            setLongitude(parseInt(item.lon))
+    /**
+     *
+     * @param item
+     * @param {number} lat
+     * @param {number} lon
+     */
+    const selectItem = (item, lat = undefined, lon = undefined) => {
+        console.log(lat, lon)
+        let {primary, secondary} = nominatimToPrimarySecondary(item);
+        setAddr(`${primary} ${secondary}`);
+        setPos(`SRID=4326;POINT (${item.lat} ${item.lon})`)
+        if (lat !== undefined) {
+            setLatitude(parseFloat(item.lat))
+        } else {
+            setLatitude(item.lat)
         }
 
-        const getMapData = () => {
-            axios
-                .get(`https://nominatim.openstreetmap.org/search/?q=${encodeURI(addr)}&format=json&limit=3&addressdetails=1&dedupe=1`,)
-                .then(res => {
-                    setPositions(res.data);
-                    setOpen(true)
-                })
-                .catch(err => {
-                    props.addAlert("An error occurred while retrieving positions")
-                })
+        if (lon !== undefined) {
+            setLongitude(lon);
+        } else {
+            setLongitude(item.lon);
         }
+    }
 
-        const click = () => {
-            let now = new Date()
-            if (now - lastRequest > 1000) {
-                getMapData()
-            } else {
-                console.log("will")
-                setTimeout(getMapData, now - lastRequest);
-            }
+    const getMapData = () => {
+        axios
+            .get(`https://nominatim.openstreetmap.org/search/?q=${encodeURI(addr)}&format=json&limit=3&addressdetails=1&dedupe=1`,)
+            .then(res => {
+                setPositions(res.data);
+                setOpen(true)
+            })
+            .catch(err => {
+                props.addAlert("An error occurred while retrieving positions")
+            })
+    }
+
+    const click = () => {
+        let now = new Date()
+        if (now - lastRequest > 1000) {
+            getMapData()
+        } else {
+            console.log("will")
+            setTimeout(getMapData, now - lastRequest);
         }
-        return (
+    }
+    return (
+        <>
+
             <div className={classes.root}>
                 <FormControl variant="outlined" className={classes.form}>
                     <Grid container spacing={2}>
                         <Grid item xs={8} sm={4}>
-                            <TextField fullWidth id="address" label="Address" placeholder="via Pietro Vivarelli 10, Modena"
+                            <TextField fullWidth id="address" label="Address"
+                                       placeholder="via Pietro Vivarelli 10, Modena"
                                        value={addr}
                                        onChange={(input) => {
                                            let name = input.target.value;
@@ -156,24 +176,31 @@ const MapContainer = (props) => {
                         <Map
                             center={[latitude, longitude]}
                             zoom={zoom}
-                            className={classes.map}
+                            style={{width: '100%', height: '600px'}}
+                            onZoomEnd={(e) => {
+                                setZoom(e.target._zoom)
+                            }}
                         >
                             <TileLayer
                                 attribution='&copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                             />
+
                             <Marker
                                 draggable={true}
                                 onDragend={(ev) => {
-                                    console.log(ev)
+                                    axios
+                                        .get(`https://nominatim.openstreetmap.org/reverse/?lat=${ev.target._latlng.lat}&lon=${ev.target._latlng.lng}&format=json&addressdetails=1`,)
+                                        .then(res => {
+                                            console.log(res.data)
+                                            selectItem(res.data, ev.target._latlng.lat, ev.target._latlng.lng);
+                                        }).catch(error => {
+                                        props.addAlert("An error occurred while retrieving your selected location")
+                                    })
                                 }}
+
                                 position={{lat: latitude, lng: longitude}}
                             >
-                                <Popup minWidth={90}>
-                                            <span>
-                                              {"ciao"}
-                                            </span>
-                                </Popup>
                             </Marker>
                         </Map>
                     </Box>
@@ -184,9 +211,10 @@ const MapContainer = (props) => {
                     setOpen(false)
                 }} positions={positions} selectItem={selectItem}/>
             </div>
-        )
-    }
-;
+        </>
+    )
+}
+
 const mapDispatchToProps = (dispatch) => {
     return {
         addAlert: (text) => (dispatch(addAlert(text, "error"))),

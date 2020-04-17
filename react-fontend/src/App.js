@@ -10,6 +10,7 @@ import {createBrowserHistory} from "history";
 import NavBar from "./components/navbar/NavBar";
 import theme from "./theme";
 import {ThemeProvider} from "@material-ui/styles";
+import {Map, TileLayer} from "react-leaflet";
 
 export const history = createBrowserHistory();
 
