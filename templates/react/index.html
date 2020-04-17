@@ -1,9 +1,0 @@
-{% extends "base.html" %}
-{% load render_bundle from webpack_loader %}
-
-{% block content %}
-    <div id="app"></div>
-    <noscript>Your browser does not support JavaScript!</noscript>
-    {% render_bundle 'vendors' %}
-    {% render_bundle 'App' %}
-{% endblock %}
