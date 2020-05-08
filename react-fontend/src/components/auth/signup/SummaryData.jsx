@@ -40,6 +40,8 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: theme.spacing(1),
     },
     imgPreview: {
+        color: theme.palette.getContrastText(theme.palette.secondary.dark),
+        backgroundColor: theme.palette.secondary.dark,
         margin: 10,
         maxWidth: '9ch',
         minWidth: '6ch',
@@ -168,6 +170,7 @@ const SummaryData = ({
                             <FormControl variant="outlined">
                                 <InputLabel id="fuel-label">Fuel</InputLabel>
                                 <Select id="fuel" labelId="fuel-label" label="Fuel" value={fuel}
+                                        fullWidth
                                         inputProps={{
                                             readOnly: true,
                                         }}>

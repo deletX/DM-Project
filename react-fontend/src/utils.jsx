@@ -118,3 +118,9 @@ export const nominatimToPrimarySecondary = (position) => {
 
     return {primary, secondary}
 }
+
+
+export const pridStringToLatLng = (position) => {
+    let latlng = position.split(' ')
+    return [latlng[1].slice(1), latlng[2].slice(0, -1)]
+}

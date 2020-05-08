@@ -33,6 +33,9 @@ import {PhotoCamera} from "@material-ui/icons";
 import Input from "@material-ui/core/Input";
 import LockIcon from '@material-ui/icons/Lock';
 import {addAlert} from "../../actions/alertActions";
+import CardContainer from "../../containers/CardContainer";
+import AvatarCustom from "../AvatarCustom";
+import {Helmet} from "react-helmet";
 
 const useStyles = makeStyles((theme) => ({
     title: {
@@ -105,15 +108,14 @@ function SignupComponent({authLogin, googleLogin, addError}) {
     const disabled = !(username.length > 0 && password.length > 0);
 
     return (
-        <div className={classes.root}>
-            <Typography variant="h5" align="center" className={classes.title}>
-                Log in!
-            </Typography>
-            <Divider/>
+        <CardContainer title="Log in!" open={open}>
+            <Helmet>
+                <title>React App - Login</title>
+            </Helmet>
             <div className={classes.formContainer}>
-                <Avatar className={classes.imgPreview}>
+                <AvatarCustom className={classes.imgPreview}>
                     <LockIcon fontSize="large"/>
-                </Avatar>
+                </AvatarCustom>
 
                 <form className={classes.form}>
                     <Grid container spacing={5}>
@@ -210,15 +212,7 @@ function SignupComponent({authLogin, googleLogin, addError}) {
                 </form>
             </div>
 
-            <Backdrop className={classes.backdrop} open={open}>
-                <Box className={classes.loading}>
-                    <Typography className={classes.loadingTypography}>
-                        Loading your data!
-                    </Typography>
-                    <CircularProgress color="inherit"/>
-                </Box>
-            </Backdrop>
-        </div>
+        </CardContainer>
     )
 }
 

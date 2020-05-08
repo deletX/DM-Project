@@ -10,6 +10,8 @@ export const eventDetailURL = (eventPk) => (`${eventCreateURL()}${eventPk}/`);
 
 export const eventJoinURL = (eventPk) => (`${eventDetailURL(eventPk)}participants/`);
 
+export const eventRunURL = (eventPk) => (`${eventDetailURL(eventPk)}run/`);
+
 export const participationEditURL = (eventPk, participantPk) => (`${eventJoinURL(eventPk)}${participantPk}/`);
 
 export const currentProfileURL = () => (apiBaseUrl + 'current-profile/');
@@ -24,7 +26,7 @@ export const profilesURL = (profilePk) => (apiBaseUrl + `profiles/${profilePk}/`
 
 export const carsListURL = (profilePk) => (`${profilesURL(profilePk)}cars/`);
 
-export const carsDetailURL = (profilePk, carPk) => (`${carsListURL}${carPk}/`);
+export const carsDetailURL = (profilePk, carPk) => (`${carsListURL(profilePk)}${carPk}/`);
 
 export const createFeedbackURL = (eventPk, receiverParticipantPk) => (`${participationEditURL(eventPk, receiverParticipantPk)}feedback/`);
 

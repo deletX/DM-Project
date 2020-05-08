@@ -1,7 +1,7 @@
 import {connect} from "react-redux";
 import React, {useEffect, useState} from 'react';
 import {history} from "../App";
-import {home, login} from "../constants/pagesurls";
+import {addEvent, home, homeJoinableJoinedOwned, login} from "../constants/pagesurls";
 import {makeStyles} from "@material-ui/core/styles";
 import {white} from "color-name";
 import Icon from "@material-ui/core/Icon";
@@ -21,6 +21,8 @@ import ChipBox from "../components/event/ChipBox";
 import EventCard from "../components/event/EventCard";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
+import {useLocation} from "react-router";
+import {Helmet} from "react-helmet";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -57,61 +59,90 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-const HomeContainer = ({isAuthenticated, search, token}) => {
-    useEffect(() => {
-        if (!isAuthenticated) history.push(login)
+const useQuery = () => {
+    return new URLSearchParams(useLocation().search);
+}
 
-        if (events === null)
-            axios
-                .get(eventListURL(joinable, joined, owned), headers('application/json', token))
-                .then((response) => {
-                    setEvents(response.data)
-                })
-                .catch((err) => {
-                    addAlert("An Error occurred while retrieving events")
-                });
-    });
+const HomeContainer = ({addError, isAuthenticated, isLoading, search, token}) => {
+    let query = useQuery();
+
     const classes = useStyles();
 
+    let joinable = query.get("joinable") === null ? true : query.get("joinable") === "true"
+    let joined = query.get("joined") === null ? true : query.get("joined") === "true"
+    let owned = query.get("owned") === null ? false : query.get("owned") === "true"
 
-    const [joinable, setJoinable] = useState(true);
-    const [joined, setJoined] = useState(true);
-    const [owned, setOwned] = useState(false);
+    useEffect(() => {
+        if (!(isAuthenticated || isLoading))
+            history.push(login)
+        else if (isAuthenticated)
+            refreshEvents(joinable, joined, owned);
+    }, [joinable, joined, owned, isAuthenticated, isLoading]);
+
+
+    const setJoinable = (joinable) => {
+        history.push(homeJoinableJoinedOwned(joinable, joined, owned))
+        // refreshEvents(joinable, joined, owned);
+    }
+    const setJoined = (joined) => {
+        history.push(homeJoinableJoinedOwned(joinable, joined, owned))
+        // refreshEvents(joinable, joined, owned);
+    }
+    const setOwned = (owned) => {
+        history.push(homeJoinableJoinedOwned(joinable, joined, owned))
+        // refreshEvents(joinable, joined, owned);
+    }
+
     const [events, setEvents] = useState(null);
     let eventsFiltered = events;
 
+
+    const refreshEvents = (joinable = query.get("joinable") === null ? true : query.get("joinable") === "true",
+                           joined = query.get("joined") === null ? true : query.get("joined") === "true",
+                           owned = query.get("owned") === null ? false : query.get("owned") === "true") => {
+        console.log(joinable, joined, owned)
+        axios
+            .get(eventListURL(joinable, joined, owned), headers('application/json', token))
+            .then((response) => {
+                setEvents(response.data)
+            })
+            .catch((err) => {
+                addError("An Error occurred while retrieving events")
+            });
+    }
+
     if (events !== null)
         eventsFiltered = eventsFiltered.filter((item) => (item.name.includes(search)))
-
-    const changeValues = (joinable, joined, owned) => {
-        setJoinable(joinable)
-        setJoined(joined);
-        setOwned(owned);
-        setEvents(null);
-    }
 
     let eventCards = []
     if (eventsFiltered !== null)
         eventCards = eventsFiltered.map((item) => (
             <Grid key={item.id} item className={classes.cardGridItem}>
-                <EventCard event={item}/>
+                <EventCard event={item} refreshEvents={refreshEvents}/>
             </Grid>
         ))
-    console.log(eventsFiltered)
     return (
         <div className={classes.root}>
+            <Helmet>
+                <title>React App - Event Page</title>
+                <meta name="description" content="Main Home page"/>
+            </Helmet>
             <div className={classes.firstLine}>
                 <Typography variant="h2">
                     Events
-                    <IconButton className={classes.plusButton} aria-label="add">
+                    <IconButton className={classes.plusButton} aria-label="add" onClick={() => {
+                        history.push(addEvent)
+                    }}>
                         <AddBox fontSize="large"/>
                     </IconButton>
                 </Typography>
 
 
-                <ChipBox joined={joined} joinable={joinable} owned={owned} changeValues={changeValues}/>
+                <ChipBox joined={joined} joinable={joinable} owned={owned} setJoined={setJoined}
+                         setJoinable={setJoinable}
+                         setOwned={setOwned}/>
             </div>
-            <Grid container xs={12} spacing={3} className={classes.gridContainer}>
+            <Grid container spacing={3} className={classes.gridContainer}>
                 {eventCards}
             </Grid>
         </div>
@@ -123,6 +154,7 @@ const mapStateToProps = state => {
     return {
         token: state.auth.token,
         isAuthenticated: state.auth.token !== undefined,
+        isLoading: state.auth.loading,
         search: state.search,
     };
 };

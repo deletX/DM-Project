@@ -165,16 +165,17 @@ class NotificationSerializer(serializers.ModelSerializer):
 class FeedbackSerializer(serializers.ModelSerializer):
     giver = ProfileRelatedField(read_only=True, required=False)
     event = EventRelatedField(read_only=True)
+    receiver = ProfileRelatedField(read_only=True, required=False)
 
     class Meta:
         model = Feedback
-        fields = ['id', 'giver', 'event', 'comment', 'vote']
+        fields = ['id', 'giver', 'receiver', 'event', 'comment', 'vote']
 
 
 class FeedbackEditSerializer(serializers.ModelSerializer):
     giver = ProfileRelatedField(read_only=True, required=False)
     receiver = serializers.PrimaryKeyRelatedField(required=True, queryset=Profile.objects.all())
-    event = serializers.PrimaryKeyRelatedField(required=True, queryset=Event.objects.all())
+    event = serializers.PrimaryKeyRelatedField(required=True, queryset=Event.objects.all(), allow_null=False)
 
     class Meta:
         model = Feedback
@@ -185,6 +186,9 @@ class FeedbackEditSerializer(serializers.ModelSerializer):
         owner_profile = Profile.objects.get(user=current_user)
         event = validated_data.get("event")
         receiver = validated_data.get("receiver")
+        if receiver.id == owner_profile.id:
+            raise serializers.ValidationError('You cannot post a feedback for yourself')
+
         if not event.participant_set.filter(profile=owner_profile).exists():
             raise serializers.ValidationError('You cannot post a feedback for an event you haven\'t attended')
 

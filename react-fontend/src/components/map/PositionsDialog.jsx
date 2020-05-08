@@ -12,15 +12,13 @@ import {nominatimToPrimarySecondary} from "../../utils";
 
 
 const PositionsDialog = ({open, close, positions, selectItem}) => {
+
+
     let options = positions.map(item => {
         let {primary, secondary} = nominatimToPrimarySecondary(item)
         return (<ListItem
             key={item.place_id}
             button
-            onClick={() => {
-                selectItem(item)
-            }}
-
             onClick={() => {
                 selectItem(item)
                 close()

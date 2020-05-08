@@ -30,13 +30,18 @@ class EventViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = Event.objects.all()
-        joinable = self.request.query_params.get('joinable', True)
-        joined = self.request.query_params.get('joined', True)
-        owned = self.request.query_params.get('owned', False)
+        joinable = self.request.query_params.get('joinable', 'true')
+        joined = self.request.query_params.get('joined', 'true')
+        owned = self.request.query_params.get('owned', 'false')
+        print(joinable, joined, owned)
         merged = Event.objects.none()
         joined_queryset = queryset.filter(participant__profile__user=self.request.user)
+
         joinable_queryset = queryset.filter(status=Event.EventStatusChoices.JOINABLE)
+        joinable_queryset = joinable_queryset.difference(joined_queryset)
+
         owned_queryset = queryset.filter(owner__user=self.request.user)
+
         if joinable == 'true':
             merged = merged.union(joinable_queryset)
         if joined == 'true':
@@ -75,7 +80,7 @@ class EventRunAPI(viewsets.GenericViewSet, mixins.ListModelMixin):
         try:
             event.run()
         except ValidationError:
-            return Response({'detail': "Not enough seats in cars"}, status=status.HTTP_412_PRECONDITION_FAILED)
+            return Response(ValidationError, status=status.HTTP_412_PRECONDITION_FAILED)
         return Response({'detail': "started"}, status=status.HTTP_202_ACCEPTED)
 
 
@@ -108,8 +113,7 @@ class CurrentProfileViewSet(viewsets.GenericViewSet, mixins.RetrieveModelMixin,
     '''
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
-
-    # permission_classes = [IsAuthenticated, ]
+    permission_classes = [IsAuthenticated, ]
 
     def get_object(self):
         # return Profile.objects.get(user=User.objects.get(id=1))
@@ -136,7 +140,7 @@ class ProfileViewSet(viewsets.GenericViewSet, mixins.RetrieveModelMixin):
     '''
     serializer_class = ProfileSerializerOther
     queryset = Profile.objects.all()
-    # permission_classes = [IsAuthenticated, ]
+    permission_classes = [IsAuthenticated, ]
 
 
 class CarViewSet(viewsets.ModelViewSet):
@@ -198,3 +202,7 @@ class SocialView(ConvertTokenView):
         response = super(SocialView, self).post(request, *args, **kwargs)
         # response.data['user'] = AccessToken.objects.get(token=response.data['access_token']).user_id
         return response
+
+
+def custom_page_not_found_view(request, exception):
+    return render(request, "index.html", {})

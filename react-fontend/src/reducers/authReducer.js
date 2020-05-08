@@ -3,7 +3,8 @@ import {updateObject} from "../utils";
 
 const initialState = {
     token: undefined,
-    loading: false
+    loading: false,
+    error: false,
 };
 
 const authStart = (state, action) => {
@@ -21,7 +22,8 @@ const authSuccess = (state, action) => {
 
 const authFail = (state, action) => {
     return updateObject(state, {
-        loading: false
+        loading: false,
+        error: true,
     });
 };
 

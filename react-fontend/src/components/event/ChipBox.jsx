@@ -16,28 +16,28 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const ChipBox = ({joinable, joined, owned, changeValues}) => {
+const ChipBox = ({joinable, joined, owned, setJoinable, setJoined, setOwned}) => {
     const classes = useStyles()
     return (
         <div className={classes.root}>
             <Chip
                 className={classes.chip}
                 label="Joinable"
-                onClick={() => (changeValues(!joinable, joined, owned))}
+                onClick={() => (setJoinable(!joinable))}
                 color={joinable ? "secondary" : "default"}
-                icon={joinable ? <DoneIcon/> : ""}
+                icon={joinable ? <DoneIcon/> : null}
             />
             <Chip
                 className={classes.chip}
                 label="Joined"
-                onClick={() => (changeValues(joinable, !joined, owned))}
+                onClick={() => (setJoined(!joined))}
                 color={joined ? "secondary" : "default"}
-                icon={joined ? <DoneIcon/> : ""}
+                icon={joined ? <DoneIcon/> : null}
             />
             <Chip
                 className={classes.chip}
                 label="Owned"
-                onClick={() => (changeValues(joinable, joined, !owned))}
+                onClick={() => (setOwned(!owned))}
                 color={owned ? "secondary" : "default"}
                 icon={owned ? <DoneIcon/> : null}
             />

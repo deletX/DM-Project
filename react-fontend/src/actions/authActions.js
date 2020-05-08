@@ -188,7 +188,7 @@ export const authCheckState = () => {
 
 export const authLogout = () => dispatch => {
     dispatch(logout());
-    // dispatch(removeAllAlerts());
+    dispatch(removeAllAlerts());
     dispatch(clearProfileData());
     dispatch(clearNotifications());
 };

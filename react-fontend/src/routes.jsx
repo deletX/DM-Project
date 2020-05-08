@@ -1,39 +1,51 @@
 import React from "react";
-import {Route, Switch} from "react-router-dom";
-
-// import requireAuth from "./requireAuth"; // deprecated
-
+import {Redirect, Route, Switch} from "react-router-dom";
 import {createBrowserHistory} from "history";
-import AuthContainer from "./containers/AuthContainer";
+import FormContainer from "./containers/FormContainer";
 import SignupComponent from "./components/auth/SignupComponent";
 import LoginComponent from "./components/auth/LoginComponent";
 import HomeContainer from "./containers/HomeContainer";
 import MapContainer from "./containers/MapContainer";
-
-const history = createBrowserHistory();
+import JoinContainer from "./containers/JoinContainer";
+import CreateComponent from "./components/event/CreateComponent";
+import {addEvent, createEvent, home, login, profile, profile_id, signup} from "./constants/pagesurls";
+import {history} from "./App";
+import {useLocation} from "react-router";
+import EventContainer from "./containers/EventContainer";
+import ProfileContainer from "./containers/ProfileContainer";
+import LandingPageContainer from "./containers/LandingPageContainer";
+import NotFound404 from "./components/NotFound404";
 
 
 const BaseRouter = props => (
     <div>
         <Switch>
-            {/*<Route exact path="/">*/}
-            {/*    <LandingPageContainer/>*/}
-            {/*</Route>*/}
-            <Route exact path="/login">
-                <AuthContainer>
+
+            <Route exact path="/">
+                <LandingPageContainer/>
+            </Route>
+            <Route exact path={login}>
+                <FormContainer effect={() => {
+                    if (props.isAuthenticated)
+                        history.push(home)
+                }}>
                     <LoginComponent/>
-                </AuthContainer>
+                </FormContainer>
             </Route>
-            <Route exact path="/signup">
-                <AuthContainer>
+            <Route exact path={signup}>
+                <FormContainer effect={() => {
+                    if (props.isAuthenticated)
+                        history.push(home)
+                }}>
                     <SignupComponent/>
-                </AuthContainer>
+                </FormContainer>
             </Route>
-            <Route exact path="/home" component={HomeContainer}/>
-            {/*<Route exact path="/profile/:id" component={ProfileContainer}/>*/}
-            {/*<Route exact path="/my-profile" component={MyProfileContainer}/>*/}
-            {/*<Route exact path="/events/:id" component={EventContainer}/>*/}
-            <Route path="*" component={MapContainer}/>
+            <Route exact path={home} component={HomeContainer}/>
+            <Route exact path={addEvent} component={CreateComponent}/>
+            <Route exact path={profile_id} component={ProfileContainer}/>
+            <Route exact path="/my-profile" render={() => (<Redirect to={profile(props.profileId)}/>)}/>
+            <Route exact path="/events/:id" component={EventContainer}/>
+            <Route exact path={"*"} component={NotFound404}/>
         </Switch>
     </div>
 );

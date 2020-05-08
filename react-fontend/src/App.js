@@ -1,7 +1,7 @@
-import React, {Component, useEffect} from 'react';
+import React from 'react';
 import './App.css';
 import BaseRouter from "./routes";
-import {authCheckState, authLogout} from "./actions/authActions";
+import {authCheckState} from "./actions/authActions";
 import AlertContainer from "./containers/AlertContainer";
 import {connect} from "react-redux";
 import {Router} from "react-router";
@@ -9,24 +9,27 @@ import {createBrowserHistory} from "history";
 
 import NavBar from "./components/navbar/NavBar";
 import theme from "./theme";
-import {ThemeProvider} from "@material-ui/styles";
-import {Map, TileLayer} from "react-leaflet";
+import {ThemeProvider} from "@material-ui/core/styles";
+import {MuiPickersUtilsProvider} from "@material-ui/pickers";
+import DateFnsUtils from "@date-io/date-fns";
 
 export const history = createBrowserHistory();
 
 
 function App(props) {
 
-    useEffect(() => {
+    if (!props.isAuthenticatedOrLoading && !props.error)
         props.onTryAutoSignup()
-    });
 
     return (
         <Router history={history}>
+
             <ThemeProvider theme={theme}>
-                <NavBar/>
-                <AlertContainer alerts={props.alerts}/>
-                <BaseRouter/>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <NavBar/>
+                    <AlertContainer alerts={props.alerts}/>
+                    <BaseRouter {...props}/>
+                </MuiPickersUtilsProvider>
             </ThemeProvider>
         </Router>
     )
@@ -34,12 +37,16 @@ function App(props) {
 
 const mapStateToProps = state => {
     return {
+        isAuthenticated: state.auth.token !== undefined,
+        isLoading: state.auth.loading,
         username: state.profile.user.username,
-        alerts: state.alerts
+        alerts: state.alerts,
+        profileId: state.profile.id,
+        error: state.auth.error || state.profile.error || state.notifications.error,
     };
 };
 
-// authomatic auth check
+
 const mapDispatchToProps = dispatch => {
     return {
         onTryAutoSignup: () => dispatch(authCheckState()),

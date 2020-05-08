@@ -21,6 +21,9 @@ import {authCheckState, authLogin, authSignup, googleOAuthLogin} from "../../act
 import {connect} from "react-redux";
 import {changePicture, createCar} from "../../actions/profileActions";
 import {addAlert} from "../../actions/alertActions";
+import CardContainer from "../../containers/CardContainer";
+import StepperContainer from "../../containers/StepperContainer";
+import {Helmet} from "react-helmet";
 
 const useStyles = makeStyles((theme) => ({
 
@@ -30,33 +33,8 @@ const useStyles = makeStyles((theme) => ({
     instructions: {
         marginTop: theme.spacing(1),
         marginBottom: theme.spacing(1),
-    },
-    root: {
-        width: '95%',
-        margin: 10
-    },
-    loading: {
-        marginBottom: theme.spacing(5),
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-
-    },
-    backdrop: {
-        zIndex: theme.zIndex.drawer + 1,
-        color: '#fff',
-    },
-    loadingTypography: {
-        marginBottom: theme.spacing(2),
     }
-
 }));
-
-const getSteps = () => (
-    ["Personal Info", "Add your Car", "Submit!"]
-);
-
 
 function SignupComponent({authSignup, googleLogin, setPicture, postCar, addError}) {
     const [email, setEmail] = useState("");
@@ -79,8 +57,8 @@ function SignupComponent({authSignup, googleLogin, setPicture, postCar, addError
     const [isGoogleLogin, setGoogleLogin] = useState(false);
     const [googleAccessToken, setGoogleAccessToken] = useState("");
 
-    const [open, setOpen] = useState(true);
-    const getStepContent = (step) => {
+    const [open, setOpen] = useState(false);
+    const getStepContent = (step, handleNext) => {
         switch (step) {
             case 0:
                 return <PersonalInfoForm firstName={firstName} setFirstName={setFirstName} lastName={lastName}
@@ -107,80 +85,21 @@ function SignupComponent({authSignup, googleLogin, setPicture, postCar, addError
     };
 
 
-    const steps = getSteps();
-    const classes = useStyles();
-    const [activeStep, setActiveStep] = React.useState(0);
-    const [skipped, setSkipped] = React.useState(new Set());
-
-    const isStepValid = (step) => {
-        switch (step) {
-            case 0:
-                return (!emailError && email.length > 0 && !usernameError && username.length > 0 && !passwordError && password.length > 0) || isGoogleLogin;
-            case 1:
-                return carName.length > 0;
-            default:
-                return true;
-        }
-    };
-
-    const isStepOptional = (step) => {
-        return step === 1;
-    };
-
-    const isStepSkipped = (step) => {
-        return skipped.has(step);
-    };
-
-    const handleNext = () => {
-        let newSkipped = skipped;
-        if (isStepSkipped(activeStep)) {
-            newSkipped = new Set(newSkipped.values());
-            newSkipped.delete(activeStep);
-        }
-
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        setSkipped(newSkipped);
-    };
-
-    const handleBack = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep - 1);
-    };
-
-    const clearSkipped = (step) => {
-        if (step === 1) {
-            setCarName("")
-            setTotSeats(4)
-            setFuel(1)
-            setConsumption(10)
-        }
-    }
-
-    const handleSkip = () => {
-        if (!isStepOptional(activeStep)) {
-            addError("You can't skip a step that isn't optional.");
-        }
-        clearSkipped(activeStep)
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        setSkipped((prevSkipped) => {
-            const newSkipped = new Set(prevSkipped.values());
-            newSkipped.add(activeStep);
-            return newSkipped;
-        });
-    };
-
-    const uploadData = () => {
-        if (isGoogleLogin) {
+    const uploadData = (restart) => {
+        if (!open)
+            setOpen(true);
+        else if (isGoogleLogin) {
             googleLogin(googleAccessToken).then((value) => {
                 if (value instanceof Error) {
                     addError("An error occurred while signing you up with google")
                     console.log(value)
                     setOpen(false);
-                    setActiveStep(0);
+                    restart(true);
                 } else {
                     if (carName !== "") {
                         postCar(carName, totSeats, fuel, consumption)
                     }
-                    if (imageURL !== "") {
+                    if (image !== null && imageURL !== "") {
                         setPicture(image)
                     }
                     history.push(home)
@@ -192,12 +111,12 @@ function SignupComponent({authSignup, googleLogin, setPicture, postCar, addError
                     addError("An error occurred while signing you up")
                     console.log(value)
                     setOpen(false);
-                    setActiveStep(0);
+                    restart(true);
                 } else {
                     if (carName !== "") {
                         postCar(carName, totSeats, fuel, consumption)
                     }
-                    if (imageURL !== "") {
+                    if (image !== null && imageURL !== "") {
                         setPicture(image)
                     }
                     history.push(home)
@@ -206,77 +125,41 @@ function SignupComponent({authSignup, googleLogin, setPicture, postCar, addError
         }
     }
 
-    if (activeStep === steps.length) {
-        uploadData()
-    }
-
-    const disabled = !isStepValid(activeStep);
     return (
-        <div className={classes.root}>
-            <Typography variant="h5" align="center" className={classes.title}>
-                Sign Up!
-            </Typography>
-            <Divider/>
-            <Stepper activeStep={activeStep} orientation="vertical">
-                {steps.map((label, index) => {
-                    const stepProps = {};
-                    const labelProps = {};
-                    if (isStepOptional(index)) {
-                        labelProps.optional = <Typography variant="caption">Optional</Typography>;
+        <CardContainer title="Sign up!" open={open}>
+            <Helmet>
+                <title>React App - Signup</title>
+            </Helmet>
+            <StepperContainer
+                getSteps={() => (
+                    ["Personal Info", "Add your Car", "Submit!"]
+                )}
+                getStepContent={getStepContent}
+                isStepValid={(step) => {
+                    switch (step) {
+                        case 0:
+                            return (!emailError && email.length > 0 && !usernameError && username.length > 0 && !passwordError && password.length > 0) || isGoogleLogin;
+                        case 1:
+                            return carName.length > 0;
+                        default:
+                            return true;
                     }
-                    if (isStepSkipped(index)) {
-                        stepProps.completed = false;
+                }}
+                isStepOptional={(step) => {
+                    return step === 1;
+                }}
+                clear={(step) => {
+                    if (step === 1) {
+                        setCarName("")
+                        setTotSeats(4)
+                        setFuel(1)
+                        setConsumption(10)
                     }
-                    return (
-                        <Step key={label} {...stepProps}>
-                            <StepLabel {...labelProps}>{label}</StepLabel>
-                            <StepContent>
-                                {getStepContent(index)}
-                                <div>
-                                    <Button disabled={activeStep === 0} onClick={handleBack}
-                                            className={classes.button}>
-                                        Back
-                                    </Button>
-                                    {isStepOptional(activeStep) && (
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                            onClick={handleSkip}
-                                            className={classes.button}
-                                        >
-                                            Skip
-                                        </Button>
-                                    )}
-
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
-                                        onClick={handleNext}
-                                        className={classes.button}
-                                        disabled={disabled}
-                                    >
-                                        {activeStep === steps.length - 1 ? 'SignUP!' : 'Next'}
-                                    </Button>
-                                </div>
-                            </StepContent>
-                        </Step>
-                    );
-                })}
-            </Stepper>
-
-            {activeStep === steps.length &&
-            <Backdrop className={classes.backdrop} open={open}>
-                <Box className={classes.loading}>
-                    <Typography className={classes.loadingTypography}>
-                        Loading your data!
-                    </Typography>
-                    <CircularProgress color="inherit"/>
-                </Box>
-            </Backdrop>
-
-            }
-
-        </div>
+                }}
+                uploadData={uploadData}
+                finalButtonText="Sign Up!"
+            />
+        </CardContainer>
     )
 }
 

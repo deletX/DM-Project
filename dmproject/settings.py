@@ -24,7 +24,7 @@ SECRET_KEY = 't3jaxs@=6qumn_dbc8+d=7m#4#7$j5ags5=wh_wpht@(9v8ew1'
 DEBUG = True
 CORS_ORIGIN_ALLOW_ALL = True
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "192.168.1.54", "thechiosco.ns0.it"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "192.168.1.54", "192.168.1.27", "thechiosco.ns0.it"]
 
 # Application definition
 
@@ -147,8 +147,8 @@ USE_L10N = True
 USE_TZ = True
 
 # celery
-CELERY_BROKER_URL = 'redis://localhost:6381'
-CELERY_RESULT_BACKEND = 'redis://localhost:6381'
+CELERY_BROKER_URL = 'redis://localhost:6380'
+CELERY_RESULT_BACKEND = 'redis://localhost:6380'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'

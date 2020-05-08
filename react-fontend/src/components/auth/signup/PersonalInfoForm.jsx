@@ -17,6 +17,7 @@ import SvgIcon from "@material-ui/core/SvgIcon";
 import {ReactComponent as GoogleIcon} from '../../../icons/GoogleLogo.svg'
 import Alert from "@material-ui/lab/Alert";
 import axios from "axios"
+import AvatarCustom from "../../AvatarCustom";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -131,12 +132,9 @@ const PersonalInfoForm = ({
         setGoogleLogin(false);
     }
 
-    let charName = (firstName !== "" ? firstName.toUpperCase().charAt(0) : "") + (lastName !== "" ? lastName.toUpperCase().charAt(0) : "");
     return (
         <div className={classes.root}>
-            <Avatar src={imageURL} className={classes.imgPreview}>
-                {charName !== "" ? charName : null}
-            </Avatar>
+            <AvatarCustom src={imageURL} className={classes.imgPreview} firstName={firstName} lastName={lastName}/>
 
             <form className={classes.form}>
                 <Grid container spacing={2}>
@@ -154,10 +152,14 @@ const PersonalInfoForm = ({
                                 setImageURL(input.profileObj.imageUrl)
                                 axios.get(input.profileObj.imageUrl, {responseType: 'blob'}).then(res => {
                                     let blob = res.data
+                                    
                                     let type = res.data.type.split('/').pop()
                                     blob.name = `${username}.${type}`
                                     setImage(blob)
                                 })
+                                    .catch(err => {
+                                        console.log(err)
+                                    })
                                 handleNext()
                             }}
                             onFailure={() => {

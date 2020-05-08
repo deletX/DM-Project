@@ -24,7 +24,7 @@ import List from "@material-ui/core/List";
 import NotificationItem from "./NotificationItem";
 import Divider from "@material-ui/core/Divider";
 import Box from "@material-ui/core/Box";
-import {home, login} from "../../constants/pagesurls";
+import {home, login, myProfile, profile} from "../../constants/pagesurls";
 import {signup} from "../../constants/pagesurls";
 import {history} from "../../App";
 import {authLogout} from "../../actions/authActions";
@@ -175,7 +175,9 @@ function NavBar({isAuthenticated, notifications, notificationsNumber, authLogout
                 </IconButton>
                 <p>Notifications</p>
             </MenuItem>
-            <MenuItem>
+            <MenuItem onClick={() => {
+                history.push(myProfile)
+            }}>
                 <IconButton
                     aria-label="account of current user"
                     aria-controls="primary-search-account-menu"
@@ -219,15 +221,15 @@ function NavBar({isAuthenticated, notifications, notificationsNumber, authLogout
         <div className={classes.grow}>
             <AppBar position="static">
                 <Toolbar>
-                    <button className={classes.logo} href="#" onClick={() => {
+                    <button className={classes.logo} onClick={() => {
                         isAuthenticated ? history.push(pagesURL.home) : history.push(pagesURL.landingPage)
                     }}>
 
                         <img src={logo} alt="logo" className={classes.logo}/>
                     </button>
-                    <Typography className={classes.title} variant="h6" noWrap component="button" href="#"
+                    <Typography className={classes.title} variant="h6" noWrap component="button"
                                 onClick={() => {
-                                    history.push(home)
+                                    isAuthenticated ? history.push(pagesURL.home) : history.push(pagesURL.landingPage)
                                 }}>
                         DM Project
                     </Typography>
@@ -265,6 +267,7 @@ function NavBar({isAuthenticated, notifications, notificationsNumber, authLogout
                                     aria-controls={menuId}
                                     aria-haspopup="true"
                                     onClick={() => {
+                                        history.push(myProfile)
                                     }}
                                     color="inherit"
                                 >

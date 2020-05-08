@@ -19,6 +19,7 @@ const initialState = {
     givenFeedback: [],
     user: {},
     loading: false,
+    error: false,
 };
 
 const profileStart = (state, action) => {
@@ -49,7 +50,8 @@ const profilePictureUpdate = (state, action) => {
 
 const profileError = (state, action) => {
     return updateObject(state, {
-        loading: false
+        loading: false,
+        error: true,
     })
 };
 
@@ -72,25 +74,29 @@ const clearProfileData = (state, action) => {
 
 const carCreate = (state, action) => {
     let {id, name, totSeats, fuel, consumption} = action;
+    console.log("create")
+    console.log(action)
+
     let carSet = state.carSet;
-    carSet.push({id: id, name: name, totSeats: totSeats, fuel: fuel, consumption: consumption});
-    state.loading = false;
-    return state;
+    carSet.push({id: id, name: name, tot_avail_seats: totSeats, fuel: fuel, consumption: consumption});
+    return {...state, carSet: carSet, loading: false};
 };
 
 const carUpdate = (state, action) => {
     let {id, name, totSeats, fuel, consumption} = action;
     let index = state.carSet.findIndex((car) => (car.id === id));
-    state.carSet[index].name = name;
-    state.carSet[index].totSeats = totSeats;
-    state.carSet[index].fuel = fuel;
-    state.carSet[index].consumption = fuel;
-    state.loading = false;
-    return state;
+    let carSet = state.carSet;
+    console.log("edit")
+    console.log(action)
+    carSet[index].name = name;
+    carSet[index].tot_avail_seats = totSeats;
+    carSet[index].fuel = fuel;
+    carSet[index].consumption = consumption;
+    return {...state, carSet: carSet, loading: false};
 };
 
 const carDelete = (state, action) => {
-    let carSet = state.carSet.filter((car) => (car.id !== action));
+    let carSet = state.carSet.filter((car) => (car.id !== action.id));
     return updateObject(state, {
         carSet: carSet,
         loading: false,

@@ -8,7 +8,7 @@ import {
     PROFILE_PICTURE_UPDATE,
     USER_DATA_UPDATE
 } from "./types";
-import {carsListURL, currentProfileURL, signupURL} from "../constants/apiurls";
+import {carsDetailURL, carsListURL, currentProfileURL, signupURL} from "../constants/apiurls";
 import {headers} from "../utils";
 import {addAlert, alertError, removeAllAlerts} from "./alertActions";
 import {authLogout} from "./authActions";
@@ -60,22 +60,22 @@ const changeUserDataSuccess = (id, firstName, lastName, email) => (
 const createCarSuccess = (id, name, totSeats, fuel, consumption) => (
     {
         type: CAR_CREATE,
-        id,
-        name,
-        totSeats,
-        fuel,
-        consumption,
+        id: id,
+        name: name,
+        totSeats: totSeats,
+        fuel: fuel,
+        consumption: consumption,
     }
 );
 
 const changeCarSuccess = (id, name, totSeats, fuel, consumption) => (
     {
         type: CAR_UPDATE,
-        id,
-        name,
-        totSeats,
-        fuel,
-        consumption,
+        id: id,
+        name: name,
+        totSeats: totSeats,
+        fuel: fuel,
+        consumption: consumption,
     }
 );
 
@@ -104,7 +104,7 @@ export const fetchProfile = () => (dispatch) => {
         .then(res => {
             let {id, user, picture, score, car_set, average_vote, received_feedback, given_feedback} = res.data;
             localStorage.setItem("profile_id", id);
-            dispatch(removeAllAlerts());
+            // dispatch(removeAllAlerts());
             return dispatch(getSuccess(id, user, picture, score, car_set, average_vote, received_feedback, given_feedback));
         })
         .catch(error => {
@@ -139,12 +139,12 @@ export const changePicture = (picture) => (dispatch) => {
 
 export const changeUserData = (first_name, last_name, email, password = null) => (dispatch) => {
     dispatch(start());
+    console.log("tette")
     let access_token = localStorage.getItem("access_token");
     let data = {
         first_name: first_name,
         last_name: last_name,
         email: email,
-        password: password
     };
     if (password != null) {
         data.password = password;
@@ -205,8 +205,8 @@ export const createCar = (name, totSeats, fuel, consumption) => (dispatch) => {
             headers('application/json', access_token)
         )
         .then(res => {
-            let {id, name, totSeats, fuel, consumption} = res.data;
-            dispatch(createCarSuccess(id, name, totSeats, fuel, consumption))
+            let {id, name, tot_avail_seats, fuel, consumption} = res.data;
+            dispatch(createCarSuccess(id, name, tot_avail_seats, fuel, consumption))
         })
         .catch(error => {
             dispatch(alertError(error));
@@ -215,14 +215,14 @@ export const createCar = (name, totSeats, fuel, consumption) => (dispatch) => {
         })
 };
 
-export const updateCar = (name, totSeats, fuel, consumption) => (dispatch) => {
+export const updateCar = (id, name, totSeats, fuel, consumption) => (dispatch) => {
     dispatch(start());
     let access_token = localStorage.getItem("access_token");
     let profileId = localStorage.getItem("profile_id");
 
     return axios
         .put(
-            carsListURL(profileId),
+            carsDetailURL(profileId, id),
             {
                 name: name,
                 tot_avail_seats: totSeats,
@@ -232,8 +232,8 @@ export const updateCar = (name, totSeats, fuel, consumption) => (dispatch) => {
             headers('application/json', access_token)
         )
         .then(res => {
-            let {id, name, totSeats, fuel, consumption} = res.data;
-            dispatch(changeCarSuccess(id, name, totSeats, fuel, consumption))
+            let {id, name, tot_avail_seats, fuel, consumption} = res.data;
+            dispatch(changeCarSuccess(id, name, tot_avail_seats, fuel, consumption))
         })
         .catch(error => {
             dispatch(alertError(error));
@@ -249,7 +249,7 @@ export const deleteCar = (id) => (dispatch) => {
     let profileId = localStorage.getItem("profile_id");
     return axios
         .delete(
-            carsListURL(profileId),
+            carsDetailURL(profileId, id),
             headers('application/json', access_token)
         )
         .then(res => {

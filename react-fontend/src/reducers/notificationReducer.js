@@ -9,7 +9,8 @@ import {
 
 const initialState = {
     loading: false,
-    notifications: []
+    notifications: [],
+    error: false
 };
 
 const notificationsStart = (state, action) => (
@@ -20,7 +21,8 @@ const notificationsStart = (state, action) => (
 
 const notificationsError = (state, action) => (
     updateObject(state, {
-        loading: false
+        loading: false,
+        error: true,
     })
 );
 

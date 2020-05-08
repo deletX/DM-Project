@@ -82,11 +82,15 @@ class Event(models.Model):
         participants = self.participant_count()
         avail_seats = self.participant_set.filter(car__isnull=False).aggregate(
             avail_seats=Sum('car__tot_avail_seats'))['avail_seats']
-        if avail_seats < participants:
+        if avail_seats is None or avail_seats < participants:
             raise ValidationError("More cars are needed")
         if self.status == self.EventStatusChoices.JOINABLE:
             self.status = self.EventStatusChoices.COMPUTING
             self.save()
+            for participant in self.participant_set:
+                Notification.objects.create(profile=participant.profile, title=self.name + " started computing",
+                                            content="The computation for the event has started",
+                                            url="/events/" + str(self.id))
             if settings.DEBUG:
                 mock_algorithm_task.delay(self.id)
             else:
@@ -127,7 +131,7 @@ class Participant(models.Model):
 class Feedback(models.Model):
     giver = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='given_feedback')
     receiver = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='received_feedback')
-    event = models.ForeignKey(Event, on_delete=models.DO_NOTHING)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
     comment = models.TextField(default="", max_length=500)
     vote = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(5)])
 

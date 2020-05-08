@@ -18,16 +18,20 @@ import Typography from "@material-ui/core/Typography";
 import {authLogout} from "../actions/authActions";
 import {setSearch} from "../actions/searchActions";
 import {connect} from "react-redux";
-import {addAlert} from "../actions/alertActions";
+import {addAlert, removeAllAlerts} from "../actions/alertActions";
 import axios from "axios";
 import PositionsDialog from "../components/map/PositionsDialog";
 import {nominatimToPrimarySecondary} from "../utils";
 import Box from "@material-ui/core/Box";
 import {Map, Marker, Popup, TileLayer} from "react-leaflet";
+import LoginComponent from "../components/auth/LoginComponent";
+import FormContainer from "./FormContainer";
+import Backdrop from "@material-ui/core/Backdrop";
 
 const useStyles = makeStyles((theme) => ({
     root: {
         marginBottom: theme.spacing(2),
+        marginTop: theme.spacing(2),
         width: '100%',
         display: 'flex',
         flexDirection: 'column',
@@ -37,39 +41,46 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
     },
     button: {
-        marginRight: theme.spacing(1),
-        marginBottom: theme.spacing(1),
+        width: '100%',
+        marginTop: 12,
     },
 
     map: {
-        width: '200px',
-        height: '200px'
+        width: '100%',
+        height: '100%',
+        maxHeight: "40vh",
     },
     mapBox: {
+        margin: theme.spacing(2),
         display: "block",
     }
 
 }));
 
 
-const MapContainer = (props) => {
+const MapContainer = ({addAlert, clearAlerts, addr, setAddr, pos, setPos, loadUserPosition = true}) => {
 
     useEffect(() => {
-        if (pos === "" && navigator.geolocation) {
+        if (pos === "" && navigator.geolocation && loadUserPosition) {
             navigator.geolocation.getCurrentPosition((position) => {
-                setPos(`SRID=4326;POINT (${position.coords.latitude} ${position.coords.longitude})`)
-                setLatitude(position.coords.latitude)
-                setLongitude(position.coords.longitude)
+                axios
+                    .get(`https://nominatim.openstreetmap.org/reverse/?lat=${position.coords.latitude}&lon=${position.coords.longitude}&format=json&addressdetails=1`,)
+                    .then((res) => {
+                        console.log(res.data)
+                        selectItem(res.data, position.coords.latitude, position.coords.longitude);
+                        clearAlerts();
+                    })
+                    .catch((error) => {
+                        addAlert("An error occurred while retrieving your location")
+                    })
             })
         }
     })
 
-    //will be props
-    const [addr, setAddr] = useState("");
-    const [pos, setPos] = useState("");
 
-    const [latitude, setLatitude] = useState(44.629430);
-    const [longitude, setLongitude] = useState(10.948296);
+    const [latitude, setLatitude] = useState(pos !== "" ? parseFloat(pos.split(' ')[1].slice(1)) : 44.629430);
+    const [longitude, setLongitude] = useState(pos !== "" ? parseFloat(pos.split(' ')[2].slice(0, -1)) : 10.948296);
+
     const classes = useStyles();
     let [addrError, setAddrError] = useState(false)
 
@@ -87,7 +98,6 @@ const MapContainer = (props) => {
      * @param {number} lon
      */
     const selectItem = (item, lat = undefined, lon = undefined) => {
-        console.log(lat, lon)
         let {primary, secondary} = nominatimToPrimarySecondary(item);
         setAddr(`${primary} ${secondary}`);
         setPos(`SRID=4326;POINT (${item.lat} ${item.lon})`)
@@ -108,11 +118,16 @@ const MapContainer = (props) => {
         axios
             .get(`https://nominatim.openstreetmap.org/search/?q=${encodeURI(addr)}&format=json&limit=3&addressdetails=1&dedupe=1`,)
             .then(res => {
+                if (res.data.length === 0) {
+                    addAlert("No positions found for given address", "info")
+                    return;
+                }
                 setPositions(res.data);
-                setOpen(true)
+                setOpen(true);
+                clearAlerts();
             })
             .catch(err => {
-                props.addAlert("An error occurred while retrieving positions")
+                addAlert("An error occurred while retrieving positions")
             })
     }
 
@@ -126,98 +141,99 @@ const MapContainer = (props) => {
         }
     }
     return (
-        <>
-
-            <div className={classes.root}>
-                <FormControl variant="outlined" className={classes.form}>
-                    <Grid container spacing={2}>
-                        <Grid item xs={8} sm={4}>
-                            <TextField fullWidth id="address" label="Address"
-                                       placeholder="via Pietro Vivarelli 10, Modena"
-                                       value={addr}
-                                       onChange={(input) => {
-                                           let name = input.target.value;
-                                           if (name.length > 0) {
-                                               setAddrError(false)
-                                           } else {
-                                               setAddrError(true)
-                                           }
-                                           setAddr(name);
-                                       }}
-                                       onBlur={(input) => {
-                                           if (input.target.value === "") {
-                                               setAddrError(true)
-                                           }
-                                       }}
-                                       onKeyPress={(ev) => {
-                                           if (ev.key === 'Enter') {
-                                               click()
-                                           }
-                                       }}
-                                       error={addrError}
-                                       required
-                                       helperText={addrError ? "Required" : ""}
-                                       autoComplete="address-line1"/>
-                        </Grid>
-                        <Grid item xs={4} sm={2}>
-                            <Button
-                                variant="contained"
-                                color="secondary"
-                                className={classes.button}
-                                startIcon={<SearchIcon/>}
-                                disabled={!addr.length}
-                                onClick={click}
-                            >
-                                Search
-                            </Button>
-                        </Grid>
+        <div className={classes.root}>
+            <FormControl variant="outlined" className={classes.form}>
+                <Grid container spacing={2}>
+                    <Grid item xs={6} sm={8}>
+                        <TextField fullWidth id="address" label="Address"
+                                   placeholder="via Pietro Vivarelli 10, Modena"
+                                   value={addr}
+                                   onChange={(input) => {
+                                       let name = input.target.value;
+                                       if (input.target.value.length > 0) {
+                                           setAddrError(false)
+                                       } else {
+                                           setAddrError(true)
+                                       }
+                                       setAddr(name);
+                                   }}
+                                   onBlur={(input) => {
+                                       if (input.target.value === "") {
+                                           setAddrError(true)
+                                       } else {
+                                           setAddrError(false)
+                                       }
+                                   }}
+                                   onKeyPress={(ev) => {
+                                       if (ev.key === 'Enter') {
+                                           click()
+                                       }
+                                   }}
+                                   error={addrError}
+                                   required
+                                   helperText={addrError ? "Required" : ""}
+                                   autoComplete="address-line1"/>
                     </Grid>
-                    <Box className={classes.mapBox}>
-                        <Map
-                            center={[latitude, longitude]}
-                            zoom={zoom}
-                            style={{width: '100%', height: '600px'}}
-                            onZoomEnd={(e) => {
-                                setZoom(e.target._zoom)
-                            }}
+                    <Grid item xs={6} sm={4}>
+                        <Button
+                            variant="contained"
+                            color="secondary"
+                            className={classes.button}
+                            startIcon={<SearchIcon/>}
+                            disabled={!addr.length}
+                            onClick={click}
                         >
-                            <TileLayer
-                                attribution='&copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                            />
+                            Search
+                        </Button>
+                    </Grid>
+                </Grid>
+                <Box className={classes.mapBox}>
+                    <Map
+                        center={[latitude, longitude]}
+                        zoom={zoom}
+                        style={{width: '100%', height: '600px'}}
+                        onZoomEnd={(e) => {
+                            setZoom(e.target._zoom)
+                        }}
+                        className={classes.map}
+                    >
+                        <TileLayer
+                            attribution='&copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                        />
 
-                            <Marker
-                                draggable={true}
-                                onDragend={(ev) => {
-                                    axios
-                                        .get(`https://nominatim.openstreetmap.org/reverse/?lat=${ev.target._latlng.lat}&lon=${ev.target._latlng.lng}&format=json&addressdetails=1`,)
-                                        .then(res => {
-                                            console.log(res.data)
-                                            selectItem(res.data, ev.target._latlng.lat, ev.target._latlng.lng);
-                                        }).catch(error => {
-                                        props.addAlert("An error occurred while retrieving your selected location")
-                                    })
-                                }}
+                        <Marker
+                            draggable={true}
+                            onDragend={(ev) => {
+                                axios
+                                    .get(`https://nominatim.openstreetmap.org/reverse/?lat=${ev.target._latlng.lat}&lon=${ev.target._latlng.lng}&format=json&addressdetails=1`,)
+                                    .then(res => {
+                                        console.log(res.data)
+                                        selectItem(res.data, ev.target._latlng.lat, ev.target._latlng.lng);
+                                        clearAlerts();
+                                        setAddrError(false);
+                                    }).catch(error => {
+                                    addAlert("An error occurred while retrieving your selected location")
+                                })
+                            }}
 
-                                position={{lat: latitude, lng: longitude}}
-                            >
-                            </Marker>
-                        </Map>
-                    </Box>
-
-
-                </FormControl>
-                <PositionsDialog open={open} close={() => {
-                    setOpen(false)
-                }} positions={positions} selectItem={selectItem}/>
-            </div>
-        </>
+                            position={{lat: latitude, lng: longitude}}
+                        >
+                        </Marker>
+                    </Map>
+                </Box>
+            </FormControl>
+            <PositionsDialog open={open} close={() => {
+                setOpen(false)
+            }} positions={positions} selectItem={selectItem}/>
+        </div>
     )
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        addAlert: (text) => (dispatch(addAlert(text, "error"))),
+        addAlert: (text, style = "error") => (dispatch(addAlert(text, style))),
+        clearAlerts: () => (dispatch(removeAllAlerts())),
     }
 }
 

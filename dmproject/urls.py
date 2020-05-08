@@ -26,6 +26,16 @@ urlpatterns = [
     path('api/v0.1/', include(('api.urls', 'api'), namespace='api')),
     path('social/', include('social_django.urls', namespace='social')),
     path('', TemplateView.as_view(template_name="index.html")),
+    path('home', TemplateView.as_view(template_name="index.html")),
+    path('login', TemplateView.as_view(template_name="index.html")),
+    path('signup', TemplateView.as_view(template_name="index.html")),
+    path('home', TemplateView.as_view(template_name="index.html")),
+    path('add', TemplateView.as_view(template_name="index.html")),
+    path('my-profile', TemplateView.as_view(template_name="index.html")),
+    path('profiles/<int:num>/', TemplateView.as_view(template_name="index.html")),
+    path('events/<int:num>/', TemplateView.as_view(template_name="index.html")),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 # urlpatterns += static('/', document_root=settings.STATIC_ROOT)
+
+handler404 = 'api.views.custom_page_not_found_view'
