@@ -101,7 +101,7 @@ const PersonalInfoForm = ({
 
     const validatePassword = (input) => {
         undoGoogleLogin()
-        if (!/^(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])(?=.*[\d]){8,}$/.test(input.target.value)) {
+        if (!/^(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])(?=.*[\d])[\w!@#$%^&*]{8,}$/.test(input.target.value)) {
             setPasswordError(true);
         } else {
             setPasswordError(false);
@@ -217,7 +217,7 @@ const PersonalInfoForm = ({
                                    error={passwordError}
                                    value={password}
                                    type="password"
-                                   helperText={"Password should contain at least a lower case, an upper case, a number and a special character [! @ # $ % ^ & *]"}
+                                   helperText={"Password should contain at least a lower case, an upper case, a number and a special character [! @ # $ % ^ & *] and be at least 8 characters long and shouldn't contain whitespaces"}
                                    onChange={validatePassword}
                                    onBlur={validatePassword}
                                    autoComplete="new-password"
