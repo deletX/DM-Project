@@ -87,7 +87,7 @@ class Event(models.Model):
         if self.status == self.EventStatusChoices.JOINABLE:
             self.status = self.EventStatusChoices.COMPUTING
             self.save()
-            for participant in self.participant_set:
+            for participant in self.participant_set.all:
                 Notification.objects.create(profile=participant.profile, title=self.name + " started computing",
                                             content="The computation for the event has started",
                                             url="/events/" + str(self.id))
@@ -167,7 +167,7 @@ def create_notification_for_feedback(sender, **kwargs):
     if kwargs["created"]:
         notification = Notification.objects.create(profile=feedback.receiver, title="New feedback",
                                                    content="User {} gave you a {} star rating".format(
-                                                       feedback.giver.user, feedback.vote))
+                                                       feedback.giver.user.username, feedback.vote))
 
 
 post_save.connect(create_notification_for_feedback, sender=Feedback)
