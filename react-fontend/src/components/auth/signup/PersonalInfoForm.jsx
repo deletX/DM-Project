@@ -70,7 +70,6 @@ const PersonalInfoForm = ({
                           }) => {
     const classes = useStyles();
     const [emailHelperText, setEmailHelperText] = useState("");
-    const [passwordHelperText, setPasswordHelperText] = useState("");
     const [usernameHelperText, setUsernameHelperText] = useState("");
 
     const validateEmail = (input) => {
@@ -102,27 +101,10 @@ const PersonalInfoForm = ({
 
     const validatePassword = (input) => {
         undoGoogleLogin()
-        if (input.target.value === null || input.target.value === "") {
+        if (!/^(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])(?=.*[\d]){8,}$/.test(input.target.value)) {
             setPasswordError(true);
-            setPasswordHelperText("Required");
-        } else if (!(/^[\w!@#$%^&*]{8,}$/.test(input.target.value))) {
-            setPasswordError(true);
-            setPasswordHelperText("Should be at least 8 character long");
-        } else if (!/^(?=.*[\d])[\w!@#$%^&*]{8,}$/.test(input.target.value)) {
-            setPasswordError(true);
-            setPasswordHelperText("Should contain at least 1 number");
-        } else if (!/^(?=.*[A-Z])(?=.*[\d])[\w!@#$%^&*]{8,}$/.test(input.target.value)) {
-            setPasswordError(true);
-            setPasswordHelperText("Should contain at least 1 capital");
-        } else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*[\d])[\w!@#$%^&*]{8,}$/.test(input.target.value)) {
-            setPasswordError(true);
-            setPasswordHelperText("Should contain at least 1 lowercase");
-        } else if (!/^(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])(?=.*[\d])[\w!@#$%^&*]{8,}$/.test(input.target.value)) {
-            setPasswordError(true);
-            setPasswordHelperText("Should contain at least 1 special character");
         } else {
             setPasswordError(false);
-            setPasswordHelperText("");
         }
         setPassword(input.target.value)
     };
@@ -152,7 +134,7 @@ const PersonalInfoForm = ({
                                 setImageURL(input.profileObj.imageUrl)
                                 axios.get(input.profileObj.imageUrl, {responseType: 'blob'}).then(res => {
                                     let blob = res.data
-                                    
+
                                     let type = res.data.type.split('/').pop()
                                     blob.name = `${username}.${type}`
                                     setImage(blob)
@@ -235,7 +217,7 @@ const PersonalInfoForm = ({
                                    error={passwordError}
                                    value={password}
                                    type="password"
-                                   helperText={passwordHelperText}
+                                   helperText={"Password should contain at least a lower case, an upper case, a number and a special character [! @ # $ % ^ & *]"}
                                    onChange={validatePassword}
                                    onBlur={validatePassword}
                                    autoComplete="new-password"
