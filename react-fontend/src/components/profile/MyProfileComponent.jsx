@@ -71,21 +71,9 @@ const MyProfileComponent = ({profile, changeUserData}) => {
     const validatePassword = (input) => {
         if (input.target.value === null || input.target.value === "") {
             setPasswordError(false);
-        } else if (!(/^[\w!@#$%^&*]{8,}$/.test(input.target.value))) {
-            setPasswordError(true);
-            setPasswordHelperText("Should be at least 8 character long");
-        } else if (!/^(?=.*[\d])[\w!@#$%^&*]{8,}$/.test(input.target.value)) {
-            setPasswordError(true);
-            setPasswordHelperText("Should contain at least 1 number");
-        } else if (!/^(?=.*[A-Z])(?=.*[\d])[\w!@#$%^&*]{8,}$/.test(input.target.value)) {
-            setPasswordError(true);
-            setPasswordHelperText("Should contain at least 1 capital");
-        } else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*[\d])[\w!@#$%^&*]{8,}$/.test(input.target.value)) {
-            setPasswordError(true);
-            setPasswordHelperText("Should contain at least 1 lowercase");
         } else if (!/^(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])(?=.*[\d])[\w!@#$%^&*]{8,}$/.test(input.target.value)) {
             setPasswordError(true);
-            setPasswordHelperText("Should contain at least 1 special character");
+            setPasswordHelperText("Password should contain at least a lower case, an upper case, a number and a special character [! @ # $ % ^ & *] and be at least 8 characters long and shouldn't contain whitespaces");
         } else {
             setPasswordError(false);
             setPasswordHelperText("");

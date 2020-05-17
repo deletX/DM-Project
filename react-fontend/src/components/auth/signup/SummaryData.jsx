@@ -72,7 +72,7 @@ const SummaryData = ({
             <Typography className={classes.instruction}>
                 Review you're data before submitting!
             </Typography>
-            <Avatar src={imageURL !== "" ? imageURL : defaultProfilePic} className={classes.imgPreview}/>
+            <Avatar src={imageURL} className={classes.imgPreview}/>
 
             <FormControl variant="outlined" className={classes.form}>
                 <Grid container spacing={2}>

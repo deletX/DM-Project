@@ -134,7 +134,7 @@ export const changePicture = (picture) => {
             )
             .then(res => {
                 dispatch(successPictureUpdate(res.data.picture));
-                dispatch(addAlert("Immagine modificata con successo!", "success"));
+                dispatch(addAlert("Picture changed successfully!", "success"));
             })
             .catch(error => {
                 dispatch(alertError(error));
