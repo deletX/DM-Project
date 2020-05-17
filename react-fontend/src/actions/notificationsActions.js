@@ -60,6 +60,9 @@ export const retrieveNotifications = () => {
             )
             .then(res => {
                 dispatch(getSuccess(res.data))
+                setTimeout(() => {
+                    retrieveNotifications()
+                }, 60)
             })
             .catch(error => {
                 dispatch(alertError(error));
