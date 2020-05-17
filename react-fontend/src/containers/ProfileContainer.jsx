@@ -66,7 +66,7 @@ const ProfileContainer = ({location, addAlert, token, isAuthenticated, isLoading
     useEffect(() => {
 
             if (!(isAuthenticated || isLoading))
-                history.push(login)
+                history.push(`${login}?next=${encodeURI(location.pathname)}`)
             else if (profile.id === -1 && isAuthenticated) {
                 if (profileId === id) {
                     setProfile(profileRedux)
@@ -107,8 +107,7 @@ const ProfileContainer = ({location, addAlert, token, isAuthenticated, isLoading
         <FormContainer effect={() => {
         }}>
             <Helmet>
-                <title>React App - Event Page</title>
-                <meta name="description" content="Pagina degli eventi"/>
+                <title>React App - Profile Page</title>
             </Helmet>
             {("given_feedback" in profile) ?
                 <MyProfileComponent profile={profile}/>

@@ -16,7 +16,7 @@ import {useParams} from "react-router";
 import {findRenderedDOMComponentWithClass} from "react-dom/test-utils";
 import {addAlert} from "../actions/alertActions";
 import {history} from "../App";
-import {home, login} from "../constants/pagesurls";
+import {eventPage, home, login} from "../constants/pagesurls";
 import AlertDialog from "../components/AlertDialog";
 import {createFeedbackURL, eventDetailURL, eventRunURL, participationEditURL} from "../constants/apiurls";
 import {headers, pridStringToLatLng} from "../utils";
@@ -232,7 +232,7 @@ const EventContainer = ({location, addAlert, token, profileId, isAuthenticated, 
 
     useEffect(() => {
             if (!(isAuthenticated || isAuthLoading))
-                history.push(login)
+                history.push(`${login}?next=${encodeURI(eventPage(id))}`)
             else if (event.name === "" && isAuthenticated) {
                 getEvent()
             }

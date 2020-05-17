@@ -36,135 +36,143 @@ const checkAuthTimeout = (expirationTime) => dispatch => {
     }, expirationTime * 1000);
 };
 
-export const refreshAuth = (refresh_token) => (dispatch) => {
-    return axios
-        .post(
-            tokenURL(),
-            qs.stringify({
-                client_id: APP_CLIENTID,
-                client_secret: APP_SECRET,
-                grant_type: 'refresh_token',
-                refresh_token: refresh_token,
-            }),
-            headers('application/x-www-form-urlencoded')
-        )
-        .then(res => {
-            let access_token = res.data.access_token;
-            let refresh_token = res.data.refresh_token;
-            let expirationDate = new Date(new Date().getTime() + 3600 * 1000);
-            localStorage.setItem("access_token", access_token);
-            localStorage.setItem("refresh_token", refresh_token);
-            localStorage.setItem("expiration_date", expirationDate);
-            dispatch(success(access_token));
-            dispatch(fetchProfile());
-            dispatch(retrieveNotifications());
-            dispatch(checkAuthTimeout(3600));
-        })
-        .catch(error => {
-            dispatch(fail(error));
-            dispatch(alertError(error));
-            return error;
-        });
-};
+export const refreshAuth = (refresh_token) => {
+    return async (dispatch) => {
+        return axios
+            .post(
+                tokenURL(),
+                qs.stringify({
+                    client_id: APP_CLIENTID,
+                    client_secret: APP_SECRET,
+                    grant_type: 'refresh_token',
+                    refresh_token: refresh_token,
+                }),
+                headers('application/x-www-form-urlencoded')
+            )
+            .then(res => {
+                let access_token = res.data.access_token;
+                let refresh_token = res.data.refresh_token;
+                let expirationDate = new Date(new Date().getTime() + 3600 * 1000);
+                localStorage.setItem("access_token", access_token);
+                localStorage.setItem("refresh_token", refresh_token);
+                localStorage.setItem("expiration_date", expirationDate);
+                dispatch(success(access_token));
+                dispatch(fetchProfile());
+                dispatch(retrieveNotifications());
+                dispatch(checkAuthTimeout(3600));
+            })
+            .catch(error => {
+                dispatch(fail(error));
+                dispatch(alertError(error));
+                return error;
+            });
+    };
+}
 
-export const googleOAuthLogin = (google_token) => (dispatch) => {
-    dispatch(start());
+export const googleOAuthLogin = (google_token) => {
+    return async (dispatch) => {
+        dispatch(start());
 
-    return axios
-        .post(
-            convertTokenURL(),
-            qs.stringify({
-                client_id: APP_CLIENTID,
-                client_secret: APP_SECRET,
-                grant_type: 'convert_token',
-                backend: 'google-oauth2',
-                token: google_token
-            }),
-            headers("application/x-www-form-urlencoded")
-        )
-        .then(res => {
-            let access_token = res.data.access_token;
-            let refresh_token = res.data.refresh_token;
-            let expirationDate = new Date(new Date().getTime() + 3600 * 1000);
-            localStorage.setItem("access_token", access_token);
-            localStorage.setItem("refresh_token", refresh_token);
-            localStorage.setItem("expiration_date", expirationDate);
-            dispatch(success(access_token));
-            dispatch(retrieveNotifications());
-            dispatch(checkAuthTimeout(3600));
-            return dispatch(fetchProfile());
-        })
-        .catch(error => {
-            dispatch(fail(error));
-            dispatch(alertError(error));
-            return error;
-        });
-};
+        return axios
+            .post(
+                convertTokenURL(),
+                qs.stringify({
+                    client_id: APP_CLIENTID,
+                    client_secret: APP_SECRET,
+                    grant_type: 'convert_token',
+                    backend: 'google-oauth2',
+                    token: google_token
+                }),
+                headers("application/x-www-form-urlencoded")
+            )
+            .then(res => {
+                let access_token = res.data.access_token;
+                let refresh_token = res.data.refresh_token;
+                let expirationDate = new Date(new Date().getTime() + 3600 * 1000);
+                localStorage.setItem("access_token", access_token);
+                localStorage.setItem("refresh_token", refresh_token);
+                localStorage.setItem("expiration_date", expirationDate);
+                dispatch(success(access_token));
+                dispatch(retrieveNotifications());
+                dispatch(checkAuthTimeout(3600));
+                dispatch(fetchProfile());
+            })
+            .catch(error => {
+                dispatch(fail(error));
+                dispatch(alertError(error));
+                return error;
+            });
+    };
+}
 
-export const authLogin = (username, password) => (dispatch) => {
-    dispatch(start());
+export const authLogin = (username, password) => {
+    return async (dispatch) => {
+        dispatch(start());
 
-    return axios
-        .post(
-            tokenURL(),
-            qs.stringify({
-                client_id: APP_CLIENTID,
-                client_secret: APP_SECRET,
-                grant_type: 'password',
-                username: username,
-                password: password,
-            }),
-            headers("application/x-www-form-urlencoded")
-        )
-        .then(res => {
-            let access_token = res.data.access_token;
-            let refresh_token = res.data.refresh_token;
-            let expirationDate = new Date(new Date().getTime() + 3600 * 1000);
-            localStorage.setItem("access_token", access_token);
-            localStorage.setItem("refresh_token", refresh_token);
-            localStorage.setItem("expiration_date", expirationDate);
-            dispatch(success(access_token));
-            dispatch(checkAuthTimeout(3600));
-            dispatch(retrieveNotifications());
-            return dispatch(fetchProfile());
-
-
-        })
-        .catch(error => {
-            dispatch(fail(error));
-            dispatch(alertError(error));
-            return error;
-        });
-};
+        return axios
+            .post(
+                tokenURL(),
+                qs.stringify({
+                    client_id: APP_CLIENTID,
+                    client_secret: APP_SECRET,
+                    grant_type: 'password',
+                    username: username,
+                    password: password,
+                }),
+                headers("application/x-www-form-urlencoded")
+            )
+            .then(res => {
+                let access_token = res.data.access_token;
+                let refresh_token = res.data.refresh_token;
+                let expirationDate = new Date(new Date().getTime() + 3600 * 1000);
+                localStorage.setItem("access_token", access_token);
+                localStorage.setItem("refresh_token", refresh_token);
+                localStorage.setItem("expiration_date", expirationDate);
+                dispatch(success(access_token));
+                dispatch(checkAuthTimeout(3600));
+                dispatch(retrieveNotifications());
+                dispatch(fetchProfile());
 
 
-export const authSignup = (username, first_name, last_name, email, password) => (dispatch) => {
-    dispatch(start());
-    // we return the promise in order to use wait till the end using "then"
-    return axios
-        .post(
-            signupURL(),
-            {
-                username: username,
-                first_name: first_name,
-                last_name: last_name,
-                email: email,
-                password: password
-            },
-            headers('application/json')
-        )
-        .then(res => {
-            return dispatch(authLogin(username, password))
-        })
-        .catch(error => {
-            dispatch(fail(error));
-            dispatch(alertError(error));
-            return error;
-        });
-};
+            })
+            .catch(error => {
+                dispatch(fail(error));
+                dispatch(alertError(error));
+                return error;
+            });
+    };
+}
+
+
+export const authSignup = (username, first_name, last_name, email, password) => {
+    return async (dispatch) => {
+        dispatch(start());
+        // we return the promise in order to use wait till the end using "then"
+        return axios
+            .post(
+                signupURL(),
+                {
+                    username: username,
+                    first_name: first_name,
+                    last_name: last_name,
+                    email: email,
+                    password: password
+                },
+                headers('application/json')
+            )
+            .then(res => {
+                dispatch(authLogin(username, password))
+            })
+            .catch(error => {
+                dispatch(fail(error));
+                dispatch(alertError(error));
+                return error;
+            });
+    };
+}
 
 export const authCheckState = () => {
-    return dispatch => {
+    return async dispatch => {
         const token = localStorage.getItem("access_token");
         if (token !== undefined || token !== null) {
             const expirationDate = new Date(localStorage.getItem("expiration_date"));
@@ -186,10 +194,12 @@ export const authCheckState = () => {
     };
 };
 
-export const authLogout = () => dispatch => {
-    dispatch(logout());
-    dispatch(removeAllAlerts());
-    dispatch(clearProfileData());
-    dispatch(clearNotifications());
-};
+export const authLogout = () => {
+    return async (dispatch) => {
+        dispatch(logout());
+        dispatch(removeAllAlerts());
+        dispatch(clearProfileData());
+        dispatch(clearNotifications());
+    };
+}
 

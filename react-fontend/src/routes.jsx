@@ -27,7 +27,7 @@ const BaseRouter = props => (
             <Route exact path={login}>
                 <FormContainer effect={() => {
                     if (props.isAuthenticated)
-                        history.push(home)
+                        history.push(props.location.query.next ? decodeURI(props.location.query.next) : home)
                 }}>
                     <LoginComponent/>
                 </FormContainer>
@@ -35,7 +35,7 @@ const BaseRouter = props => (
             <Route exact path={signup}>
                 <FormContainer effect={() => {
                     if (props.isAuthenticated)
-                        history.push(home)
+                        history.push(props.location.query.next ? decodeURI(props.location.query.next) : home)
                 }}>
                     <SignupComponent/>
                 </FormContainer>

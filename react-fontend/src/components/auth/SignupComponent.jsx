@@ -97,12 +97,20 @@ function SignupComponent({authSignup, googleLogin, setPicture, postCar, addError
                     restart(true);
                 } else {
                     if (carName !== "") {
-                        postCar(carName, totSeats, fuel, consumption)
+                        postCar(carName, totSeats, fuel, consumption).then(
+                            () => {
+                                if (image !== null && imageURL !== "") {
+                                    setPicture(image).then(() => {
+                                        history.push(home)
+                                    })
+                                }
+                            }
+                        )
+                    } else if (image !== null && imageURL !== "") {
+                        setPicture(image).then(() => {
+                            history.push(home)
+                        })
                     }
-                    if (image !== null && imageURL !== "") {
-                        setPicture(image)
-                    }
-                    history.push(home)
                 }
             })
         } else {
@@ -115,11 +123,20 @@ function SignupComponent({authSignup, googleLogin, setPicture, postCar, addError
                 } else {
                     if (carName !== "") {
                         postCar(carName, totSeats, fuel, consumption)
+                            .then(() => {
+                                    if (image !== null && imageURL !== "") {
+                                        setPicture(image).then(() => {
+                                            history.push(home)
+                                        })
+                                    }
+                                }
+                            )
+                    } else if (image !== null && imageURL !== "") {
+                        setPicture(image).then(() => {
+                            history.push(home)
+                        })
                     }
-                    if (image !== null && imageURL !== "") {
-                        setPicture(image)
-                    }
-                    history.push(home)
+
                 }
             })
         }

@@ -94,7 +94,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-function SignupComponent({authLogin, googleLogin, addError}) {
+function SignupComponent({authLogin, googleLogin, addError, location}) {
 
     const [username, setUsername] = useState("");
     const [usernameError, setUsernameError] = useState(false);
@@ -126,7 +126,7 @@ function SignupComponent({authLogin, googleLogin, addError}) {
                                     let username = input.profileObj.email.split("@")[0]
                                     googleLogin(input.accessToken).catch(err => {
                                         if (!err instanceof Error) {
-                                            history.push(home)
+                                            history.push(location.query.next ? decodeURI(location.query.next) : home)
                                         } else {
                                             addError("An error occurred while logging you in with google")
                                             console.log(err)
@@ -198,7 +198,7 @@ function SignupComponent({authLogin, googleLogin, addError}) {
                                 onClick={() => {
                                     authLogin(username, password).catch(err => {
                                         if (!err instanceof Error) {
-                                            history.push(home)
+                                            history.push(location.query.next ? decodeURI(location.query.next) : home)
                                         } else {
                                             addError("An error occurred while logging you in")
                                             console.log(err)

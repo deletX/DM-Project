@@ -11,7 +11,7 @@ import MapContainer from "../../containers/MapContainer";
 import JoinComponent from "./JoinComponent";
 import StepperContainer from "../../containers/StepperContainer";
 import {history} from "../../App";
-import {login} from "../../constants/pagesurls";
+import {addEvent, login} from "../../constants/pagesurls";
 import {defaultEventPic} from "../../constants/constants";
 import ReviewCreateComponent from "./create/ReviewCreateComponent";
 import axios from "axios"
@@ -164,7 +164,7 @@ const CreateComponent = ({addAlert, isAuthenticatedOrLoading}) => {
         <FormContainer
             effect={() => {
                 if (!isAuthenticatedOrLoading) {
-                    history.push(login);
+                    history.push(`${login}?next=${encodeURI(addEvent)}`);
                 }
             }}>
             <CardContainer title={"Add Event"} loading={true} open={open}>

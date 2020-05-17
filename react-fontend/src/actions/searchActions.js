@@ -1,8 +1,10 @@
 import {SET_SEARCH} from "./types";
 
-export const setSearch = (search) => dispatch => (
-    dispatch({
-        type: SET_SEARCH,
-        search: search,
-    })
-)
+export const setSearch = (search) => {
+    return async dispatch => (
+        dispatch({
+            type: SET_SEARCH,
+            search: search,
+        })
+    )
+}

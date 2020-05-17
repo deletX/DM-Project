@@ -74,7 +74,7 @@ const HomeContainer = ({addError, isAuthenticated, isLoading, search, token}) =>
 
     useEffect(() => {
         if (!(isAuthenticated || isLoading))
-            history.push(login)
+            history.push(`${login}?next=${encodeURI(home)}`)
         else if (isAuthenticated)
             refreshEvents(joinable, joined, owned);
     }, [joinable, joined, owned, isAuthenticated, isLoading]);

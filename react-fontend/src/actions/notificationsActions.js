@@ -43,46 +43,52 @@ const readSuccess = (id, read) => (
 );
 
 
-export const clearNotifications = () => (dispatch) => {
-    dispatch({type: CLEAR_NOTIFICATIONS})
-};
+export const clearNotifications = () => {
+    return async (dispatch) => {
+        dispatch({type: CLEAR_NOTIFICATIONS})
+    };
+}
 
-export const retrieveNotifications = () => (dispatch) => {
-    dispatch(start());
-    let access_token = localStorage.getItem("access_token");
-    return axios
-        .get(
-            notificationListURL(),
-            headers('application/json', access_token)
-        )
-        .then(res => {
-            dispatch(getSuccess(res.data))
-        })
-        .catch(error => {
-            dispatch(alertError(error));
-            dispatch(fail());
-            return error;
-        })
-};
+export const retrieveNotifications = () => {
+    return async (dispatch) => {
+        dispatch(start());
+        let access_token = localStorage.getItem("access_token");
+        return axios
+            .get(
+                notificationListURL(),
+                headers('application/json', access_token)
+            )
+            .then(res => {
+                dispatch(getSuccess(res.data))
+            })
+            .catch(error => {
+                dispatch(alertError(error));
+                dispatch(fail());
+                return error;
+            })
+    };
+}
 
-export const readNotification = (notificationId, read = true) => (dispatch) => {
-    dispatch(start());
-    let access_token = localStorage.getItem("access_token");
-    return axios
-        .put(
-            notificationEditURL(notificationId),
-            {
-                read: read
-            },
-            headers('application/json', access_token)
-        )
-        .then(res => {
-            dispatch(readSuccess(notificationId, read))
-        })
-        .catch(error => {
-            dispatch(alertError(error));
-            dispatch(fail());
-            return error;
-        })
-};
+export const readNotification = (notificationId, read = true) => {
+    return async (dispatch) => {
+        dispatch(start());
+        let access_token = localStorage.getItem("access_token");
+        return axios
+            .put(
+                notificationEditURL(notificationId),
+                {
+                    read: read
+                },
+                headers('application/json', access_token)
+            )
+            .then(res => {
+                dispatch(readSuccess(notificationId, read))
+            })
+            .catch(error => {
+                dispatch(alertError(error));
+                dispatch(fail());
+                return error;
+            })
+    };
+}
 

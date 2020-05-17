@@ -77,7 +77,7 @@ const carCreate = (state, action) => {
     console.log("create")
     console.log(action)
 
-    let carSet = state.carSet;
+    const carSet = state.carSet;
     carSet.push({id: id, name: name, tot_avail_seats: totSeats, fuel: fuel, consumption: consumption});
     return {...state, carSet: carSet, loading: false};
 };
