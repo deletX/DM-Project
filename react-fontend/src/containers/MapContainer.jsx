@@ -222,6 +222,9 @@ const MapContainer = ({addAlert, clearAlerts, addr, setAddr, pos, setPos, loadUs
                         </Marker>
                     </Map>
                 </Box>
+                <Typography variant="body2">
+                    You can move the pin on the map to select the exact location
+                </Typography>
             </FormControl>
             <PositionsDialog open={open} close={() => {
                 setOpen(false)
