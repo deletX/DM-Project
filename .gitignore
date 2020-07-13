@@ -25,3 +25,4 @@
 /.idea/
 /react-fontend/node_modules/
 react-fontend/package-lock.json
+.vscode
