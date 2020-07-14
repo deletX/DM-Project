@@ -21,7 +21,8 @@ Per creare un utente:
 - `GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO django;`
 - `CREATE EXTENSION postgis;`
 
-
+##  cose
+`apt-get install python3-dev`
 ## Creazione del venv
 In Pycharm entrare nel menu impostazioni (Ctrl+Alt+S), sotto Project > Project Interpreter, rotellina a fianco di Project Interpreter. Cliccare su Add e poi su OK
 
