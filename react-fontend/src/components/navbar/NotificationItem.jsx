@@ -9,6 +9,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import {history} from "../../App";
+import {useHistory} from "react-router-dom";
 import {connect} from 'react-redux';
 import {readNotification} from "../../actions/notificationsActions";
 
@@ -25,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
 
 const NotificationItem = ({notification, readNotification}) => {
     const classes = useStyles();
+    let history=useHistory()
 
     return (
         <>

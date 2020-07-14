@@ -4,7 +4,7 @@ import * as pagesURL from "../../constants/pagesurls";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import React from "react";
-import {useHistory} from "react-router-dom";
+
 import {fade} from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {connect} from "react-redux";
@@ -31,6 +31,7 @@ import {authLogout} from "../../actions/authActions";
 import logo from "../../icons/logo.svg"
 import {setSearch} from "../../actions/searchActions";
 //import {history} from "../../App"
+import {useHistory} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     grow: {

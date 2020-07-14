@@ -16,7 +16,8 @@ import axios from "axios"
 import {eventDetailURL, participationEditURL} from "../../constants/apiurls";
 import {headers} from "../../utils";
 import {addAlert} from "../../actions/alertActions";
-import {history} from "../../App";
+//import {history} from "../../App";
+import {useHistory} from "react-router-dom";
 import {event_id, eventPage} from "../../constants/pagesurls";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import {Helmet} from "react-helmet";
@@ -43,6 +44,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const EventCard = ({addAlert, token, event, profileId, refreshEvents}) => {
+    let history=useHistory()
     const classes = useStyles()
     const [joinOpen, setJoinOpen] = useState(false);
     const [leaveOpen, setLeaveOpen] = useState(false);

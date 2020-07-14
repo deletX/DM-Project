@@ -9,7 +9,9 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import DirectionsCarIcon from '@material-ui/icons/DirectionsCar';
 import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
 import Divider from "@material-ui/core/Divider";
-import {history} from "../../App";
+//import {history} from "../../App";
+import {useHistory} from "react-router-dom";
+
 import {profile} from "../../constants/pagesurls";
 import AvatarCustom from "../AvatarCustom";
 
@@ -34,6 +36,8 @@ const useStyles = makeStyles((theme) => ({
 
 const ParticipationListItem = ({participation, onlyDriverIcon = false, profileId = undefined}) => {
     const classes = useStyles();
+    let history=useHistory()
+
     return (
         <>
             <ListItem>

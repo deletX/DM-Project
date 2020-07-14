@@ -10,7 +10,8 @@ import SummaryData from "../auth/signup/SummaryData";
 import MapContainer from "../../containers/MapContainer";
 import JoinComponent from "./JoinComponent";
 import StepperContainer from "../../containers/StepperContainer";
-import {history} from "../../App";
+//import {history} from "../../App";
+import {useHistory} from "react-router-dom";
 import {addEvent, login} from "../../constants/pagesurls";
 import {defaultEventPic} from "../../constants/constants";
 import ReviewCreateComponent from "./create/ReviewCreateComponent";
@@ -46,6 +47,7 @@ const useStyles = makeStyles((theme) => ({
 
 const CreateComponent = ({addAlert, isAuthenticatedOrLoading}) => {
     const classes = useStyles();
+    let history=useHistory()
 
     const [open, setOpen] = useState(false);
     const [name, setName] = useState("");

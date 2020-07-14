@@ -15,7 +15,8 @@ import Alert from "@material-ui/lab/Alert";
 import {useParams} from "react-router";
 import {findRenderedDOMComponentWithClass} from "react-dom/test-utils";
 import {addAlert} from "../actions/alertActions";
-import {history} from "../App";
+//import {history} from "../App";
+import {useHistory} from "react-router-dom";
 import {eventPage, home, login} from "../constants/pagesurls";
 import AlertDialog from "../components/AlertDialog";
 import {createFeedbackURL, eventDetailURL, eventRunURL, participationEditURL} from "../constants/apiurls";
@@ -208,6 +209,7 @@ const emptyEvent = {
 const EventContainer = ({location, addAlert, token, profileId, isAuthenticated, isAuthLoading}) => {
     let {id} = useParams();
     const [event, setEvent] = useState(location.state ? location.state : emptyEvent)
+    let history=useHistory()
     const getEvent = () => {
         axios
             .get(

@@ -16,7 +16,8 @@ import Box from "@material-ui/core/Box";
 import Backdrop from "@material-ui/core/Backdrop";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import {home, signup} from "../../constants/pagesurls";
-import {history} from "../../App";
+//import {history} from "../../App";
+import {useHistory} from "react-router-dom";
 import {authCheckState, authLogin, authSignup, googleOAuthLogin} from "../../actions/authActions";
 import {connect} from "react-redux";
 import {changePicture, createCar} from "../../actions/profileActions";
@@ -95,7 +96,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 function SignupComponent({authLogin, googleLogin, addError, location}) {
-
+    let history=useHistory()
     const [username, setUsername] = useState("");
     const [usernameError, setUsernameError] = useState(false);
 
