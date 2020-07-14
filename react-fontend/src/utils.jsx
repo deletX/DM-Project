@@ -1,3 +1,5 @@
+import {useLocation} from "react-router";
+
 export const isAuthenticated = () => {
     const token = localStorage.getItem("token");
     if (token === undefined) {
@@ -123,4 +125,8 @@ export const nominatimToPrimarySecondary = (position) => {
 export const pridStringToLatLng = (position) => {
     let latlng = position.split(' ')
     return [latlng[1].slice(1), latlng[2].slice(0, -1)]
+}
+
+export const useQuery = () => {
+    return new URLSearchParams(useLocation().search);
 }

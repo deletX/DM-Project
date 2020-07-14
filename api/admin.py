@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Profile, Event, Participant, Car, Feedback
+from .models import Profile, Event, Participant, Car, Feedback, Notification
 
 
 class ParticipantInline(admin.StackedInline):
@@ -13,6 +13,12 @@ class FeedBacksInline(admin.StackedInline):
     fk_name = 'receiver'
     fields = ['giver', 'comment', 'vote', 'event']
     extra = 2
+
+
+class NotificationInline(admin.StackedInline):
+    model = Notification
+    fk_name = 'profile'
+    fields = ['date_time', 'title', 'content', 'url', 'read']
 
 
 class EventAdmin(admin.ModelAdmin):
@@ -32,7 +38,7 @@ class ProfileAdmin(admin.ModelAdmin):
     list_display = ['user', 'score', 'average_vote']
     fields = ['picture', 'score', 'user']
     readonly_fields = ['average_vote', ]
-    inlines = [CarInline, FeedBacksInline]
+    inlines = [CarInline, FeedBacksInline, NotificationInline]
 
 
 admin.site.register(Event, EventAdmin)

@@ -8,7 +8,9 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
-
+import {history} from "../../App";
+import {connect} from 'react-redux';
+import {readNotification} from "../../actions/notificationsActions";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -21,22 +23,44 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function NotificationItem({notification, history}) {
+const NotificationItem = ({notification, readNotification}) => {
     const classes = useStyles();
 
     return (
         <>
-            <ListItem alignItems="flex-start" disabled={notification.read} component="a" href="#"
-                      onClick={history.push(notification.url)}>
+            <ListItem alignItems="flex-start" button disabled={notification.read}
+                      onClick={() => {
+                          readNotification(notification.id);
+                          history.push(notification.url)
+                      }}>
                 <ListItemAvatar>
                     <ArrowForwardIosIcon/>
                 </ListItemAvatar>
                 <ListItemText
                     primary={notification.title}
-                    secondary={notification.content}
+                    secondary={
+                        notification.content
+                    }
                 />
+
             </ListItem>
             <Divider variant="inset" component="li"/>
         </>
     );
 }
+
+
+function mapStateToProps(state) {
+    return {};
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        readNotification: (id) => dispatch(readNotification(id))
+    };
+}
+
+
+export default connect(
+    mapStateToProps, mapDispatchToProps
+)(NotificationItem);

@@ -24,3 +24,5 @@
 /react-frontedyarn-error.log*
 /.idea/
 /react-fontend/node_modules/
+/static/
+/media/event_pictures/

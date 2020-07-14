@@ -12,7 +12,7 @@ import IconButton from "@material-ui/core/IconButton";
 import {AddBox, AddCircle} from "@material-ui/icons";
 import Divider from "@material-ui/core/Divider";
 import {eventListURL} from "../constants/apiurls";
-import {headers} from "../utils";
+import {headers, useQuery} from "../utils";
 import {authSignup, googleOAuthLogin} from "../actions/authActions";
 import {changePicture, createCar} from "../actions/profileActions";
 import {addAlert} from "../actions/alertActions";
@@ -59,9 +59,6 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-const useQuery = () => {
-    return new URLSearchParams(useLocation().search);
-}
 
 const HomeContainer = ({addError, isAuthenticated, isLoading, search, token}) => {
     let query = useQuery();

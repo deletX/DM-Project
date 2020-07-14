@@ -15,7 +15,30 @@ import EventContainer from "./containers/EventContainer";
 import ProfileContainer from "./containers/ProfileContainer";
 import LandingPageContainer from "./containers/LandingPageContainer";
 import NotFound404 from "./components/NotFound404";
+import {useQuery} from "./utils";
 
+
+const Login = (props) => {
+    const query = useQuery()
+    return (<FormContainer effect={() => {
+        if (props.isAuthenticated)
+            history.push(query.get("next") != null ? decodeURI(query.get("next")) : home)
+    }}>
+        <LoginComponent/>
+    </FormContainer>)
+}
+
+const Signup = props => {
+    const query = useQuery()
+    return (
+        <FormContainer effect={() => {
+            if (props.isAuthenticated)
+                history.push(query.get("next") != null ? decodeURI(query.get("next")) : home)
+        }}>
+            <SignupComponent/>
+        </FormContainer>
+    )
+}
 
 const BaseRouter = props => (
     <div>
@@ -25,20 +48,10 @@ const BaseRouter = props => (
                 <LandingPageContainer/>
             </Route>
             <Route exact path={login}>
-                <FormContainer effect={() => {
-                    if (props.isAuthenticated)
-                        history.push(props.location.query.next ? decodeURI(props.location.query.next) : home)
-                }}>
-                    <LoginComponent/>
-                </FormContainer>
+                <Login {...props}/>
             </Route>
             <Route exact path={signup}>
-                <FormContainer effect={() => {
-                    if (props.isAuthenticated)
-                        history.push(props.location.query.next ? decodeURI(props.location.query.next) : home)
-                }}>
-                    <SignupComponent/>
-                </FormContainer>
+                <Signup {...props}/>
             </Route>
             <Route exact path={home} component={HomeContainer}/>
             <Route exact path={addEvent} component={CreateComponent}/>

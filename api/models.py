@@ -87,7 +87,7 @@ class Event(models.Model):
         if self.status == self.EventStatusChoices.JOINABLE:
             self.status = self.EventStatusChoices.COMPUTING
             self.save()
-            for participant in self.participant_set.all:
+            for participant in self.participant_set.all():
                 Notification.objects.create(profile=participant.profile, title=self.name + " started computing",
                                             content="The computation for the event has started",
                                             url="/events/" + str(self.id))

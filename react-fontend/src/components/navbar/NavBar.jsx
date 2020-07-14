@@ -108,7 +108,9 @@ const useStyles = makeStyles((theme) => ({
         outline: 0,
     },
     list: {
-        width: 250,
+        minWidth: 250,
+        maxWidth: 500,
+        width: "15vw",
     },
     fullList: {
         width: 'auto',
@@ -121,9 +123,9 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-function NavBar({isAuthenticated, notifications, notificationsNumber, authLogout, setSearch, search}) {
-    const classes = useStyles();
 
+function NavBar({isAuthenticated, notifications, authLogout, notificationsNumber, setSearch, search}) {
+    const classes = useStyles();
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
     const [drawerOpen, setDrawerOpen] = React.useState(false);
 
@@ -313,7 +315,7 @@ function NavBar({isAuthenticated, notifications, notificationsNumber, authLogout
 const mapStateToProps = state => {
     return {
         isAuthenticated: state.auth.token !== undefined,
-        notificationsNumber: state.notifications.notifications.filter((notification) => (notification.read)).length,
+        notificationsNumber: state.notifications.notifications.filter((notification) => (!notification.read)).length,
         notifications: state.notifications.notifications,
         search: state.search,
     };

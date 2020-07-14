@@ -131,7 +131,7 @@ export const authLogin = (username, password) => {
                 dispatch(success(access_token));
                 dispatch(checkAuthTimeout(3600));
                 dispatch(retrieveNotifications());
-                dispatch(fetchProfile());
+                return dispatch(fetchProfile());
 
 
             })
@@ -161,7 +161,7 @@ export const authSignup = (username, first_name, last_name, email, password) => 
                 headers('application/json')
             )
             .then(res => {
-                dispatch(authLogin(username, password))
+                return dispatch(authLogin(username, password))
             })
             .catch(error => {
                 dispatch(fail(error));

@@ -44,7 +44,7 @@ const JoinContainer = ({addAlert, cars, token, open, close, event, refreshEvents
             >
 
                 <JoinComponent car={car} setCar={setCar} addr={addr} setAddr={setAddr} pos={pos} setPos={setPos}/>
-                <Button variant="contained" className={classes.button} color="secondary" disabled={addr === ""}
+                <Button variant="contained" className={classes.button} color="secondary" disabled={pos === ""}
                         onClick={() => {
                             console.log(event.id)
                             console.log(eventJoinURL(event.id))
