@@ -56,6 +56,12 @@ then http://127.0.0.1:8000/admin/
 - Client secret: `FW4dYuZsLmE6PQHk7qrPAc4shQhdx2hknqNOh58XO3JQ6PFI8um2z6wyJubxF6hKNOOOJfZUQ67jm5ApN5HJioq4XsNAGSbCLiQZqrqfo6jiy67ddpvMOl3Be8SATFSL`
 - `Save`
 
+finally
+- python manage.py runserver
+
+or in Pycharm AddConfiguration -> add new -> djangoServer -> save
+
+
 
 ### Back Ground Tasks
 Sono necessari __celery__, il motore che esegue in background i tasks e __redis__ che si occupa di gestire le comunicazioni tra django e celery.
@@ -87,5 +93,7 @@ Access token can be used to provide authorization including `Authorization: Bear
 ### REACT
 - `cd react-fontend/`
 - `npm install`
+- `npm start` -> http://localhost:3000/
+
 - `npm run dev` per far partire il server che si occupa dell'*hot reload*; sostanzialmente è possibile lavorare sulle 
 pagine web con REACT ed al salvataggio le pagine che sono mostrate nel browser si refreshano atuomaticamente
