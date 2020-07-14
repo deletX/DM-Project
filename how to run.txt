@@ -1,0 +1,10 @@
+all steps to run backend, frontend and mobile locally:
+
+backend
+
+
+
+frontend
+
+
+mobile

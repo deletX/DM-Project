@@ -26,3 +26,5 @@
 /react-fontend/node_modules/
 /static/
 /media/event_pictures/
+react-fontend/package-lock.json
+.vscode
