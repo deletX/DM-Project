@@ -1,4 +1,4 @@
-###Prerequisites
+### Prerequisites
 - `sudo apt install gcc`
 - `sudo snap install node --classic --channel=12`
 verify with
