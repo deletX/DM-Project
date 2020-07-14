@@ -4,7 +4,7 @@ import BaseRouter from "./routes";
 import {authCheckState} from "./actions/authActions";
 import AlertContainer from "./containers/AlertContainer";
 import {connect} from "react-redux";
-import {Router} from "react-router";
+import {Router, BrowserRouter} from "react-router-dom";
 import {createBrowserHistory} from "history";
 
 import NavBar from "./components/navbar/NavBar";
@@ -12,6 +12,7 @@ import theme from "./theme";
 import {ThemeProvider} from "@material-ui/core/styles";
 import {MuiPickersUtilsProvider} from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
+import hst from "./hst"
 
 export const history = createBrowserHistory();
 
@@ -22,7 +23,7 @@ function App(props) {
         props.onTryAutoSignup()
 
     return (
-        <Router history={history}>
+        <BrowserRouter history={history}>
 
             <ThemeProvider theme={theme}>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -31,7 +32,7 @@ function App(props) {
                     <BaseRouter {...props}/>
                 </MuiPickersUtilsProvider>
             </ThemeProvider>
-        </Router>
+        </BrowserRouter>
     )
 }
 

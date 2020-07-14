@@ -1,5 +1,5 @@
 import React from "react";
-import {Redirect, Route, Switch} from "react-router-dom";
+import {Redirect, Route, Switch, useHistory} from "react-router-dom";
 import {createBrowserHistory} from "history";
 import FormContainer from "./containers/FormContainer";
 import SignupComponent from "./components/auth/SignupComponent";
@@ -9,7 +9,6 @@ import MapContainer from "./containers/MapContainer";
 import JoinContainer from "./containers/JoinContainer";
 import CreateComponent from "./components/event/CreateComponent";
 import {addEvent, createEvent, home, login, profile, profile_id, signup} from "./constants/pagesurls";
-import {history} from "./App";
 import {useLocation} from "react-router";
 import EventContainer from "./containers/EventContainer";
 import ProfileContainer from "./containers/ProfileContainer";
@@ -19,6 +18,7 @@ import {useQuery} from "./utils";
 
 
 const Login = (props) => {
+    let history=useHistory()
     const query = useQuery()
     return (<FormContainer effect={() => {
         if (props.isAuthenticated)
@@ -29,6 +29,7 @@ const Login = (props) => {
 }
 
 const Signup = props => {
+    let history=useHistory()
     const query = useQuery()
     return (
         <FormContainer effect={() => {

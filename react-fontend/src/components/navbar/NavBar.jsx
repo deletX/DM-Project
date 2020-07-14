@@ -4,6 +4,7 @@ import * as pagesURL from "../../constants/pagesurls";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import React from "react";
+import {useHistory} from "react-router-dom";
 import {fade} from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {connect} from "react-redux";
@@ -26,10 +27,10 @@ import Divider from "@material-ui/core/Divider";
 import Box from "@material-ui/core/Box";
 import {home, login, myProfile, profile} from "../../constants/pagesurls";
 import {signup} from "../../constants/pagesurls";
-import {history} from "../../App";
 import {authLogout} from "../../actions/authActions";
 import logo from "../../icons/logo.svg"
 import {setSearch} from "../../actions/searchActions";
+//import {history} from "../../App"
 
 const useStyles = makeStyles((theme) => ({
     grow: {
@@ -125,6 +126,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 function NavBar({isAuthenticated, notifications, authLogout, notificationsNumber, setSearch, search}) {
+    let history=useHistory();
     const classes = useStyles();
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
     const [drawerOpen, setDrawerOpen] = React.useState(false);

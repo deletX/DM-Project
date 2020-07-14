@@ -3,7 +3,7 @@
 ### PostgreSQL
 - `sudo apt-get install wget ca-certificates`
 - `wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -`
-- `sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/lsb_release -cs-pgdg main" >> /etc/apt/sources.list.d/pgdg.list'`
+- `sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt bionic-pgdg main" >> /etc/apt/sources.list.d/pgdg.list'`
 - `sudo apt-get update`
 - `sudo apt-get install postgresql-11 postgresql-11-postgis-3 postgresql-server-dev-11 python-psycopg2`
 
@@ -15,11 +15,12 @@
 #### Crezione db ed utente:
 Per creare un utente:
 - `sudo -i -u postgres`
-- `createdb tete_c`
-- `psql tete_c`
+- `createdb dmproject`
+- `psql dmproject`
 - `CREATE USER django WITH PASSWORD 'django_tete_c';`
 - `GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO django;`
 - `CREATE EXTENSION postgis;`
+
 
 ##  cose
 `apt-get install python3-dev`

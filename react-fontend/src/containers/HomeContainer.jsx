@@ -23,6 +23,7 @@ import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import {useLocation} from "react-router";
 import {Helmet} from "react-helmet";
+import {useHistory} from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -61,6 +62,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 const HomeContainer = ({addError, isAuthenticated, isLoading, search, token}) => {
+    let history=useHistory()
     let query = useQuery();
 
     const classes = useStyles();
