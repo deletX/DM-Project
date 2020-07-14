@@ -2,30 +2,17 @@ import React, {useEffect, useState} from "react";
 import FormControl from "@material-ui/core/FormControl";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
-import InputLabel from "@material-ui/core/InputLabel";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import InputAdornment from "@material-ui/core/InputAdornment";
 import {makeStyles} from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import SearchIcon from '@material-ui/icons/Search';
-import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogActions from "@material-ui/core/DialogActions";
 import Typography from "@material-ui/core/Typography";
-import {authLogout} from "../actions/authActions";
-import {setSearch} from "../actions/searchActions";
 import {connect} from "react-redux";
 import {addAlert, removeAllAlerts} from "../actions/alertActions";
 import axios from "axios";
 import PositionsDialog from "../components/map/PositionsDialog";
 import {nominatimToPrimarySecondary} from "../utils";
 import Box from "@material-ui/core/Box";
-import {Map, Marker, Popup, TileLayer} from "react-leaflet";
-import LoginComponent from "../components/auth/LoginComponent";
-import FormContainer from "./FormContainer";
-import Backdrop from "@material-ui/core/Backdrop";
+import {Map, Marker, TileLayer} from "react-leaflet";
 
 const useStyles = makeStyles((theme) => ({
     root: {

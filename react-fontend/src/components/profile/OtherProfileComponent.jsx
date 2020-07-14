@@ -1,10 +1,8 @@
 import React, {useState} from 'react';
-import {TextField} from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import FeedbacksComponent from "../feedback/FeedbacksComponent";
 import {makeStyles} from "@material-ui/core/styles";
-import {white} from "color-name";
 import {Helmet} from "react-helmet";
 
 const useStyles = makeStyles((theme) => ({

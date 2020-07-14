@@ -1,12 +1,7 @@
 import React, {useEffect} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
-import {home, login} from "../constants/pagesurls";
-import {connect} from "react-redux";
-import {authCheckState, authLogin, googleOAuthLogin} from "../actions/authActions";
 import {Container, Paper} from "@material-ui/core";
 import {white} from "color-name";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import {history} from "../App";
 
 
 const useStyles = makeStyles((theme) => ({

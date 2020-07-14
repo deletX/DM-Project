@@ -5,14 +5,9 @@ import TextField from "@material-ui/core/TextField";
 import {PhotoCamera} from "@material-ui/icons";
 import Input from "@material-ui/core/Input";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import Box from "@material-ui/core/Box";
-import Avatar from "@material-ui/core/Avatar";
-import {CLIENT_ID, defaultProfilePic} from "../../../constants/constants";
+import {CLIENT_ID} from "../../../constants/constants";
 import Grid from "@material-ui/core/Grid";
-import Link from "@material-ui/core/Link";
-import {login} from "../../../constants/pagesurls";
 import GoogleLogin from "react-google-login";
-import IconButton from "@material-ui/core/IconButton";
 import SvgIcon from "@material-ui/core/SvgIcon";
 import {ReactComponent as GoogleIcon} from '../../../icons/GoogleLogo.svg'
 import Alert from "@material-ui/lab/Alert";

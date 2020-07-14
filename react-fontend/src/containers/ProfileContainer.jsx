@@ -6,9 +6,7 @@ import axios from "axios"
 import {addAlert} from "../actions/alertActions";
 import ProfileComponent from "../components/profile/ProfileComponent";
 import {useParams} from "react-router";
-//import {history} from "../App";
 import {useHistory} from "react-router-dom";
-
 import {home, login} from "../constants/pagesurls";
 import MyProfileComponent from "../components/profile/MyProfileComponent";
 import OtherProfileComponent from "../components/profile/OtherProfileComponent";

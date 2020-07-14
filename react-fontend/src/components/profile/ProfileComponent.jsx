@@ -1,10 +1,7 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {makeStyles} from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import Avatar from "@material-ui/core/Avatar";
 import Rating from "@material-ui/lab/Rating";
 import {white} from "color-name";
-import FormContainer from "../../containers/FormContainer";
 import AvatarCustom from "../AvatarCustom";
 
 const useStyles = makeStyles((theme) => ({

@@ -4,13 +4,9 @@ import FormContainer from "../../containers/FormContainer";
 import {makeStyles} from "@material-ui/core/styles";
 import CardContainer from "../../containers/CardContainer";
 import NewEventFormComponent from "./create/NewEventFormComponent"
-import PersonalInfoForm from "../auth/signup/PersonalInfoForm";
-import CarForm from "../auth/signup/CarForm";
-import SummaryData from "../auth/signup/SummaryData";
 import MapContainer from "../../containers/MapContainer";
 import JoinComponent from "./JoinComponent";
 import StepperContainer from "../../containers/StepperContainer";
-//import {history} from "../../App";
 import {useHistory} from "react-router-dom";
 import {addEvent, login} from "../../constants/pagesurls";
 import {defaultEventPic} from "../../constants/constants";

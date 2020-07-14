@@ -2,7 +2,6 @@ import axios from "axios";
 import {convertTokenURL, tokenURL, signupURL} from "../constants/apiurls";
 import {alertError, removeAllAlerts} from './alertActions';
 import {AUTH_ERROR, AUTH_LOGOUT, AUTH_START, AUTH_SUCCESS} from "./types";
-import loginURL from "../constants/apiurls";
 import {APP_CLIENTID, APP_SECRET} from "../constants/constants";
 import * as qs from "qs";
 import {headers} from "../utils";

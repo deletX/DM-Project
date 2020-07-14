@@ -3,16 +3,10 @@ import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MapContainer from "../../containers/MapContainer";
-import Button from "@material-ui/core/Button";
-import {eventJoinURL} from "../../constants/apiurls";
-import axios from "axios";
-import {headers} from "../../utils";
 import {makeStyles} from "@material-ui/core/styles";
 import MenuItem from "@material-ui/core/MenuItem";
 import uuid from "node-uuid";
-import {addAlert} from "../../actions/alertActions";
 import {connect} from "react-redux";
-import {Helmet} from "react-helmet";
 
 const useStyles = makeStyles((theme) => ({
     root: {

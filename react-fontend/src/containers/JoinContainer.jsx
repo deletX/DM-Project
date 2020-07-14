@@ -1,22 +1,13 @@
 import React, {useState} from 'react';
 import {connect} from 'react-redux';
 import Typography from "@material-ui/core/Typography";
-import uuid from "node-uuid";
 import {makeStyles} from "@material-ui/core/styles";
 import ModalContainer from "./ModalContainer";
-import MapContainer from "./MapContainer";
-import FormContainer from "./FormContainer";
-import MenuItem from "@material-ui/core/MenuItem";
-import Select from "@material-ui/core/Select";
-import InputLabel from "@material-ui/core/InputLabel";
-import FormControl from "@material-ui/core/FormControl";
 import Button from "@material-ui/core/Button";
 import {addAlert} from "../actions/alertActions";
 import axios from "axios"
 import {eventJoinURL} from "../constants/apiurls";
 import {headers} from "../utils";
-import {history} from "../App";
-import {home, profile} from "../constants/pagesurls";
 import JoinComponent from "../components/event/JoinComponent";
 
 const useStyles = makeStyles((theme) => ({

@@ -2,16 +2,13 @@ import React from 'react';
 import Rating from "@material-ui/lab/Rating";
 import Typography from "@material-ui/core/Typography";
 import ListItemText from "@material-ui/core/ListItemText";
-import Avatar from "@material-ui/core/Avatar";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import ListItem from "@material-ui/core/ListItem";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import DirectionsCarIcon from '@material-ui/icons/DirectionsCar';
 import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
 import Divider from "@material-ui/core/Divider";
-//import {history} from "../../App";
 import {useHistory} from "react-router-dom";
-
 import {profile} from "../../constants/pagesurls";
 import AvatarCustom from "../AvatarCustom";
 

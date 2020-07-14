@@ -10,7 +10,7 @@ import {
 } from "./types";
 import {carsDetailURL, carsListURL, currentProfileURL, signupURL} from "../constants/apiurls";
 import {headers} from "../utils";
-import {addAlert, alertError, removeAllAlerts} from "./alertActions";
+import {addAlert, alertError} from "./alertActions";
 import {authLogout} from "./authActions";
 
 

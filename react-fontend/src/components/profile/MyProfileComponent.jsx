@@ -1,19 +1,15 @@
 import React, {useState} from 'react';
 import {makeStyles} from "@material-ui/core/styles";
-import {white} from "color-name";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import FeedbacksComponent from "../feedback/FeedbacksComponent";
 import {TextField} from "@material-ui/core";
-import Fab from "@material-ui/core/Fab";
 import {PhotoCamera} from "@material-ui/icons";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import {changeUserData} from "../../actions/profileActions";
 import {connect} from "react-redux";
-import ProfileContainer from "../../containers/ProfileContainer";
 import ProfileComponent from "./ProfileComponent";
-import CarsComponent from "./CarsComponent";
 import CarContainer from "../../containers/CarContainer";
 import {Helmet} from "react-helmet";
 

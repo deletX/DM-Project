@@ -1,10 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {connect} from 'react-redux';
 import {makeStyles} from "@material-ui/core/styles";
-import {white} from "color-name";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
-import ButtonGroup from "@material-ui/core/ButtonGroup";
 import CardContent from "@material-ui/core/CardContent";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardMedia from "@material-ui/core/CardMedia";
@@ -16,11 +14,9 @@ import axios from "axios"
 import {eventDetailURL, participationEditURL} from "../../constants/apiurls";
 import {headers} from "../../utils";
 import {addAlert} from "../../actions/alertActions";
-//import {history} from "../../App";
 import {useHistory} from "react-router-dom";
-import {event_id, eventPage} from "../../constants/pagesurls";
+import {eventPage} from "../../constants/pagesurls";
 import LinearProgress from "@material-ui/core/LinearProgress";
-import {Helmet} from "react-helmet";
 
 const useStyles = makeStyles((theme) => ({
     root: {

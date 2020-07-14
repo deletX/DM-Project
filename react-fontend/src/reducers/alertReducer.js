@@ -1,4 +1,3 @@
-import * as actionTypes from "../actions/types";
 import uuid from "node-uuid";
 import {ADD_ALERT, REMOVE_ALERT, REMOVE_ALL_ALERTS} from "../actions/types";
 

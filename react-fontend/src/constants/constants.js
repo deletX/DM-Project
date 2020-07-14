@@ -1,5 +1,3 @@
-import {home} from "./pagesurls";
-
 export const CLIENT_ID = "283420556311-30r26g3mtt5odkqmit6u7onam3qrul16.apps.googleusercontent.com";
 export const CLIENT_SECRET = "KsSTbOaPDbxEbEGqkcyWl3-v";
 export const APP_CLIENTID = "4mOLHPfJL0zueHOlawvJXsdnImpjOv3PmLdmm3NT";

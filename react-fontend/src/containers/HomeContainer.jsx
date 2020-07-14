@@ -1,27 +1,18 @@
 import {connect} from "react-redux";
 import React, {useEffect, useState} from 'react';
-import {history} from "../App";
 import {addEvent, home, homeJoinableJoinedOwned, login} from "../constants/pagesurls";
 import {makeStyles} from "@material-ui/core/styles";
 import {white} from "color-name";
-import Icon from "@material-ui/core/Icon";
 import Typography from "@material-ui/core/Typography";
-import AddIcon from '@material-ui/icons/Add';
-import Avatar from "@material-ui/core/Avatar";
 import IconButton from "@material-ui/core/IconButton";
-import {AddBox, AddCircle} from "@material-ui/icons";
-import Divider from "@material-ui/core/Divider";
+import {AddBox} from "@material-ui/icons";
 import {eventListURL} from "../constants/apiurls";
 import {headers, useQuery} from "../utils";
-import {authSignup, googleOAuthLogin} from "../actions/authActions";
-import {changePicture, createCar} from "../actions/profileActions";
 import {addAlert} from "../actions/alertActions";
 import axios from "axios";
 import ChipBox from "../components/event/ChipBox";
 import EventCard from "../components/event/EventCard";
-import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
-import {useLocation} from "react-router";
 import {Helmet} from "react-helmet";
 import {useHistory} from "react-router-dom";
 

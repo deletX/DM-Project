@@ -1,5 +1,5 @@
 import Chip from "@material-ui/core/Chip";
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import DoneIcon from '@material-ui/icons/Done';
 import {makeStyles} from "@material-ui/core/styles";
 import {white} from "color-name";

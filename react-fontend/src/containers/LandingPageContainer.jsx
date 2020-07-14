@@ -1,17 +1,11 @@
 import React from 'react';
-import {Helmet} from "react-helmet";
 import {makeStyles, ThemeProvider} from "@material-ui/core/styles";
 import {white_text_theme} from "../theme";
-import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import TextField from "@material-ui/core/TextField";
-import {KeyboardDatePicker, KeyboardTimePicker} from "@material-ui/pickers";
 import {white} from "color-name";
-import red from "@material-ui/core/colors/red";
 import {landingpageback, landingpageEvent, landingpageProfile} from "../constants/constants";
-import {home, login, signup} from "../constants/pagesurls";
+import {login, signup} from "../constants/pagesurls";
 import Button from "@material-ui/core/Button";
-import AvatarCustom from "../components/AvatarCustom";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Avatar from "@material-ui/core/Avatar";

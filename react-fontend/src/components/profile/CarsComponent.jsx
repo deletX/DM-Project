@@ -2,7 +2,6 @@ import React, {Component, useState} from 'react';
 import {connect} from 'react-redux';
 import MaterialTable from "material-table";
 import {forwardRef} from 'react';
-
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import Check from '@material-ui/icons/Check';
