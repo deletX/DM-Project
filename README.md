@@ -97,3 +97,8 @@ Access token can be used to provide authorization including `Authorization: Bear
 
 - `npm run dev` per far partire il server che si occupa dell'*hot reload*; sostanzialmente è possibile lavorare sulle 
 pagine web con REACT ed al salvataggio le pagine che sono mostrate nel browser si refreshano atuomaticamente
+
+
+### Fake user (Alberto localhost)
+- username: `mario`
+- password: `marioRossi1*`
