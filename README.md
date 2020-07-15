@@ -70,15 +70,29 @@ Package necessari li trovi in `requirements.txt`
 
 
 ### Redis
+Importante: far partire redis e celery prima di ogni altra cosa
+- `sudo apt install redis-server`
+- `redis-server --port 6380`
+
 Per installare redis bisogna installare il server `sudo apt install redis-server`
 Bisogna lanciare redis-server prima di poter lanciare tasks tramite  `redis-server`
 Nel caso la porta di default `6379` fosse occupata si può selezionare un'altra porta con `--port 6380`
 
 
 ### Celery
+- `celery worker -A dmproject --loglevel=info`
 Per installare celery sono sufficienti i packages e le impostazioni messe nei vari files.
-Per far partire celery, prima di lanciare tasks: `celery worker -A init_test --loglevel=info`
+Per far partire celery, prima di lanciare tasks: `celery worker -A dmproject --loglevel=info`
 
+When process start you should see something like:
+
+`[2020-07-15 14:48:46,275: INFO/ForkPoolWorker-3] Starting Driver Selection`
+
+`[2020-07-15 14:48:46,290: INFO/ForkPoolWorker-3] Starting Mock APCA`
+
+`[2020-07-15 14:49:16,305: INFO/ForkPoolWorker-3] Saving result into DB`
+
+`[2020-07-15 14:49:16,316: INFO/ForkPoolWorker-3] Task api.tasks.mock_algorithm_task[2b0733a7-5ec2-41ad-8cf1-8df8321dbc85] succeeded in 30.092565850000028s: None`
 
 ### Social Auth
 Bisogna fare la migrazione dopo aver installato i pacchetti
@@ -96,9 +110,6 @@ Access token can be used to provide authorization including `Authorization: Bear
 - `npm install`
 - `npm start` -> http://localhost:3000/
 
-- `npm run dev` per far partire il server che si occupa dell'*hot reload*; sostanzialmente è possibile lavorare sulle 
-pagine web con REACT ed al salvataggio le pagine che sono mostrate nel browser si refreshano atuomaticamente
-
 
 ### Fake user (Alberto localhost)
 - username: `mario`
@@ -106,7 +117,24 @@ pagine web con REACT ed al salvataggio le pagine che sono mostrate nel browser s
 
 
 ### React native
+Split terminal vertically
+
+First:
+- `cd reactFrontendMobile/ && npm install`
+- `cd reactFrontendMobile/ && npm start`
+
+Second:
+- `cd reactFrontendMobile/ && npx react-native run-android`
+
+
+### Requisiti
 - un utente può solo fare il login, signup solo su web
 - un utente può vedere gli eventi disponibili e joinarli oppure crearne uno
 - un utente autista può aprire l'indirizzo di destinazione su Google Maps
 - integrazione 
+
+
+### Screen mirror with scrcpy
+- install `scrcpy` with `Ubuntu Software`
+- plug your phone with USB
+- `ADB="/home/alberto/Android/Sdk/platform-tools/adb" scrcpy`
