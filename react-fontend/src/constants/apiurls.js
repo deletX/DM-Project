@@ -33,6 +33,6 @@ export const createFeedbackURL = (eventPk, receiverParticipantPk) => (`${partici
 export const editFeedbackURL = (eventPk, receiverParticipantPk, feedbackPk) => (`${createFeedbackURL(eventPk, receiverParticipantPk)}${feedbackPk}/`);
 
 export const notificationListURL = () => (`${currentProfileURL()}notifications/`);
-export const notificationEditURL = (notificationPk) => (`${notificationListURL()}${notificationPk}/`)
+export const notificationEditURL = (notificationPk) => (`${notificationListURL()}${notificationPk}`)
 
 
