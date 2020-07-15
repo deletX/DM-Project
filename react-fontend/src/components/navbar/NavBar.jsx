@@ -3,7 +3,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import * as pagesURL from "../../constants/pagesurls";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
-import React from "react";
+import React, {useEffect} from "react";
 
 import {fade} from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
@@ -121,12 +121,20 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-function NavBar({isAuthenticated, notifications, authLogout, notificationsNumber, setSearch, search}) {
-    let history=useHistory();
+function NavBar({isAuthenticated, notifications, authLogout, setSearch, search}) {
+    let history = useHistory();
     const classes = useStyles();
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
     const [drawerOpen, setDrawerOpen] = React.useState(false);
+    const [notificationsNumber, setNotificationsNumber] = React.useState(notifications.filter((notification) => (!notification.read)).length)
 
+    useEffect(() => {
+        setNotificationsNumber(notifications.filter((notification) => (!notification.read)).length)
+    }, [notifications])
+
+    const readNotification = () => {
+        setNotificationsNumber(notificationsNumber - 1)
+    }
     const toggleDrawer = (open) => (event) => {
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
             return;
@@ -195,7 +203,7 @@ function NavBar({isAuthenticated, notifications, authLogout, notificationsNumber
     );
 
     let notificationListItem = notifications.map((notification) => (
-        <NotificationItem key={notification.id} notification={notification}/>
+        <NotificationItem key={notification.id} notification={notification} readNotificationNavBar={readNotification}/>
     ));
 
     const notificationDrawer = (
@@ -313,7 +321,6 @@ function NavBar({isAuthenticated, notifications, authLogout, notificationsNumber
 const mapStateToProps = state => {
     return {
         isAuthenticated: state.auth.token !== undefined,
-        notificationsNumber: state.notifications.notifications.filter((notification) => (!notification.read)).length,
         notifications: state.notifications.notifications,
         search: state.search,
     };

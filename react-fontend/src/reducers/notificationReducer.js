@@ -35,7 +35,7 @@ const getNotificationSuccess = (state, action) => (
 const notificationUpdate = (state, action) => {
     let {id, read} = action;
     let index = state.notifications.findIndex((notification) => (notification.id === id));
-    state.notifications[index].read = action;
+    state.notifications[index].read = read;
     return state
 };
 

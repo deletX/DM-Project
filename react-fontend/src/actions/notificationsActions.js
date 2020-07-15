@@ -37,8 +37,8 @@ const getSuccess = (notifications) => (
 const readSuccess = (id, read) => (
     {
         type: NOTIFICATION_UPDATE,
-        id,
-        read
+        id: id,
+        read: read
     }
 );
 

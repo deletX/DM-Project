@@ -20,15 +20,16 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const NotificationItem = ({notification, readNotification}) => {
+const NotificationItem = ({notification, readNotification, readNotificationNavBar}) => {
     const classes = useStyles();
-    let history=useHistory()
+    let history = useHistory()
 
     return (
         <>
             <ListItem alignItems="flex-start" button disabled={notification.read}
                       onClick={() => {
                           readNotification(notification.id);
+                          readNotificationNavBar()
                           history.push(notification.url)
                       }}>
                 <ListItemAvatar>
