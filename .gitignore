@@ -22,7 +22,10 @@
 /react-frontednpm-debug.log*
 /react-frontedyarn-debug.log*
 /react-frontedyarn-error.log*
-/.idea/
+.idea
+.idea/*
+/.idea/*
+/.idea
 /react-fontend/node_modules/
 /static/
 /media/event_pictures/
