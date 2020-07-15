@@ -90,7 +90,8 @@ class Event(models.Model):
             for participant in self.participant_set.all():
                 Notification.objects.create(profile=participant.profile, title=self.name + " started computing",
                                             content="The computation for the event has started",
-                                            url="/events/" + str(self.id))
+                                            url="/events/" + str(self.id),
+                                            related_event=self)
             if settings.DEBUG:
                 mock_algorithm_task.delay(self.id)
             else:
@@ -150,6 +151,9 @@ class Notification(models.Model):
     read = models.BooleanField(default=False)
     url = models.URLField(default="", blank=True)
 
+    # so that if events get deleted it also get removed
+    related_event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='notifications')
+
 
 def create_profile(sender, **kwargs):
     user = kwargs["instance"]
@@ -167,7 +171,9 @@ def create_notification_for_feedback(sender, **kwargs):
     if kwargs["created"]:
         notification = Notification.objects.create(profile=feedback.receiver, title="New feedback",
                                                    content="User {} gave you a {} star rating".format(
-                                                       feedback.giver.user.username, feedback.vote))
+                                                       feedback.giver.user.username, feedback.vote),
+                                                   url="/profiles/" + feedback.receiver,
+                                                   related_event=feedback.event)
 
 
 post_save.connect(create_notification_for_feedback, sender=Feedback)
