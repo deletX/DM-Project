@@ -1,4 +1,5 @@
 ### Prerequisites
+- `sudo apt install git-all`
 - `sudo apt install gcc`
 - `sudo snap install node --classic --channel=12`
 verify with
@@ -102,3 +103,10 @@ pagine web con REACT ed al salvataggio le pagine che sono mostrate nel browser s
 ### Fake user (Alberto localhost)
 - username: `mario`
 - password: `marioRossi1*`
+
+
+### React native
+- un utente può solo fare il login, signup solo su web
+- un utente può vedere gli eventi disponibili e joinarli oppure crearne uno
+- un utente autista può aprire l'indirizzo di destinazione su Google Maps
+- integrazione 
