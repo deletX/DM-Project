@@ -23,7 +23,6 @@ verify with
 
 
 ### Crezione db ed utente:
-Per creare un utente:
 - `sudo -i -u postgres`
 - `createdb dmproject`
 - `psql dmproject`
@@ -44,8 +43,8 @@ Per installare le dipendenze necessarie, tramite la finestra del terminale (in b
 
 
 ###Django
-- `python manage.py migrate`
 - `python manage.py makemigrations`
+- `python manage.py migrate`
 - `python manage.py createsuperuser` (just username and password, email blank)
 
 then http://127.0.0.1:8000/admin/
@@ -60,7 +59,7 @@ then http://127.0.0.1:8000/admin/
 finally
 - python manage.py runserver
 
-or in Pycharm AddConfiguration -> add new -> djangoServer -> save
+or in Pycharm AddConfiguration -> add new -> djangoServer -> save -> run
 
 
 
@@ -138,3 +137,28 @@ Second:
 - install `scrcpy` with `Ubuntu Software`
 - plug your phone with USB
 - `ADB="/home/alberto/Android/Sdk/platform-tools/adb" scrcpy`
+
+
+### Problems with DB
+- Remove postgres:
+```bash 
+$ dpkg -l | grep postgres
+ii  pgdg-keyring                               2018.2                                           all          keyring for apt.postgresql.org
+ii  postgresql-11                              11.8-1.pgdg18.04+1                               amd64        object-relational SQL database, version 11 server
+ii  postgresql-11-postgis-3                    3.0.1+dfsg-2.pgdg18.04+1                         amd64        Geographic objects support for PostgreSQL 11
+ii  postgresql-11-postgis-3-scripts            3.0.1+dfsg-2.pgdg18.04+1                         all          Geographic objects support for PostgreSQL 11 -- SQL scripts
+ii  postgresql-client-11                       11.8-1.pgdg18.04+1                               amd64        front-end programs for PostgreSQL 11
+ii  postgresql-client-common                   215.pgdg18.04+1                                  all          manager for multiple PostgreSQL client versions
+ii  postgresql-common                          215.pgdg18.04+1                                  all          PostgreSQL database-cluster manager
+ii  postgresql-server-dev-11                   11.8-1.pgdg18.04+1                               amd64        development files for PostgreSQL 11 server-side programming
+```
+```bash 
+$ sudo apt-get --purge remove pgdg-keyring postgresql-11 postgresql-11-postgis-3 postgresql-11-postgis-3-scripts postgresql-client-11 postgresql-client-common postgresql-common postgresql-server-dev-11
+```
+
+```bash
+$ dpkg -l | grep postgres
+```
+
+- then reinstall postgres, create superuser in django, make migrations in django and add application in `Django OAuth Toolkit/Applications`
+https://www.liquidweb.com/kb/how-to-remove-postgresql/
