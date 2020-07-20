@@ -1,4 +1,4 @@
-import {updateObject} from "../utils";
+import {updateObject} from "../../utils";
 import {
     CAR_CREATE, CAR_DELETE, CAR_UPDATE,
     CLEAR_PROFILE_DATA,

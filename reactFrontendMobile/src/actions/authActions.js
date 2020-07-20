@@ -4,7 +4,7 @@ import {alertError, removeAllAlerts} from './alertActions';
 import {AUTH_ERROR, AUTH_LOGOUT, AUTH_START, AUTH_SUCCESS} from "./types";
 import {APP_CLIENTID, APP_SECRET} from "../constants/constants";
 import * as qs from "qs";
-import {headers} from "../utils";
+import {headers} from "../../utils";
 import {clearProfileData, fetchProfile} from "./profileActions";
 import {clearNotifications, retrieveNotifications} from "./notificationsActions";
 import AsyncStorage from '@react-native-community/async-storage'

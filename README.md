@@ -126,13 +126,6 @@ Second:
 - `cd reactFrontendMobile/ && npx react-native run-android`
 
 
-### Requisiti
-- un utente può solo fare il login, signup solo su web
-- un utente può vedere gli eventi disponibili e joinarli oppure crearne uno
-- un utente autista può aprire l'indirizzo di destinazione su Google Maps
-- integrazione 
-
-
 ### Screen mirror with scrcpy
 - install `scrcpy` with `Ubuntu Software`
 - plug your phone with USB
