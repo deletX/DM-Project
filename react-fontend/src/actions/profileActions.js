@@ -147,7 +147,6 @@ export const changePicture = (picture) => {
 export const changeUserData = (first_name, last_name, email, password = null) => {
     return async (dispatch) => {
         dispatch(start());
-        console.log("tette")
         let access_token = localStorage.getItem("access_token");
         let data = {
             first_name: first_name,
