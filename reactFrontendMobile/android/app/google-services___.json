@@ -1,0 +1,44 @@
+{
+  "project_info": {
+    "project_number": "181623464835",
+    "firebase_url": "https://shared-driver-app-projec-3cc11.firebaseio.com",
+    "project_id": "shared-driver-app-projec-3cc11",
+    "storage_bucket": "shared-driver-app-projec-3cc11.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:181623464835:android:74f782b162ee63bfa38cb6",
+        "android_client_info": {
+          "package_name": "com.dmproject.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "181623464835-va9asjbc45b57f9egosg3eos6hovmt2i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dmproject.app",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvuR7mV_EksllPQx8Bz9Z6L6Pfqz2THUo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "181623464835-gprvinuntre34j70sal21dm3pboa51ra.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
