@@ -98,11 +98,6 @@ const App: () => React$Node = () => {
           contentInsetAdjustmentBehavior="automatic"
           style={styles.scrollView}>
           <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
           <View style={styles.body}>
             <View style={styles.sectionContainer}>
               <Text style={styles.sectionTitle}>Step One</Text>
@@ -114,7 +109,11 @@ const App: () => React$Node = () => {
             <View />
           </View>
           <View>
-            <GoogleSigninButton onPress={googleLogin} />
+            <GoogleSigninButton
+              onPress={googleLogin}
+              size={GoogleSigninButton.Size.Wide}
+              color={GoogleSigninButton.Color.Dark}
+            />
           </View>
         </ScrollView>
       </SafeAreaView>

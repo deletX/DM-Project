@@ -126,11 +126,58 @@ Second:
 - `cd reactFrontendMobile/ && npx react-native run-android`
 
 
+###RN Google Sign in
+- https://dev.to/anwargul0x/get-started-with-react-native-google-sign-in-18i5
+```bash
+keytool -keystore /home/alberto/PycharmProjects/tete_c/reactFrontendMobile/android/app/debug.keystore -list -v
+Enter keystore password: android
+Alias name: androiddebugkey
+Creation date: Dec 31, 2013
+Entry type: PrivateKeyEntry
+Certificate chain length: 1
+Certificate[1]:
+Owner: CN=Android Debug, OU=Android, O=Unknown, L=Unknown, ST=Unknown, C=US
+Issuer: CN=Android Debug, OU=Android, O=Unknown, L=Unknown, ST=Unknown, C=US
+Serial number: 232eae62
+Valid from: Tue Dec 31 23:35:04 CET 2013 until: Wed May 01 00:35:04 CEST 2052
+Certificate fingerprints:
+         MD5:  20:F4:61:48:B7:2D:8E:5E:5C:A2:3D:37:A4:F4:14:90
+         SHA1: 5E:8F:16:06:2E:A3:CD:2C:4A:0D:54:78:76:BA:A6:F3:8C:AB:F6:25
+         SHA256: FA:C6:17:45:DC:09:03:78:6F:B9:ED:E6:2A:96:2B:39:9F:73:48:F0:BB:6F:89:9B:83:32:66:75:91:03:3B:9C
+Signature algorithm name: SHA1withRSA
+Subject Public Key Algorithm: 2048-bit RSA key
+Version: 3
+Extensions: 
+#1: ObjectId: 2.5.29.14 Criticality=false
+SubjectKeyIdentifier [
+KeyIdentifier [
+0000: 0B F9 FE 38 89 D2 8A 9C   58 F0 C1 0A B7 0E 43 28  ...8....X.....C(
+0010: D8 23 F3 20                                        .#. 
+]
+]
+Warning:
+The JKS keystore uses a proprietary format. It is recommended to migrate to PKCS12 which is an industry standard format using "keytool -importkeystore -srckeystore ./android/app/debug.keystore -destkeystore ./android/app/debug.keystore -deststoretype pkcs12".
+```
+- ``
+
+###RN Problems
+```bash 
+PROBLEMS:
+If you are sure the module exists, try these steps:
+1. Clear watchman watches: watchman watch-del-all
+2. Delete node_modules: rm -rf node_modules && rm package-lock.json && npm install --save
+3. Reset Metro's cache: rm -rf /tmp/metro-*
+4. Remove the cache: npx react-native start --reset-cache
+5. Rebuild: npx react-native run-android
+```
+
 ### Screen mirror with scrcpy
 - install `scrcpy` with `Ubuntu Software`
 - plug your phone with USB
 - `ADB="/home/alberto/Android/Sdk/platform-tools/adb" scrcpy`
 - `ADB="/home/stefano/Android/Sdk/platform-tools/adb" scrcpy`
+
+
 
 ### Problems with DB
 - Remove postgres:

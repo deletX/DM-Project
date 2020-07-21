@@ -12,11 +12,12 @@
   "dependencies": {
     "@react-native-community/google-signin": "^4.0.3",
     "@react-native-community/masked-view": "^0.1.10",
-    "@react-navigation/native": "^5.7.1",
     "@react-navigation/bottom-tabs": "^5.4.2",
     "@react-navigation/drawer": "^5.7.2",
+    "@react-navigation/native": "^5.7.1",
     "@react-navigation/stack": "^5.2.18",
     "axios": "^0.19.2",
+    "native-base": "^2.13.13",
     "qs": "^6.9.4",
     "react": "16.13.1",
     "react-native": "0.63.1",
