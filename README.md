@@ -130,7 +130,7 @@ Second:
 - install `scrcpy` with `Ubuntu Software`
 - plug your phone with USB
 - `ADB="/home/alberto/Android/Sdk/platform-tools/adb" scrcpy`
-
+- `ADB="/home/stefano/Android/Sdk/platform-tools/adb" scrcpy`
 
 ### Problems with DB
 - Remove postgres:
