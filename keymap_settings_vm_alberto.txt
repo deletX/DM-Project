@@ -1,0 +1,11 @@
+https://www.jetbrains.com/help/pycharm/sharing-your-ide-settings.html#import-export-settings
+
+in Ubuntu/Settings/Universal access -> large text
+in Ubuntu/Settings/devices/keyboard -> switch applications: disabled, switch windows: alt+tab
+in terminal/file/preferences/shortcuts/edit -> copy: ctrl+c, paste: ctrl+v
+download GNOME Tweaks from Ubuntu software
+then
+Appereance -> animations: off
+top bar -> battery: on, date: on
+
+in Ubuntu/Settings/devices/keyboard -> switch applications: disabled, switch windows: alt+tab
