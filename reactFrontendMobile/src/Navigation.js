@@ -24,7 +24,7 @@ const EventStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
 const AuthStack = createStackNavigator();
 
-const isAuthenticated = true
+const isAuthenticated = false;
 
 const Events = () => {
 

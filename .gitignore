@@ -31,3 +31,8 @@
 /media/event_pictures/
 react-fontend/package-lock.json
 .vscode
+
+
+./reactFrontendMobile/src/constants/virtual-box.js
+/reactFrontendMobile/src/constants/virtual-box.js
+reactFrontendMobile/src/constants/virtual-box.js
