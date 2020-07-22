@@ -6,10 +6,10 @@ import CustomDrawerComponent from "./components/CustomDrawerComponent";
 import {
     ADD_CAR_SCREEN,
     EVENT_SCREEN,
-    HOME_SCREEN,
+    HOME_SCREEN, HOME_STACK,
     JOIN_SCREEN,
     LOGIN_SCREEN,
-    PROFILE_SCREEN
+    PROFILE_SCREEN, PROFILE_STACK
 } from "./constants/screens";
 
 import LoginScreen from "./screens/LoginScreen";
@@ -18,6 +18,8 @@ import ProfileScreen from "./screens/ProfileScreen";
 import JoinScreen from "./screens/JoinScreen";
 import EventScreen from "./screens/EventScreen";
 import EventsScreen from "./screens/EventsScreen";
+import {authCheckState} from "./actions/authActions";
+import {connect} from "react-redux"
 
 const Drawer = createDrawerNavigator();
 const EventStack = createStackNavigator();
@@ -30,8 +32,8 @@ const Events = () => {
 
     return (
         <EventStack.Navigator>
-            <EventStack.Screen name={EVENT_SCREEN} component={EventsScreen}/>
-            <EventStack.Screen name={HOME_SCREEN} component={EventScreen}/>
+            <EventStack.Screen name={HOME_SCREEN} component={EventsScreen}/>
+            <EventStack.Screen name={EVENT_SCREEN} component={EventScreen}/>
             <EventStack.Screen name={JOIN_SCREEN} component={JoinScreen}/>
         </EventStack.Navigator>
     )
@@ -49,16 +51,17 @@ const Profile = () => {
 
 const Navigation = (props) => {
     /*const {isAuthenticated, isLoading, username, alerts, profileId, error} = props*/
-
+    if (!props.isAuthenticatedOrLoading && !props.error)
+        props.onTryAutoSignup()
 
     return (
         <NavigationContainer>
-            {isAuthenticated ? (
+            {props.isAuthenticated ? (
                 <Drawer.Navigator drawerContent={(props) => (
                     <CustomDrawerComponent {...props}/>
                 )}>
-                    <Drawer.Screen name="Events" component={Events}/>
-                    <Drawer.Screen name="Profile" component={Profile}/>
+                    <Drawer.Screen name={HOME_STACK} component={Events}/>
+                    <Drawer.Screen name={PROFILE_STACK} component={Profile}/>
                 </Drawer.Navigator>
             ) : (
                 <AuthStack.Navigator>
@@ -69,4 +72,23 @@ const Navigation = (props) => {
     )
 }
 
-export default Navigation;
+
+const mapStateToProps = state => {
+    return {
+        isAuthenticated: state.auth.token !== undefined,
+        isLoading: state.auth.loading,
+        username: state.profile.user.username,
+        alerts: state.alerts,
+        profileId: state.profile.id,
+        error: state.auth.error || state.profile.error || state.notifications.error,
+    };
+};
+
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onTryAutoSignup: () => dispatch(authCheckState()),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Navigation);

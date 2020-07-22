@@ -15,6 +15,8 @@ import {
 } from 'react-native-paper';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {EVENT_SCREEN, HOME_SCREEN, LOGIN_SCREEN, PROFILE_SCREEN, PROFILE_STACK} from "../constants/screens";
+import {URLtoScreenWithProps} from "../utils";
 
 const profile = {
     username: "mock-username",
@@ -33,36 +35,37 @@ const notifications = [{
 }, {
     "id": 9,
     "date_time": "2020-07-15T15:40:35.969730Z",
-    "title": "Prova1 started computing",
+    "title": "Prova31 started computing",
     "content": "The computation for the event has started",
     "read": true,
-    "url": "/events/23"
+    "url": "/events/24"
 }, {
     "id": 6,
     "date_time": "2020-07-15T15:40:35.969730Z",
-    "title": "Prova1 started computing",
+    "title": "Prova2 started computing",
     "content": "The computation for the event has started",
     "read": true,
-    "url": "/events/23"
+    "url": "/events/25"
 }]
 
 
 const CustomDrawerContentComponent = (props) => {
 
-    // const notificationListItems = notifications.map((notification) => (
-    //     <ListItem icon>
-    //         <Left>
-    //             <Button onPress={() => {
-    //                 console.log("Pressed notificaiton")
-    //             }}>
-    //                 <Icon active name="keyboard_arrow_right"/>
-    //             </Button>
-    //         </Left>
-    //         <Body>
-    //             <Text>{notification.title}</Text>
-    //         </Body>
-    //     </ListItem>
-    // ))
+    const notificationListItems = notifications.map((notification) => (
+        <DrawerItem key={notification.id} label={notification.title}
+                    icon={({color, size}) => (
+                        <Icon
+                            name="chevron-right"
+                            color={color}
+                            size={size}
+                        />
+                    )}
+                    onPress={() => {
+                        let screenwithProps = URLtoScreenWithProps(notification.url);
+                        console.log(screenwithProps)
+                        props.navigation.navigate(screenwithProps.screen, screenwithProps.props)
+                    }}/>
+    ))
 
     return (
         <View style={{flex: 1}}>
@@ -83,18 +86,8 @@ const CustomDrawerContentComponent = (props) => {
                                 </Caption>
                             </View>
                         </View>
-                        <View style={styles.row}>
-                            <View style={styles.section}>
-                                <Paragraph style={[styles.paragraph, styles.caption]}>80</Paragraph>
-                                <Caption style={styles.caption}>Following</Caption>
-                            </View>
-                            <View style={styles.section}>
-                                <Paragraph style={[styles.paragraph, styles.caption]}>3</Paragraph>
-                                <Caption style={styles.caption}>Follower</Caption>
-                            </View>
-                        </View>
                     </View>
-                    <Drawer.Section style={styles.drawerSection}>
+                    <Drawer.Section style={styles.drawerSection} title={"Pages:"}>
                         <DrawerItem label="Home"
                                     icon={({color, size}) => (
                                         <Icon
@@ -104,19 +97,24 @@ const CustomDrawerContentComponent = (props) => {
                                         />
                                     )}
                                     onPress={() => {
-                                        console.log("Home")
+                                        props.navigation.navigate(HOME_SCREEN)
+                                        props.navigation.closeDrawer()
                                     }}/>
                         <DrawerItem label="Profile"
                                     icon={({color, size}) => (
                                         <Icon
-                                            name="account-circle"
+                                            name="account"
                                             color={color}
                                             size={size}
                                         />
                                     )}
                                     onPress={() => {
-                                        console.log("Profile")
+                                        props.navigation.navigate(PROFILE_STACK)
+                                        props.navigation.closeDrawer()
                                     }}/>
+                    </Drawer.Section>
+                    <Drawer.Section style={styles.drawerSection} title="Notifications:">
+                        {notificationListItems}
                     </Drawer.Section>
                 </View>
             </DrawerContentScrollView>
@@ -130,7 +128,8 @@ const CustomDrawerContentComponent = (props) => {
                                 />
                             )}
                             onPress={() => {
-                                console.log("exit")
+                                console.log("logout")
+                                //TODO: call the logout
                             }}/>
             </Drawer.Section>
 
@@ -138,30 +137,6 @@ const CustomDrawerContentComponent = (props) => {
     );
 
 }
-//                 {/*<View*/}
-//                 {/*    forceInset={{top: 'always', horizontal: 'never'}}*/}
-//                 {/*>*/}
-//                 {/*    <View>*/}
-//                 {/*        <View style={{justifyContent: 'center', alignItems: 'center'}}>*/}
-//
-//                 {/*            <Text style={{*/}
-//                 {/*                color: '#f9f9f9',*/}
-//                 {/*                marginTop: '3%',*/}
-//                 {/*                fontFamily: 'sans-serif-condensed'*/}
-//                 {/*            }}>{`Hi ${username}`}</Text>*/}
-//                 {/*        </View>*/}
-//                 {/*    </View>*/}
-//
-//                 {/*    <DrawerItems {...props} />*/}
-//                 {/*    <DrawerItem label={"Logout"} onPress={() => {*/}
-//                 {/*        console.log("logout")*/}
-//                 {/*    }}/>*/}
-//                 {/*    <View>*/}
-//                 {/*        <Text>Notifications:</Text>*/}
-//                 {/*        <Separator/>*/}
-//                 {/*        {notificationListItems}*/}
-//                 {/*    </View>*/}
-//                 {/*</View>*/}
 
 const styles = StyleSheet.create({
     drawerContent: {

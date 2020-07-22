@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-community/async-storage'
+import {EVENT_SCREEN, PROFILE_SCREEN} from "./constants/screens";
 
 export const isAuthenticated = () => {
     const token = AsyncStorage.getItem("token");
@@ -124,4 +125,21 @@ export const nominatimToPrimarySecondary = (position) => {
 export const pridStringToLatLng = (position) => {
     let latlng = position.split(' ')
     return [latlng[1].slice(1), latlng[2].slice(0, -1)]
+}
+
+/**
+ *
+ * @param {string} url
+ *
+ */
+export const URLtoScreenWithProps = (url) => {
+    let screenWithProps = {};
+    const splittedUrl = url.split('/');
+    if (splittedUrl[1] === "profile") {
+        screenWithProps["screen"] = PROFILE_SCREEN;
+    } else {
+        screenWithProps["screen"] = EVENT_SCREEN;
+        screenWithProps["props"] = {id: parseInt(splittedUrl[2])};
+    }
+    return screenWithProps;
 }
