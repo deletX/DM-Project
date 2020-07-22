@@ -1,6 +1,6 @@
-export const HOME_SCREEN = "HOME_SCREEN";
-export const LOGIN_SCREEN = "LOGIN_SCREEN";
-export const JOIN_SCREEN = "JOIN_SCREEN";
-export const EVENT_SCREEN = "EVENT_SCREEN"
-export const PROFILE_SCREEN = "PROFILE_SCREEN";
-export const ADD_CAR_SCREEN = "ADD_CAR_SCREEN";
+export const HOME_SCREEN = "Events";
+export const LOGIN_SCREEN = "Login";
+export const JOIN_SCREEN = "Join";
+export const EVENT_SCREEN = "Event"
+export const PROFILE_SCREEN = "Profile";
+export const ADD_CAR_SCREEN = "Add Car";

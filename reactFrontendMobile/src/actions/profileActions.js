@@ -9,7 +9,7 @@ import {
     USER_DATA_UPDATE
 } from "./types";
 import {carsDetailURL, carsListURL, currentProfileURL, signupURL} from "../constants/apiurls";
-import {headers} from "../../utils";
+import {headers} from "../utils";
 import {addAlert, alertError} from "./alertActions";
 import {authLogout} from "./authActions";
 import AsyncStorage from '@react-native-community/async-storage'

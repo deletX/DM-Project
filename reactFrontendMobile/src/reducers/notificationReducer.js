@@ -1,4 +1,4 @@
-import {updateObject} from "../../utils";
+import {updateObject} from "../utils";
 import {
     CLEAR_NOTIFICATIONS,
     GET_NOTIFICATIONS_SUCCESS,
