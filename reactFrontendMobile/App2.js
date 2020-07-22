@@ -1,36 +1,19 @@
 import React, {Component} from 'react';
 import {
+  ActivityIndicator,
+  Alert,
   Button,
+  StyleSheet,
   TextInput,
   View,
-  StyleSheet,
-  Alert,
-  Image,
-  ActivityIndicator,
 } from 'react-native';
-import {Spinner, Content} from 'native-base';
 import Logo from './src/Logo';
 
 import {
   GoogleSignin,
   GoogleSigninButton,
-  statusCodes,
 } from '@react-native-community/google-signin';
 import {CLIENT_ID} from './src/constants/constants';
-
-const googleLogin = () => {
-  GoogleSignin.signIn().then((data) => {
-    console.log('TEST ' + JSON.stringify(data));
-
-    const currentUser = GoogleSignin.getTokens().then((res) => {
-      console.log(res.accessToken); //<-------Get accessToken
-      var postData = {
-        access_token: res.accessToken,
-        code: data.idToken,
-      };
-    });
-  });
-};
 
 export default class App2 extends Component {
   constructor(props) {
@@ -39,28 +22,60 @@ export default class App2 extends Component {
     this.state = {
       username: '',
       password: '',
+      idToken: '',
+      accessToken: '',
     };
   }
+
   componentDidMount() {
     GoogleSignin.configure({
-      webClientId:
-        '283420556311-tpt22dt7i551nup0pmrihp2a6j1qse7r.apps.googleusercontent.com', // client ID of type WEB for your server(needed to verify user ID and offline access)
+      webClientId: CLIENT_ID, // client ID of type WEB for your server(needed to verify user ID and offline access)
       offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
       forceCodeForRefreshToken: true, // [Android] related to `serverAuthCode`, read the docs link below *.
       accountName: '', // [Android] specifies an account name on the device that should be used
     });
   }
 
-  onLogin() {
-    const {username, password} = this.state;
+  onLogin = () => {
+    Alert.alert(
+      'Credentials',
+      `username: ${this.state.username} \npassword:${this.state.password}`,
+    );
+  };
 
-    Alert.alert('Credentials', `${username} + ${password}`);
-  }
+  googleLogin = () => {
+    GoogleSignin.signIn().then((data) => {
+      //console.log('TEST ' + JSON.stringify(data));
+      console.log('scopes: ' + JSON.stringify(data.scopes));
+      console.log('serverAuthCode: ' + JSON.stringify(data.serverAuthCode));
+      console.log('ID token: ' + JSON.stringify(data.idToken));
+      console.log('user: ' + JSON.stringify(data.user));
+      this.setState({
+        idToken: data.idToken,
+      });
+      const currentUser = GoogleSignin.getTokens().then((res) => {
+        this.setState({
+          accessToken: res.accessToken,
+        });
+        const postData = {
+          access_token: res.accessToken,
+          code: data.idToken,
+        };
+
+        console.log('Access token: ' + this.state.accessToken); //<-------Get accessToken
+      });
+      Alert.alert('Google Credentials', `ID TOKEN: ${this.state.idToken}`);
+      Alert.alert(
+        'Google Credentials',
+        `ACCESS TOKEN: ${this.state.accessToken}`,
+      );
+    });
+  };r
 
   render() {
     return (
       <View style={styles.container}>
-        <Logo/>
+        <Logo />
         <TextInput
           value={this.state.username}
           onChangeText={(username) => this.setState({username})}
@@ -78,10 +93,10 @@ export default class App2 extends Component {
         <Button
           title={'Sign in now!'}
           style={styles.input}
-          onPress={this.onLogin.bind(this)}
+          onPress={this.onLogin}
         />
         <GoogleSigninButton
-          onPress={googleLogin}
+          onPress={this.googleLogin}
           size={GoogleSigninButton.Size.Wide}
           color={GoogleSigninButton.Color.Dark}
         />
