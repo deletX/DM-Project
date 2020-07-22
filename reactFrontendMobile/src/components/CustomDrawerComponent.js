@@ -22,6 +22,7 @@ const profile = {
     name: "mock",
     surname: "fake",
 }
+
 const notifications = [{
     "id": 8,
     "date_time": "2020-07-15T15:40:35.969730Z",
@@ -108,7 +109,7 @@ const CustomDrawerContentComponent = (props) => {
                         <DrawerItem label="Profile"
                                     icon={({color, size}) => (
                                         <Icon
-                                            name="person"
+                                            name="account-circle"
                                             color={color}
                                             size={size}
                                         />
