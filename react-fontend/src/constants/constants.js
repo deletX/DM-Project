@@ -1,4 +1,4 @@
-import {ALBERTO_IP, COMPUTER} from "../../../reactFrontendMobile/src/constants/virtual-box";
+import {ALBERTO_IP, COMPUTER} from "./virtual-box";
 
 export const CLIENT_ID = "283420556311-30r26g3mtt5odkqmit6u7onam3qrul16.apps.googleusercontent.com";
 export const CLIENT_SECRET = "KsSTbOaPDbxEbEGqkcyWl3-v";

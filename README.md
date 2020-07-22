@@ -42,7 +42,7 @@ In Pycharm entrare nel menu impostazioni (Ctrl+Alt+S), sotto Project > Project I
 Per installare le dipendenze necessarie, tramite la finestra del terminale (in basso) eseguire:`
 
 
-###Django
+### Django
 - `python manage.py makemigrations`
 - `python manage.py migrate`
 - `python manage.py createsuperuser` (just username and password, email blank)
@@ -126,7 +126,7 @@ Second:
 - `cd reactFrontendMobile/ && npx react-native run-android`
 
 
-###RN Google Sign in
+### RN Google Sign in
 - https://dev.to/anwargul0x/get-started-with-react-native-google-sign-in-18i5
 ```bash
 keytool -keystore /home/alberto/PycharmProjects/tete_c/reactFrontendMobile/android/app/debug.keystore -list -v
@@ -160,7 +160,7 @@ The JKS keystore uses a proprietary format. It is recommended to migrate to PKCS
 ```
 - ``
 
-###RN Problems
+### RN Problems
 ```bash 
 PROBLEMS:
 If you are sure the module exists, try these steps:
