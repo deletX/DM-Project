@@ -7,9 +7,9 @@ export const APP_CLIENTID = "4mOLHPfJL0zueHOlawvJXsdnImpjOv3PmLdmm3NT";
 export const APP_SECRET = "FW4dYuZsLmE6PQHk7qrPAc4shQhdx2hknqNOh58XO3JQ6PFI8um2z6wyJubxF6hKNOOOJfZUQ67jm5ApN5HJioq4XsNAGSbCLiQZqrqfo6jiy67ddpvMOl3Be8SATFSL";
 
 export const serverURL =
-  COMPUTER === 'alberto'
-    ? ALBERTO_IP
-    : 'http://192.168.1.27:8000/';
+    COMPUTER === 'alberto'
+        ? ALBERTO_IP
+        : 'http://192.168.1.27:8000/';
 
 export const status = [
     'Joinable',

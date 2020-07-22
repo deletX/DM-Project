@@ -99,7 +99,7 @@ export const clearProfileData = () => {
 export const fetchProfile = () => {
     return async (dispatch) => {
         dispatch(start());
-        let access_token = AsyncStorage.getItem("access_token");
+        let access_token = await AsyncStorage.getItem("access_token");
         return axios
             .get(
                 currentProfileURL(),
@@ -107,7 +107,7 @@ export const fetchProfile = () => {
             )
             .then(res => {
                 let {id, user, picture, score, car_set, average_vote, received_feedback, given_feedback} = res.data;
-                AsyncStorage.setItem("profile_id", id);
+                AsyncStorage.setItem("profile_id", id.toString());
                 // dispatch(removeAllAlerts());
                 dispatch(getSuccess(id, user, picture, score, car_set, average_vote, received_feedback, given_feedback));
             })
@@ -123,7 +123,7 @@ export const fetchProfile = () => {
 export const changePicture = (picture) => {
     return async (dispatch) => {
         dispatch(start());
-        let access_token = AsyncStorage.getItem("access_token");
+        let access_token = await AsyncStorage.getItem("access_token");
         let formData = new FormData();
         formData.append("picture", picture, picture.name);
         return axios
@@ -147,7 +147,7 @@ export const changePicture = (picture) => {
 export const changeUserData = (first_name, last_name, email, password = null) => {
     return async (dispatch) => {
         dispatch(start());
-        let access_token = AsyncStorage.getItem("access_token");
+        let access_token = await AsyncStorage.getItem("access_token");
         let data = {
             first_name: first_name,
             last_name: last_name,
@@ -178,7 +178,7 @@ export const changeUserData = (first_name, last_name, email, password = null) =>
 export const deleteUser = () => {
     return async (dispatch) => {
         dispatch(start());
-        let access_token = AsyncStorage.getItem("access_token");
+        let access_token = await AsyncStorage.getItem("access_token");
 
         return axios
             .delete(
@@ -201,8 +201,8 @@ export const deleteUser = () => {
 export const createCar = (name, totSeats, fuel, consumption) => {
     return async (dispatch) => {
         dispatch(start());
-        let access_token = AsyncStorage.getItem("access_token");
-        let profileId = AsyncStorage.getItem("profile_id");
+        let access_token = await AsyncStorage.getItem("access_token");
+        let profileId = parseInt(await AsyncStorage.getItem("profile_id"));
 
         return axios
             .post(
@@ -230,8 +230,8 @@ export const createCar = (name, totSeats, fuel, consumption) => {
 export const updateCar = (id, name, totSeats, fuel, consumption) => {
     return async (dispatch) => {
         dispatch(start());
-        let access_token = AsyncStorage.getItem("access_token");
-        let profileId = AsyncStorage.getItem("profile_id");
+        let access_token = await AsyncStorage.getItem("access_token");
+        let profileId = parseInt(await AsyncStorage.getItem("profile_id"));
 
         return axios
             .put(
@@ -260,8 +260,8 @@ export const updateCar = (id, name, totSeats, fuel, consumption) => {
 export const deleteCar = (id) => {
     return async (dispatch) => {
         dispatch(start());
-        let access_token = AsyncStorage.getItem("access_token");
-        let profileId = AsyncStorage.getItem("profile_id");
+        let access_token = await AsyncStorage.getItem("access_token");
+        let profileId = parseInt(await AsyncStorage.getItem("profile_id"));
         return axios
             .delete(
                 carsDetailURL(profileId, id),

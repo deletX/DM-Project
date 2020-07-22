@@ -53,7 +53,8 @@ export const clearNotifications = () => {
 export const retrieveNotifications = () => {
     return async (dispatch) => {
         dispatch(start());
-        let access_token = AsyncStorage.getItem("access_token");
+        let access_token = await AsyncStorage.getItem("access_token");
+        console.log(`retrieveNotifications - access_token: ${access_token}`)
         return axios
             .get(
                 notificationListURL(),
@@ -76,7 +77,7 @@ export const retrieveNotifications = () => {
 export const readNotification = (notificationId, read = true) => {
     return async (dispatch) => {
         dispatch(start());
-        let access_token = AsyncStorage.getItem("access_token");
+        let access_token = await AsyncStorage.getItem("access_token");
         return axios
             .put(
                 notificationEditURL(notificationId),
