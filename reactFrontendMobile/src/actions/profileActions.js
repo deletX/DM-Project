@@ -100,18 +100,21 @@ export const fetchProfile = () => {
     return async (dispatch) => {
         dispatch(start());
         let access_token = await AsyncStorage.getItem("access_token");
+        console.log("fetchProfile - access_token: " + access_token)
         return axios
             .get(
                 currentProfileURL(),
                 headers('application/json', access_token)
             )
             .then(res => {
+                console.log("fetchProfile - Profile fetch successfully")
                 let {id, user, picture, score, car_set, average_vote, received_feedback, given_feedback} = res.data;
                 AsyncStorage.setItem("profile_id", id.toString());
                 // dispatch(removeAllAlerts());
                 dispatch(getSuccess(id, user, picture, score, car_set, average_vote, received_feedback, given_feedback));
             })
             .catch(error => {
+                console.log("fetchProfile - Profile fetch with Errors")
                 dispatch(fail());
                 dispatch(alertError(error));
                 return error;

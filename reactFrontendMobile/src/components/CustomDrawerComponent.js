@@ -3,6 +3,7 @@ import {View, ScrollView, StyleSheet} from "react-native"
 import {SafeAreaView} from "react-navigation";
 import {DrawerItems} from "react-navigation-drawer"
 import {DrawerItem, DrawerContentScrollView} from "@react-navigation/drawer"
+import {connect} from "react-redux"
 
 import {
     useTheme,
@@ -17,6 +18,7 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {EVENT_SCREEN, HOME_SCREEN, LOGIN_SCREEN, PROFILE_SCREEN, PROFILE_STACK} from "../constants/screens";
 import {URLtoScreenWithProps} from "../utils";
+import {authLogout} from "../actions/authActions";
 
 const profile = {
     username: "mock-username",
@@ -129,7 +131,7 @@ const CustomDrawerContentComponent = (props) => {
                             )}
                             onPress={() => {
                                 console.log("logout")
-                                //TODO: call the logout
+                                props.logout()
                             }}/>
             </Drawer.Section>
 
@@ -184,4 +186,18 @@ const styles = StyleSheet.create({
     },
 });
 
-export default CustomDrawerContentComponent;
+
+function mapStateToProps(state) {
+    return {};
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        logout: () => dispatch(authLogout())
+    };
+}
+
+
+export default connect(
+    mapStateToProps, mapDispatchToProps
+)(CustomDrawerContentComponent);

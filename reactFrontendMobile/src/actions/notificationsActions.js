@@ -61,12 +61,14 @@ export const retrieveNotifications = () => {
                 headers('application/json', access_token)
             )
             .then(res => {
+                console.log('retrieveNotifications - Retrieved Notifications Successfully')
                 dispatch(getSuccess(res.data))
                 setTimeout(() => {
                     retrieveNotifications()
                 }, 60)
             })
             .catch(error => {
+                console.log('retrieveNotifications - Error while retrieving notificaitons')
                 dispatch(alertError(error));
                 dispatch(fail());
                 return error;
