@@ -47,7 +47,12 @@ Per installare le dipendenze necessarie, tramite la finestra del terminale (in b
 - `python manage.py migrate`
 - `python manage.py createsuperuser` (just username and password, email blank)
 
-then http://127.0.0.1:8000/admin/
+then:
+- python manage.py runserver YOUR_IP:8000
+
+or in Pycharm AddConfiguration -> add new -> djangoServer -> save -> run
+
+finally http://YOUR_IP:8000/admin/
 - go in `Django OAuth Toolkit/Applications`
 - Client id: `4mOLHPfJL0zueHOlawvJXsdnImpjOv3PmLdmm3NT`
 - User: `1`
@@ -55,11 +60,6 @@ then http://127.0.0.1:8000/admin/
 - Authorization grant type: `Resource owner password-based`
 - Client secret: `FW4dYuZsLmE6PQHk7qrPAc4shQhdx2hknqNOh58XO3JQ6PFI8um2z6wyJubxF6hKNOOOJfZUQ67jm5ApN5HJioq4XsNAGSbCLiQZqrqfo6jiy67ddpvMOl3Be8SATFSL`
 - `Save`
-
-finally
-- python manage.py runserver
-
-or in Pycharm AddConfiguration -> add new -> djangoServer -> save -> run
 
 
 
