@@ -9,3 +9,7 @@ Appereance -> animations: off
 top bar -> battery: on, date: on
 
 in Ubuntu/Settings/devices/keyboard -> switch applications: disabled, switch windows: alt+tab
+
+disable pycharm ESlint in settings/editor/inspections/code quality tools/eslint
+https://www.jetbrains.com/help/pycharm/disabling-and-enabling-inspections.html#disable-inspections
+then assign alt+A to settings/keymap/code/folding/reformat code

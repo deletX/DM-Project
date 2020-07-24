@@ -2,7 +2,8 @@ import * as React from 'react';
 import {View, Text} from "react-native"
 import Button from "react-native-paper/src/components/Button";
 
-const mock_events = [{
+const mock_events = [
+    {
     "id": 3,
     "name": "blu",
     "picture": "http://192.168.1.8:8000/media/default-event.jpg",
@@ -53,7 +54,8 @@ const mock_events = [{
         "expense": 42.0,
         "car": {"id": 2, "name": "car1", "tot_avail_seats": 4, "fuel": 1, "consumption": 10.0}
     }]
-}, {
+},
+    {
     "id": 2,
     "name": "giallo",
     "picture": "http://192.168.1.8:8000/media/default-event.jpg",
@@ -104,7 +106,8 @@ const mock_events = [{
         "expense": 42.0,
         "car": {"id": 2, "name": "car1", "tot_avail_seats": 4, "fuel": 1, "consumption": 10.0}
     }]
-}, {
+},
+    {
     "id": 1,
     "name": "verde",
     "picture": "http://192.168.1.8:8000/media/default-event.jpg",
