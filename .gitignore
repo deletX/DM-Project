@@ -36,3 +36,7 @@ react-fontend/package-lock.json
 ./reactFrontendMobile/src/constants/virtual-box.js
 /reactFrontendMobile/src/constants/virtual-box.js
 reactFrontendMobile/src/constants/virtual-box.js
+
+./react-fontend/src/constants/virtual-box.js
+/react-fontend/src/constants/virtual-box.js
+react-fontend/src/constants/virtual-box.js
