@@ -24,7 +24,7 @@ SECRET_KEY = 't3jaxs@=6qumn_dbc8+d=7m#4#7$j5ags5=wh_wpht@(9v8ew1'
 DEBUG = True
 CORS_ORIGIN_ALLOW_ALL = True
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "192.168.1.54", "192.168.1.27", "thechiosco.ns0.it", "192.168.1.11", "192.168.56.111"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "192.168.1.54", "192.168.1.27", "thechiosco.ns0.it", "192.168.1.11", "192.168.56.111", "192.168.1.8"]
 
 # Application definition
 

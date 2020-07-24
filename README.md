@@ -108,6 +108,7 @@ Access token can be used to provide authorization including `Authorization: Bear
 - `cd react-fontend/`
 - `npm install`
 - `npm start` -> http://localhost:3000/
+- be sure not to use http://127.0.0.1:3000/ or http://0.0.0.0:3000/ or http://YOUR_IP:3000 because Google Sign In won't work!
 
 
 ### Fake user (Alberto localhost)
