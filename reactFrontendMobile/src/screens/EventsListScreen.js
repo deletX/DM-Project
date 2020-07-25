@@ -3,7 +3,7 @@ import {View, Text, ScrollView, StyleSheet} from "react-native"
 import {FAB} from "react-native-paper"
 import Button from "react-native-paper/src/components/Button";
 import EventComponent from "../components/EventComponent";
-import moment from "moment";
+import moment from "moment"; //https://momentjs.com/docs/#/displaying/
 
 const mock_events = [
     {
@@ -237,7 +237,6 @@ const mock_events = [
 
 const EventsListScreen = (props) => {
     const eventsList = mock_events.map((event,) => (
-
         <EventComponent
             key={event.id}
             status={event.status}

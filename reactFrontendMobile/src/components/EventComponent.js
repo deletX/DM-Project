@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Card, Button, Title, Paragraph, Text} from 'react-native-paper';
+import {Card, Button, Title, Paragraph, Text, DefaultTheme} from 'react-native-paper';
 import {Alert, StyleSheet, View} from "react-native";
 import {COMPUTED, COMPUTING, JOINABLE} from "../constants/constants";
 
@@ -17,18 +17,18 @@ const EventComponent = (props) => (
                       Alert.alert("You are moving to detail event screen");
                   }}
                   accessible={true}>
+                <Card.Cover source={{uri: props.picture}}/>
                 <Card.Content>
                     <Title>{props.title}</Title>
                     <Paragraph>{props.date}</Paragraph>
                     <Paragraph>{props.address}</Paragraph>
                     <Paragraph>{props.description}</Paragraph>
                 </Card.Content>
-                <Card.Cover source={{uri: props.picture}}/>
+
                 <Card.Actions>
-                    <Button onPress={() =>
-                        Alert.alert("You joined this event")
+                    <Button mode="contained" color="#00675b" onPress={() => Alert.alert("You joined this event")
                     }>Join event</Button>
-                    <Button onPress={() => {
+                    <Button mode="text" color="#c56200" onPress={() => {
                         Alert.alert("You left this event")
                     }} style={styles.buttonRight}>Leave event</Button>
                 </Card.Actions>
@@ -41,6 +41,8 @@ const EventComponent = (props) => (
 const styles = StyleSheet.create({
     card: {
         marginTop: 15,
+        marginLeft: 15,
+        marginRight: 15
     },
     buttonRight: {
         flex: 1,
@@ -52,7 +54,8 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center'
-    }
+    },
+
 });
 
 export default EventComponent;
