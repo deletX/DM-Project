@@ -22,3 +22,7 @@ export const landingpageEvent = (num) =>
 
 export const defaultProfilePic = serverURL + 'media/default-profile.jpg';
 export const defaultEventPic = serverURL + 'media/default-event.jpg';
+
+export const JOINABLE = 0
+export const COMPUTING = 1
+export const COMPUTED = 2

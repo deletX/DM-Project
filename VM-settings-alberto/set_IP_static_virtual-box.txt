@@ -1,3 +1,12 @@
+file to modify when IP changes:
+dmproject/settings.py -> ALLOWED_HOSTS
+react-fontend/src/constants/virtual-box.js
+reactFrontendMobile/src/constants/virtual-box.js
+reactFrontendMobile/android/app/src/main/res/xml/network_security_config.xml -> <domain includeSubdomains="false">192.168.1.9</domain>
+python manage.py runserver IP:8000
+
+###########################################
+
 https://www.youtube.com/watch?v=YkbShiPaE_0
 in virtual box:
 select machine, settings, network:
