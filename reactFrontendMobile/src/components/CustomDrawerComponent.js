@@ -80,6 +80,7 @@ const CustomDrawerContentComponent = (props) => {
         />
     ));
 
+
     return (
         <View style={{flex: 1}}>
             <DrawerContentScrollView {...props}>

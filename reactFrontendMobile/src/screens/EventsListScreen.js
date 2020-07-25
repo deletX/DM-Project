@@ -3,6 +3,7 @@ import {View, Text, ScrollView, StyleSheet} from "react-native"
 import {FAB} from "react-native-paper"
 import Button from "react-native-paper/src/components/Button";
 import EventComponent from "../components/EventComponent";
+import moment from "moment";
 
 const mock_events = [
     {
@@ -236,11 +237,12 @@ const mock_events = [
 
 const EventsListScreen = (props) => {
     const eventsList = mock_events.map((event,) => (
+
         <EventComponent
             key={event.id}
             status={event.status}
             title={event.name}
-            date={event.date_time}
+            date={moment(event.date_time).format("dddd D MMMM YYYY, HH:mm")}
             description={event.description}
             address={event.address}
             picture={event.picture}>
