@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {View, Text, ScrollView, StyleSheet} from "react-native"
+import {FAB} from "react-native-paper"
 import Button from "react-native-paper/src/components/Button";
 import EventComponent from "../components/EventComponent";
 
@@ -233,7 +234,6 @@ const mock_events = [
         }]
     }]
 
-
 const EventsListScreen = (props) => {
     const eventsList = mock_events.map((event,) => (
         <EventComponent
@@ -246,18 +246,17 @@ const EventsListScreen = (props) => {
             picture={event.picture}>
         </EventComponent>
     ));
-    return (
-        // <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-        //     <Text>Event list Screen</Text>
-        //     <Button onPress={props.navigation.toggleDrawer}>
-        //         Apri Drawer
-        //     </Button>
-        // </View>
-        <ScrollView>
-            {eventsList}
-            <Button onPress={props.navigation.toggleDrawer}>ssss</Button>
-        </ScrollView>
 
+    return (
+        <View style={{flex: 1}}>
+            <ScrollView>
+                {eventsList}
+            </ScrollView>
+            <View>
+                <FAB style={styles.fab} icon="menu" onPress={props.navigation.toggleDrawer}>
+                </FAB>
+            </View>
+        </View>
     );
 }
 
@@ -266,7 +265,13 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center'
-    }
+    },
+    fab: {
+        position: 'absolute',
+        margin: 16,
+        right: 0,
+        bottom: 0,
+    },
 });
 
 export default EventsListScreen;
