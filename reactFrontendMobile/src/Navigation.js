@@ -115,3 +115,4 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Navigation);
+//https://dev.to/markusclaus/fetching-data-from-an-api-using-reactredux-55ao

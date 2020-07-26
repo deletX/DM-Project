@@ -50,7 +50,7 @@ const mock_events = [
         "address": "Via Francesco Prampolini, 173 41124 Modena",
         "destination": "SRID=4326;POINT (44.6371199 10.928005)",
         "date_time": "2020-07-27T18:44:00+02:00",
-        "status": 0,
+        "status": 1,
         "owner": {
             "id": 3,
             "first_name": "Mario",
