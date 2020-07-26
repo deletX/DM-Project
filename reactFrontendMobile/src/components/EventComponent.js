@@ -7,8 +7,8 @@ import {COMPUTED, COMPUTING, JOINABLE} from "../constants/constants";
 const EventComponent = (props) => (
         <View
             key={props.id}
-            pointerEvents={(props.status === JOINABLE || props.status === COMPUTING) ? "auto" : "none"}
-            opacity={(props.status === JOINABLE || props.status === COMPUTING) ? 1 : 0.4}
+            pointerEvents={(props.status === JOINABLE) ? "auto" : "none"}
+            opacity={(props.status === JOINABLE) ? 1 : 0.4}
         >
 
 
@@ -29,15 +29,13 @@ const EventComponent = (props) => (
                 <Card.Actions>
                     <Button mode="contained" color="#00675b" onPress={() => Alert.alert("You joined this event")
                     }>Join event</Button>
-
-
                     <Button mode="text" color="#c56200" onPress={() =>
                         Alert.alert("You left this event")
                     } style={styles.buttonRight}>Leave event</Button>
 
                 </Card.Actions>
                 {props.status === COMPUTING &&
-                    <ActivityIndicator animating={true} color={Colors.blue200} size="12"
+                    <ActivityIndicator animating={true} color={Colors.blue900} size="12"
                                        style={styles.spinner}/>}
 
             </Card>
