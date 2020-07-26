@@ -27,10 +27,13 @@ import {Button, Colors} from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import TouchableRipple from "react-native-paper/src/components/TouchableRipple/index";
 
+
+//https://reactnavigation.org/blog/2020/01/29/using-react-navigation-5-with-react-native-paper/
 const Drawer = createDrawerNavigator();
 const EventStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
 const AuthStack = createStackNavigator();
+
 
 const Events = (props) => {
     return (
@@ -64,7 +67,6 @@ const Profile = () => {
         </ProfileStack.Navigator>
     );
 };
-
 
 const Navigation = (props) => {
     /*const {isAuthenticated, isLoading, username, alerts, profileId, error} = props*/

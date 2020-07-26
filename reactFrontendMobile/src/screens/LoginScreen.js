@@ -49,6 +49,7 @@ const LoginScreen = ({
     };
 
     const googleSignIn = () => {
+        //https://levelup.gitconnected.com/get-started-with-react-native-google-sign-in-4a03cef373c5
         GoogleSignin.signIn().then((data) => {
             //console.log('TEST ' + JSON.stringify(data));
             console.log('scopes: ' + JSON.stringify(data.scopes));

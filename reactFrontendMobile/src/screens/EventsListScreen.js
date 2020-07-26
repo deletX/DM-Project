@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {View, Text, ScrollView, StyleSheet} from "react-native"
+import {View, Text, ScrollView, StyleSheet, RefreshControl} from "react-native"
 import {FAB} from "react-native-paper"
 import Button from "react-native-paper/src/components/Button";
 import EventComponent from "../components/EventComponent";
@@ -235,6 +235,12 @@ const mock_events = [
         }]
     }]
 
+const wait = (timeout) => {
+    return new Promise(resolve => {
+        setTimeout(resolve, timeout);
+    });
+}
+
 const EventsListScreen = (props) => {
     const eventsList = mock_events.map((event,) => (
         <EventComponent
@@ -248,9 +254,19 @@ const EventsListScreen = (props) => {
         </EventComponent>
     ));
 
+    const [refreshing, setRefreshing] = React.useState(false);
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+
+        wait(2000).then(() => setRefreshing(false));
+    }, []);
+
     return (
         <View style={{flex: 1}}>
-            <ScrollView>
+            <ScrollView
+                refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}>
                 {eventsList}
             </ScrollView>
             <View>

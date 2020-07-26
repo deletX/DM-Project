@@ -28,9 +28,9 @@ const EventComponent = (props) => (
                 <Card.Actions>
                     <Button mode="contained" color="#00675b" onPress={() => Alert.alert("You joined this event")
                     }>Join event</Button>
-                    <Button mode="text" color="#c56200" onPress={() => {
+                    <Button mode="text" color="#c56200" onPress={() =>
                         Alert.alert("You left this event")
-                    }} style={styles.buttonRight}>Leave event</Button>
+                    } style={styles.buttonRight}>Leave event</Button>
                 </Card.Actions>
             </Card>
         </View>
