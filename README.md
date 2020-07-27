@@ -217,4 +217,19 @@ project.ext.vectoricons = [
     iconFontNames: [ 'MaterialIcons.ttf', 'EvilIcons.ttf' ] // Name of the font files you want to copy
 ]
 
-apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"```
+apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
+```
+
+## Google API error
+Run these commands to clean caches
+
+```
+# NPM
+watchman watch-del-all
+npm cache clean
+
+# Android, if you encounter `com.android.dex.DexException: Multiple dex files define Landroid/support/v7/appcompat/R$anim`, then clear build folder.
+cd android
+./gradlew clean
+cd ..
+```
