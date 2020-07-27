@@ -53,10 +53,11 @@ const CustomDrawerContentComponent = (props) => {
                 <View style={styles.drawerContent}>
                     <View style={styles.userInfoSection}>
                         <View style={{flexDirection: 'row', marginTop: 15}}>
-                            {(props.picture !== null || props.picture === '') ? (
-                                <Avatar.Image source={{uri: (props.picture === '' ? null : props.picture)}} size={50}/>
+                            {(props.picture !== null || props.picture !== '') ? (
+                                <Avatar.Image source={{uri: props.picture}} size={50}/>
                             ) : (
-                                <Avatar.Text label={`${props.firstName[0]}${props.lastName[0]}`.toUpperCase()} size={50} labelStyle={{fontSize: 21}}/>
+                                <Avatar.Text label={`${props.firstName[0]}${props.lastName[0]}`.toUpperCase()} size={50}
+                                             labelStyle={{fontSize: 21}}/>
                             )}
 
                             <View style={{marginLeft: 15, flexDirection: 'column'}}>
