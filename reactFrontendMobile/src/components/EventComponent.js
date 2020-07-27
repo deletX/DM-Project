@@ -2,9 +2,16 @@ import * as React from 'react';
 import {Card, Button, Title, Paragraph, Text, DefaultTheme, ActivityIndicator, Colors} from 'react-native-paper';
 import {Alert, StyleSheet, View} from "react-native";
 import {COMPUTED, COMPUTING, JOINABLE} from "../constants/constants";
+import EventScreen from "../screens/EventScreen";
+import {EVENT_SCREEN} from "../constants/screens";
+import {useNavigation} from "@react-navigation/native"
 
 
-const EventComponent = (props) => (
+const EventComponent = (props) => {
+
+    const navigation = useNavigation();
+
+    return (
         <View
             key={props.id}
             pointerEvents={(props.status === JOINABLE) ? "auto" : "none"}
@@ -15,7 +22,7 @@ const EventComponent = (props) => (
             <Card style={styles.card}
                   key={props.id}
                   onPress={() => {
-                      Alert.alert("You are moving to detail event screen");
+                      navigation.navigate(EVENT_SCREEN, {event: props.event, id: props.event.id})
                   }}
                   accessible={true}>
                 <Card.Cover source={{uri: props.picture}}/>
@@ -35,13 +42,13 @@ const EventComponent = (props) => (
 
                 </Card.Actions>
                 {props.status === COMPUTING &&
-                    <ActivityIndicator animating={true} color={Colors.blue900} size="12"
-                                       style={styles.spinner}/>}
+                <ActivityIndicator animating={true} color={Colors.blue900} size="12"
+                                   style={styles.spinner}/>}
 
             </Card>
         </View>
     )
-;
+}
 
 
 const styles = StyleSheet.create({

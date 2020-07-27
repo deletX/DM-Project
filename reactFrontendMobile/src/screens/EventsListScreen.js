@@ -250,7 +250,9 @@ const EventsListScreen = (props) => {
             date={moment(event.date_time).format("dddd D MMMM YYYY, HH:mm")}
             description={event.description}
             address={event.address}
-            picture={event.picture}>
+            picture={event.picture}
+            event={event}
+        >
         </EventComponent>
     ));
 

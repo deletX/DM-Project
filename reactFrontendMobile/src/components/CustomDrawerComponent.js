@@ -27,42 +27,8 @@ import {URLtoScreenWithProps} from '../utils';
 import {authLogout} from '../actions/authActions';
 
 
-const profile = {
-    username: 'mock-username',
-    img: 'https://api.adorable.io/avatars/50/abott@adorable.png',
-    name: 'mock',
-    surname: 'fake',
-};
-
-const notifications = [
-    {
-        id: 8,
-        date_time: '2020-07-15T15:40:35.969730Z',
-        title: 'Prova1 started computing',
-        content: 'The computation for the event has started',
-        read: true,
-        url: '/events/23',
-    },
-    {
-        id: 9,
-        date_time: '2020-07-15T15:40:35.969730Z',
-        title: 'Prova31 started computing',
-        content: 'The computation for the event has started',
-        read: true,
-        url: '/events/24',
-    },
-    {
-        id: 6,
-        date_time: '2020-07-15T15:40:35.969730Z',
-        title: 'Prova2 started computing',
-        content: 'The computation for the event has started',
-        read: true,
-        url: '/events/25',
-    },
-];
-
 const CustomDrawerContentComponent = (props) => {
-    const notificationListItems = notifications.map((notification) => (
+    const notificationListItems = props.notifications.map((notification) => (
         <DrawerItem
             key={notification.id}
             label={notification.title}
@@ -87,12 +53,17 @@ const CustomDrawerContentComponent = (props) => {
                 <View style={styles.drawerContent}>
                     <View style={styles.userInfoSection}>
                         <View style={{flexDirection: 'row', marginTop: 15}}>
-                            <Avatar.Image source={{uri: profile.img}} size={50}/>
+                            {(props.picture !== null || props.picture === '') ? (
+                                <Avatar.Image source={{uri: props.picture}} size={50}/>
+                            ) : (
+                                <Avatar.Text label={`${props.firstName[0]}${props.lastName[0]}`.toUpperCase()} size={50} labelStyle={{fontSize: 21}}/>
+                            )}
+
                             <View style={{marginLeft: 15, flexDirection: 'column'}}>
                                 <Title style={styles.title}>
-                                    {profile.name + ' ' + profile.surname}
+                                    {props.firstName + ' ' + props.lastName}
                                 </Title>
-                                <Caption style={styles.caption}>{profile.username}</Caption>
+                                <Caption style={styles.caption}>{props.username}</Caption>
                             </View>
                         </View>
                     </View>
@@ -186,7 +157,13 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps(state) {
-    return {};
+    return {
+        username: state.profile.user.username,
+        firstName: state.profile.user.first_name,
+        lastName: state.profile.user.last_name,
+        notifications: state.notifications.notifications,
+        picture: state.profile.picture,
+    };
 }
 
 function mapDispatchToProps(dispatch) {
