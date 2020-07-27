@@ -25,6 +25,7 @@ import {
 } from '../constants/screens';
 import {URLtoScreenWithProps} from '../utils';
 import {authLogout} from '../actions/authActions';
+import CustomAvatar from "./CustomAvatar";
 
 
 const CustomDrawerContentComponent = (props) => {
@@ -53,12 +54,8 @@ const CustomDrawerContentComponent = (props) => {
                 <View style={styles.drawerContent}>
                     <View style={styles.userInfoSection}>
                         <View style={{flexDirection: 'row', marginTop: 15}}>
-                            {(props.picture !== null || props.picture !== '') ? (
-                                <Avatar.Image source={{uri: props.picture}} size={50}/>
-                            ) : (
-                                <Avatar.Text label={`${props.firstName[0]}${props.lastName[0]}`.toUpperCase()} size={50}
-                                             labelStyle={{fontSize: 21}}/>
-                            )}
+                            <CustomAvatar picture={props.picture} firstName={props.firstName}
+                                          lastName={props.lastName}/>
 
                             <View style={{marginLeft: 15, flexDirection: 'column'}}>
                                 <Title style={styles.title}>
