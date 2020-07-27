@@ -53,7 +53,8 @@ const Events = (props) => {
 
                 ),
             }}/>
-            <EventStack.Screen name={EVENT_SCREEN} component={EventScreen}/>
+            <EventStack.Screen name={EVENT_SCREEN} component={EventScreen}
+                               options={({route}) => ({title: `${route.params.event.name}`})}/>
             <EventStack.Screen name={JOIN_SCREEN} component={JoinScreen}/>
         </EventStack.Navigator>
     );
