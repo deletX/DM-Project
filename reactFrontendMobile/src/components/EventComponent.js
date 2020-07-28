@@ -17,8 +17,6 @@ const EventComponent = (props) => {
             pointerEvents={(props.status === JOINABLE) ? "auto" : "none"}
             opacity={(props.status === JOINABLE) ? 1 : 0.4}
         >
-
-
             <Card style={styles.card}
                   key={props.id}
                   onPress={() => {

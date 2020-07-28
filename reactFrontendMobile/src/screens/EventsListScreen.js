@@ -1,9 +1,11 @@
 import * as React from 'react';
-import {View, Text, ScrollView, StyleSheet, RefreshControl} from "react-native"
-import {FAB} from "react-native-paper"
+import {View, Text, ScrollView, StyleSheet, RefreshControl, TouchableOpacity} from "react-native"
+import {FAB, Chip, Colors} from "react-native-paper"
 import Button from "react-native-paper/src/components/Button";
 import EventComponent from "../components/EventComponent";
-import moment from "moment"; //https://momentjs.com/docs/#/displaying/
+import moment from "moment";
+import {set} from "react-native-reanimated";
+import {grey500} from "react-native-paper/src/styles/colors"; //https://momentjs.com/docs/#/displaying/
 
 const mock_events = [
     {
@@ -264,19 +266,55 @@ const EventsListScreen = (props) => {
         wait(2000).then(() => setRefreshing(false));
     }, []);
 
+    const [joinable, setJoinable] = React.useState(true);
+    const [joined, setJoined] = React.useState(true);
+    const [owned, setOwned] = React.useState(true);
+
     return (
-        <View style={{flex: 1}}>
+        <>
+
+            {/*<View style={{flex: 1}}>*/}
+            {/*    <Chip mode="flat" selected="false" selectedColor="blue" disabled="false" icon="menu" onPress={() => {*/}
+            {/*    }} style={{margin: 5, flexWrap: 'wrap',}}>Example Chip</Chip>*/}
             <ScrollView
                 refreshControl={
                     <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}>
+                <View style={styles.chip}>
+                    <View style={{margin: 5, flexWrap: 'wrap'}}>
+                            <Chip textStyle={{color: Colors.black, fontSize: 15}}
+                                  style={{backgroundColor: joinable ? Colors.orange500 : Colors.grey300}}
+                                  selectedColor="blue"
+                                  icon={joinable ? "check" : null}
+                                  onPress={() => setJoinable(!joinable)}> Joinable </Chip>
+                    </View>
+
+
+                    <View style={{margin: 5, flexWrap: 'wrap'}}>
+                            <Chip textStyle={{color: Colors.black, fontSize: 15}}
+                                  style={{backgroundColor: joined ? Colors.orange500 : Colors.grey300}}
+                                  selectedColor="blue"
+                                  icon={joined ? "check" : null}
+                                  onPress={() => setJoined(!joined)}> Joined </Chip>
+                    </View>
+
+                    <View style={{margin: 5, flexWrap: 'wrap'}}>
+                            <Chip textStyle={{color: Colors.black, fontSize: 15}}
+                                  style={{backgroundColor: owned ? Colors.orange500 : Colors.grey300}}
+                                  selectedColor="blue"
+                                  icon={owned ? "check" : null}
+                                  onPress={() => setOwned(!owned)}> Owned </Chip>
+                    </View>
+                </View>
                 {eventsList}
+
             </ScrollView>
             <View>
                 <FAB style={styles.fab} icon="menu" onPress={props.navigation.toggleDrawer}>
                 </FAB>
             </View>
-        </View>
-    );
+        </>
+    )
+        ;
 }
 
 const styles = StyleSheet.create({
@@ -291,6 +329,11 @@ const styles = StyleSheet.create({
         right: 0,
         bottom: 0,
     },
+    chip: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center'
+    }
 });
 
 export default EventsListScreen;
