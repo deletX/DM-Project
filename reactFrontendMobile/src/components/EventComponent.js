@@ -1,5 +1,15 @@
 import * as React from 'react';
-import {Card, Button, Title, Paragraph, Text, DefaultTheme, ActivityIndicator, Colors} from 'react-native-paper';
+import {
+    Card,
+    Button,
+    Title,
+    Paragraph,
+    Text,
+    DefaultTheme,
+    ActivityIndicator,
+    ProgressBar,
+    Colors
+} from 'react-native-paper';
 import {Alert, StyleSheet, View} from "react-native";
 import {COMPUTED, COMPUTING, JOINABLE} from "../constants/constants";
 import EventScreen from "../screens/EventScreen";
@@ -15,8 +25,8 @@ const EventComponent = (props) => {
     return (
         <View
             key={props.id}
-            pointerEvents={(props.event.status === JOINABLE) ? "auto" : "none"}
-            opacity={(props.event.status === JOINABLE) ? 1 : 0.4}
+            pointerEvents={(props.event.status === JOINABLE || props.event.status === COMPUTED) ? "auto" : "none"}
+            opacity={(props.event.status === JOINABLE || props.event.status === COMPUTED || props.event.status === COMPUTING) ? 1 : 0.4}
         >
             <Card style={styles.card}
                   key={props.event.id}
@@ -31,20 +41,29 @@ const EventComponent = (props) => {
                     <Paragraph>{moment(props.event.date_time).format("dddd D MMMM YYYY, HH:mm")}</Paragraph>
                     <Paragraph>{props.event.address}</Paragraph>
                     <Paragraph>{props.event.description}</Paragraph>
+
                 </Card.Content>
 
+                {props.event.status === COMPUTING && <ProgressBar indeterminate={"true"} color={Colors.orange500}/>}
+
                 <Card.Actions>
-                    <Button mode="contained" color="#00675b" onPress={() => Alert.alert("You joined this event")
-                    }>Join event</Button>
 
-                    <Button mode="text" color="#c56200" onPress={() =>
+                    <Button mode="contained" color="#00675b"
+                            onPress={() => Alert.alert("You joined this event")
+                    }
+                            disabled={props.event.status === JOINABLE ? null : "true"}>
+                        Join event
+                    </Button>
+
+                    <Button mode="text" color="#c56200"
+                            onPress={() =>
                         Alert.alert("You left this event")
-                    } style={styles.buttonRight}>Leave event</Button>
+                    }
+                            style={styles.buttonRight}
+                            disabled={props.event.status === JOINABLE ? null : "true"}>
+                        Leave event
+                    </Button>
                 </Card.Actions>
-
-                {props.event.status === COMPUTING &&
-                <ActivityIndicator animating={true} color={Colors.blue900} size="12"
-                                   style={styles.spinner}/>}
 
             </Card>
         </View>
@@ -56,7 +75,8 @@ const styles = StyleSheet.create({
     card: {
         marginTop: 15,
         marginLeft: 15,
-        marginRight: 15
+        marginRight: 15,
+        marginBottom: 15
     },
     buttonRight: {
         flex: 1,
