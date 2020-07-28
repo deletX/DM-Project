@@ -31,7 +31,7 @@ const ParticipantListItem = (props) => {
                             navigation.navigate(OTHER_PROFILE_SCREEN, {id: participant.profileId, profile: res.data})
                         })
                         .catch(err => {
-                            ToastAndroid.show("An Error occured")
+                            ToastAndroid.show("An Error occured", ToastAndroid.SHORT, ToastAndroid.BOTTOM)
                             console.log(err)
                         })
                 }

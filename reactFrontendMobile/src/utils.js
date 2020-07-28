@@ -157,7 +157,7 @@ export const URLtoScreenWithProps = async (url, token = "") => {
             })
             .catch(err => {
                 // history.push(home)
-                ToastAndroid.show("Error while retrieving event")
+                ToastAndroid.show("Error while retrieving event", ToastAndroid.SHORT, ToastAndroid.BOTTOM)
                 // addAlert("An error occurred while retrieving event data",)
             })
 

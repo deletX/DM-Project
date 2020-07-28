@@ -1,14 +1,22 @@
 import React from 'react';
-import {ImageBackground, useWindowDimensions, View} from "react-native";
+import {ImageBackground, useWindowDimensions, View, Alert, ToastAndroid} from "react-native";
 import {Button, Colors, IconButton, Subheading, Title} from "react-native-paper";
 import moment from "moment";
+import {useNavigation} from "@react-navigation/native";
+import axios from "axios"
+import {headers} from "../../utils";
+import {eventDetailURL} from "../../constants/apiurls";
+import {HOME_SCREEN} from "../../constants/screens";
 
 const EventHeaderComponent = (props) => {
     const windowWidth = useWindowDimensions().width;
     const windowHeight = useWindowDimensions().height;
-    const {styles, profileId} = props
+    const {styles, profileId, token} = props
+    const onRefresh = props.route.params.onRefresh
     const event = props.route.params.event
     const isOwner = props.profileId === event.owner.id
+    const navigation = useNavigation()
+
     return (
         <View>
             <ImageBackground source={{uri: event.picture}}
@@ -56,7 +64,35 @@ const EventHeaderComponent = (props) => {
                                 color={Colors.redA700}
                                 style={{position: "absolute", top: 10, left: -100}}
                                 onPress={() => {
-                                    console.log("leave-pressed")
+                                    Alert.alert(
+                                        "Are you sure?",
+                                        "It won't be recoverble after you delete it",
+                                        [
+                                            {
+                                                text: "Cancel",
+                                            },
+                                            {
+                                                text: "Yes",
+                                                onPress: () => {
+                                                    // console.log("yes-delet")
+                                                    axios
+                                                        .delete(
+                                                            eventDetailURL(event.id),
+                                                            headers('application/json', token)
+                                                        )
+                                                        .then(res => {
+                                                            console.log("tette")
+                                                            ToastAndroid.show("Deleted event", ToastAndroid.SHORT)
+                                                            navigation.navigate(HOME_SCREEN, {refresh: true})
+                                                        })
+                                                        .catch(err => {
+                                                            console.log(err)
+                                                            ToastAndroid.show("Error while deleting", ToastAndroid.SHORT)
+                                                        })
+                                                },
+                                            }
+                                        ]
+                                    )
                                 }}
                             >
                                 delete
@@ -66,7 +102,7 @@ const EventHeaderComponent = (props) => {
                                 style={{position: "absolute", top: 10, left: 80}}
                                 color={Colors.tealA700}
                                 onPress={() => {
-                                    console.log("run-pressed")
+                                    console.log("tette")
                                 }}
                             >
 

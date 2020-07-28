@@ -19,9 +19,15 @@ const wait = (timeout) => {
 const EventsListScreen = (props) => {
     const [refreshing, setRefreshing] = React.useState(false);
 
+    const [joinable, setJoinable] = React.useState(true);
+    const [joined, setJoined] = React.useState(true);
+    const [owned, setOwned] = React.useState(false);
+
+    const [events, setEvents] = React.useState([]);
+
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
-
+        console.log(joinable, joined, owned)
         axios
             .get(eventListURL(joinable, joined, owned), headers('application/json', props.token))
             .then((response) => {
@@ -32,13 +38,7 @@ const EventsListScreen = (props) => {
                 //TODO: toast
                 setRefreshing(false);
             });
-    }, []);
-
-    const [joinable, setJoinable] = React.useState(true);
-    const [joined, setJoined] = React.useState(true);
-    const [owned, setOwned] = React.useState(true);
-
-    const [events, setEvents] = React.useState([]);
+    }, [joinable, joined, owned, setEvents, setRefreshing]);
 
     React.useEffect(() => {
         axios
@@ -49,8 +49,17 @@ const EventsListScreen = (props) => {
             .catch((err) => {
                 //toast
             });
-
-    }, [joinable, joined, owned]);
+        if (props.route.params?.refresh) {
+            axios
+                .get(eventListURL(joinable, joined, owned), headers('application/json', props.token))
+                .then((response) => {
+                    setEvents(response.data)
+                })
+                .catch((err) => {
+                    //toast
+                });
+        }
+    }, [joinable, joined, owned, props.route.params?.refresh]);
 
     const eventsList = events.map((event,) => (
         <EventComponent
