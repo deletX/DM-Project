@@ -19,6 +19,9 @@ const wait = (timeout) => {
 const EventsListScreen = (props) => {
     const [refreshing, setRefreshing] = React.useState(false);
 
+    const getEvents = () => {
+        return null;
+    }
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
 
