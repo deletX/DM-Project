@@ -15,7 +15,7 @@ import {profilesURL} from "../../constants/apiurls";
 const ParticipantListItem = (props) => {
     const windowWidth = useWindowDimensions().width;
     const windowHeight = useWindowDimensions().height;
-    const navigation = useNavigation();
+    const navigation = props.navigation
     const {participant, profileId, token} = props;
     const rightIcon = props.rightIcon ? props.rightIcon : true
     return (

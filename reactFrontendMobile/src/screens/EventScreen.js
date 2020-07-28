@@ -41,32 +41,36 @@ import EventComputedOtherCarsComponent from "../components/event/EventComputedOt
 const EventScreen = (props) => {
 
     const event = props.route.params.event
-    
+
     const scrollViewRef = React.useRef()
     const isOwner = props.profileId === event.owner.id
     return (
-        <ScrollView ref={scrollViewRef}>
-            <EventHeaderComponent {...props} styles={styles} scrollViewRef={scrollViewRef}/>
-            <View style={{marginLeft: 15, marginRight: 15, marginBottom: 20}}>
-                <EventDescription event={event} styles={styles}/>
-                {event.status === JOINABLE &&
-                <EventParticipantList event={event} styles={styles}/>
-                }
+        <Portal.Host>
+            <ScrollView ref={scrollViewRef}>
 
-                {/*Shouldn't be necessary but who knows*/}
-                {event.status === COMPUTING &&
-                <ActivityIndicator/>
-                }
+                <EventHeaderComponent {...props} styles={styles} scrollViewRef={scrollViewRef}/>
+                <View style={{marginLeft: 15, marginRight: 15, marginBottom: 20}}>
+                    <EventDescription event={event} styles={styles}/>
+                    {event.status === JOINABLE &&
+                    <EventParticipantList event={event} styles={styles}/>
+                    }
 
-                {event.status === COMPUTED &&
-                <EventComputedYourCarComponent {...props} styles={styles}/>
-                }
+                    {/*Shouldn't be necessary but who knows*/}
+                    {event.status === COMPUTING &&
+                    <ActivityIndicator/>
+                    }
 
-                {(isOwner && event.status === COMPUTED) &&
-                <EventComputedOtherCarsComponent {...props} styles={styles}/>
-                }
-            </View>
-        </ScrollView>
+                    {event.status === COMPUTED &&
+                    <EventComputedYourCarComponent {...props} styles={styles}/>
+                    }
+
+                    {(isOwner && event.status === COMPUTED) &&
+                    <EventComputedOtherCarsComponent {...props} styles={styles}/>
+                    }
+                </View>
+
+            </ScrollView>
+        </Portal.Host>
     );
 }
 

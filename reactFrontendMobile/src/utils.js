@@ -126,9 +126,13 @@ export const nominatimToPrimarySecondary = (position) => {
 }
 
 
-export const pridStringToLatLng = (position) => {
+export const pridStringToLatLng = (position, shouldParseFloat = true) => {
     let latlng = position.split(' ')
-    return [parseFloat(latlng[1].slice(1)), parseFloat(latlng[2].slice(0, -1))]
+    if (shouldParseFloat) {
+        return [parseFloat(latlng[1].slice(1)), parseFloat(latlng[2].slice(0, -1))]
+    } else {
+        return [latlng[1].slice(1), latlng[2].slice(0, -1)]
+    }
 }
 
 /**
