@@ -47,16 +47,28 @@ const EventScreen = (props) => {
         <List.Item
             key={participant.id}
             title={`${participant.profile.first_name} ${participant.profile.last_name}`}
+            titleStyle={{maxWidth: windowWidth - 230}}
             left={(props) => (
-                <CustomAvatar picture={participant.profile.picture} firstName={participant.profile.first_name}
-                              lastName={participant.profile.last_name}/>)}
+                <CustomAvatar
+                    picture={participant.profile.picture}
+                    firstName={participant.profile.first_name}
+                    lastName={participant.profile.last_name}
+                    size={40}
+                />)}
             description={(props) => (
                 <StarRating
+                    halfStarEnabled
+                    rating={participant.profile.average_vote ? participant.profile.average_vote : 0}
+                    starSize={20}
+                    disabled={true}
+                    fullStarColor={"#d6a000"}
+                    containerStyle={{width: 100, marginLeft: 0, position: "absolute", right: 30}} ù
+                    emptyStarColor={participant.profile.average_vote ? "808080" : "#bbbbbb"}
                 />
             )}
             right={(props) => (
                 <Icon
-                    style={{position: "absolute", top: 13, right: 10}}
+                    style={{position: "absolute", top: 9, right: 0}}
                     name={participant.car === null ? "directions-walk" : "directions-car"}
                     color={participant.car === null ? Colors.orange700 : Colors.teal500}
                     size={20}
@@ -82,7 +94,6 @@ const EventScreen = (props) => {
                         </View>
                         <View
                             style={{
-
                                 justifyContent: "center",
                                 alignitems: "center",
                                 flexDirection: "row",
@@ -95,7 +106,7 @@ const EventScreen = (props) => {
                                 color={Colors.grey200}
                                 size={30}
                                 onPress={() => {
-                                    scrollViewRef.current.scrollTo({x: 0, y: windowHeight, animated: true})
+                                    scrollViewRef.current.scrollTo({x: 0, y: windowHeight - 80, animated: true})
                                 }}
                             />
                         </View>
@@ -104,7 +115,7 @@ const EventScreen = (props) => {
 
                 <View/>
             </View>
-            <View>
+            <View style={{marginLeft: 15, marginRight: 15, marginBottom: 20}}>
                 <Headline style={styles.header}>
                     Description
                 </Headline>
@@ -136,7 +147,7 @@ const EventScreen = (props) => {
                         }}
                     />
                 </MapView>
-                <Divider/>
+                <Divider style={{marginTop: 2}}/>
                 <Headline style={styles.header}>
                     Participants
                 </Headline>
@@ -167,7 +178,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
     },
     header: {
-        marginTop: 10
+        marginTop: 15
     }
 });
 
