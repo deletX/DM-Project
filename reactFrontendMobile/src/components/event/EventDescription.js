@@ -5,7 +5,7 @@ import {Linking, Platform, View} from "react-native";
 import {pridStringToLatLng} from "../../utils";
 
 const openGps = (lat, lng) => {
-    var scheme = Platform.OS === 'ios' ? 'maps:' : `http://www.google.com/maps/place/${lat},${lng}`;
+    var scheme = Platform.OS === 'ios' ? 'maps:' : `https://www.google.com/maps/search/?api=1&query=`;
     var url = scheme + `${lat},${lng}`;
     Linking.openURL(url);
 }
@@ -29,13 +29,18 @@ const EventDescription = (props) => {
             <MapView
                 scrollEnabled={false}
                 rotateEnabled={false}
-                zoomEnabled={false}
+                zoomEnabled={true}
+                pitchEnabled={false}
+                toolbarEnabled={true}
                 style={[{width: "100%", height: 300}]}
-                initialRegion={{
-                    latitude: lat,
-                    longitude: lng,
-                    latitudeDelta: 0.0922,
-                    longitudeDelta: 0.0421,
+                camera={{
+                    center: {
+                        latitude: lat,
+                        longitude: lng,
+                    },
+                    pitch: 0,
+                    heading: 0,
+                    zoom: 15,
                 }}
             >
                 <Marker
