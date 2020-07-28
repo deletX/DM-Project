@@ -17,6 +17,7 @@ const ParticipantListItem = (props) => {
     const windowHeight = useWindowDimensions().height;
     const navigation = useNavigation();
     const {participant, profileId, token} = props;
+    const rightIcon = props.rightIcon ? props.rightIcon : true
     return (
         <List.Item
             onPress={() => {
@@ -56,14 +57,14 @@ const ParticipantListItem = (props) => {
                     emptyStarColor={participant.profile.average_vote ? "808080" : "#bbbbbb"}
                 />
             )}
-            right={(props) => (
+            right={rightIcon ? (props) => (
                 <Icon
                     style={{position: "absolute", top: 9, right: 0}}
                     name={participant.car === null ? "directions-walk" : "directions-car"}
                     color={participant.car === null ? Colors.orange700 : Colors.teal500}
                     size={20}
                 />
-            )}
+            ) : undefined}
 
         />
     );

@@ -15,7 +15,14 @@ const EventHeaderComponent = (props) => {
                              style={[styles.image, {height: windowHeight - 80}]}>
                 <View style={styles.overlay}>
                     <View style={{marginLeft: windowWidth * 0.05}}>
-                        <Title style={{color: Colors.white, fontSize: 50, lineHeight: 80}}>{event.name}</Title>
+                        <Title numberOfLines={3} style={{
+                            color: Colors.white,
+                            fontSize: 50,
+                            lineHeight: 50,
+                            // maxHeight: ,
+                            maxWidth: windowWidth * .90
+                            // flex: 0,
+                        }}>{event.name}</Title>
                         <Subheading style={{
                             color: Colors.white,
                             marginTop: windowHeight * 0.3
