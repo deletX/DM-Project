@@ -41,6 +41,7 @@ const EventDescription = (props) => {
                     pitch: 0,
                     heading: 0,
                     zoom: 15,
+                    altitude: 15,
                 }}
             >
                 <Marker
