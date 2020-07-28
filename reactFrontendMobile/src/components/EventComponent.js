@@ -5,6 +5,7 @@ import {COMPUTED, COMPUTING, JOINABLE} from "../constants/constants";
 import EventScreen from "../screens/EventScreen";
 import {EVENT_SCREEN} from "../constants/screens";
 import {useNavigation} from "@react-navigation/native"
+import moment from "moment";
 
 
 const EventComponent = (props) => {
@@ -14,32 +15,34 @@ const EventComponent = (props) => {
     return (
         <View
             key={props.id}
-            pointerEvents={(props.status === JOINABLE) ? "auto" : "none"}
-            opacity={(props.status === JOINABLE) ? 1 : 0.4}
+            pointerEvents={(props.event.status === JOINABLE) ? "auto" : "none"}
+            opacity={(props.event.status === JOINABLE) ? 1 : 0.4}
         >
             <Card style={styles.card}
-                  key={props.id}
+                  key={props.event.id}
                   onPress={() => {
                       navigation.navigate(EVENT_SCREEN, {event: props.event, id: props.event.id})
                   }}
                   accessible={true}>
-                <Card.Cover source={{uri: props.picture}}/>
+                <Card.Cover source={{uri: props.event.picture}}/>
+
                 <Card.Content>
-                    <Title>{props.title}</Title>
-                    <Paragraph>{props.date}</Paragraph>
-                    <Paragraph>{props.address}</Paragraph>
-                    <Paragraph>{props.description}</Paragraph>
+                    <Title>{props.event.name}</Title>
+                    <Paragraph>{moment(props.event.date_time).format("dddd D MMMM YYYY, HH:mm")}</Paragraph>
+                    <Paragraph>{props.event.address}</Paragraph>
+                    <Paragraph>{props.event.description}</Paragraph>
                 </Card.Content>
 
                 <Card.Actions>
                     <Button mode="contained" color="#00675b" onPress={() => Alert.alert("You joined this event")
                     }>Join event</Button>
+
                     <Button mode="text" color="#c56200" onPress={() =>
                         Alert.alert("You left this event")
                     } style={styles.buttonRight}>Leave event</Button>
-
                 </Card.Actions>
-                {props.status === COMPUTING &&
+
+                {props.event.status === COMPUTING &&
                 <ActivityIndicator animating={true} color={Colors.blue900} size="12"
                                    style={styles.spinner}/>}
 

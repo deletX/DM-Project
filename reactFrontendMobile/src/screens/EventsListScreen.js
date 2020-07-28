@@ -247,12 +247,6 @@ const EventsListScreen = (props) => {
     const eventsList = mock_events.map((event,) => (
         <EventComponent
             key={event.id}
-            status={event.status}
-            title={event.name}
-            date={moment(event.date_time).format("dddd D MMMM YYYY, HH:mm")}
-            description={event.description}
-            address={event.address}
-            picture={event.picture}
             event={event}
         >
         </EventComponent>
@@ -272,39 +266,35 @@ const EventsListScreen = (props) => {
 
     return (
         <>
-
-            {/*<View style={{flex: 1}}>*/}
-            {/*    <Chip mode="flat" selected="false" selectedColor="blue" disabled="false" icon="menu" onPress={() => {*/}
-            {/*    }} style={{margin: 5, flexWrap: 'wrap',}}>Example Chip</Chip>*/}
             <ScrollView
                 refreshControl={
                     <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}>
-                <View style={styles.chip}>
-                    <View style={{margin: 5, flexWrap: 'wrap'}}>
-                            <Chip textStyle={{color: Colors.black, fontSize: 15}}
-                                  style={{backgroundColor: joinable ? Colors.orange500 : Colors.grey300}}
-                                  selectedColor="blue"
-                                  icon={joinable ? "check" : null}
-                                  onPress={() => setJoinable(!joinable)}> Joinable </Chip>
+                <View style={styles.chipLayout}>
+                    <View style={styles.chip}>
+                        <Chip textStyle={styles.chipText}
+                              style={{backgroundColor: joinable ? Colors.orange500 : Colors.grey300}}
+                              selectedColor="blue"
+                              icon={joinable ? "check" : null}
+                              onPress={() => setJoinable(!joinable)}> Joinable </Chip>
                     </View>
 
-
-                    <View style={{margin: 5, flexWrap: 'wrap'}}>
-                            <Chip textStyle={{color: Colors.black, fontSize: 15}}
-                                  style={{backgroundColor: joined ? Colors.orange500 : Colors.grey300}}
-                                  selectedColor="blue"
-                                  icon={joined ? "check" : null}
-                                  onPress={() => setJoined(!joined)}> Joined </Chip>
+                    <View style={styles.chip}>
+                        <Chip textStyle={styles.chipText}
+                              style={{backgroundColor: joined ? Colors.orange500 : Colors.grey300}}
+                              selectedColor="blue"
+                              icon={joined ? "check" : null}
+                              onPress={() => setJoined(!joined)}> Joined </Chip>
                     </View>
 
-                    <View style={{margin: 5, flexWrap: 'wrap'}}>
-                            <Chip textStyle={{color: Colors.black, fontSize: 15}}
-                                  style={{backgroundColor: owned ? Colors.orange500 : Colors.grey300}}
-                                  selectedColor="blue"
-                                  icon={owned ? "check" : null}
-                                  onPress={() => setOwned(!owned)}> Owned </Chip>
+                    <View style={styles.chip}>
+                        <Chip textStyle={styles.chipText}
+                              style={{backgroundColor: owned ? Colors.orange500 : Colors.grey300}}
+                              selectedColor="blue"
+                              icon={owned ? "check" : null}
+                              onPress={() => setOwned(!owned)}> Owned </Chip>
                     </View>
                 </View>
+
                 {eventsList}
 
             </ScrollView>
@@ -313,8 +303,7 @@ const EventsListScreen = (props) => {
                 </FAB>
             </View>
         </>
-    )
-        ;
+    );
 }
 
 const styles = StyleSheet.create({
@@ -329,10 +318,19 @@ const styles = StyleSheet.create({
         right: 0,
         bottom: 0,
     },
-    chip: {
+    chipLayout: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center'
+    },
+    chip: {
+        margin: 5,
+        marginTop: 15,
+        flexWrap: 'wrap'
+    },
+    chipText: {
+        color: Colors.black,
+        fontSize: 15
     }
 });
 
