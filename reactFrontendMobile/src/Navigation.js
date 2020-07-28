@@ -9,7 +9,7 @@ import {
     HOME_SCREEN,
     HOME_STACK,
     JOIN_SCREEN, LOADING_SCREEN,
-    LOGIN_SCREEN,
+    LOGIN_SCREEN, OTHER_PROFILE_SCREEN,
     PROFILE_SCREEN,
     PROFILE_STACK,
 } from './constants/screens';
@@ -26,6 +26,7 @@ import LoadingScreen from "./screens/LoadingScreen";
 import {Button, Colors} from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import TouchableRipple from "react-native-paper/src/components/TouchableRipple/index";
+import PersonalProfileScreen from "./screens/PersonalProfileScreen";
 
 
 //https://reactnavigation.org/blog/2020/01/29/using-react-navigation-5-with-react-native-paper/
@@ -40,7 +41,6 @@ const Events = (props) => {
         <EventStack.Navigator>
             <EventStack.Screen name={HOME_SCREEN} component={EventsListScreen} options={{
                 headerRight: () => (
-
                     <Icon
                         name="menu"
                         color={Colors.teal700}
@@ -56,6 +56,8 @@ const Events = (props) => {
             <EventStack.Screen name={EVENT_SCREEN} component={EventScreen}
                                options={({route}) => ({title: `${route.params.event.name}`})}/>
             <EventStack.Screen name={JOIN_SCREEN} component={JoinScreen}/>
+            <EventStack.Screen name={OTHER_PROFILE_SCREEN} component={ProfileScreen}
+                               options={({route}) => ({title: `Profile`})}/>
         </EventStack.Navigator>
     );
 };
@@ -63,7 +65,7 @@ const Events = (props) => {
 const Profile = () => {
     return (
         <ProfileStack.Navigator>
-            <ProfileStack.Screen name={PROFILE_SCREEN} component={ProfileScreen}/>
+            <ProfileStack.Screen name={PROFILE_SCREEN} component={PersonalProfileScreen}/>
             <ProfileStack.Screen name={ADD_CAR_SCREEN} component={AddCarScreen}/>
         </ProfileStack.Navigator>
     );

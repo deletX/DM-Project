@@ -1,12 +1,12 @@
 import * as React from 'react';
 import {View, Text} from 'react-native';
 
-const ProfileScreen = (props) => {
+const PersonalProfileScreen = (props) => {
     return (
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-            <Text>Profile Screen id:{props.route.params.id}</Text>
+            <Text>Personal Profile Screen</Text>
         </View>
     );
 };
 
-export default ProfileScreen;
+export default PersonalProfileScreen;

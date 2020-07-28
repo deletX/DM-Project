@@ -6,6 +6,8 @@ export const PROFILE_SCREEN = "Profile";
 export const ADD_CAR_SCREEN = "Add Car";
 export const LOADING_SCREEN = "Loading";
 
+export const OTHER_PROFILE_SCREEN = "OTHER_PROFILE"
+
 export const HOME_STACK = "HOME_STACK";
 export const PROFILE_STACK = "PROFILE_STACK";
 export const DRAWER = "DRAWER";
