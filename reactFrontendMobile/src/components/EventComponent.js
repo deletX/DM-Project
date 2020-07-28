@@ -1,15 +1,5 @@
 import * as React from 'react';
-import {
-    Card,
-    Button,
-    Title,
-    Paragraph,
-    Text,
-    DefaultTheme,
-    ActivityIndicator,
-    ProgressBar,
-    Colors
-} from 'react-native-paper';
+import {Card, Button, Title, Paragraph, Text, DefaultTheme, ActivityIndicator, Colors} from 'react-native-paper';
 import {Alert, StyleSheet, View} from "react-native";
 import {COMPUTED, COMPUTING, JOINABLE} from "../constants/constants";
 import EventScreen from "../screens/EventScreen";
@@ -25,8 +15,8 @@ const EventComponent = (props) => {
     return (
         <View
             key={props.id}
-            pointerEvents={(props.event.status === JOINABLE || props.event.status === COMPUTED) ? "auto" : "none"}
-            opacity={(props.event.status === JOINABLE || props.event.status === COMPUTED || props.event.status === COMPUTING) ? 1 : 0.4}
+            pointerEvents={(props.event.status === JOINABLE) ? "auto" : "none"}
+            opacity={(props.event.status === JOINABLE) ? 1 : 0.4}
         >
             <Card style={styles.card}
                   key={props.event.id}
@@ -35,36 +25,26 @@ const EventComponent = (props) => {
                   }}
                   accessible={true}>
                 <Card.Cover source={{uri: props.event.picture}}/>
-
+                {props.status === COMPUTING &&
+                <ProgressBar indeterminate={true} animating color={Colors.orangeA400} size="12"
+                             style={styles.spinner}/>}
                 <Card.Content>
                     <Title>{props.event.name}</Title>
                     <Paragraph>{moment(props.event.date_time).format("dddd D MMMM YYYY, HH:mm")}</Paragraph>
                     <Paragraph>{props.event.address}</Paragraph>
                     <Paragraph>{props.event.description}</Paragraph>
-
                 </Card.Content>
 
-                {props.event.status === COMPUTING && <ProgressBar indeterminate={"true"} color={Colors.orange500}/>}
-
                 <Card.Actions>
-
-                    <Button mode="contained" color="#00675b"
+                    <Button mode={props.event.status === JOINABLE ? "contained" : "text"} color="#00675b"
+                            disabled={props.event.status !== JOINABLE}
                             onPress={() => Alert.alert("You joined this event")
-                    }
-                            disabled={props.event.status === JOINABLE ? null : "true"}>
-                        Join event
-                    </Button>
-
-                    <Button mode="text" color="#c56200"
-                            onPress={() =>
+                            }>Join event</Button>
+                    <Button mode="text" color="#c56200" onPress={() =>
                         Alert.alert("You left this event")
-                    }
-                            style={styles.buttonRight}
-                            disabled={props.event.status === JOINABLE ? null : "true"}>
-                        Leave event
-                    </Button>
-                </Card.Actions>
+                    } style={styles.buttonRight} disabled={props.event.status !== JOINABLE}>Leave event</Button>
 
+                </Card.Actions>
             </Card>
         </View>
     )
@@ -75,8 +55,7 @@ const styles = StyleSheet.create({
     card: {
         marginTop: 15,
         marginLeft: 15,
-        marginRight: 15,
-        marginBottom: 15
+        marginRight: 15
     },
     buttonRight: {
         flex: 1,
@@ -89,10 +68,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
-    spinner: {
-        flex: 1,
-        marginBottom: 15
-    }
+    spinner: {width: "100%"}
 
 });
 
