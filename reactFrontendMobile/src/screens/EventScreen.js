@@ -18,8 +18,12 @@ import {
     Subheading,
     Text,
     Title,
-    List, Avatar
+    List,
+    Avatar,
+    Portal,
+    FAB, Button
 } from "react-native-paper"
+import {connect} from "react-redux"
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import moment from "moment";
 import MapView from "react-native-maps";
@@ -42,6 +46,7 @@ const EventScreen = (props) => {
     const event = props.route.params.event
     const scrollViewRef = React.useRef()
     const [lat, lng] = pridStringToLatLng(event.destination)
+    const isOwner = props.profileId === event.owner.id
 
     const participantsListItems = event.participant_set.map((participant) => (
         <List.Item
@@ -90,7 +95,10 @@ const EventScreen = (props) => {
                                 marginTop: windowHeight * 0.3
                             }}>Date: {moment(event.date_time).format("dddd D MMMM YYYY, HH:mm")}</Subheading>
                             <Subheading
-                                style={{color: Colors.white, marginTop: 20}}>Destination: {event.address}</Subheading>
+                                style={{
+                                    color: Colors.white,
+                                    marginTop: 20
+                                }}>Destination: {event.address}</Subheading>
                         </View>
                         <View
                             style={{
@@ -109,6 +117,31 @@ const EventScreen = (props) => {
                                     scrollViewRef.current.scrollTo({x: 0, y: windowHeight - 80, animated: true})
                                 }}
                             />
+                            {isOwner &&
+                            <>
+                                <Button
+                                    color={Colors.redA700}
+                                    style={{position: "absolute", top: 10, left: -100}}
+                                    onPress={() => {
+                                        console.log("leave-pressed")
+                                    }}
+                                >
+                                    delete
+                                </Button>
+
+                                <Button
+                                    style={{position: "absolute", top: 10, left: 80}}
+                                    color={Colors.tealA700}
+                                    onPress={() => {
+                                        console.log("run-pressed")
+                                    }}
+                                >
+
+                                    run
+                                </Button>
+                            </>
+                            }
+
                         </View>
                     </View>
                 </ImageBackground>
@@ -182,4 +215,20 @@ const styles = StyleSheet.create({
     }
 });
 
-export default EventScreen;
+
+function mapStateToProps(state) {
+    return {
+        token: state.auth.token,
+        profileId: state.profile.id,
+    };
+}
+
+function mapDispatchToProps(dispatch) {
+    return {};
+}
+
+
+export default connect(
+    mapStateToProps, mapDispatchToProps()
+)(EventScreen);
+
