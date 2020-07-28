@@ -6,7 +6,8 @@ import EventComponent from "../components/EventComponent";
 import moment from "moment";
 import {set} from "react-native-reanimated";
 import {grey500} from "react-native-paper/src/styles/colors";
-import mockEvents from "../components/mockEvents"; //https://momentjs.com/docs/#/displaying/
+import {JOINABLE} from "../constants/constants";
+import axios from "axios";
 
 
 const wait = (timeout) => {
@@ -16,7 +17,42 @@ const wait = (timeout) => {
 }
 
 const EventsListScreen = (props) => {
-    const eventsList = mockEvents.map((event,) => (
+    const [refreshing, setRefreshing] = React.useState(false);
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+
+        axios
+            .get(eventListURL(joinable, joined, owned), headers('application/json', props.token))
+            .then((response) => {
+                setEvents(response.data);
+                setRefreshing(false);
+            })
+            .catch((err) => {
+                //TODO: toast
+                setRefreshing(false);
+            });
+    }, []);
+
+    const [joinable, setJoinable] = React.useState(true);
+    const [joined, setJoined] = React.useState(true);
+    const [owned, setOwned] = React.useState(true);
+
+    const [events, setEvents] = React.useState([]);
+
+    React.useEffect(() => {
+        axios
+            .get(eventListURL(joinable, joined, owned), headers('application/json', props.token))
+            .then((response) => {
+                setEvents(response.data)
+            })
+            .catch((err) => {
+                //toast
+            });
+
+    }, [joinable, joined, owned]);
+
+    const eventsList = events.map((event,) => (
         <EventComponent
             key={event.id}
             event={event}
@@ -24,17 +60,6 @@ const EventsListScreen = (props) => {
         </EventComponent>
     ));
 
-    const [refreshing, setRefreshing] = React.useState(false);
-
-    const onRefresh = React.useCallback(() => {
-        setRefreshing(true);
-
-        wait(2000).then(() => setRefreshing(false));
-    }, []);
-
-    const [joinable, setJoinable] = React.useState(true);
-    const [joined, setJoined] = React.useState(true);
-    const [owned, setOwned] = React.useState(true);
 
     return (
         <>
@@ -106,4 +131,21 @@ const styles = StyleSheet.create({
     }
 });
 
-export default EventsListScreen;
+
+import {connect} from 'react-redux';
+import {eventListURL} from "../constants/apiurls";
+import {headers} from "../utils";
+
+function mapStateToProps(state) {
+    return {
+        token: state.auth.token
+    };
+}
+
+function mapDispatchToProps(dispatch) {
+    return {};
+}
+
+export default connect(
+    mapStateToProps,
+)(EventsListScreen);

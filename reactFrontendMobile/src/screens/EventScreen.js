@@ -178,6 +178,7 @@ const EventScreen = (props) => {
                         onCalloutPress={() => {
                             openGps(lat, lng)
                         }}
+
                     />
                 </MapView>
                 <Divider style={{marginTop: 2}}/>

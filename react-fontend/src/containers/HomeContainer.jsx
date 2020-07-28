@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 const HomeContainer = ({addError, isAuthenticated, isLoading, search, token}) => {
-    let history=useHistory()
+    let history = useHistory()
     let query = useQuery();
 
     const classes = useStyles();
