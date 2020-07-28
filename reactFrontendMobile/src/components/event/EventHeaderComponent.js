@@ -5,8 +5,9 @@ import moment from "moment";
 import {useNavigation} from "@react-navigation/native";
 import axios from "axios"
 import {headers} from "../../utils";
-import {eventDetailURL} from "../../constants/apiurls";
+import {eventDetailURL, eventRunURL} from "../../constants/apiurls";
 import {HOME_SCREEN} from "../../constants/screens";
+import {JOINABLE} from "../../constants/constants";
 
 const EventHeaderComponent = (props) => {
     const windowWidth = useWindowDimensions().width;
@@ -16,6 +17,12 @@ const EventHeaderComponent = (props) => {
     const event = props.route.params.event
     const isOwner = props.profileId === event.owner.id
     const navigation = useNavigation()
+
+    const checkMinimumCarSeats = () => {
+        const drivers = event.participant_set.filter(part => (part.car !== null))
+        const availableSeats = drivers.map(item => item.car.tot_avail_seats).reduce((prev, curr) => (prev + curr), 0);
+        return !(availableSeats < event.participant_set.length || event.participant_set.length === 0);
+    }
 
     return (
         <View>
@@ -62,6 +69,7 @@ const EventHeaderComponent = (props) => {
                         <>
                             <Button
                                 color={Colors.redA700}
+                                disabled={event.status !== JOINABLE}
                                 style={{position: "absolute", top: 10, left: -100}}
                                 onPress={() => {
                                     Alert.alert(
@@ -81,7 +89,6 @@ const EventHeaderComponent = (props) => {
                                                             headers('application/json', token)
                                                         )
                                                         .then(res => {
-                                                            console.log("tette")
                                                             ToastAndroid.show("Deleted event", ToastAndroid.SHORT)
                                                             navigation.navigate(HOME_SCREEN, {refresh: true})
                                                         })
@@ -101,8 +108,24 @@ const EventHeaderComponent = (props) => {
                             <Button
                                 style={{position: "absolute", top: 10, left: 80}}
                                 color={Colors.tealA700}
+                                disabled={event.status !== JOINABLE}
                                 onPress={() => {
-                                    console.log("tette")
+                                    if (!checkMinimumCarSeats()) {
+                                        ToastAndroid.show("Not Enough Seats", ToastAndroid.LONG)
+                                    } else {
+                                        axios
+                                            .get(
+                                                eventRunURL(event.id),
+                                                headers('application/json', token),
+                                            )
+                                            .then(res => {
+                                                navigation.navigate(HOME_SCREEN, {refresh: true})
+                                                ToastAndroid.show("Started", ToastAndroid.SHORT)
+                                            })
+                                            .catch(err => {
+                                                ToastAndroid.show("An error occurred while launching the computation :(", ToastAndroid.LONG)
+                                            })
+                                    }
                                 }}
                             >
 

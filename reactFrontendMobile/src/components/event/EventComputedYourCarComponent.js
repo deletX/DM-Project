@@ -1,6 +1,6 @@
 import React from 'react';
 import {View} from "react-native";
-import {Headline, Text} from "react-native-paper";
+import {Divider, Headline, Text} from "react-native-paper";
 
 const EventComputedYourCarComponent = (props) => {
     const {profileId, styles} = props
@@ -10,6 +10,7 @@ const EventComputedYourCarComponent = (props) => {
             <Headline style={styles.header}>
                 Your Car
             </Headline>
+            <Divider/>
         </View>
     );
 };
