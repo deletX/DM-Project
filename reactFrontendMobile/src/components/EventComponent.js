@@ -5,6 +5,7 @@ import {COMPUTED, COMPUTING, JOINABLE} from "../constants/constants";
 import EventScreen from "../screens/EventScreen";
 import {EVENT_SCREEN} from "../constants/screens";
 import {useNavigation} from "@react-navigation/native"
+import moment from "moment";
 
 
 const EventComponent = (props) => {
