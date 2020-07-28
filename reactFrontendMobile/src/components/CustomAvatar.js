@@ -3,8 +3,6 @@ import {Avatar, Colors} from "react-native-paper";
 
 
 const CustomAvatar = (props) => {
-    console.log(`CustomAvatar - picture: ${props.picture}`)
-    if (props.firstName !== undefined) console.log(`, firstName[0]lastName[0]Upp: ${`${props.firstName[0]}${props.lastName[0]}`.toUpperCase()}\`)`)
     return (
         (props.picture === null || props.picture === "") ? (
             <Avatar.Text
