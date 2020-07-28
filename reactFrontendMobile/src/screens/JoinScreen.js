@@ -1,6 +1,6 @@
 import * as React from 'react';
-import {View, Text, StyleSheet, ScrollView, PermissionsAndroid} from "react-native"
-import MapView, {Polyline, PROVIDER_GOOGLE} from 'react-native-maps';
+import {View, Text, StyleSheet, ScrollView, PermissionsAndroid, Alert} from "react-native"
+import MapView, {Marker, Polyline, PROVIDER_GOOGLE} from 'react-native-maps';
 
 
 const JoinScreen = (props) => {
@@ -12,10 +12,18 @@ const JoinScreen = (props) => {
         Platform.OS === 'android' ? PermissionsAndroid.request(
             PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
         ).then(granted => {
-            alert("allowed") // just to ensure that permissions were granted
+            Alert.alert("Permissions", "You already gave GPS permissions") // just to ensure that permissions were granted
             setPaddingTop(1);
         }) : null
     }
+
+
+    // const getCurrentLocation = () => {
+    //     return new Promise((resolve, reject) => {
+    //         navigator.geolocation.getCurrentPosition(position => resolve(position), e => reject(e));
+    //     });
+    // };
+
 
     return (
         <ScrollView>
@@ -28,7 +36,7 @@ const JoinScreen = (props) => {
             }}>
                 <MapView
                     onMapReady={() => onMapReady()}
-                    provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+                    provider={PROVIDER_GOOGLE}
                     style={styles.map}
                     region={{
                         latitude: 37.78825,
@@ -39,20 +47,34 @@ const JoinScreen = (props) => {
                     mapType={"standard"}
                     showsUserLocation={true}
                     showsMyLocationButton={true}
+                    zoomTapEnabled={true}
+                    rotateEnabled={true}
+                    scrollEnabled={true}
+                    onRegionChange={(region) => {
+                        //console.log('onRegionChange', region)
+                    }}
+                    onRegionChangeComplete={(region) => {
+                        console.log('onRegionChange', region)
+                    }}>
+                    <Marker
+                        coordinate={{
+                            latitude: 37.78825,
+                            longitude: -122.4324,
+                        }}
+                        draggable={true}
+                    onDragEnd={(region) => {
+                        console.log('onDragEnd', region.nativeEvent)
+                    }}>
 
-                />
+                    </Marker>
+
+                </MapView>
             </View>
         </ScrollView>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        marginLeft: 15,
-        marginRight: 15,
-        marginBottom: 15,
-        marginTop: 15
-    },
     map: {
         width: "100%",
         height: 500,
