@@ -5,7 +5,6 @@ import {COMPUTED, COMPUTING, JOINABLE} from "../constants/constants";
 import EventScreen from "../screens/EventScreen";
 import {EVENT_SCREEN} from "../constants/screens";
 import {useNavigation} from "@react-navigation/native"
-import moment from "moment";
 
 
 const EventComponent = (props) => {
@@ -25,7 +24,9 @@ const EventComponent = (props) => {
                   }}
                   accessible={true}>
                 <Card.Cover source={{uri: props.event.picture}}/>
-
+                {props.status === COMPUTING &&
+                <ProgressBar indeterminate={true} animating color={Colors.orangeA400} size="12"
+                             style={styles.spinner}/>}
                 <Card.Content>
                     <Title>{props.event.name}</Title>
                     <Paragraph>{moment(props.event.date_time).format("dddd D MMMM YYYY, HH:mm")}</Paragraph>
@@ -34,18 +35,15 @@ const EventComponent = (props) => {
                 </Card.Content>
 
                 <Card.Actions>
-                    <Button mode="contained" color="#00675b" onPress={() => Alert.alert("You joined this event")
-                    }>Join event</Button>
-
+                    <Button mode={props.event.status === JOINABLE ? "contained" : "text"} color="#00675b"
+                            disabled={props.event.status !== JOINABLE}
+                            onPress={() => Alert.alert("You joined this event")
+                            }>Join event</Button>
                     <Button mode="text" color="#c56200" onPress={() =>
                         Alert.alert("You left this event")
-                    } style={styles.buttonRight}>Leave event</Button>
+                    } style={styles.buttonRight} disabled={props.event.status !== JOINABLE}>Leave event</Button>
+
                 </Card.Actions>
-
-                {props.event.status === COMPUTING &&
-                <ActivityIndicator animating={true} color={Colors.blue900} size="12"
-                                   style={styles.spinner}/>}
-
             </Card>
         </View>
     )
@@ -69,10 +67,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
-    spinner: {
-        flex: 1,
-        marginBottom: 15
-    }
+    spinner: {width: "100%"}
 
 });
 
