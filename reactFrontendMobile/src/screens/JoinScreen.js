@@ -7,6 +7,7 @@ const JoinScreen = (props) => {
 
     const [paddingTop, setPaddingTop] = React.useState(0);
 
+
     const onMapReady = () => {
         Platform.OS === 'android' ? PermissionsAndroid.request(
             PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
