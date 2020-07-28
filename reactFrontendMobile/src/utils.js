@@ -126,9 +126,13 @@ export const nominatimToPrimarySecondary = (position) => {
 }
 
 
-export const pridStringToLatLng = (position) => {
+export const pridStringToLatLng = (position, shouldParseFloat = true) => {
     let latlng = position.split(' ')
-    return [parseFloat(latlng[1].slice(1)), parseFloat(latlng[2].slice(0, -1))]
+    if (shouldParseFloat) {
+        return [parseFloat(latlng[1].slice(1)), parseFloat(latlng[2].slice(0, -1))]
+    } else {
+        return [latlng[1].slice(1), latlng[2].slice(0, -1)]
+    }
 }
 
 /**
@@ -157,7 +161,7 @@ export const URLtoScreenWithProps = async (url, token = "") => {
             })
             .catch(err => {
                 // history.push(home)
-                ToastAndroid.show("Error while retrieving event")
+                ToastAndroid.show("Error while retrieving event", ToastAndroid.SHORT, ToastAndroid.BOTTOM)
                 // addAlert("An error occurred while retrieving event data",)
             })
 
