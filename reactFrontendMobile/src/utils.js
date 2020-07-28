@@ -1,5 +1,9 @@
 import AsyncStorage from '@react-native-community/async-storage'
 import {EVENT_SCREEN, PROFILE_SCREEN} from "./constants/screens";
+import axios from "axios";
+import {eventDetailURL} from "./constants/apiurls";
+import NativeToastAndroid from "react-native/Libraries/Components/ToastAndroid/NativeToastAndroid";
+import {ToastAndroid} from "react-native"
 
 export const isAuthenticated = () => {
     const token = AsyncStorage.getItem("token");
@@ -130,16 +134,33 @@ export const pridStringToLatLng = (position) => {
 /**
  *
  * @param {string} url
- *
+ * @param {string} token
  */
-export const URLtoScreenWithProps = (url) => {
+export const URLtoScreenWithProps = async (url, token = "") => {
     let screenWithProps = {};
     const splittedUrl = url.split('/');
     if (splittedUrl[1] === "profile") {
         screenWithProps["screen"] = PROFILE_SCREEN;
     } else {
         screenWithProps["screen"] = EVENT_SCREEN;
-        screenWithProps["props"] = {id: parseInt(splittedUrl[2])};
+        let id = parseInt(splittedUrl[2])
+        await axios
+            .get(
+                eventDetailURL(id),
+                headers('application/json', token)
+            )
+            .then(res => {
+                screenWithProps["props"] = {
+                    id: id,
+                    event: res.data,
+                }
+            })
+            .catch(err => {
+                // history.push(home)
+                ToastAndroid.show("Error while retrieving event")
+                // addAlert("An error occurred while retrieving event data",)
+            })
+
     }
     return screenWithProps;
 }

@@ -4,7 +4,7 @@ import {SafeAreaView} from 'react-navigation';
 import {DrawerItems} from 'react-navigation-drawer';
 import {DrawerItem, DrawerContentScrollView} from '@react-navigation/drawer';
 import {connect} from 'react-redux';
-
+import axios from "axios"
 import {
     useTheme,
     Avatar,
@@ -27,7 +27,6 @@ import {URLtoScreenWithProps} from '../utils';
 import {authLogout} from '../actions/authActions';
 import CustomAvatar from "./CustomAvatar";
 
-
 const CustomDrawerContentComponent = (props) => {
     const notificationListItems = props.notifications.map((notification) => (
         <DrawerItem
@@ -36,9 +35,11 @@ const CustomDrawerContentComponent = (props) => {
             icon={({color, size}) => (
                 <Icon name="chevron-right" color={color} size={size}/>
             )}
-            onPress={() => {
-                let screenwithProps = URLtoScreenWithProps(notification.url);
+            onPress={async () => {
+                let screenwithProps = await URLtoScreenWithProps(notification.url, props.token);
                 console.log(screenwithProps);
+
+
                 props.navigation.navigate(
                     screenwithProps.screen,
                     screenwithProps.props,
@@ -156,6 +157,7 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
     return {
+        token: state.auth.token,
         username: state.profile.user.username,
         firstName: state.profile.user.first_name,
         lastName: state.profile.user.last_name,
