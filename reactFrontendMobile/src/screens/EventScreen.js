@@ -41,6 +41,7 @@ import EventComputedOtherCarsComponent from "../components/event/EventComputedOt
 const EventScreen = (props) => {
 
     const event = props.route.params.event
+    
     const scrollViewRef = React.useRef()
     const isOwner = props.profileId === event.owner.id
     return (
@@ -61,7 +62,7 @@ const EventScreen = (props) => {
                 <EventComputedYourCarComponent {...props} styles={styles}/>
                 }
 
-                {isOwner &&
+                {(isOwner && event.status === COMPUTED) &&
                 <EventComputedOtherCarsComponent {...props} styles={styles}/>
                 }
             </View>
