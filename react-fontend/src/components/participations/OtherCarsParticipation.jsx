@@ -2,6 +2,7 @@ import React from 'react';
 import _ from "lodash";
 import ParticipantsContainer from "../../containers/ParticipantsContainer";
 import makeStyles from "@material-ui/core/styles/makeStyles";
+import uuid from "node-uuid";
 
 const useStyles = makeStyles((theme) => ({
     root: {},
@@ -19,7 +20,7 @@ const OtherCarsParticipation = ({participantSet, profileId}) => {
 
     const carsItems = cars.map((item) => {
 
-        return <div key={item.car} className={classes.car}>
+        return <div key={uuid()} className={classes.car}>
             <ParticipantsContainer participantSet={_.sortBy(item, ['pickup_index'])} onlyDriverIcon={true}/>
         </div>
     })
