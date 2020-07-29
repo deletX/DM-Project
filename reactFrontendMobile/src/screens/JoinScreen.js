@@ -1,7 +1,8 @@
 import * as React from 'react';
 import {View, Text, StyleSheet, ScrollView, PermissionsAndroid, Alert} from "react-native"
 import MapView, {Marker, Polyline, PROVIDER_GOOGLE} from 'react-native-maps';
-import Geolocation from '@react-native-community/geolocation';
+//import Geolocation from '@react-native-community/geolocation';
+import Geolocation from 'react-native-geolocation-service';
 
 const JoinScreen = (props) => {
 
@@ -11,11 +12,11 @@ const JoinScreen = (props) => {
 
 
     const onMapReady = () => {
-        locateCurrentLocation();
         Platform.OS === 'android' ? PermissionsAndroid.request(
             PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
         ).then(granted => {
-            Alert.alert("Permissions", "You already gave GPS permissions") // just to ensure that permissions were granted
+            // Alert.alert("Permissions", "You already gave GPS permissions") // just to ensure that permissions were granted
+            locateCurrentLocation();
             setPaddingTop(1);//trick to show location button
         }) : null
     }
