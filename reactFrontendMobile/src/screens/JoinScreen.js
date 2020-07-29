@@ -7,8 +7,15 @@ import Geolocation from 'react-native-geolocation-service';
 const JoinScreen = (props) => {
 
     const [paddingTop, setPaddingTop] = React.useState(0);
+
     const [latitude, setLatitude] = React.useState(38.78825);
     const [longitude, setLongitude] = React.useState(-122.4324);
+
+    const [GPSPositionLatitude, setGPSPositionLatitude] = React.useState(0);
+    const [GPSPositionLongitude, setGPSPositionLongitude] = React.useState(0);
+
+    const [MarkerPositionLatitude, setMarkerPositionLatitude] = React.useState(0);
+    const [MarkerPositionLongitude, setMarkerPositionLongitude] = React.useState(0);
 
 
     const onMapReady = () => {
@@ -24,13 +31,19 @@ const JoinScreen = (props) => {
 
     const locateCurrentLocation = () => {
         Geolocation.getCurrentPosition(position => {
-            console.log("your current position ", JSON.stringify(position));
+            console.log("Your current position: ", JSON.stringify(position));
             let region = {
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude,
                 latitudeDelta: 0.015,
                 longitudeDelta: 0.0121,
             }
+            setGPSPositionLatitude(region.latitude);
+            setGPSPositionLongitude(region.longitude);
+
+            setMarkerPositionLatitude(region.latitude);
+            setMarkerPositionLongitude(region.longitude);
+
             setLatitude(region.latitude);
             setLongitude(region.longitude);
         })
@@ -51,8 +64,8 @@ const JoinScreen = (props) => {
                     provider={PROVIDER_GOOGLE}
                     style={styles.map}
                     region={{
-                        latitude: latitude,
-                        longitude: longitude,
+                        latitude: MarkerPositionLatitude,
+                        longitude: MarkerPositionLongitude,
                         latitudeDelta: 0.015,
                         longitudeDelta: 0.0121,
                     }}
@@ -66,16 +79,21 @@ const JoinScreen = (props) => {
                         //console.log('onRegionChange', region)
                     }}
                     onRegionChangeComplete={(region) => {
-                        console.log('onRegionChange', region)
-                    }}>
+                        console.log('onRegionChangeComplete', region);
+                    }}
+                >
+
+
                     <Marker
                         coordinate={{
-                            latitude: latitude,
-                            longitude: longitude,
+                            latitude: MarkerPositionLatitude,
+                            longitude: MarkerPositionLongitude,
                         }}
                         draggable={true}
                         onDragEnd={(region) => {
-                            console.log('onDragEnd', region.nativeEvent)
+                            console.log('onDragEnd', region.nativeEvent);
+                            setMarkerPositionLatitude(region.nativeEvent["coordinate"].latitude);
+                            setMarkerPositionLongitude(region.nativeEvent["coordinate"].longitude);
                         }}
                     >
 
@@ -83,6 +101,15 @@ const JoinScreen = (props) => {
                     </Marker>
 
                 </MapView>
+                <View>
+                    <Text>{"GPS current latitude: "}{GPSPositionLatitude}</Text>
+                    <Text>{"GPS current longitude: "}{GPSPositionLongitude}</Text>
+                </View>
+
+                <View>
+                    <Text>{"Marker current latitude: "}{MarkerPositionLatitude}</Text>
+                    <Text>{"Marker current longitude: "}{MarkerPositionLongitude}</Text>
+                </View>
             </View>
 
         </ScrollView>
