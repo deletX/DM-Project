@@ -42,10 +42,17 @@ const EventComputedYourCarComponent = (props) => {
     const [vote, setVote] = React.useState(3)
     const [receiver, setReceiver] = React.useState(myCar[0].profile.id)
 
-    const participantsListItems = myCar.map((participant) => (
-        <ParticipantListItem key={participant.id} participant={participant} rightIcon={participant.pickup_index === 0}
-                             navigation={navigation}/>
-    ))
+    const participantsListItems = myCar.map((participant) => {
+        return (
+            <View key={participant.id}>
+                <ParticipantListItem participant={participant}
+                                     rightIcon={participant.pickup_index === 0}
+                                     navigation={navigation}/>
+                {participant.pickup_index === 0 &&
+                <Divider/>
+                }
+            </View>)
+    })
 
     const feedbackMenuItems = myCar.length === 0 ? [] : myCar.filter((participant) => (participant.profile.id !== profileId)).map(item => (
         <View key={item.id} style={{flex: 0, flexDirection: 'row', alignItems: 'center'}}>
@@ -58,23 +65,23 @@ const EventComputedYourCarComponent = (props) => {
             <Headline style={styles.header}>
                 Your Car
             </Headline>
-            <Subheading>
-                Expenses
+
+            <Subheading style={{marginBottom: 10}}>
+                Expenses {expense}€
             </Subheading>
-            <Paragraph>
-                {expense}
-            </Paragraph>
+
             {participation[0].pickup_index === 0 &&
-            <Button mode="outlined" target="_blank" onPress={() => {
+            <Button style={{marginBottom: 10}} mode="outlined" target="_blank" onPress={() => {
                 Linking.openURL(directionsURL)
             }}>
                 Directions
             </Button>
             }
-            <ScrollView style={{maxHeight: windowHeight * 0.3}}>
+            <ScrollView style={{maxHeight: windowHeight * 0.3, marginBottom: 15}}>
                 {participantsListItems}
             </ScrollView>
-            <Button mode="outlined" disabled={feedbackMenuItems.length === 0 || (new Date()) < date}
+            <Button style={{marginBottom: 10}} mode="outlined"
+                    disabled={feedbackMenuItems.length === 0 || (new Date()) < date}
                     onPress={() => {
                         setVisible(true)
                     }}>

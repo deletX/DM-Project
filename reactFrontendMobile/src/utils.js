@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-community/async-storage'
-import {EVENT_SCREEN, PROFILE_SCREEN} from "./constants/screens";
+import {EVENT_SCREEN, PROFILE_SCREEN, PROFILE_STACK} from "./constants/screens";
 import axios from "axios";
 import {eventDetailURL} from "./constants/apiurls";
 import NativeToastAndroid from "react-native/Libraries/Components/ToastAndroid/NativeToastAndroid";
@@ -143,8 +143,8 @@ export const pridStringToLatLng = (position, shouldParseFloat = true) => {
 export const URLtoScreenWithProps = async (url, token = "") => {
     let screenWithProps = {};
     const splittedUrl = url.split('/');
-    if (splittedUrl[1] === "profile") {
-        screenWithProps["screen"] = PROFILE_SCREEN;
+    if (splittedUrl[1] === "profiles") {
+        screenWithProps["screen"] = PROFILE_STACK;
     } else {
         screenWithProps["screen"] = EVENT_SCREEN;
         let id = parseInt(splittedUrl[2])

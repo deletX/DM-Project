@@ -17,7 +17,7 @@ const ParticipantListItem = (props) => {
     const windowHeight = useWindowDimensions().height;
     const navigation = props.navigation
     const {participant, profileId, token} = props;
-    const rightIcon = props.rightIcon ? props.rightIcon : true
+    const rightIcon = props.rightIcon !== undefined ? props.rightIcon : true
     return (
         <List.Item
             onPress={() => {
