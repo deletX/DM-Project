@@ -81,9 +81,12 @@ const JoinScreen = (props) => {
                     onRegionChangeComplete={(region) => {
                         console.log('onRegionChangeComplete', region);
                     }}
+                    onLongPress={(region) => {
+                        setMarkerPositionLatitude(region.nativeEvent["coordinate"].latitude);
+                            setMarkerPositionLongitude(region.nativeEvent["coordinate"].longitude);
+                    }}
+
                 >
-
-
                     <Marker
                         coordinate={{
                             latitude: MarkerPositionLatitude,
