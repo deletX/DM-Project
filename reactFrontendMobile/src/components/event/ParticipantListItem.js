@@ -54,7 +54,7 @@ const ParticipantListItem = (props) => {
                     disabled={true}
                     fullStarColor={"#d6a000"}
                     containerStyle={{width: 100, marginLeft: 0, position: "absolute", right: 30}} ù
-                    emptyStarColor={participant.profile.average_vote ? "808080" : "#bbbbbb"}
+                    emptyStarColor={participant.profile.average_vote ? "#808080" : "#bbbbbb"}
                 />
             )}
             right={rightIcon ? (props) => (
