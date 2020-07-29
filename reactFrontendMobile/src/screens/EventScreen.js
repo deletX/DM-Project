@@ -44,6 +44,8 @@ const EventScreen = (props) => {
 
     const scrollViewRef = React.useRef()
     const isOwner = props.profileId === event.owner.id
+    const participation = event.participant_set.filter(participation => (participation.profile.id === props.profileId))
+    const isParticipating = participation.length > 0
     return (
         <Portal.Host>
             <ScrollView ref={scrollViewRef}>
@@ -60,7 +62,7 @@ const EventScreen = (props) => {
                     <ActivityIndicator/>
                     }
 
-                    {event.status === COMPUTED &&
+                    {(event.status === COMPUTED && isParticipating) &&
                     <EventComputedYourCarComponent {...props} styles={styles}/>
                     }
 

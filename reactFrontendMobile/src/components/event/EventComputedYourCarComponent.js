@@ -1,6 +1,6 @@
 import React from 'react';
 import _ from "lodash"
-import {View, Linking, ScrollView, useWindowDimensions} from "react-native";
+import {View, Linking, ScrollView, useWindowDimensions, ToastAndroid} from "react-native";
 import {
     Divider,
     Headline,
@@ -13,14 +13,16 @@ import {
     RadioButton,
     TextInput, Caption
 } from "react-native-paper";
-import {pridStringToLatLng} from "../../utils";
+import {headers, pridStringToLatLng} from "../../utils";
 import ParticipantListItem from "./ParticipantListItem";
 import {useNavigation} from "@react-navigation/native";
 import StarRating from "react-native-star-rating";
+import axios from "axios";
+import {createFeedbackURL} from "../../constants/apiurls";
 
 
 const EventComputedYourCarComponent = (props) => {
-    const {profileId, styles} = props
+    const {profileId, styles, token} = props
     const [visible, setVisible] = React.useState(false)
 
 
@@ -28,12 +30,12 @@ const EventComputedYourCarComponent = (props) => {
     const windowHeight = useWindowDimensions().height;
     const event = props.route.params.event
     const participation = event.participant_set.filter(participation => (participation.profile.id === profileId))
-    const myCar = (participation.length > 0 && participation[0].car !== null) ? _.sortBy(event.participant_set.filter((item) => (item.car !== null && item.car.id === participation[0].car.id)), ['pickup_index']) : []
-    const expense = participation.length > 0 ? participation[0].expense : 0
+    const myCar = _.sortBy(event.participant_set.filter((item) => (item.car !== null && item.car.id === participation[0].car.id)), ['pickup_index'])
+    const expense = participation[0].expense
     const date = new Date(event.date_time)
     const navigation = useNavigation()
     let directionsURL = ""
-    if (participation.length > 0 && participation[0].pickup_index === 0)
+    if (participation[0].pickup_index === 0)
         directionsURL = `https://www.google.com/maps/dir/?api=1&origin=${pridStringToLatLng(participation[0].starting_pos, false).join(",")}&destination=${pridStringToLatLng(event.destination, false).join(",")}&travelmode=driving&waypoints=${myCar.map(item => pridStringToLatLng(item.starting_pos, false).join(",")).join("%7C")}`
 
     const [comment, setComment] = React.useState("")
@@ -116,6 +118,29 @@ const EventComputedYourCarComponent = (props) => {
                             emptyStarColor={"#808080"}
                         />
                     </Dialog.Content>
+                    <Dialog.Actions>
+                        <Button onPress={() => setVisible(false)}>Close</Button>
+                        <Button onPress={() => {
+                            axios
+                                .post(
+                                    createFeedbackURL(event.id, receiver),
+                                    {
+                                        receiver: receiver,
+                                        event: event.id,
+                                        comment: comment,
+                                        vote: vote,
+                                    },
+                                    headers('application/json', token)
+                                )
+                                .then((res) => {
+                                    setVisible(false)
+                                })
+                                .catch((error) => {
+                                    console.log(error)
+                                    ToastAndroid.show("Couldn't post feedback", ToastAndroid.SHORT)
+                                })
+                        }}>SUBMIT</Button>
+                    </Dialog.Actions>
                 </Dialog>
             </Portal>
         </View>
