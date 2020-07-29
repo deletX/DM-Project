@@ -6,7 +6,7 @@ import {Colors, List} from "react-native-paper";
 import {useWindowDimensions, ToastAndroid} from "react-native";
 import {useNavigation} from "@react-navigation/native";
 import {connect} from "react-redux"
-import {OTHER_PROFILE_SCREEN, PROFILE_SCREEN} from "../../constants/screens";
+import {OTHER_PROFILE_SCREEN, PROFILE_SCREEN, PROFILE_STACK} from "../../constants/screens";
 import axios from "axios"
 import {headers} from "../../utils";
 import {profilesURL} from "../../constants/apiurls";
@@ -22,7 +22,7 @@ const ParticipantListItem = (props) => {
         <List.Item
             onPress={() => {
                 if (participant.profile.id === profileId) {
-                    navigation.navigate(PROFILE_SCREEN)
+                    navigation.navigate(PROFILE_STACK)
                 } else {
                     axios
                         .get(profilesURL(participant.profile.id),
