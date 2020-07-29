@@ -47,7 +47,7 @@ const EventComputedYourCarComponent = (props) => {
                              navigation={navigation}/>
     ))
 
-    const feedbackMenuItems = myCar.length === 0 ? [] : myCar.map(item => (
+    const feedbackMenuItems = myCar.length === 0 ? [] : myCar.filter((participant) => (participant.profile.id !== profileId)).map(item => (
         <View key={item.id} style={{flex: 0, flexDirection: 'row', alignItems: 'center'}}>
             <Text>{item.profile.first_name} {item.profile.last_name}</Text>
             <RadioButton value={item.profile.id}/>
@@ -74,9 +74,10 @@ const EventComputedYourCarComponent = (props) => {
             <ScrollView style={{maxHeight: windowHeight * 0.3}}>
                 {participantsListItems}
             </ScrollView>
-            <Button mode="outlined" /*disabled={(new Date()) < date}*/ onPress={() => {
-                setVisible(true)
-            }}>
+            <Button mode="outlined" disabled={feedbackMenuItems.length === 0 || (new Date()) < date}
+                    onPress={() => {
+                        setVisible(true)
+                    }}>
                 Submit Feedback
             </Button>
             <Divider/>
