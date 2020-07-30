@@ -26,3 +26,5 @@ export const defaultEventPic = serverURL + 'media/default-event.jpg';
 export const JOINABLE = 0
 export const COMPUTING = 1
 export const COMPUTED = 2
+
+export const FUEL = ["Error", "Petrol", "Diesel", "Gas", "Electric"]
