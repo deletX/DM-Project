@@ -55,10 +55,8 @@ const EventComputedYourCarComponent = (props) => {
     })
 
     const feedbackMenuItems = myCar.length === 0 ? [] : myCar.filter((participant) => (participant.profile.id !== profileId)).map(item => (
-        <View key={item.id} style={{flex: 0, flexDirection: 'row', alignItems: 'center'}}>
-            <Text>{item.profile.first_name} {item.profile.last_name}</Text>
-            <RadioButton value={item.profile.id}/>
-        </View>
+        <RadioButton.Item key={item.id} label={`${item.profile.first_name} ${item.profile.last_name}`}
+                          value={item.profile.id} style={{height: 40}}/>
     ))
     return (
         <View>
