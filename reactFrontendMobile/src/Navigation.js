@@ -35,14 +35,14 @@ const EventStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
 const AuthStack = createStackNavigator();
 
-const drawerIcon = () => (
+const drawerIcon = (navigation) => () => (
     <Icon
         name="menu"
         color={Colors.teal700}
         size={30}
         style={{marginRight: 20}}
         onPress={() => {
-            props.navigation.toggleDrawer()
+            navigation.toggleDrawer()
         }}
     />
 
@@ -51,30 +51,31 @@ const drawerIcon = () => (
 const Events = (props) => {
     return (
         <EventStack.Navigator>
-            <EventStack.Screen name={HOME_SCREEN} component={EventsListScreen} options={{headerRight: drawerIcon,}}/>
+            <EventStack.Screen name={HOME_SCREEN} component={EventsListScreen}
+                               options={{headerRight: drawerIcon(props.navigation),}}/>
             <EventStack.Screen name={EVENT_SCREEN} component={EventScreen}
                                options={({route}) => ({
                                    title: `${route.params.event.name}`,
-                                   headerRight: drawerIcon,
+                                   headerRight: drawerIcon(props.navigation),
                                })}/>
             <EventStack.Screen name={JOIN_SCREEN} component={JoinScreen} options={{
-                headerRight: drawerIcon,
+                headerRight: drawerIcon(props.navigation),
             }}/>
             <EventStack.Screen name={OTHER_PROFILE_SCREEN} component={ProfileScreen}
-                               options={({route}) => ({title: `Profile`, headerRight: drawerIcon})}/>
+                               options={({route}) => ({title: `Profile`, headerRight: drawerIcon(props.navigation)})}/>
         </EventStack.Navigator>
     );
 };
 
-const Profile = () => {
+const Profile = (props) => {
     return (
         <ProfileStack.Navigator>
             <ProfileStack.Screen name={PROFILE_SCREEN} component={PersonalProfileScreen}
-                                 options={{headerRight: drawerIcon,}}/>
+                                 options={{headerRight: drawerIcon(props.navigation),}}/>
             <ProfileStack.Screen name={ADD_CAR_SCREEN} component={AddCarScreen}
                                  options={({route}) => ({
                                      title: `${route.params.edit ? "Edit car" : "Add car"}`,
-                                     headerRight: drawerIcon
+                                     headerRight: drawerIcon(props.navigation)
                                  })}/>
         </ProfileStack.Navigator>
     );
