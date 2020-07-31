@@ -40,7 +40,7 @@ const EventsListScreen = (props) => {
             });
     }, [joinable, joined, owned, setEvents, setRefreshing]);
 
-    React.useEffect(() => {
+    const reload = () => {
         axios
             .get(eventListURL(joinable, joined, owned), headers('application/json', props.token))
             .then((response) => {
@@ -48,16 +48,13 @@ const EventsListScreen = (props) => {
             })
             .catch((err) => {
                 //toast
-            });
+            })
+    }
+    React.useEffect(() => {
+        reload();
+
         if (props.route.params?.refresh) {
-            axios
-                .get(eventListURL(joinable, joined, owned), headers('application/json', props.token))
-                .then((response) => {
-                    setEvents(response.data)
-                })
-                .catch((err) => {
-                    //toast
-                });
+            reload();
         }
     }, [joinable, joined, owned, props.route.params?.refresh]);
 
@@ -65,6 +62,7 @@ const EventsListScreen = (props) => {
         <EventComponent
             key={event.id}
             event={event}
+            reload={reload}
         >
         </EventComponent>
     ));

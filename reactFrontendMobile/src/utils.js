@@ -1,9 +1,10 @@
 import AsyncStorage from '@react-native-community/async-storage'
-import {EVENT_SCREEN, PROFILE_SCREEN, PROFILE_STACK} from "./constants/screens";
+import {EVENT_SCREEN, HOME_SCREEN, PROFILE_SCREEN, PROFILE_STACK} from "./constants/screens";
 import axios from "axios";
-import {eventDetailURL} from "./constants/apiurls";
+import {eventDetailURL, eventJoinURL, nominatimCoordinatesToAddressURL} from "./constants/apiurls";
 import NativeToastAndroid from "react-native/Libraries/Components/ToastAndroid/NativeToastAndroid";
-import {ToastAndroid} from "react-native"
+import {ToastAndroid} from "react-native";
+import {participationEditURL} from "./constants/apiurls";
 
 export const isAuthenticated = () => {
     const token = AsyncStorage.getItem("token");
@@ -42,7 +43,6 @@ export const headers = (content_type, access_token = null, otherHeaders = {}, ot
     };
     return headers
 };
-
 
 export const nominatimToPrimarySecondary = (position) => {
     let primary = "";
@@ -125,7 +125,82 @@ export const nominatimToPrimarySecondary = (position) => {
     return {primary, secondary}
 }
 
+export const getNominatimInfo = async (latitude, longitude) => {
+    //console.log("getNominatimInfo ", latitude, longitude);
+    return axios.get(nominatimCoordinatesToAddressURL(latitude, longitude))
+        .then((res) => {
+                let payload = selectItem(res.data, latitude, longitude);
+                console.log("getNominatimInfo ", payload);
+                return payload;
+            }
+        )
+        .catch((error) => {
+            console.log("An error occurred while retrieving your location");
+        })
 
+
+}
+
+export const postJoinedEvent = async (eventID, token, startingAddress, startingPos, carID, navigation) => {
+    axios
+        .post(
+            eventJoinURL(eventID),
+            {
+                starting_address: startingAddress,
+                starting_pos: startingPos,
+                car: carID
+            },
+            headers('application/json', token)
+        )
+        .then(res => {
+                console.log("Joined successfully");
+                navigation.navigate(HOME_SCREEN, {refresh: true});
+
+            }
+        )
+        .catch(err => {
+                console.log("An error occurred while joining", err)
+            }
+        )
+}
+
+export const selectItem = (item, latitude, longitude) => {
+    let {primary, secondary} = nominatimToPrimarySecondary(item);
+    let lat, lon;
+    let addr = (`${primary} ${secondary}`);
+    let pos = (`SRID=4326;POINT (${item.lat} ${item.lon})`)
+    if (latitude !== undefined) {
+        lat = (parseFloat(item.lat))
+    } else {
+        lat = (item.lat)
+    }
+
+    if (longitude !== undefined) {
+        lon = (lon);
+    } else {
+        lon = (item.lon);
+    }
+
+    return [addr, pos]
+}
+
+export const deleteLeaveEvent = async (eventID, token, participationID, reload) => {
+    axios
+        .delete(
+            participationEditURL(eventID, participationID),
+            headers('application/json', token)
+        )
+        .then(res => {
+            console.log("Successfully left the event");
+            reload();
+
+        })
+        .catch(err => {
+            ToastAndroid.show("Something went wrong while leaving ", ToastAndroid.SHORT);
+            console.log("Something went wrong while leaving ", err)
+        })
+
+}
 export const pridStringToLatLng = (position, shouldParseFloat = true) => {
     let latlng = position.split(' ')
     if (shouldParseFloat) {

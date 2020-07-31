@@ -122,7 +122,7 @@ const EventCard = ({addAlert, token, event, profileId, refreshEvents}) => {
                 noText="No"
                 onYes={() => {
                     let participation = event.participant_set.filter(item => (item.profile.id === profileId))[0];
-
+                    console.log(participation);
                     axios
                         .delete(
                             participationEditURL(event.id, participation.id),

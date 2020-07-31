@@ -23,10 +23,11 @@ import EventsListScreen from './screens/EventsListScreen';
 import {authCheckState} from './actions/authActions';
 import {connect} from 'react-redux';
 import LoadingScreen from "./screens/LoadingScreen";
-import {Button, Colors} from "react-native-paper";
+import {Button, Colors, Badge} from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import TouchableRipple from "react-native-paper/src/components/TouchableRipple/index";
 import PersonalProfileScreen from "./screens/PersonalProfileScreen";
+import {View} from "react-native";
 
 
 //https://reactnavigation.org/blog/2020/01/29/using-react-navigation-5-with-react-native-paper/
@@ -36,15 +37,18 @@ const ProfileStack = createStackNavigator();
 const AuthStack = createStackNavigator();
 
 const drawerIcon = (navigation) => () => (
-    <Icon
-        name="menu"
-        color={Colors.teal700}
-        size={30}
-        style={{marginRight: 20}}
-        onPress={() => {
-            navigation.toggleDrawer()
-        }}
-    />
+    <View>
+        <Icon
+            name="menu"
+            color={Colors.teal700}
+            size={35}
+            style={{marginRight: 20}}
+            onPress={() => {
+                navigation.toggleDrawer()
+            }}
+        />
+        <Badge style={{position: "absolute", top: 2, right: 15, maxWidth: 25}}>30</Badge>
+    </View>
 
 )
 

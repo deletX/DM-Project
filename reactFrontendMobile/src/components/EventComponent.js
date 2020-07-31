@@ -4,23 +4,38 @@ import {
     Button,
     Title,
     Paragraph,
-    Text,
-    DefaultTheme,
-    ActivityIndicator,
     Colors,
-    ProgressBar
+    ProgressBar,
+    Portal,
+    Dialog
 } from 'react-native-paper';
 import {Alert, StyleSheet, View} from "react-native";
 import {COMPUTED, COMPUTING, JOINABLE} from "../constants/constants";
 import EventScreen from "../screens/EventScreen";
-import {EVENT_SCREEN, JOIN_SCREEN} from "../constants/screens";
+import {EVENT_SCREEN, HOME_SCREEN, JOIN_SCREEN} from "../constants/screens";
 import {useNavigation} from "@react-navigation/native"
 import moment from "moment";
+import {deleteLeaveEvent} from "../utils";
 
 
 const EventComponent = (props) => {
 
     const navigation = useNavigation();
+
+    const [visible, setVisible] = React.useState(false);
+    const hideDialog = () => {
+        setVisible(false);
+    };
+
+    let participation = props.event.participant_set.filter(item => (item.profile.id === props.profileID))[0];
+
+    const leaveEvent = async () => {
+        setVisible(false);
+        console.log(props.event.participant_set, props.profileID, props.event.id, props.token);
+        //props.event.participant_set.filter(item => (item.profile.id === props.profileID)).length = 0
+
+        await deleteLeaveEvent(props.event.id, props.token, participation.id, props.reload);
+    }
 
     return (
         <View
@@ -49,16 +64,39 @@ const EventComponent = (props) => {
 
                 <Card.Actions>
                     <Button mode={props.event.status === JOINABLE ? "contained" : "text"} color="#00675b"
-                            onPress={() => navigation.navigate(JOIN_SCREEN)}
+                            onPress={() => navigation.navigate((JOIN_SCREEN), {event: props.event, id: props.event.id})}
                             disabled={props.event.status === JOINABLE ? null : "true"}
                     >Join event</Button>
 
                     <Button mode="text" color="#c56200"
-                            onPress={() =>
-                                Alert.alert("You left this event")
-                            } style={styles.buttonRight}
-                            disabled={props.event.status === JOINABLE ? null : "true"}>Leave
+                            onPress={() => Alert.alert(
+                                "Are you sure?",
+                                "There is no coming back",
+                                [
+                                    {text: "No", style: 'cancel'},
+                                    {
+                                        text: "Yes", onPress: leaveEvent
+                                    }
+                                ],
+                                {cancelable: true}
+                            )} style={styles.buttonRight}
+                            disabled={(props.event.status === JOINABLE && (participation !== undefined) )? null : "true"}>Leave
                         event</Button>
+
+
+                    {/*<Portal>*/}
+                    {/*    <Dialog visible={visible} onDismiss={hideDialog}>*/}
+                    {/*        <Dialog.Title>Do you really want to leave this event?</Dialog.Title>*/}
+                    {/*        <Dialog.Content>*/}
+                    {/*            <Paragraph>There is no coming back</Paragraph>*/}
+                    {/*        </Dialog.Content>*/}
+                    {/*        <Dialog.Actions>*/}
+                    {/*            <Button onPress={hideDialog}>Cancel</Button>*/}
+                    {/*            <Button onPress={leaveEvent}>Ok</Button>*/}
+                    {/*        </Dialog.Actions>*/}
+                    {/*    </Dialog>*/}
+                    {/*</Portal>*/}
+
 
                 </Card.Actions>
             </Card>
@@ -85,11 +123,26 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
-    spinner: {width: "100%"}
+    spinner: {
+        width: "100%",
+        height: 7
+    }
 
 });
 
-export default EventComponent;
+import {connect} from 'react-redux';
+
+function mapStateToProps(state) {
+    return {
+        token: state.auth.token,
+        profileID: state.profile.id
+    };
+}
+
+
+export default connect(
+    mapStateToProps,
+)(EventComponent);
 
 // https://reactjs.org/warnings/special-props.html
 // https://stackoverflow.com/questions/39720039/can-i-disable-a-view-component-in-react-native
