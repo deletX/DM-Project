@@ -36,6 +36,8 @@ verify with
 - `source venv/bin/activate`
 - `pip install -r requirements.txt`
 
+(Se ci sono problemi con il modulo assicurarsi di avere installato python3.6-dev)
+
 Oppure:
 
 In Pycharm entrare nel menu impostazioni (Ctrl+Alt+S), sotto Project > Project Interpreter, rotellina a fianco di Project Interpreter. Cliccare su Add e poi su OK
