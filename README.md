@@ -237,3 +237,13 @@ cd android
 ./gradlew clean
 cd ..
 ```
+
+## Testing
+Se non già fatto eseguire nell'interfaccia di postgresql (vedi su)
+- `ALTER USER django CREATEDB;`
+- `ALTER USER django SUPERUSER;`
+
+è possibile eseguire i test con `python manage.py test` o tramite l'interfaccia di pycharm. E' importante affinché i test funzionino che cartelle media e static siano setuppate. Per fare ciò eseguire:
+- `npm run build` (dentro react-frontend)
+- spostare la cartella `react-frontend/build` dentro la cartella principale di progetto
+- `python manage.py collectstatic`
