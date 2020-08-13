@@ -28,6 +28,8 @@ verify with
 - `psql dmproject`
 - `CREATE USER django WITH PASSWORD 'django_tete_c';`
 - `GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO django;`
+- `ALTER USER django CREATEDB;`
+- `ALTER USER django SUPERUSER;`
 - `CREATE EXTENSION postgis;`
 
 
