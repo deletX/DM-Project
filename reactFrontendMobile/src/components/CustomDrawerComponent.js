@@ -26,9 +26,10 @@ import {
 import {URLtoScreenWithProps} from '../utils';
 import {authLogout} from '../actions/authActions';
 import CustomAvatar from "./CustomAvatar";
+import {readNotification} from "../actions/notificationsActions";
 
 const CustomDrawerContentComponent = (props) => {
-    const notificationListItems = props.notifications.map((notification) => (
+    const notificationListItems = props.notifications.filter((notification) => !notification.read).map((notification) => (
         <DrawerItem
             key={notification.id}
             label={notification.title}
@@ -37,13 +38,12 @@ const CustomDrawerContentComponent = (props) => {
             )}
             onPress={async () => {
                 let screenwithProps = await URLtoScreenWithProps(notification.url, props.token);
-                console.log(screenwithProps);
-
-
+                await props.readNotification(notification.id)
                 props.navigation.navigate(
                     screenwithProps.screen,
                     screenwithProps.props,
                 );
+
             }}
         />
     ));
@@ -169,6 +169,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         logout: () => dispatch(authLogout()),
+        readNotification: (id) => dispatch(readNotification(id))
     };
 }
 

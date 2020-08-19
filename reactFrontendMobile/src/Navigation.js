@@ -28,6 +28,7 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import TouchableRipple from "react-native-paper/src/components/TouchableRipple/index";
 import PersonalProfileScreen from "./screens/PersonalProfileScreen";
 import {View} from "react-native";
+import DrawerIcon from "./components/DrawerIcon";
 
 
 //https://reactnavigation.org/blog/2020/01/29/using-react-navigation-5-with-react-native-paper/
@@ -36,54 +37,49 @@ const EventStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
 const AuthStack = createStackNavigator();
 
-const drawerIcon = (navigation) => () => (
-    <View>
-        <Icon
-            name="menu"
-            color={Colors.teal700}
-            size={35}
-            style={{marginRight: 20}}
-            onPress={() => {
-                navigation.toggleDrawer()
-            }}
-        />
-        <Badge style={{position: "absolute", top: 2, right: 15, maxWidth: 25}}>30</Badge>
-    </View>
-
+const drawerIcon = (navigation, notifications) => () => (
+    <DrawerIcon navigation={navigation}/>
 )
 
 const Events = (props) => {
     return (
         <EventStack.Navigator>
             <EventStack.Screen name={HOME_SCREEN} component={EventsListScreen}
-                               options={{headerRight: drawerIcon(props.navigation),}}/>
+                               options={{headerRight: drawerIcon(props.navigation, props.notifications),}}/>
             <EventStack.Screen name={EVENT_SCREEN} component={EventScreen}
                                options={({route}) => ({
                                    title: `${route.params.event.name}`,
-                                   headerRight: drawerIcon(props.navigation),
+                                   headerRight: drawerIcon(props.navigation, props.notifications),
                                })}/>
             <EventStack.Screen name={JOIN_SCREEN} component={JoinScreen} options={{
-                headerRight: drawerIcon(props.navigation),
+                headerRight: drawerIcon(props.navigation, props.notifications),
             }}/>
             <EventStack.Screen name={OTHER_PROFILE_SCREEN} component={ProfileScreen}
-                               options={({route}) => ({title: `Profile`, headerRight: drawerIcon(props.navigation)})}/>
+                               options={({route}) => ({
+                                   title: `Profile`,
+                                   headerRight: drawerIcon(props.navigation, props.notifications)
+                               })}/>
         </EventStack.Navigator>
     );
 };
+
+connect(mapStateToProps, mapDispatchToProps)(Events);
 
 const Profile = (props) => {
     return (
         <ProfileStack.Navigator>
             <ProfileStack.Screen name={PROFILE_SCREEN} component={PersonalProfileScreen}
-                                 options={{headerRight: drawerIcon(props.navigation),}}/>
+                                 options={{headerRight: drawerIcon(props.navigation, props.notifications),}}/>
             <ProfileStack.Screen name={ADD_CAR_SCREEN} component={AddCarScreen}
                                  options={({route}) => ({
                                      title: `${route.params.edit ? "Edit car" : "Add car"}`,
-                                     headerRight: drawerIcon(props.navigation)
+                                     headerRight: drawerIcon(props.navigation, props.notifications)
                                  })}/>
         </ProfileStack.Navigator>
     );
 };
+
+connect(mapStateToProps, mapDispatchToProps)(Profile);
 
 const Navigation = (props) => {
     /*const {isAuthenticated, isLoading, username, alerts, profileId, error} = props*/
@@ -122,6 +118,7 @@ const mapStateToProps = (state) => {
         alerts: state.alerts,
         profileId: state.profile.id,
         error: state.auth.error || state.profile.error || state.notifications.error,
+        notifications: state.notifications.notifications
     };
 };
 
