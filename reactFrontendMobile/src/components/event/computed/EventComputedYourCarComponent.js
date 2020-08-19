@@ -1,24 +1,10 @@
 import React from 'react';
 import _ from "lodash"
-import {Linking, ScrollView, ToastAndroid, useWindowDimensions, View} from "react-native";
-import {
-    Button,
-    Caption,
-    Dialog,
-    Divider,
-    Headline,
-    Paragraph,
-    Portal,
-    RadioButton,
-    Subheading,
-    TextInput
-} from "react-native-paper";
-import {createDirectionLink, headers} from "../../../utils/utils";
+import {Linking, ScrollView, useWindowDimensions, View} from "react-native";
+import {Button, Divider, Headline, Portal, RadioButton, Subheading} from "react-native-paper";
+import {createDirectionLink} from "../../../utils/utils";
 import ParticipantListItem from "../participant/ParticipantListItem";
 import {useNavigation} from "@react-navigation/native";
-import StarRating from "react-native-star-rating";
-import axios from "axios";
-import {createFeedbackURL} from "../../../constants/apiurls";
 import FeedbackDialog from "../../feedback/FeedbackDialog";
 import {connect} from 'react-redux';
 

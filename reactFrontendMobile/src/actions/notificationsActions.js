@@ -3,11 +3,11 @@ import {handleError, headers} from '../utils/utils';
 import axios from "axios";
 import AsyncStorage from '@react-native-community/async-storage'
 import {
+    CLEAR_NOTIFICATIONS,
     GET_NOTIFICATIONS_SUCCESS,
     NOTIFICATION_UPDATE,
     NOTIFICATIONS_ERROR,
-    NOTIFICATIONS_START,
-    CLEAR_NOTIFICATIONS
+    NOTIFICATIONS_START
 } from "./types";
 
 /**

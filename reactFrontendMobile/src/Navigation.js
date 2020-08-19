@@ -8,7 +8,8 @@ import {
     HOME_SCREEN,
     HOME_STACK,
     JOIN_SCREEN,
-    LOGIN_SCREEN, OTHER_PROFILE_SCREEN,
+    LOGIN_SCREEN,
+    OTHER_PROFILE_SCREEN,
     PROFILE_SCREEN,
     PROFILE_STACK,
 } from './constants/screens';

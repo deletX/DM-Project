@@ -1,10 +1,12 @@
 import axios from "axios";
 import {
-    CAR_CREATE, CAR_DELETE, CAR_UPDATE,
+    CAR_CREATE,
+    CAR_DELETE,
+    CAR_UPDATE,
     CLEAR_PROFILE_DATA,
     GET_PROFILE_SUCCESS,
-    PROFILE_OP_START,
-    PROFILE_OP_ERROR
+    PROFILE_OP_ERROR,
+    PROFILE_OP_START
 } from "./types";
 import {carsDetailURL, carsListURL, currentProfileURL} from "../constants/apiurls";
 import {handleError, headers} from "../utils/utils";

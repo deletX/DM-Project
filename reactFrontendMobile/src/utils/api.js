@@ -1,14 +1,14 @@
 import axios from "axios";
 import {
-    createFeedbackURL, eventDetailURL,
-    eventJoinURL, eventRunURL,
+    createFeedbackURL,
+    eventDetailURL,
+    eventJoinURL,
+    eventRunURL,
     nominatimCoordinatesToAddressURL,
     participationEditURL,
     profilesURL
 } from "../constants/apiurls";
 import {handleError, headers, selectItem} from "./utils";
-import {ToastAndroid} from "react-native";
-import {HOME_SCREEN} from "../constants/screens";
 
 /*
     DMPROJECT API

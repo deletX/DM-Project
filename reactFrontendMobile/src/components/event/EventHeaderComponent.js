@@ -1,5 +1,5 @@
 import React from 'react';
-import {ImageBackground, useWindowDimensions, View, StyleSheet} from "react-native";
+import {ImageBackground, StyleSheet, useWindowDimensions, View} from "react-native";
 import {Button, Colors, IconButton, Subheading, Title} from "react-native-paper";
 import moment from "moment";
 import {useNavigation} from "@react-navigation/native";

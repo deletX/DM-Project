@@ -3,12 +3,9 @@ import CustomAvatar from "../../CustomAvatar";
 import StarRating from "react-native-star-rating";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import {Colors, List} from "react-native-paper";
-import {ToastAndroid, useWindowDimensions} from "react-native";
+import {useWindowDimensions} from "react-native";
 import {connect} from "react-redux"
 import {OTHER_PROFILE_SCREEN, PROFILE_STACK} from "../../../constants/screens";
-import axios from "axios"
-import {headers} from "../../../utils/utils";
-import {profilesURL} from "../../../constants/apiurls";
 import {useNavigation} from "@react-navigation/native";
 import {getProfile} from "../../../utils/api";
 
