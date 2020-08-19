@@ -3,6 +3,7 @@ import {EVENT_SCREEN, PROFILE_STACK} from "../constants/screens";
 import axios from "axios";
 import {eventDetailURL, nominatimCoordinatesToAddressURL} from "../constants/apiurls";
 import Toast from 'react-native-simple-toast';
+import {Alert} from "react-native";
 
 /**
  * Check authentication by looking for the token item inside AsyncStorage
@@ -230,6 +231,26 @@ export const URLtoScreenWithProps = async (url, token = "") => {
     }
     return screenWithProps;
 }
+
+/**
+ * Generates a callback that creates an Alert to cancel an action or do it.
+ *
+ * @param {function()} onPressYes
+ * @param {boolean} cancelable
+ * @return {function(): *}
+ */
+export const alertAreYouSure = (onPressYes, cancelable = true) => () => Alert.alert(
+    "Are you sure?",
+    "There is no coming back",
+    [
+        {text: "No", style: 'cancel'},
+        {
+            text: "Yes", onPress: onPressYes
+        }
+    ],
+    {cancelable: cancelable}
+)
+
 
 /**
  * Toast the given message and logs the error.

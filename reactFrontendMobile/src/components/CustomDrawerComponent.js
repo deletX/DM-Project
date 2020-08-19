@@ -1,109 +1,129 @@
 import * as React from 'react';
-import {View, ScrollView, StyleSheet} from 'react-native';
-import {SafeAreaView} from 'react-navigation';
-import {DrawerItems} from 'react-navigation-drawer';
-import {DrawerItem, DrawerContentScrollView} from '@react-navigation/drawer';
+import {StyleSheet, View} from 'react-native';
+import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 import {connect} from 'react-redux';
-import axios from "axios"
-import {
-    useTheme,
-    Avatar,
-    Title,
-    Caption,
-    Paragraph,
-    Drawer,
-    Text,
-} from 'react-native-paper';
-
+import {Caption, Drawer, Title,} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {
-    EVENT_SCREEN,
-    HOME_SCREEN,
-    LOGIN_SCREEN,
-    PROFILE_SCREEN,
-    PROFILE_STACK,
-} from '../constants/screens';
+import {HOME_SCREEN, PROFILE_STACK,} from '../constants/screens';
 import {URLtoScreenWithProps} from '../utils/utils';
 import {authLogout} from '../actions/authActions';
 import CustomAvatar from "./CustomAvatar";
 import {readNotification} from "../actions/notificationsActions";
 
-const CustomDrawerContentComponent = (props) => {
-    const notificationListItems = props.notifications.filter((notification) => !notification.read).map((notification) => (
-        <DrawerItem
-            key={notification.id}
-            label={notification.title}
-            icon={({color, size}) => (
-                <Icon name="chevron-right" color={color} size={size}/>
-            )}
-            onPress={async () => {
-                let screenwithProps = await URLtoScreenWithProps(notification.url, props.token);
-                await props.readNotification(notification.id)
-                props.navigation.navigate(
-                    screenwithProps.screen,
-                    screenwithProps.props,
-                );
+/**
+ * Notification Drawer Item.
+ */
+const NotificationDrawerItem = (props) => (
+    <DrawerItem
+        label={props.notification.title}
+        icon={({color, size}) => (
+            <Icon name="chevron-right" color={color} size={size}/>
+        )}
+        onPress={async () => {
+            let screenWithProps = await URLtoScreenWithProps(props.notification.url, props.token);
+            await props.readNotification(props.notification.id)
+            props.navigation.navigate(
+                screenWithProps.screen,
+                screenWithProps.props,
+            );
 
+        }}
+    />
+)
+
+/**
+ * User information:
+ * - Avatar
+ * - Full name
+ * - username
+ */
+const UserInfoDrawerComponent = (props) => (
+    <View style={styles.userInfoDrawerComponent}>
+        <CustomAvatar picture={props.picture} firstName={props.firstName}
+                      lastName={props.lastName}/>
+        <View style={styles.userInfoDrawerComponentText}>
+            <Title style={styles.title}>
+                {props.firstName + ' ' + props.lastName}
+            </Title>
+            <Caption style={styles.caption}>{props.username}</Caption>
+        </View>
+    </View>
+)
+
+/**
+ * Navigation section. Contains two buttons:
+ * - Home: to navigate to the *EventsListScreen*
+ * - Profile: to navigate to the *PersonalProfileScreen*
+ */
+const DrawerNavigationSection = (props) => (
+    <Drawer.Section style={styles.drawerSection} title={'Pages:'}>
+        <DrawerItem
+            label="Home"
+            icon={({color, size}) => (
+                <Icon name="home-outline" color={color} size={size}/>
+            )}
+            onPress={() => {
+                props.navigation.navigate(HOME_SCREEN);
+                props.navigation.closeDrawer();
             }}
         />
-    ));
+        <DrawerItem
+            label="Profile"
+            icon={({color, size}) => (
+                <Icon name="account" color={color} size={size}/>
+            )}
+            onPress={() => {
+                props.navigation.navigate(PROFILE_STACK);
+                props.navigation.closeDrawer();
+            }}
+        />
+    </Drawer.Section>
+)
 
+/**
+ * SignOut button. Runs the {@link authLogout} action
+ */
+const SignOutButton = (props) => (
+    <DrawerItem
+        label="Sign Out"
+        icon={({color, size}) => (
+            <Icon name="exit-to-app" color={color} size={size}/>
+        )}
+        onPress={() => {
+            props.logout();
+        }}
+    />
+)
+
+/**
+ * Drawer component that contains:
+ * - User information on top {@link UserInfoDrawerComponent}
+ * - Event and Profile stack navigation buttons {@link DrawerNavigationSection}
+ * - unread notifications {@link NotificationDrawerItem}
+ * - signout button {@link SignOutButton}
+ */
+const CustomDrawerContentComponent = (props) => {
+
+    const notificationListItems = props.notifications.filter((notification) => !notification.read).map((notification) => (
+        <NotificationDrawerItem key={notification.id} notification={notification} token={props.token}
+                                navigation={props.navigation}/>
+    ));
 
     return (
         <View style={{flex: 1}}>
             <DrawerContentScrollView {...props}>
                 <View style={styles.drawerContent}>
                     <View style={styles.userInfoSection}>
-                        <View style={{flexDirection: 'row', marginTop: 15}}>
-                            <CustomAvatar picture={props.picture} firstName={props.firstName}
-                                          lastName={props.lastName}/>
-
-                            <View style={{marginLeft: 15, flexDirection: 'column'}}>
-                                <Title style={styles.title}>
-                                    {props.firstName + ' ' + props.lastName}
-                                </Title>
-                                <Caption style={styles.caption}>{props.username}</Caption>
-                            </View>
-                        </View>
+                        <UserInfoDrawerComponent {...props}/>
                     </View>
-                    <Drawer.Section style={styles.drawerSection} title={'Pages:'}>
-                        <DrawerItem
-                            label="Home"
-                            icon={({color, size}) => (
-                                <Icon name="home-outline" color={color} size={size}/>
-                            )}
-                            onPress={() => {
-                                props.navigation.navigate(HOME_SCREEN);
-                                props.navigation.closeDrawer();
-                            }}
-                        />
-                        <DrawerItem
-                            label="Profile"
-                            icon={({color, size}) => (
-                                <Icon name="account" color={color} size={size}/>
-                            )}
-                            onPress={() => {
-                                props.navigation.navigate(PROFILE_STACK);
-                                props.navigation.closeDrawer();
-                            }}
-                        />
-                    </Drawer.Section>
+                    <DrawerNavigationSection {...props}/>
                     <Drawer.Section style={styles.drawerSection} title="Notifications:">
                         {notificationListItems}
                     </Drawer.Section>
                 </View>
             </DrawerContentScrollView>
             <Drawer.Section style={styles.bottomDrawerSection}>
-                <DrawerItem
-                    label="Sign Out"
-                    icon={({color, size}) => (
-                        <Icon name="exit-to-app" color={color} size={size}/>
-                    )}
-                    onPress={() => {
-                        console.log('logout');
-                        props.logout();
-                    }}
-                />
+                <SignOutButton {...props}/>
             </Drawer.Section>
         </View>
     );
@@ -115,6 +135,14 @@ const styles = StyleSheet.create({
     },
     userInfoSection: {
         paddingLeft: 20,
+    },
+    userInfoDrawerComponent: {
+        flexDirection: 'row',
+        marginTop: 15
+    },
+    userInfoDrawerComponentText: {
+        marginLeft: 15,
+        flexDirection: 'column'
     },
     title: {
         fontSize: 16,

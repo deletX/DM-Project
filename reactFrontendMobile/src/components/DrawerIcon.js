@@ -2,12 +2,13 @@ import {View} from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import {Badge, Colors} from "react-native-paper";
 import * as React from "react";
-import {authCheckState} from "../actions/authActions";
 import {connect} from "react-redux";
-import {handleError} from "../utils/utils";
 
-const DrawerIcon = ({navigation, notifications}) => {
-    const unRead = notifications.filter((notification) => !notification.read)
+/**
+ * Drawer hamburger Icon to open the drawer
+ */
+const DrawerIcon = (props) => {
+    const unRead = props.notifications.filter((notification) => !notification.read)
     return (<View>
         <Icon
             name="menu"
@@ -15,7 +16,7 @@ const DrawerIcon = ({navigation, notifications}) => {
             size={35}
             style={{marginRight: 20}}
             onPress={() => {
-                navigation.toggleDrawer()
+                props.navigation.toggleDrawer()
             }}
         />
         {unRead.length > 0 &&

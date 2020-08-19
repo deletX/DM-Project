@@ -1,8 +1,12 @@
 import axios from "axios";
-import {eventJoinURL, nominatimCoordinatesToAddressURL, participationEditURL} from "../constants/apiurls";
-import {HOME_SCREEN} from "../constants/screens";
+import {eventJoinURL, nominatimCoordinatesToAddressURL, participationEditURL, profilesURL} from "../constants/apiurls";
+import {HOME_SCREEN, OTHER_PROFILE_SCREEN} from "../constants/screens";
 import {handleError, headers, selectItem} from "./utils";
+import {ToastAndroid} from "react-native";
 
+/*
+    DMPROJECT API
+ */
 
 /**
  * API call to join an event at {@link eventJoinURL}.
@@ -62,6 +66,27 @@ export const deleteLeaveEvent = async (eventID, token, participationID, reload) 
         })
 
 }
+
+export const getProfile = async (feedbackGiverId, token, navigation) => {
+    axios
+        .get(profilesURL(feedbackGiverId),
+            headers('application/json', token))
+        .then(res => {
+            navigation.navigate(OTHER_PROFILE_SCREEN, {
+                id: feedbackGiverId,
+                profile: res.data
+            })
+        })
+        .catch(err => {
+            handleError("Something went wrong while retrieving the profile", err)
+        })
+}
+
+
+/*
+    NOMINATIM API
+ */
+
 /**
  * Nomatim API call to get address data from a lat, lon couple.
  *
