@@ -23,7 +23,7 @@ import {
     PROFILE_SCREEN,
     PROFILE_STACK,
 } from '../constants/screens';
-import {URLtoScreenWithProps} from '../utils';
+import {URLtoScreenWithProps} from '../utils/utils';
 import {authLogout} from '../actions/authActions';
 import CustomAvatar from "./CustomAvatar";
 import {readNotification} from "../actions/notificationsActions";

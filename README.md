@@ -247,3 +247,58 @@ Se non già fatto eseguire nell'interfaccia di postgresql (vedi su)
 - `npm run build` (dentro react-frontend)
 - spostare la cartella `react-frontend/build` dentro la cartella principale di progetto
 - `python manage.py collectstatic`
+
+# Error numbering
+**App errors**
+- `001` Error in getting the refresh token
+- `002` Error in deleting the participation for an event
+- `003` Error in retrieving event details
+- `004` Error while logging in with google Oauth
+- `005` Error while logging in with username and password
+- `006` Error while retrieving notifications
+- `007` Error while reading the notification (setting `read` value)
+- `008` Error while retrieving profile
+- `009` Error while creating a car
+- `010` Error while editing a car
+- `011` Error while deleting a car
+- `012` Error while getting the address from nominatim given lat and lon
+- `013` Error while joining an event
+- `014` 
+- `015` 
+- `016` 
+- `017` 
+- `018` 
+- `019` 
+- `020` 
+- `021` 
+- `022` 
+- `023` 
+- `024` 
+- `025` 
+- `026` 
+- `027` 
+- `028` 
+- `029` 
+- `030` 
+
+**Web errors**
+- `000`
+- `000`
+- `000`
+- `000`
+- `000`
+- `000`
+- `000`
+- `000`
+- `000`
+- `000`
+- `000`
+- `000`
+- `000`
+- `000`
+- `000`
+- `000`
+- `000`
+- `000`
+- `000`
+- `000` 

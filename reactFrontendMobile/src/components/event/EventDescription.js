@@ -2,7 +2,7 @@ import React from 'react';
 import {Divider, Headline, Paragraph} from "react-native-paper";
 import MapView, {Marker} from "react-native-maps";
 import {Linking, Platform, View} from "react-native";
-import {pridStringToLatLng} from "../../utils";
+import {pridStringToLatLng} from "../../utils/utils";
 
 const openGps = (lat, lng) => {
     var scheme = Platform.OS === 'ios' ? 'maps:' : `https://www.google.com/maps/search/?api=1&query=`;

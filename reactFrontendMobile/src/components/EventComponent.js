@@ -15,7 +15,6 @@ import EventScreen from "../screens/EventScreen";
 import {EVENT_SCREEN, HOME_SCREEN, JOIN_SCREEN} from "../constants/screens";
 import {useNavigation} from "@react-navigation/native"
 import moment from "moment";
-import {deleteLeaveEvent} from "../utils";
 
 
 const EventComponent = (props) => {
@@ -80,7 +79,7 @@ const EventComponent = (props) => {
                                 ],
                                 {cancelable: true}
                             )} style={styles.buttonRight}
-                            disabled={(props.event.status === JOINABLE && (participation !== undefined) )? null : "true"}>Leave
+                            disabled={(props.event.status === JOINABLE && (participation !== undefined)) ? null : "true"}>Leave
                         event</Button>
 
 
@@ -131,6 +130,7 @@ const styles = StyleSheet.create({
 });
 
 import {connect} from 'react-redux';
+import {deleteLeaveEvent} from "../utils/api";
 
 function mapStateToProps(state) {
     return {

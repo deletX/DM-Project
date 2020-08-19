@@ -4,10 +4,10 @@ import {Badge, Colors} from "react-native-paper";
 import * as React from "react";
 import {authCheckState} from "../actions/authActions";
 import {connect} from "react-redux";
+import {handleError} from "../utils/utils";
 
 const DrawerIcon = ({navigation, notifications}) => {
     const unRead = notifications.filter((notification) => !notification.read)
-    console.log(notifications)
     return (<View>
         <Icon
             name="menu"

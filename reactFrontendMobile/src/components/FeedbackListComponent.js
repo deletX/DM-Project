@@ -9,7 +9,7 @@ import {connect} from "react-redux"
 import {OTHER_PROFILE_SCREEN, PROFILE_SCREEN, PROFILE_STACK} from "../constants/screens";
 import axios from "axios"
 import {profilesURL} from "../constants/apiurls";
-import {headers} from "../utils";
+import {headers} from "../utils/utils";
 
 
 const ParticipantListItem = (props) => {

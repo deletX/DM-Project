@@ -1,31 +1,49 @@
 import axios from 'axios';
-import {convertTokenURL, tokenURL, signupURL} from '../constants/apiurls';
-import {alertError, removeAllAlerts} from './alertActions';
+import {convertTokenURL, tokenURL} from '../constants/apiurls';
 import {AUTH_ERROR, AUTH_LOGOUT, AUTH_START, AUTH_SUCCESS} from './types';
 import {APP_CLIENTID, APP_SECRET} from '../constants/constants';
 import * as qs from 'qs';
-import {headers} from '../utils';
+import {handleError, headers} from '../utils/utils';
 import {clearProfileData, fetchProfile} from './profileActions';
-import {
-    clearNotifications,
-    retrieveNotifications,
-} from './notificationsActions';
+import {clearNotifications, retrieveNotifications} from './notificationsActions';
 import AsyncStorage from '@react-native-community/async-storage';
-import {ToastAndroid} from 'react-native';
 
+/**
+ * Start authentication action object
+ *
+ * @returns {{type: string}}
+ */
 const start = () => ({
     type: AUTH_START,
 });
 
+/**
+ * Authentication success action object
+ *
+ * @param {string} token retrieved application token
+ *
+ * @returns {{type: string, token: string}}
+ */
 const success = (token) => ({
     type: AUTH_SUCCESS,
     token: token,
 });
 
+/**
+ * Authentication fail action object
+ *
+ * @returns {{type: string}}
+ */
 const fail = () => ({
     type: AUTH_ERROR,
 });
 
+/**
+ * Logout action object.
+ * Clear all the stored information
+ *
+ * @returns {{type: string}}
+ */
 const logout = () => {
     AsyncStorage.clear();
     return {
@@ -33,13 +51,13 @@ const logout = () => {
     };
 };
 
-const checkAuthTimeout = (expirationTime) => async (dispatch) => {
-    const refresh_token = await AsyncStorage.getItem('refresh_token');
-    setTimeout(() => {
-        dispatch(refreshAuth(refresh_token));
-    }, expirationTime * 1000);
-};
-
+/**
+ * Refresh authentication through the refresh token if the authentication expired
+ *
+ * @param {string} refresh_token
+ *
+ * @returns {function(*): Promise<AxiosResponse<any>>}
+ */
 export const refreshAuth = (refresh_token) => {
     return async (dispatch) => {
         return axios
@@ -56,28 +74,33 @@ export const refreshAuth = (refresh_token) => {
             .then((res) => {
                 let access_token = res.data.access_token;
                 let refresh_token = res.data.refresh_token;
-                let expirationDate = new Date(new Date().getTime() + 3600 * 1000);
+
                 AsyncStorage.setItem('access_token', access_token);
                 AsyncStorage.setItem('refresh_token', refresh_token);
-                // AsyncStorage.setItem('expiration_date', expirationDate)
 
                 dispatch(success(access_token));
                 dispatch(fetchProfile());
                 dispatch(retrieveNotifications());
-                // dispatch(checkAuthTimeout(3600));
             })
             .catch((error) => {
                 dispatch(fail(error));
-                dispatch(alertError(error));
+                // There is no need to comunicate to the user since this will be executed when the app is opened mainly
+                // handleError("Something went wrong [001]",error)
                 return error;
             });
     };
 };
 
+/**
+ * Authentication action through Google
+ *
+ * @param {string} google_token
+ *
+ * @returns {function(*): Promise<AxiosResponse<any>>}
+ */
 export const googleOAuthLogin = (google_token) => {
     return async (dispatch) => {
         dispatch(start());
-        console.log('googleOAuthLogin before post');
         return axios
             .post(
                 convertTokenURL(),
@@ -93,29 +116,33 @@ export const googleOAuthLogin = (google_token) => {
             .then((res) => {
                 let access_token = res.data.access_token;
                 let refresh_token = res.data.refresh_token;
-                let expirationDate = new Date(new Date().getTime() + 3600 * 1000);
+
                 AsyncStorage.setItem('access_token', access_token);
                 AsyncStorage.setItem('refresh_token', refresh_token);
-                // AsyncStorage.setItem('expiration_date', expirationDate)
-                dispatch(success(access_token));
 
+                dispatch(success(access_token));
                 dispatch(retrieveNotifications());
-                // dispatch(checkAuthTimeout(3600));
                 dispatch(fetchProfile());
             })
             .catch((error) => {
                 dispatch(fail(error));
-                dispatch(alertError(error));
-                console.log(error);
+                handleError("Something went wrong while logging in [004]", error)
                 return error;
             });
     };
 };
 
+/**
+ * Username and password authentication action
+ *
+ * @param {string} username
+ * @param {string} password
+ *
+ * @returns {function(*): Promise<AxiosResponse<any>>}
+ */
 export const authLogin = (username, password) => {
     return async (dispatch) => {
         dispatch(start());
-        console.log('authLogin - before post');
         return axios
             .post(
                 tokenURL(),
@@ -129,83 +156,46 @@ export const authLogin = (username, password) => {
                 headers('application/x-www-form-urlencoded'),
             )
             .then((res) => {
-                console.log('authLogin - AuthLoggedIn!');
                 let access_token = res.data.access_token;
                 let refresh_token = res.data.refresh_token;
-                let expirationDate = new Date(new Date().getTime() + 3600 * 1000);
+
                 AsyncStorage.setItem('access_token', access_token);
                 AsyncStorage.setItem('refresh_token', refresh_token);
-                // AsyncStorage.setItem('expiration_date', expirationDate)
+
                 dispatch(success(access_token));
-                // dispatch(checkAuthTimeout(3600));
                 dispatch(retrieveNotifications());
                 return dispatch(fetchProfile());
             })
             .catch((err) => {
-                console.log('authLogin - Errors while logging in!');
-                console.log(err);
-                dispatch(fail(err));
-                dispatch(alertError(err));
-                ToastAndroid.show(
-                    'Incorrect username or password!',
-                    ToastAndroid.LONG,
-                    ToastAndroid.BOTTOM,
-                );
+                handleError("Incorrect username and/or password! [005]", err)
                 return err;
             });
     };
 };
 
-export const authSignup = (
-    username,
-    first_name,
-    last_name,
-    email,
-    password,
-) => {
-    return async (dispatch) => {
-        dispatch(start());
-        // we return the promise in order to use wait till the end using "then"
-        return axios
-            .post(
-                signupURL(),
-                {
-                    username: username,
-                    first_name: first_name,
-                    last_name: last_name,
-                    email: email,
-                    password: password,
-                },
-                headers('application/json'),
-            )
-            .then((res) => {
-                return dispatch(authLogin(username, password));
-            })
-            .catch((error) => {
-                dispatch(fail(error));
-                dispatch(alertError(error));
-                return error;
-            });
-    };
-};
-
+/**
+ * Check if is authenticated (has an access_token stored) then run the refresh
+ *
+ * @returns {function(...[*]=)}
+ */
 export const authCheckState = () => {
     return async (dispatch) => {
         const token = await AsyncStorage.getItem('access_token');
-        console.log(`authCheckState - token: ${token}`);
         if (token !== null) {
-            console.log('authCheckState - Token found');
             const refresh = await AsyncStorage.getItem('refresh_token');
-            console.log(`authCheckState - refresh_token: ${refresh}`);
             dispatch(refreshAuth(refresh));
         }
     };
 };
 
+/**
+ * Logout action flow
+ *
+ * @returns {function(...[*]=)}
+ */
 export const authLogout = () => {
     return async (dispatch) => {
         dispatch(logout());
-        dispatch(removeAllAlerts());
         dispatch(clearProfileData());
         dispatch(clearNotifications());
     };

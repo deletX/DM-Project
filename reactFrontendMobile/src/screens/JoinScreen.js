@@ -10,7 +10,7 @@ import axios from "axios";
 import {eventJoinURL} from "../constants/apiurls"
 import {LogBox} from 'react-native';
 import {nominatimCoordinatesToAddressURL} from "../constants/apiurls";
-import {headers, selectItem, getNominatimInfo, postJoinedEvent} from "../utils";
+import {headers, selectItem} from "../utils/utils";
 import {useNavigation} from "@react-navigation/native";
 
 LogBox.ignoreLogs(['Warning: useNativeDriver']);
@@ -171,12 +171,12 @@ const JoinScreen = (props) => {
 
 
                 </View>
-            {/*    <Text>{"GPS current latitude: "}{GPSPositionLatitude}</Text>*/}
-            {/*    <Text>{"GPS current longitude: "}{GPSPositionLongitude}</Text>*/}
-            {/*</View>*/}
-            {/*<View>*/}
-            {/*    <Text>{"Marker current latitude: "}{MarkerPositionLatitude}</Text>*/}
-            {/*    <Text>{"Marker current longitude: "}{MarkerPositionLongitude}</Text>*/}
+                {/*    <Text>{"GPS current latitude: "}{GPSPositionLatitude}</Text>*/}
+                {/*    <Text>{"GPS current longitude: "}{GPSPositionLongitude}</Text>*/}
+                {/*</View>*/}
+                {/*<View>*/}
+                {/*    <Text>{"Marker current latitude: "}{MarkerPositionLatitude}</Text>*/}
+                {/*    <Text>{"Marker current longitude: "}{MarkerPositionLongitude}</Text>*/}
             </View>
 
         </ScrollView>
@@ -204,6 +204,7 @@ const styles = StyleSheet.create({
 });
 
 import {connect} from 'react-redux';
+import {getNominatimInfo, postJoinedEvent} from "../utils/api";
 
 function mapStateToProps(state) {
     return {

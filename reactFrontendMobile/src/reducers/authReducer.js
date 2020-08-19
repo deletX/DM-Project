@@ -1,18 +1,39 @@
 import * as actionTypes from "../actions/types";
-import {updateObject} from "../utils";
+import {updateObject} from "../utils/utils";
 
+/**
+ * Initial authentication state
+ *
+ * @type {{loading: boolean, error: boolean, token: undefined}}
+ */
 const initialState = {
     token: undefined,
     loading: false,
     error: false,
 };
 
+/**
+ * Authentication start handler
+ *
+ * @param {{}} state
+ * @param {{}} action
+ *
+ * @returns {{}}
+ */
 const authStart = (state, action) => {
     return updateObject(state, {
         loading: true
     });
 };
 
+/**
+ * Authentication success handler
+ *
+ * @param {{}} state
+ * @param {{}} action
+ *
+ * @returns {{}}
+ */
 const authSuccess = (state, action) => {
     return updateObject(state, {
         token: action.token,
@@ -20,6 +41,14 @@ const authSuccess = (state, action) => {
     });
 };
 
+/**
+ * Authentication fail handler
+ *
+ * @param {{}} state
+ * @param {{}} action
+ *
+ * @returns {{}}
+ */
 const authFail = (state, action) => {
     return updateObject(state, {
         loading: false,
@@ -27,12 +56,28 @@ const authFail = (state, action) => {
     });
 };
 
+/**
+ * Logout handler
+ *
+ * @param {{}} state
+ * @param {{}} action
+ *
+ * @returns {{}}
+ */
 const authLogout = (state, action) => {
     return updateObject(state, {
         token: undefined
     });
 };
 
+/**
+ * Authentication reducer
+ *
+ * @param {{}} state
+ * @param {{}} action
+ *
+ * @returns {{}|{loading: boolean, error: boolean, token: string}}
+ */
 const authReducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.AUTH_START:

@@ -3,24 +3,46 @@ import {
     CAR_CREATE, CAR_DELETE, CAR_UPDATE,
     CLEAR_PROFILE_DATA,
     GET_PROFILE_SUCCESS,
-    PROFILE_OP_ERROR,
     PROFILE_OP_START,
-    PROFILE_PICTURE_UPDATE,
-    USER_DATA_UPDATE
+    PROFILE_OP_ERROR
 } from "./types";
-import {carsDetailURL, carsListURL, currentProfileURL, signupURL} from "../constants/apiurls";
-import {headers} from "../utils";
-import {addAlert, alertError} from "./alertActions";
-import {authLogout} from "./authActions";
+import {carsDetailURL, carsListURL, currentProfileURL} from "../constants/apiurls";
+import {handleError, headers} from "../utils/utils";
 import AsyncStorage from '@react-native-community/async-storage'
 
+/**
+ * Profile operation start action object
+ *
+ * @returns {{type: string}}
+ */
 const start = () => (
     {
         type: PROFILE_OP_START
     }
 );
 
-const getSuccess = (id, user, picture, score, carSet, averageVote, receivedFeedback, givenFeedback) => (
+/**
+ * Profile retrieval success action object
+ *
+ * @param {number} id
+ * @param {{email:string,first_name:string,id:number,last_name:string, username:string}}user
+ * @param {string} picture
+ * @param {number} score
+ * @param {[{consumption:number, fuel:number, id:number, name:string,tot_avail_seats:number}]} carSet
+ * @param {number} averageVote
+ * @param {[{comment:string, event:{},giver:{},id:number, receiver:{},vote:number}]} receivedFeedback
+ * @param {[{}]} givenFeedback
+ *
+ * @returns {{score: *, givenFeedback: *, carSet: *, averageVote: *, id: *, type: string, user: *, picture: *, receivedFeedback: *}}
+ */
+const getSuccess = (id,
+                    user,
+                    picture,
+                    score,
+                    carSet,
+                    averageVote,
+                    receivedFeedback,
+                    givenFeedback) => (
     {
         type: GET_PROFILE_SUCCESS,
         id,
@@ -34,29 +56,28 @@ const getSuccess = (id, user, picture, score, carSet, averageVote, receivedFeedb
     }
 );
 
-const successPictureUpdate = (picture) => (
-    {
-        type: PROFILE_PICTURE_UPDATE,
-        picture,
-    }
-);
-
+/**
+ * Profile operation fail action object
+ *
+ * @returns {{type: string}}
+ */
 const fail = () => (
     {
         type: PROFILE_OP_ERROR,
     }
 );
 
-const changeUserDataSuccess = (id, firstName, lastName, email) => (
-    {
-        type: USER_DATA_UPDATE,
-        id,
-        firstName,
-        lastName,
-        email
-    }
-);
-
+/**
+ * Car creation action object
+ *
+ * @param {number} id
+ * @param {string} name
+ * @param {number} totSeats
+ * @param {number} fuel
+ * @param {number} consumption
+ *
+ * @returns {{fuel: number, name: string, totSeats: number, consumption: number, id: number, type: string}}
+ */
 const createCarSuccess = (id, name, totSeats, fuel, consumption) => (
     {
         type: CAR_CREATE,
@@ -68,6 +89,17 @@ const createCarSuccess = (id, name, totSeats, fuel, consumption) => (
     }
 );
 
+/**
+ * Car edit action object
+ *
+ * @param {number} id
+ * @param {string} name
+ * @param {number} totSeats
+ * @param {number} fuel
+ * @param {number} consumption
+ *
+ * @returns {{fuel: number, name: string, totSeats: number, consumption: number, id: number, type: string}}
+ */
 const changeCarSuccess = (id, name, totSeats, fuel, consumption) => (
     {
         type: CAR_UPDATE,
@@ -79,6 +111,13 @@ const changeCarSuccess = (id, name, totSeats, fuel, consumption) => (
     }
 );
 
+/**
+ * Car delete action object
+ *
+ * @param {number} id
+ *
+ * @returns {{id: number, type: string}}
+ */
 const deleteCarSuccess = (id) => (
     {
         type: CAR_DELETE,
@@ -86,6 +125,11 @@ const deleteCarSuccess = (id) => (
     }
 );
 
+/**
+ * Clear profile data from app (**does NOT erase the profile from the system**)
+ *
+ * @returns {function(*): *}
+ */
 export const clearProfileData = () => {
     return async (dispatch) => (
         dispatch(
@@ -95,112 +139,45 @@ export const clearProfileData = () => {
     );
 }
 
-
+/**
+ * Profile retrieval action
+ *
+ * @returns {function(*): Promise<AxiosResponse<any>>}
+ */
 export const fetchProfile = () => {
     return async (dispatch) => {
         dispatch(start());
         let access_token = await AsyncStorage.getItem("access_token");
-        console.log("fetchProfile - access_token: " + access_token)
         return axios
             .get(
                 currentProfileURL(),
                 headers('application/json', access_token)
             )
             .then(res => {
-                console.log("fetchProfile - Profile fetch successfully")
                 let {id, user, picture, score, car_set, average_vote, received_feedback, given_feedback} = res.data;
+
                 AsyncStorage.setItem("profile_id", id.toString());
-                // dispatch(removeAllAlerts());
+
                 dispatch(getSuccess(id, user, picture, score, car_set, average_vote, received_feedback, given_feedback));
             })
             .catch(error => {
-                console.log("fetchProfile - Profile fetch with Errors")
                 dispatch(fail());
-                dispatch(alertError(error));
+                handleError("Something went wrong while retrieving your profile [008]", error)
                 return error;
             })
     }
 };
 
-
-export const changePicture = (picture) => {
-    return async (dispatch) => {
-        dispatch(start());
-        let access_token = await AsyncStorage.getItem("access_token");
-        let formData = new FormData();
-        formData.append("picture", picture, picture.name);
-        return axios
-            .put(
-                currentProfileURL(),
-                formData,
-                headers('multipart/form-data', access_token)
-            )
-            .then(res => {
-                dispatch(successPictureUpdate(res.data.picture));
-                dispatch(addAlert("Picture changed successfully!", "success"));
-            })
-            .catch(error => {
-                dispatch(alertError(error));
-                dispatch(fail());
-                return error;
-            })
-    };
-}
-
-export const changeUserData = (first_name, last_name, email, password = null) => {
-    return async (dispatch) => {
-        dispatch(start());
-        let access_token = await AsyncStorage.getItem("access_token");
-        let data = {
-            first_name: first_name,
-            last_name: last_name,
-            email: email,
-        };
-        if (password != null) {
-            data.password = password;
-        }
-        return axios
-            .put(
-                signupURL(),
-                data,
-                headers('application/json', access_token)
-            )
-            .then(res => {
-                let {id, firstName, lastName, email} = res.data;
-                dispatch(changeUserDataSuccess(id, firstName, lastName, email));
-            })
-            .catch(error => {
-                dispatch(alertError(error));
-                dispatch(fail());
-                return error;
-            });
-    };
-}
-
-
-export const deleteUser = () => {
-    return async (dispatch) => {
-        dispatch(start());
-        let access_token = await AsyncStorage.getItem("access_token");
-
-        return axios
-            .delete(
-                signupURL(),
-                headers('application/json', access_token)
-            )
-            .then(res => {
-                addAlert("You have been deleted from the system!", "success");
-                dispatch(authLogout());
-            })
-            .catch(error => {
-                dispatch(alertError(error));
-                dispatch(fail());
-                return error;
-            })
-    };
-}
-
-
+/**
+ * Create car action
+ *
+ * @param {string} name
+ * @param {number} totSeats
+ * @param {number} fuel
+ * @param {number} consumption
+ *
+ * @returns {function(*): Promise<AxiosResponse<any>>}
+ */
 export const createCar = (name, totSeats, fuel, consumption) => {
     return async (dispatch) => {
         dispatch(start());
@@ -220,16 +197,28 @@ export const createCar = (name, totSeats, fuel, consumption) => {
             )
             .then(res => {
                 let {id, name, tot_avail_seats, fuel, consumption} = res.data;
+
                 dispatch(createCarSuccess(id, name, tot_avail_seats, fuel, consumption))
             })
             .catch(error => {
-                dispatch(alertError(error));
                 dispatch(fail());
+                handleError("Something went wrong while creating the car [009]", error)
                 return error;
             })
     };
 }
 
+/**
+ * Car edit action
+ *
+ * @param {number} id
+ * @param {string} name
+ * @param {number} totSeats
+ * @param {number} fuel
+ * @param {number} consumption
+ *
+ * @returns {function(*): Promise<AxiosResponse<any>>}
+ */
 export const updateCar = (id, name, totSeats, fuel, consumption) => {
     return async (dispatch) => {
         dispatch(start());
@@ -249,22 +238,30 @@ export const updateCar = (id, name, totSeats, fuel, consumption) => {
             )
             .then(res => {
                 let {id, name, tot_avail_seats, fuel, consumption} = res.data;
+
                 dispatch(changeCarSuccess(id, name, tot_avail_seats, fuel, consumption))
             })
             .catch(error => {
-                dispatch(alertError(error));
                 dispatch(fail());
+                handleError("Something went wrong while editing the car [010]", error)
                 return error;
             })
     };
 }
 
-
+/**
+ * Car delete action (**no coming back**)
+ *
+ * @param {number} id
+ *
+ * @returns {function(*): Promise<AxiosResponse<any>>}
+ */
 export const deleteCar = (id) => {
     return async (dispatch) => {
         dispatch(start());
         let access_token = await AsyncStorage.getItem("access_token");
         let profileId = parseInt(await AsyncStorage.getItem("profile_id"));
+
         return axios
             .delete(
                 carsDetailURL(profileId, id),
@@ -274,8 +271,8 @@ export const deleteCar = (id) => {
                 dispatch(deleteCarSuccess(id));
             })
             .catch(error => {
-                dispatch(alertError(error));
                 dispatch(fail());
+                handleError("Something went wrong while deleting the car [011]", error)
                 return error;
             })
     };

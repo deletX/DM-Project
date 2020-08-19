@@ -1,14 +1,17 @@
-import {updateObject} from "../utils";
+import {updateObject} from "../utils/utils";
 import {
     CAR_CREATE, CAR_DELETE, CAR_UPDATE,
     CLEAR_PROFILE_DATA,
     GET_PROFILE_SUCCESS,
-    PROFILE_OP_ERROR,
     PROFILE_OP_START,
-    PROFILE_PICTURE_UPDATE,
-    USER_DATA_UPDATE
+    PROFILE_OP_ERROR,
 } from "../actions/types";
 
+/**
+ * Profile initial state
+ *
+ * @type {{score: number, givenFeedback: [], carSet: [], averageVote: number, id: string, loading: boolean, error: boolean, user: {}, picture: string, receivedFeedback: []}}
+ */
 const initialState = {
     id: "",
     picture: "",
@@ -22,10 +25,26 @@ const initialState = {
     error: false,
 };
 
+/**
+ * Profile operation start handler
+ *
+ * @param {{}} state
+ * @param {{}} action
+ *
+ * @returns {{}}
+ */
 const profileStart = (state, action) => {
     return updateObject(state, {loading: true})
 };
 
+/**
+ * Profile retrieval successful handler
+ *
+ * @param {{}} state
+ * @param {{}} action
+ *
+ * @returns {{}}
+ */
 const getProfileSuccess = (state, action) => {
     let {id, picture, score, carSet, averageVote, receivedFeedback, givenFeedback, user} = action;
     return updateObject(state, {
@@ -41,13 +60,15 @@ const getProfileSuccess = (state, action) => {
     })
 };
 
-const profilePictureUpdate = (state, action) => {
-    return updateObject(state, {
-        loading: false,
-        picture: action.picture
-    })
-};
 
+/**
+ * Profile operation error handler
+ *
+ * @param {{}} state
+ * @param {{}} action
+ *
+ * @returns {{}}
+ */
 const profileError = (state, action) => {
     return updateObject(state, {
         loading: false,
@@ -55,39 +76,48 @@ const profileError = (state, action) => {
     })
 };
 
-const userDataUpdate = (state, action) => {
-    let {id, firstName, lastName, email} = action;
-    let user = state.user;
-    user.id = id;
-    user.firstName = firstName;
-    user.lastName = lastName;
-    user.email = email;
-    return updateObject(state, {
-        loading: false,
-        user: user
-    })
-};
-
+/**
+ * Clear profile handler
+ *
+ * @param {{}} state
+ * @param {{}} action
+ *
+ * @returns {{score: number, givenFeedback: *[], carSet: *[], averageVote: number, id: string, loading: boolean, error: boolean, user: {}, picture: string, receivedFeedback: *[]}}
+ */
 const clearProfileData = (state, action) => {
     return initialState;
 };
 
+/**
+ * Create car operation handler
+ *
+ * @param {{}} state
+ * @param {{}} action
+ *
+ * @returns {{}}
+ */
 const carCreate = (state, action) => {
     let {id, name, totSeats, fuel, consumption} = action;
-    console.log("create")
-    console.log(action)
 
     const carSet = state.carSet;
     carSet.push({id: id, name: name, tot_avail_seats: totSeats, fuel: fuel, consumption: consumption});
+
     return {...state, carSet: carSet, loading: false};
 };
 
+/**
+ * Car edit operation handler
+ *
+ * @param {{}} state
+ * @param {{}} action
+ *
+ * @returns {{}}
+ */
 const carUpdate = (state, action) => {
     let {id, name, totSeats, fuel, consumption} = action;
     let index = state.carSet.findIndex((car) => (car.id === id));
     let carSet = state.carSet;
-    console.log("edit")
-    console.log(action)
+
     carSet[index].name = name;
     carSet[index].tot_avail_seats = totSeats;
     carSet[index].fuel = fuel;
@@ -95,6 +125,14 @@ const carUpdate = (state, action) => {
     return {...state, carSet: carSet, loading: false};
 };
 
+/**
+ * Car delete operation handler
+ *
+ * @param {{}} state
+ * @param {{}} action
+ *
+ * @returns {{}}
+ */
 const carDelete = (state, action) => {
     let carSet = state.carSet.filter((car) => (car.id !== action.id));
     return updateObject(state, {
@@ -102,19 +140,24 @@ const carDelete = (state, action) => {
         loading: false,
     })
 };
-
+/**
+ * Profile Reducer
+ *
+ * @param {{}} state
+ * @param {{}} action
+ *
+ * @returns {{carSet: *, loading: boolean}|{score: number, givenFeedback: *[], carSet: *[], averageVote: number, id: string, loading: boolean, error: boolean, user: {}, picture: string, receivedFeedback: *[]}|*}
+ */
 const profileReducer = (state = initialState, action) => {
     switch (action.type) {
         case PROFILE_OP_START:
             return profileStart(state, action);
         case GET_PROFILE_SUCCESS:
             return getProfileSuccess(state, action);
-        case PROFILE_PICTURE_UPDATE:
-            return profilePictureUpdate(state, action);
+
         case PROFILE_OP_ERROR:
             return profileError(state, action);
-        case USER_DATA_UPDATE:
-            return userDataUpdate(state, action);
+
         case CLEAR_PROFILE_DATA:
             return clearProfileData(state, action);
         case CAR_CREATE:

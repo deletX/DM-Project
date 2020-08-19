@@ -13,7 +13,7 @@ import {
     RadioButton,
     TextInput, Caption
 } from "react-native-paper";
-import {headers, pridStringToLatLng} from "../../utils";
+import {headers, pridStringToLatLng} from "../../utils/utils";
 import ParticipantListItem from "./ParticipantListItem";
 import {useNavigation} from "@react-navigation/native";
 import StarRating from "react-native-star-rating";

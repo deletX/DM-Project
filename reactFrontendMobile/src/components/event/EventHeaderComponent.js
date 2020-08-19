@@ -4,7 +4,7 @@ import {Button, Colors, IconButton, Subheading, Title} from "react-native-paper"
 import moment from "moment";
 import {useNavigation} from "@react-navigation/native";
 import axios from "axios"
-import {headers} from "../../utils";
+import {headers} from "../../utils/utils";
 import {eventDetailURL, eventRunURL} from "../../constants/apiurls";
 import {HOME_SCREEN} from "../../constants/screens";
 import {JOINABLE} from "../../constants/constants";

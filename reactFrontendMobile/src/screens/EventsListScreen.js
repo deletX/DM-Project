@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
 
 import {connect} from 'react-redux';
 import {eventListURL} from "../constants/apiurls";
-import {headers} from "../utils";
+import {headers} from "../utils/utils";
 
 function mapStateToProps(state) {
     return {

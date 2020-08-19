@@ -1,11 +1,14 @@
 import AsyncStorage from '@react-native-community/async-storage'
-import {EVENT_SCREEN, HOME_SCREEN, PROFILE_SCREEN, PROFILE_STACK} from "./constants/screens";
+import {EVENT_SCREEN, PROFILE_STACK} from "../constants/screens";
 import axios from "axios";
-import {eventDetailURL, eventJoinURL, nominatimCoordinatesToAddressURL} from "./constants/apiurls";
-import NativeToastAndroid from "react-native/Libraries/Components/ToastAndroid/NativeToastAndroid";
-import {ToastAndroid} from "react-native";
-import {participationEditURL} from "./constants/apiurls";
+import {eventDetailURL, nominatimCoordinatesToAddressURL} from "../constants/apiurls";
+import Toast from 'react-native-simple-toast';
 
+/**
+ * Check authentication by looking for the token item inside AsyncStorage
+ *
+ * @returns {boolean}
+ */
 export const isAuthenticated = () => {
     const token = AsyncStorage.getItem("token");
     if (token === undefined) {
@@ -16,6 +19,14 @@ export const isAuthenticated = () => {
     }
 };
 
+/**
+ * Updates the oldObject object changing given updateProperties
+ *
+ * @param {{}} oldObject
+ * @param {{}} updatedProperties
+ *
+ * @return {{}} oldObject with properties listed in updatedProperties changed
+ */
 export const updateObject = (oldObject, updatedProperties) => {
     return {
         ...oldObject,
@@ -24,11 +35,14 @@ export const updateObject = (oldObject, updatedProperties) => {
 };
 
 /**
+ * Return the object to be used as options in axios calls
  *
- * @param {string}content_type
- * @param {string}access_token
- * @param {{}}otherHeaders
- * @param otherOptions
+ * @param {string} content_type
+ * @param {string} access_token
+ * @param {{}} otherHeaders
+ * @param {[{}]} otherOptions
+ *
+ * @return {{}} options including the header option correctly set
  */
 export const headers = (content_type, access_token = null, otherHeaders = {}, otherOptions = {}) => {
     let headers = {
@@ -44,6 +58,18 @@ export const headers = (content_type, access_token = null, otherHeaders = {}, ot
     return headers
 };
 
+/**
+ * Utility function that translate the nominatim response address into two substrings composed of the address elements.
+ * In general:
+ * - **Primary**: includes the road and house_number (if available)
+ * - **Secondary**: includes town/hamlet/province/county/village and postcode information
+ *
+ * If the location is a province a county or a state _primary_ and _secondary_ may differ.
+ *
+ * @param position from nominatim
+ *
+ * @return {{secondary: string, primary: string}}
+ */
 export const nominatimToPrimarySecondary = (position) => {
     let primary = "";
     let secondary = "";
@@ -125,45 +151,15 @@ export const nominatimToPrimarySecondary = (position) => {
     return {primary, secondary}
 }
 
-export const getNominatimInfo = async (latitude, longitude) => {
-    //console.log("getNominatimInfo ", latitude, longitude);
-    return axios.get(nominatimCoordinatesToAddressURL(latitude, longitude))
-        .then((res) => {
-                let payload = selectItem(res.data, latitude, longitude);
-                console.log("getNominatimInfo ", payload);
-                return payload;
-            }
-        )
-        .catch((error) => {
-            console.log("An error occurred while retrieving your location");
-        })
-
-
-}
-
-export const postJoinedEvent = async (eventID, token, startingAddress, startingPos, carID, navigation) => {
-    axios
-        .post(
-            eventJoinURL(eventID),
-            {
-                starting_address: startingAddress,
-                starting_pos: startingPos,
-                car: carID
-            },
-            headers('application/json', token)
-        )
-        .then(res => {
-                console.log("Joined successfully");
-                navigation.navigate(HOME_SCREEN, {refresh: true});
-
-            }
-        )
-        .catch(err => {
-                console.log("An error occurred while joining", err)
-            }
-        )
-}
-
+/**
+ * From a nominatim data to [address, position] couple
+ *
+ * @param item Nominatim response data got at {@link nominatimCoordinatesToAddressURL}
+ * @param {number} latitude
+ * @param {number} longitude
+ *
+ * @return {[string, string]} address, position
+ */
 export const selectItem = (item, latitude, longitude) => {
     let {primary, secondary} = nominatimToPrimarySecondary(item);
     let lat, lon;
@@ -184,23 +180,14 @@ export const selectItem = (item, latitude, longitude) => {
     return [addr, pos]
 }
 
-export const deleteLeaveEvent = async (eventID, token, participationID, reload) => {
-    axios
-        .delete(
-            participationEditURL(eventID, participationID),
-            headers('application/json', token)
-        )
-        .then(res => {
-            console.log("Successfully left the event");
-            reload();
-
-        })
-        .catch(err => {
-            ToastAndroid.show("Something went wrong while leaving ", ToastAndroid.SHORT);
-            console.log("Something went wrong while leaving ", err)
-        })
-
-}
+/**
+ * From a position string (ex: "SRID=4326;POINT (<lat> <lon>)") to a lat, long couble
+ *
+ * @param {string} position
+ * @param {boolean} shouldParseFloat If the return value should be float or not (default: true)
+ *
+ * @return {[number, number]|[string, string]}
+ */
 export const pridStringToLatLng = (position, shouldParseFloat = true) => {
     let latlng = position.split(' ')
     if (shouldParseFloat) {
@@ -211,8 +198,10 @@ export const pridStringToLatLng = (position, shouldParseFloat = true) => {
 }
 
 /**
+ * Translate a notification url to the corresponding screen and its props.
  *
- * @param {string} url
+ * @param {string} url Of the notification
+ *
  * @param {string} token
  */
 export const URLtoScreenWithProps = async (url, token = "") => {
@@ -235,11 +224,20 @@ export const URLtoScreenWithProps = async (url, token = "") => {
                 }
             })
             .catch(err => {
-                // history.push(home)
-                ToastAndroid.show("Error while retrieving event", ToastAndroid.SHORT, ToastAndroid.BOTTOM)
-                // addAlert("An error occurred while retrieving event data",)
+                handleError("Something went wrong while retrieving event [003]", err)
             })
 
     }
     return screenWithProps;
+}
+
+/**
+ * Toast the given message and logs the error.
+ *
+ * @param {string} msg
+ * @param error
+ */
+export const handleError = (msg, error) => {
+    Toast.show(msg)
+    console.log(error)
 }

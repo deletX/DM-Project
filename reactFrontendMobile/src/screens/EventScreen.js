@@ -28,7 +28,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import moment from "moment";
 import MapView from "react-native-maps";
 import {Marker} from 'react-native-maps';
-import {pridStringToLatLng} from "../utils";
+import {pridStringToLatLng} from "../utils/utils";
 import CustomAvatar from "../components/CustomAvatar";
 import StarRating from 'react-native-star-rating';
 import EventHeaderComponent from "../components/event/EventHeaderComponent";
