@@ -263,9 +263,9 @@ Se non già fatto eseguire nell'interfaccia di postgresql (vedi su)
 - `011` Error while deleting a car
 - `012` Error while getting the address from nominatim given lat and lon
 - `013` Error while joining an event
-- `014` 
-- `015` 
-- `016` 
+- `014` Error while posting feedback
+- `015` Error while deleting the event
+- `016` Error while starting the computation
 - `017` 
 - `018` 
 - `019` 

@@ -1,13 +1,13 @@
 import * as React from 'react';
 import {Button, Card, Colors, Paragraph, ProgressBar, Title} from 'react-native-paper';
 import {StyleSheet, View} from "react-native";
-import {COMPUTED, COMPUTING, JOINABLE} from "../constants/constants";
-import {EVENT_SCREEN, JOIN_SCREEN} from "../constants/screens";
+import {COMPUTED, COMPUTING, JOINABLE} from "../../constants/constants";
+import {EVENT_SCREEN, JOIN_SCREEN} from "../../constants/screens";
 import {useNavigation} from "@react-navigation/native"
 import moment from "moment";
 import {connect} from 'react-redux';
-import {deleteLeaveEvent} from "../utils/api";
-import {alertAreYouSure} from "../utils/utils";
+import {deleteLeaveEvent} from "../../utils/api";
+import {alertAreYouSure} from "../../utils/utils";
 
 /**
  * Text card content:

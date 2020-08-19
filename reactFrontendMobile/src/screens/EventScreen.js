@@ -34,9 +34,9 @@ import StarRating from 'react-native-star-rating';
 import EventHeaderComponent from "../components/event/EventHeaderComponent";
 import EventDescription from "../components/event/EventDescription";
 import {COMPUTED, COMPUTING, JOINABLE} from "../constants/constants";
-import EventParticipantList from "../components/event/EventParticipantList";
-import EventComputedYourCarComponent from "../components/event/EventComputedYourCarComponent";
-import EventComputedOtherCarsComponent from "../components/event/EventComputedOtherCarsComponent";
+import EventParticipantList from "../components/event/participant/EventParticipantList";
+import EventComputedYourCarComponent from "../components/event/computed/EventComputedYourCarComponent";
+import EventComputedOtherCarsComponent from "../components/event/computed/EventComputedOtherCarsComponent";
 
 const EventScreen = (props) => {
 
@@ -50,7 +50,7 @@ const EventScreen = (props) => {
         <Portal.Host>
             <ScrollView ref={scrollViewRef}>
 
-                <EventHeaderComponent {...props} styles={styles} scrollViewRef={scrollViewRef}/>
+                <EventHeaderComponent event={event} styles={styles} scrollViewRef={scrollViewRef}/>
                 <View style={{marginLeft: 15, marginRight: 15, marginBottom: 20}}>
                     <EventDescription event={event} styles={styles}/>
                     {event.status === JOINABLE &&
@@ -63,11 +63,11 @@ const EventScreen = (props) => {
                     }
 
                     {(event.status === COMPUTED && isParticipating) &&
-                    <EventComputedYourCarComponent {...props} styles={styles}/>
+                    <EventComputedYourCarComponent event={event} styles={styles}/>
                     }
 
                     {(isOwner && event.status === COMPUTED) &&
-                    <EventComputedOtherCarsComponent {...props} styles={styles}/>
+                    <EventComputedOtherCarsComponent event={event} styles={styles}/>
                     }
                 </View>
 

@@ -161,28 +161,15 @@ export const nominatimToPrimarySecondary = (position) => {
  *
  * @return {[string, string]} address, position
  */
-export const selectItem = (item, latitude, longitude) => {
+export const selectItem = (item) => {
     let {primary, secondary} = nominatimToPrimarySecondary(item);
-    let lat, lon;
     let addr = (`${primary} ${secondary}`);
     let pos = (`SRID=4326;POINT (${item.lat} ${item.lon})`)
-    if (latitude !== undefined) {
-        lat = (parseFloat(item.lat))
-    } else {
-        lat = (item.lat)
-    }
-
-    if (longitude !== undefined) {
-        lon = (lon);
-    } else {
-        lon = (item.lon);
-    }
-
     return [addr, pos]
 }
 
 /**
- * From a position string (ex: "SRID=4326;POINT (<lat> <lon>)") to a lat, long couble
+ * From a position string (ex: "SRID=4326;POINT (<lat> <lon>)") to a lat, long couple
  *
  * @param {string} position
  * @param {boolean} shouldParseFloat If the return value should be float or not (default: true)
@@ -207,12 +194,12 @@ export const pridStringToLatLng = (position, shouldParseFloat = true) => {
  */
 export const URLtoScreenWithProps = async (url, token = "") => {
     let screenWithProps = {};
-    const splittedUrl = url.split('/');
-    if (splittedUrl[1] === "profiles") {
+    const splitUrl = url.split('/');
+    if (splitUrl[1] === "profiles") {
         screenWithProps["screen"] = PROFILE_STACK;
     } else {
         screenWithProps["screen"] = EVENT_SCREEN;
-        let id = parseInt(splittedUrl[2])
+        let id = parseInt(splitUrl[2])
         await axios
             .get(
                 eventDetailURL(id),
@@ -251,6 +238,21 @@ export const alertAreYouSure = (onPressYes, cancelable = true) => () => Alert.al
     {cancelable: cancelable}
 )
 
+/**
+ * Creates the directions link, that will open google maps with the starting position, being my selected location
+ * and waypoints other participant in the car
+ *
+ * @param {{}} participation
+ * @param {{}} event
+ * @param {{}} myCar
+ * @return {string}
+ */
+export const createDirectionLink = (participation, event, myCar) => {
+    let origin = pridStringToLatLng(participation.starting_pos, false).join(",")
+    let destination = pridStringToLatLng(event.destination, false).join(",")
+    let waypoints = myCar.map(item => pridStringToLatLng(item.starting_pos, false).join(",")).join("%7C")
+    return `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&travelmode=driving&waypoints=${waypoints}`
+}
 
 /**
  * Toast the given message and logs the error.

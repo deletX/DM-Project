@@ -1,10 +1,12 @@
 import React from 'react';
-import CustomAvatar from "./CustomAvatar";
+import CustomAvatar from "../CustomAvatar";
 import StarRating from "react-native-star-rating";
 import {List} from "react-native-paper";
-import {Alert} from "react-native";
+import {Alert, StyleSheet} from "react-native";
 import {connect} from "react-redux"
-import {getProfile} from "../utils/api";
+import {getProfile} from "../../utils/api";
+import {OTHER_PROFILE_SCREEN} from "../../constants/screens";
+
 
 /**
  * Alert that contains the comment and three buttons to:
@@ -20,7 +22,10 @@ const lengthyFeedbackAlert = (feedback, token, navigation) => {
             {text: "Cancel", style: "cancel"},
             {
                 text: "See Profile", onPress: async () => {
-                    await getProfile(feedback.giver.id, token, navigation)
+                    await getProfile(feedback.giver.id, token, (res) => (navigation.navigate(OTHER_PROFILE_SCREEN, {
+                        id: feedback.giver.id,
+                        profile: res.data
+                    })))
 
                 }
             },
@@ -46,7 +51,10 @@ const FeedbackListComponent = (props) => {
                 if (feedback.comment.length > 80) {
                     lengthyFeedbackAlert(feedback, token, navigation)
                 } else {
-                    await getProfile(feedback.giver.id, token, navigation)
+                    await getProfile(feedback.giver.id, token, (res) => (navigation.navigate(OTHER_PROFILE_SCREEN, {
+                        id: feedback.giver.id,
+                        profile: res.data
+                    })));
                 }
 
             }}

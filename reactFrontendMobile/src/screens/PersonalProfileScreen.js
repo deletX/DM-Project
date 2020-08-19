@@ -2,7 +2,7 @@ import * as React from 'react';
 import {ScrollView, View, Text} from 'react-native';
 import {Headline, Title, Caption, DataTable, Button, Colors} from "react-native-paper"
 import CustomAvatar from "../components/CustomAvatar";
-import FeedbackListComponent from "../components/FeedbackListComponent";
+import FeedbackListComponent from "../components/feedback/FeedbackListComponent";
 import Icon from "react-native-vector-icons/MaterialIcons"
 import {connect} from 'react-redux';
 import StarRating from "react-native-star-rating";

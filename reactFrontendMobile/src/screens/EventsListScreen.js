@@ -2,7 +2,7 @@ import * as React from 'react';
 import {View, Text, ScrollView, StyleSheet, RefreshControl, TouchableOpacity} from "react-native"
 import {FAB, Chip, Colors} from "react-native-paper"
 import Button from "react-native-paper/src/components/Button";
-import EventComponent from "../components/EventComponent";
+import EventComponent from "../components/event/EventComponent";
 import moment from "moment";
 import {set} from "react-native-reanimated";
 import {grey500} from "react-native-paper/src/styles/colors";
@@ -40,7 +40,7 @@ const EventsListScreen = (props) => {
             });
     }, [joinable, joined, owned, setEvents, setRefreshing]);
 
-    const reload = () => {
+    const reload = (res) => {
         axios
             .get(eventListURL(joinable, joined, owned), headers('application/json', props.token))
             .then((response) => {

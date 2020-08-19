@@ -4,11 +4,11 @@ import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 import {connect} from 'react-redux';
 import {Caption, Drawer, Title,} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {HOME_SCREEN, PROFILE_STACK,} from '../constants/screens';
-import {URLtoScreenWithProps} from '../utils/utils';
-import {authLogout} from '../actions/authActions';
-import CustomAvatar from "./CustomAvatar";
-import {readNotification} from "../actions/notificationsActions";
+import {HOME_SCREEN, PROFILE_STACK,} from '../../constants/screens';
+import {URLtoScreenWithProps} from '../../utils/utils';
+import {authLogout} from '../../actions/authActions';
+import CustomAvatar from "../CustomAvatar";
+import {readNotification} from "../../actions/notificationsActions";
 
 /**
  * Notification Drawer Item.

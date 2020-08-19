@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createStackNavigator} from '@react-navigation/stack';
-import CustomDrawerComponent from './components/CustomDrawerComponent';
+import CustomDrawerComponent from './components/drawer/CustomDrawerComponent';
 import {
     ADD_CAR_SCREEN,
     EVENT_SCREEN,
@@ -21,7 +21,7 @@ import EventsListScreen from './screens/EventsListScreen';
 import {authCheckState} from './actions/authActions';
 import {connect} from 'react-redux';
 import PersonalProfileScreen from "./screens/PersonalProfileScreen";
-import DrawerIcon from "./components/DrawerIcon";
+import DrawerIcon from "./components/drawer/DrawerIcon";
 
 /**
  * Drawer Navigator

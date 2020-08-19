@@ -1,39 +1,39 @@
 import React from 'react';
-import CustomAvatar from "../CustomAvatar";
+import CustomAvatar from "../../CustomAvatar";
 import StarRating from "react-native-star-rating";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import {Colors, List} from "react-native-paper";
-import {useWindowDimensions, ToastAndroid} from "react-native";
-import {useNavigation} from "@react-navigation/native";
+import {ToastAndroid, useWindowDimensions} from "react-native";
 import {connect} from "react-redux"
-import {OTHER_PROFILE_SCREEN, PROFILE_SCREEN, PROFILE_STACK} from "../../constants/screens";
+import {OTHER_PROFILE_SCREEN, PROFILE_STACK} from "../../../constants/screens";
 import axios from "axios"
-import {headers} from "../../utils/utils";
-import {profilesURL} from "../../constants/apiurls";
+import {headers} from "../../../utils/utils";
+import {profilesURL} from "../../../constants/apiurls";
+import {useNavigation} from "@react-navigation/native";
+import {getProfile} from "../../../utils/api";
 
 
+/**
+ * A participant to an event gets rendered as a List.Item with title: his/her full name, his/her avatar
+ * and his/her rating.
+ * It is also shown an Icon to show their driver/passenger status if the prop rightIcon is true
+ */
 const ParticipantListItem = (props) => {
     const windowWidth = useWindowDimensions().width;
-    const windowHeight = useWindowDimensions().height;
-    const navigation = props.navigation
+    const navigation = useNavigation()
     const {participant, profileId, token} = props;
+
     const rightIcon = props.rightIcon !== undefined ? props.rightIcon : true
+
     return (
         <List.Item
-            onPress={() => {
+            onPress={async () => {
                 if (participant.profile.id === profileId) {
                     navigation.navigate(PROFILE_STACK)
                 } else {
-                    axios
-                        .get(profilesURL(participant.profile.id),
-                            headers('application/json', token))
-                        .then(res => {
-                            navigation.navigate(OTHER_PROFILE_SCREEN, {id: participant.profileId, profile: res.data})
-                        })
-                        .catch(err => {
-                            ToastAndroid.show("An Error occured", ToastAndroid.SHORT, ToastAndroid.BOTTOM)
-                            console.log(err)
-                        })
+                    await getProfile(participant.profile.id, token, (res) => {
+                        navigation.navigate(OTHER_PROFILE_SCREEN, {id: participant.profileId, profile: res.data})
+                    })
                 }
             }}
             key={participant.id}
@@ -53,7 +53,7 @@ const ParticipantListItem = (props) => {
                     starSize={20}
                     disabled={true}
                     fullStarColor={"#d6a000"}
-                    containerStyle={{width: 100, marginLeft: 0, position: "absolute", right: 30}} ù
+                    containerStyle={{width: 100, marginLeft: 0, position: "absolute", right: 30}}
                     emptyStarColor={participant.profile.average_vote ? "#808080" : "#bbbbbb"}
                 />
             )}
@@ -76,10 +76,6 @@ function mapStateToProps(state) {
         profileId: state.profile.id,
         token: state.auth.token,
     };
-}
-
-function mapDispatchToProps(dispatch) {
-    return {};
 }
 
 

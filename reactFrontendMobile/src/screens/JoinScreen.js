@@ -79,12 +79,12 @@ const JoinScreen = (props) => {
 
     const joinWithGPS = async () => {
         let payload = await getNominatimInfo(GPSPositionLatitude, GPSPositionLongitude);
-        await postJoinedEvent(props.route.params.id, props.token, payload[0], payload[1], carsID[car], navigation);
+        await postJoinedEvent(props.route.params.id, props.token, payload[0], payload[1], carsID[car], (res) => (navigation.navigate(HOME_SCREEN, {refresh: true})));
     }
 
     const joinWithMarker = async () => {
         let payload = await getNominatimInfo(MarkerPositionLatitude, MarkerPositionLongitude);
-        await postJoinedEvent(props.route.params.id, props.token, payload[0], payload[1], carsID[car], navigation);
+        await postJoinedEvent(props.route.params.id, props.token, payload[0], payload[1], carsID[car], (res) => (navigation.navigate(HOME_SCREEN, {refresh: true})));
     }
 
     return (
@@ -205,6 +205,7 @@ const styles = StyleSheet.create({
 
 import {connect} from 'react-redux';
 import {getNominatimInfo, postJoinedEvent} from "../utils/api";
+import {HOME_SCREEN} from "../constants/screens";
 
 function mapStateToProps(state) {
     return {

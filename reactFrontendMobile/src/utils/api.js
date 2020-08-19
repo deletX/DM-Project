@@ -1,8 +1,14 @@
 import axios from "axios";
-import {eventJoinURL, nominatimCoordinatesToAddressURL, participationEditURL, profilesURL} from "../constants/apiurls";
-import {HOME_SCREEN, OTHER_PROFILE_SCREEN} from "../constants/screens";
+import {
+    createFeedbackURL, eventDetailURL,
+    eventJoinURL, eventRunURL,
+    nominatimCoordinatesToAddressURL,
+    participationEditURL,
+    profilesURL
+} from "../constants/apiurls";
 import {handleError, headers, selectItem} from "./utils";
 import {ToastAndroid} from "react-native";
+import {HOME_SCREEN} from "../constants/screens";
 
 /*
     DMPROJECT API
@@ -16,11 +22,11 @@ import {ToastAndroid} from "react-native";
  * @param {string} startingAddress
  * @param {string} startingPos
  * @param {number} carID
- * @param navigation react-navigation navigation so to navigate to {@link HOME_SCREEN} when successful
+ * @param {function()} onSuccess
  *
  * @return {Promise<void>}
  */
-export const postJoinedEvent = async (eventID, token, startingAddress, startingPos, carID, navigation) => {
+export const postJoinedEvent = async (eventID, token, startingAddress, startingPos, carID, onSuccess) => {
     axios
         .post(
             eventJoinURL(eventID),
@@ -32,12 +38,12 @@ export const postJoinedEvent = async (eventID, token, startingAddress, startingP
             headers('application/json', token)
         )
         .then(res => {
-                navigation.navigate(HOME_SCREEN, {refresh: true});
+                onSuccess(res)
 
             }
         )
         .catch(err => {
-                handleError("Something went wrong while joining the event [013]")
+                handleError("Something went wrong while joining the event [013]", err)
             }
         )
 }
@@ -48,18 +54,18 @@ export const postJoinedEvent = async (eventID, token, startingAddress, startingP
  * @param {number} eventID
  * @param {number} token
  * @param participationID
- * @param {function} reload callback called after success
+ * @param {function} onSuccess callback called after success
  *
  * @return {Promise<void>}
  */
-export const deleteLeaveEvent = async (eventID, token, participationID, reload) => {
+export const deleteLeaveEvent = async (eventID, token, participationID, onSuccess) => {
     axios
         .delete(
             participationEditURL(eventID, participationID),
             headers('application/json', token)
         )
         .then(res => {
-            reload();
+            onSuccess(res);
         })
         .catch(err => {
             handleError("Something went wrong while leaving [002]", err)
@@ -67,18 +73,96 @@ export const deleteLeaveEvent = async (eventID, token, participationID, reload) 
 
 }
 
-export const getProfile = async (feedbackGiverId, token, navigation) => {
+/**
+ * API call to retrieve another user's profile
+ *
+ * @param {number} id
+ * @param {string} token
+ * @param {function()} onSuccess
+ *
+ * @return {Promise<void>}
+ */
+export const getProfile = async (id, token, onSuccess) => {
     axios
-        .get(profilesURL(feedbackGiverId),
+        .get(profilesURL(id),
             headers('application/json', token))
         .then(res => {
-            navigation.navigate(OTHER_PROFILE_SCREEN, {
-                id: feedbackGiverId,
-                profile: res.data
-            })
+            onSuccess(res);
         })
         .catch(err => {
-            handleError("Something went wrong while retrieving the profile", err)
+            handleError("Something went wrong while retrieving the profile [008]", err)
+        })
+}
+
+/**
+ * API call to create a feedback
+ *
+ * @param {number} eventId
+ * @param {number} receiver
+ * @param {string} comment
+ * @param {number} vote
+ * @param {string} token
+ * @param {function()} onSuccess
+ */
+export const postCreateFeedback = (eventId, receiver, comment, vote, token, onSuccess) => {
+    axios
+        .post(
+            createFeedbackURL(eventId, receiver),
+            {
+                receiver: receiver,
+                event: eventId,
+                comment: comment,
+                vote: vote,
+            },
+            headers('application/json', token)
+        )
+        .then((res) => {
+            onSuccess(res)
+        })
+        .catch((error) => {
+            handleError("Something went wrong while posting your feedback [014]", error)
+        })
+}
+
+/**
+ * API call to delete an event (**only the owner can do so**)
+ *
+ * @param {number} eventId
+ * @param {string} token
+ * @param {function()} onSuccess
+ */
+export const deleteEvent = (eventId, token, onSuccess) => {
+    axios
+        .delete(
+            eventDetailURL(eventId),
+            headers('application/json', token)
+        )
+        .then(res => {
+            onSuccess(res)
+        })
+        .catch(err => {
+            handleError("Something went wrong while deleting your event [015]", err)
+        })
+}
+
+/**
+ * API call to start the computation (**only the owner can do so**)
+ *
+ * @param {number} eventId
+ * @param {string} token
+ * @param {function()} onSuccess
+ */
+export const runEvent = (eventId, token, onSuccess) => {
+    axios
+        .get(
+            eventRunURL(eventId),
+            headers('application/json', token),
+        )
+        .then(res => {
+            onSuccess(res)
+        })
+        .catch(err => {
+            handleError("Something went wrong while launching the computation [016]", err)
         })
 }
 
@@ -99,7 +183,7 @@ export const getNominatimInfo = async (latitude, longitude) => {
 
     return axios.get(nominatimCoordinatesToAddressURL(latitude, longitude))
         .then((res) => {
-                return selectItem(res.data, latitude, longitude);
+                return selectItem(res.data);
             }
         )
         .catch((error) => {

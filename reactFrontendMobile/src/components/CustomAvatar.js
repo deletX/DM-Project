@@ -1,5 +1,6 @@
 import React from 'react';
 import {Avatar, Colors} from "react-native-paper";
+import {StyleSheet} from "react-native"
 
 
 /**
