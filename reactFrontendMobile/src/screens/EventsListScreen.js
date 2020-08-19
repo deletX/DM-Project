@@ -102,10 +102,6 @@ const EventsListScreen = (props) => {
                 {eventsList}
 
             </ScrollView>
-            <View>
-                <FAB style={styles.fab} icon="menu" onPress={props.navigation.toggleDrawer}>
-                </FAB>
-            </View>
         </>
     );
 }
@@ -115,12 +111,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center'
-    },
-    fab: {
-        position: 'absolute',
-        margin: 16,
-        right: 0,
-        bottom: 0,
     },
     chipLayout: {
         flexDirection: 'row',
