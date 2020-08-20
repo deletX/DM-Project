@@ -4,6 +4,9 @@ import StarRating from "react-native-star-rating";
 import {StyleSheet, View} from "react-native";
 import * as React from "react";
 
+/**
+ * Profile header with Avatar {@link CustomAvatar}, username, average rating and full name
+ */
 export const ProfileHeader = (props) => (
     <>
         <CustomAvatar picture={props.profile.picture} firstName={props.profile.user.first_name}
