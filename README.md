@@ -266,20 +266,9 @@ Se non già fatto eseguire nell'interfaccia di postgresql (vedi su)
 - `014` Error while posting feedback
 - `015` Error while deleting the event
 - `016` Error while starting the computation
-- `017` 
-- `018` 
-- `019` 
-- `020` 
-- `021` 
-- `022` 
-- `023` 
-- `024` 
-- `025` 
-- `026` 
-- `027` 
-- `028` 
-- `029` 
-- `030` 
+- `017` Error while retrieving events list
+- `018` Error with the gps location
+
 
 **Web errors**
 - `000`

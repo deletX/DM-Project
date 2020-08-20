@@ -1,21 +1,16 @@
 import * as React from 'react';
-import {View, Text, ScrollView, StyleSheet, RefreshControl, TouchableOpacity} from "react-native"
-import {FAB, Chip, Colors} from "react-native-paper"
-import Button from "react-native-paper/src/components/Button";
+import {RefreshControl, ScrollView, StyleSheet, View} from "react-native"
+import {Chip, Colors} from "react-native-paper"
 import EventComponent from "../components/event/EventComponent";
-import moment from "moment";
-import {set} from "react-native-reanimated";
-import {grey500} from "react-native-paper/src/styles/colors";
-import {JOINABLE} from "../constants/constants";
-import axios from "axios";
+import {connect} from 'react-redux';
+import {getListEvent} from "../utils/api";
 
-
-const wait = (timeout) => {
-    return new Promise(resolve => {
-        setTimeout(resolve, timeout);
-    });
-}
-
+/**
+ * Screen shows all the event got with relative filter selected with Chips ({@link Chip}.
+ *
+ * This screen also handles reload action
+ *
+ */
 const EventsListScreen = (props) => {
     const [refreshing, setRefreshing] = React.useState(false);
 
@@ -27,27 +22,20 @@ const EventsListScreen = (props) => {
 
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
-        console.log(joinable, joined, owned)
-        axios
-            .get(eventListURL(joinable, joined, owned), headers('application/json', props.token))
-            .then((response) => {
-                setEvents(response.data);
+        getListEvent(joinable, joined, owned, props.token,
+            (res) => {
+                setEvents(res.data);
+                setRefreshing(false);
+            }, () => {
                 setRefreshing(false);
             })
-            .catch((err) => {
-                //TODO: toast
-                setRefreshing(false);
-            });
     }, [joinable, joined, owned, setEvents, setRefreshing]);
 
     const reload = (res) => {
-        axios
-            .get(eventListURL(joinable, joined, owned), headers('application/json', props.token))
-            .then((response) => {
-                setEvents(response.data)
-            })
-            .catch((err) => {
-                //toast
+        getListEvent(joinable, joined, owned, props.token,
+            (res) => {
+                setEvents(res.data);
+                setRefreshing(false);
             })
     }
     React.useEffect(() => {
@@ -128,19 +116,10 @@ const styles = StyleSheet.create({
     }
 });
 
-
-import {connect} from 'react-redux';
-import {eventListURL} from "../constants/apiurls";
-import {headers} from "../utils/utils";
-
 function mapStateToProps(state) {
     return {
         token: state.auth.token
     };
-}
-
-function mapDispatchToProps(dispatch) {
-    return {};
 }
 
 export default connect(

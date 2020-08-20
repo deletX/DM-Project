@@ -1,36 +1,7 @@
 import * as React from 'react';
-import {
-    ScrollView,
-    View,
-    ImageBackground,
-    useWindowDimensions,
-    StyleSheet,
-    Image,
-    Linking,
-    Platform,
-} from "react-native"
-import {
-    Colors,
-    Divider,
-    Headline,
-    IconButton,
-    Paragraph,
-    Subheading,
-    Text,
-    Title,
-    List,
-    Avatar,
-    Portal,
-    FAB, Button, ActivityIndicator
-} from "react-native-paper"
+import {ScrollView, StyleSheet, View,} from "react-native"
+import {ActivityIndicator, Portal} from "react-native-paper"
 import {connect} from "react-redux"
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import moment from "moment";
-import MapView from "react-native-maps";
-import {Marker} from 'react-native-maps';
-import {pridStringToLatLng} from "../utils/utils";
-import CustomAvatar from "../components/CustomAvatar";
-import StarRating from 'react-native-star-rating';
 import EventHeaderComponent from "../components/event/EventHeaderComponent";
 import EventDescription from "../components/event/EventDescription";
 import {COMPUTED, COMPUTING, JOINABLE} from "../constants/constants";
@@ -38,8 +9,15 @@ import EventParticipantList from "../components/event/participant/EventParticipa
 import EventComputedYourCarComponent from "../components/event/computed/EventComputedYourCarComponent";
 import EventComputedOtherCarsComponent from "../components/event/computed/EventComputedOtherCarsComponent";
 
+/**
+ * Main event Screen. It contains:
+ * - the header with image, title and date {@link EventHeaderComponent}
+ * - the description {@link EventDescription}
+ * - the participant list if the event is not computed yet {@link EventParticipantList}
+ * - the car the user has been assigned if the event is computed {@link EventComputedYourCarComponent}
+ * - other cars if the user is owner {@link EventComputedOtherCarsComponent}
+ */
 const EventScreen = (props) => {
-
     const event = props.route.params.event
 
     const scrollViewRef = React.useRef()
@@ -49,7 +27,6 @@ const EventScreen = (props) => {
     return (
         <Portal.Host>
             <ScrollView ref={scrollViewRef}>
-
                 <EventHeaderComponent event={event} styles={styles} scrollViewRef={scrollViewRef}/>
                 <View style={{marginLeft: 15, marginRight: 15, marginBottom: 20}}>
                     <EventDescription event={event} styles={styles}/>
@@ -99,7 +76,6 @@ const styles = StyleSheet.create({
     }
 });
 
-
 function mapStateToProps(state) {
     return {
         token: state.auth.token,
@@ -107,12 +83,7 @@ function mapStateToProps(state) {
     };
 }
 
-function mapDispatchToProps(dispatch) {
-    return {};
-}
-
-
 export default connect(
-    mapStateToProps, mapDispatchToProps()
+    mapStateToProps
 )(EventScreen);
 

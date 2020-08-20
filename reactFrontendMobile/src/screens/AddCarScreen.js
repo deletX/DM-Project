@@ -1,11 +1,90 @@
 import * as React from 'react';
-import {ScrollView, View, Text, Alert} from "react-native"
-import {TextInput, RadioButton, HelperText, Caption, Button, Colors} from "react-native-paper";
+import {ScrollView, StyleSheet, View} from "react-native"
+import {Button, Caption, Colors, HelperText, RadioButton, TextInput} from "react-native-paper";
 import {FUEL} from "../constants/constants";
-import Icon from "react-native-vector-icons/MaterialIcons"
 import {connect} from 'react-redux';
 import {createCar, deleteCar, updateCar} from "../actions/profileActions";
+import {alertAreYouSure} from "../utils/utils";
 
+/**
+ * Text input for car name and helper text
+ */
+const CarName = (props) => (
+    <>
+        <TextInput
+            label="Name"
+            value={props.value}
+            placeholder="My Awesome car"
+            onChangeText={props.onChangeText}
+            onBlur={props.onBlur}
+        />
+        <HelperText visible={props.visible} type="error">
+            Car name cannot be empty
+        </HelperText>
+    </>
+)
+
+/**
+ * Radio Button and caption for fuel type selection
+ */
+const CarFuelType = (props) => (
+    <>
+        <Caption style={{marginTop: 15}}>Select the fuel type:</Caption>
+        <RadioButton.Group onValueChange={props.onValueChange} value={props.value}>
+            <RadioButton.Item style={styles.radioButton} label={FUEL[1]} value={1}/>
+            <RadioButton.Item style={styles.radioButton} label={FUEL[2]} value={2}/>
+            <RadioButton.Item style={styles.radioButton} label={FUEL[3]} value={3}/>
+            <RadioButton.Item style={styles.radioButton} label={FUEL[4]} value={4}/>
+        </RadioButton.Group>
+    </>
+)
+
+/**
+ * Text input and helper text for car seats
+ */
+const CarSeats = (props) => (
+    <>
+        <TextInput
+            label="Seats"
+            value={props.value}
+            placeholder="5"
+            onChangeText={props.onChangeText}
+            onBlur={props.onBlur}
+            keyboardType={'numeric'}
+            style={styles.textInput}
+        />
+        <HelperText>From 2 seats to 9 are allowed (driver included)</HelperText>
+    </>
+)
+
+/**
+ * Text input and helper text for consumption
+ */
+const CarConsumption = (props) => (
+    <>
+        <TextInput
+            label="Consumption"
+            value={props.value}
+            placeholder="10"
+            onChangeText={props.onChangeText}
+            onBlur={props.onBlur}
+            keyboardType={'numeric'}
+            style={styles.textInput}
+        />
+        <HelperText>A minimum of 3 l/100km is allowed</HelperText>
+    </>
+
+)
+
+/**
+ * Add and edit car screen:
+ *  - name {@link CarName}
+ *  - Fuel Type {@link CarFuelType}
+ *  - seats {@link CarSeats}
+ *  - consumption {@link CarConsumption}
+ *
+ *  Button included with alert if editing
+ */
 const AddCarScreen = (props) => {
     const [name, setName] = React.useState(props.route.params.edit ? props.route.params.car.name : "")
     const [fuel, setFuel] = React.useState(props.route.params.edit ? props.route.params.car.fuel : 1)
@@ -14,13 +93,9 @@ const AddCarScreen = (props) => {
     const [nameError, setNameError] = React.useState(false)
     return (
         <ScrollView>
-            <View style={{
-                marginTop: 15, marginLeft: 15, marginRight: 15
-            }}>
-                <TextInput
-                    label="Name"
+            <View style={styles.mainView}>
+                <CarName
                     value={name}
-                    placeholder="My Awesome car"
                     onChangeText={(text) => {
                         setName(text)
                         if (text.length === 0) setNameError(true)
@@ -28,22 +103,13 @@ const AddCarScreen = (props) => {
                     }}
                     onBlur={(text) => {
                         if (name.length === 0) setNameError(true)
-                    }}
+                    }} visible={nameError}
                 />
-                <HelperText visible={nameError} type="error">
-                    Car name cannot be empty
-                </HelperText>
-                <Caption style={{marginTop: 15}}>Select the fuel type:</Caption>
-                <RadioButton.Group onValueChange={(fuel) => setFuel(fuel)} value={fuel}>
-                    <RadioButton.Item style={{height: 40}} label={FUEL[1]} value={1}/>
-                    <RadioButton.Item style={{height: 40}} label={FUEL[2]} value={2}/>
-                    <RadioButton.Item style={{height: 40}} label={FUEL[3]} value={3}/>
-                    <RadioButton.Item style={{height: 40}} label={FUEL[4]} value={4}/>
-                </RadioButton.Group>
-                <TextInput
-                    label="Seats"
+
+                <CarFuelType onValueChange={(fuel) => setFuel(fuel)} value={fuel}/>
+
+                <CarSeats
                     value={seats.toString()}
-                    placeholder="5"
                     onChangeText={(text) => {
                         setSeats(text)
                     }}
@@ -51,14 +117,10 @@ const AddCarScreen = (props) => {
                         let _seats = Math.round(parseFloat(seats))
                         setSeats(_seats < 2 || isNaN(_seats) ? 2 : _seats > 9 ? 9 : _seats)
                     }}
-                    keyboardType={'numeric'}
-                    style={{marginTop: 15}}
                 />
-                <HelperText>From 2 seats to 9 are allowed (driver included)</HelperText>
-                <TextInput
-                    label="Consumption"
+
+                <CarConsumption
                     value={consumption.toString()}
-                    placeholder="10"
                     onChangeText={(text) => {
                         setConsumption(text)
                     }}
@@ -66,61 +128,65 @@ const AddCarScreen = (props) => {
                         let _consumption = (parseFloat(consumption))
                         setConsumption(_consumption < 3 || isNaN(_consumption) ? 3 : _consumption)
                     }}
-                    keyboardType={'numeric'}
-                    style={{marginTop: 15}}
                 />
-                <HelperText>A minimum of 3 l/100km is allowed</HelperText>
-                <View style={{
-                    flex: 1,
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                }}>
+
+                <View style={styles.buttonView}>
                     {props.route.params.edit &&
-                    <Button icon={"delete"} color={Colors.red800} onPress={() => {
-                        Alert.alert(
-                            "Are you sure?",
-                            "There is no coming back",
-                            [
-                                {text: "No", style: 'cancel'},
-                                {
-                                    text: "Yes", onPress: () => {
-                                        props.deleteCar(props.route.params.car.id)
-                                        props.navigation.goBack()
-                                    }
-                                }
-                            ]
-                        )
-                    }}>Delete</Button>
-                    }
-                    <Button icon={"content-save"} onPress={() => {
-                        if (props.route.params.edit) {
-                            Alert.alert(
-                                "Are you sure?",
-                                "There is no coming back",
-                                [
-                                    {text: "No", style: 'cancel'},
-                                    {
-                                        text: "Yes", onPress: () => {
-                                            props.editCar(props.route.params.car.id, name, fuel, seats, consumption)
-                                            props.navigation.goBack()
-                                        }
-                                    }
-                                ]
-                            )
-                        } else {
-                            if (name.length === 0) {
-                                setNameError(true)
-                            } else {
-                                props.createCar(name, fuel, seats, consumption)
+                    <Button
+                        icon={"delete"}
+                        color={Colors.red800}
+                        onPress={() => {
+                            alertAreYouSure(() => {
+                                props.deleteCar(props.route.params.car.id)
                                 props.navigation.goBack()
+                            })
+
+                        }}>
+                        Delete
+                    </Button>
+                    }
+                    <Button
+                        icon={"content-save"}
+                        onPress={() => {
+                            if (props.route.params.edit) {
+                                alertAreYouSure(() => {
+                                    props.editCar(props.route.params.car.id, name, fuel, seats, consumption)
+                                    props.navigation.goBack()
+                                })
+                            } else {
+                                if (name.length === 0) {
+                                    setNameError(true)
+                                } else {
+                                    props.createCar(name, fuel, seats, consumption)
+                                    props.navigation.goBack()
+                                }
                             }
-                        }
-                    }}>Save</Button>
+                        }}>
+                        Save
+                    </Button>
                 </View>
             </View>
         </ScrollView>
     );
 };
+
+
+const styles = StyleSheet.create({
+    buttonView: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center',
+    },
+    mainView: {
+        marginTop: 15,
+        marginLeft: 15,
+        marginRight: 15
+    },
+    textInput: {marginTop: 15},
+    radioButton: {height: 40},
+
+
+})
 
 function mapStateToProps(state) {
     return {};
@@ -133,7 +199,6 @@ function mapDispatchToProps(dispatch) {
         createCar: (name, fuel, seats, consumption) => dispatch(createCar(name, seats, fuel, consumption)),
     };
 }
-
 
 export default connect(
     mapStateToProps, mapDispatchToProps

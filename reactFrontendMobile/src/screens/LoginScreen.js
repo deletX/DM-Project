@@ -1,34 +1,28 @@
-import React, {Component} from 'react';
-import {Alert, StyleSheet, View, ToastAndroid} from 'react-native';
+import React from 'react';
+import {StyleSheet, View} from 'react-native';
 import {connect} from 'react-redux';
-import {
-    Button,
-    TextInput,
-    ActivityIndicator,
-    Colors,
-    Snackbar,
-} from 'react-native-paper';
+import {ActivityIndicator, Button, Colors, TextInput,} from 'react-native-paper';
 import Logo from '../Logo';
-import {Toast} from 'native-base';
-import {
-    GoogleSignin,
-    GoogleSigninButton,
-} from '@react-native-community/google-signin';
+import {GoogleSignin, GoogleSigninButton,} from '@react-native-community/google-signin';
 import {CLIENT_ID} from '../constants/constants';
 import {authLogin, googleOAuthLogin} from '../actions/authActions';
-import NativeToastAndroid from 'react-native/Libraries/Components/ToastAndroid/NativeToastAndroid';
 import {HOME_SCREEN} from '../constants/screens';
 
-const LoginScreen = ({
-                         authLogin,
-                         googleLogin,
-                         isLoading,
-                         isAuthenticated,
-                         navigation,
-                     }) => {
+/**
+ * Login screen. It is possible to login through:
+ * - Google OAuth
+ * - username and password
+ */
+const LoginScreen = (props) => {
+    const {
+        authLogin,
+        googleLogin,
+        isLoading,
+        isAuthenticated,
+        navigation,
+    } = props;
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
-    const [googleToken, setGoogleToken] = React.useState('');
 
     if (isAuthenticated) {
         navigation.navigate(HOME_SCREEN);
@@ -43,33 +37,21 @@ const LoginScreen = ({
         });
     });
 
-    const onLogin = () => {
-        //Alert.alert('Credentials', `username: ${username} \npassword:${password}`);
-        authLogin(username, password);
-    };
-
+    /**
+     * Use the google SignIn API in order to get the accessToken required by the DMProject auth flow
+     */
     const googleSignIn = () => {
-        //https://levelup.gitconnected.com/get-started-with-react-native-google-sign-in-4a03cef373c5
         GoogleSignin.signIn().then((data) => {
-            //console.log('TEST ' + JSON.stringify(data));
             console.log('scopes: ' + JSON.stringify(data.scopes));
             console.log('serverAuthCode: ' + JSON.stringify(data.serverAuthCode));
             console.log('ID token: ' + JSON.stringify(data.idToken));
             console.log('user: ' + JSON.stringify(data.user));
-            const currentUser = GoogleSignin.getTokens()
+            GoogleSignin.getTokens()
                 .then((res) => {
-                    setGoogleToken(res.accessToken);
-                    const postData = {
-                        access_token: res.accessToken,
-                        code: data.idToken,
-                    };
-
-                    console.log('Access token: ' + res.accessToken); //<-------Get accessToken
-                    // Alert.alert('Google Credentials', `ID TOKEN: ${this.state.idToken}`);
-                    //Alert.alert('Google Credentials', `ACCESS TOKEN: ${res.accessToken}`);
                     googleLogin(res.accessToken);
                 })
                 .catch((err) => {
+                    console.log(err)
                 });
         });
     };
@@ -107,7 +89,9 @@ const LoginScreen = ({
                     <Button
                         contentStyle={styles.loginText}
                         style={[styles.login, {marginTop: 60}]}
-                        onPress={onLogin}
+                        onPress={() => {
+                            authLogin(username, password);
+                        }}
                         mode="contained"
                         color={Colors.orange600}>
                         login
@@ -124,7 +108,6 @@ const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
         justifyContent: 'center',
-        // backgroundColor: '#fffffsf',
     },
     loginText: {
         width: 235,
@@ -144,7 +127,6 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-    //prendi var da stato
     return {
         isLoading: state.auth.loading,
         isAuthenticated: state.auth.token !== undefined,
@@ -152,13 +134,10 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-    //prendi le azioni da fare
     return {
         authLogin: (username, password) => dispatch(authLogin(username, password)),
         googleLogin: (googleToken) => dispatch(googleOAuthLogin(googleToken)),
     };
 };
-//username, password dispatchiamo la funzione authlogin, la mandi a chi la deve fare
-//istruzioni/compito
-//auth login è un azione, prende user e pass e fa il logn interrogando server, dammi il token
+
 export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);

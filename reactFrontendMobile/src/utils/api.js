@@ -2,7 +2,7 @@ import axios from "axios";
 import {
     createFeedbackURL,
     eventDetailURL,
-    eventJoinURL,
+    eventJoinURL, eventListURL,
     eventRunURL,
     nominatimCoordinatesToAddressURL,
     participationEditURL,
@@ -17,23 +17,23 @@ import {handleError, headers, selectItem} from "./utils";
 /**
  * API call to join an event at {@link eventJoinURL}.
  *
- * @param {number} eventID
+ * @param {number} eventId
  * @param {string} token
  * @param {string} startingAddress
  * @param {string} startingPos
- * @param {number} carID
+ * @param {number} carId
  * @param {function()} onSuccess
  *
  * @return {Promise<void>}
  */
-export const postJoinedEvent = async (eventID, token, startingAddress, startingPos, carID, onSuccess) => {
+export const postJoinedEvent = async (eventId, token, startingAddress, startingPos, carId, onSuccess) => {
     axios
         .post(
-            eventJoinURL(eventID),
+            eventJoinURL(eventId),
             {
                 starting_address: startingAddress,
                 starting_pos: startingPos,
-                car: carID
+                car: carId === -1 ? null : carId
             },
             headers('application/json', token)
         )
@@ -166,6 +166,28 @@ export const runEvent = (eventId, token, onSuccess) => {
         })
 }
 
+/**
+ * API call to retrieve the list of events with the relative filters
+ *
+ * @param {boolean} joinable
+ * @param {boolean} joined
+ * @param {boolean} owned
+ * @param {string} token
+ * @param {function()} onSuccess
+ * @param {function()} onError
+ */
+export const getListEvent = (joinable, joined, owned, token, onSuccess, onError = () => {
+}) => {
+    axios
+        .get(eventListURL(joinable, joined, owned), headers('application/json', token))
+        .then((res) => {
+            onSuccess(res)
+        })
+        .catch((err) => {
+            handleError("Something went wrong while retrieving the events [017]", err)
+            onError()
+        });
+}
 
 /*
     NOMINATIM API
