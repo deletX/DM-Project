@@ -77,7 +77,7 @@ const Events = (props) => {
             }}/>
             <EventStack.Screen name={OTHER_PROFILE_SCREEN} component={ProfileScreen}
                                options={({route}) => ({
-                                   title: `Profile`,
+                                   title: `Profile - ${route.params.profile.user.username}`,
                                    headerRight: drawerIcon(props.navigation)
                                })}/>
         </EventStack.Navigator>

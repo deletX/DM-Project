@@ -4,7 +4,6 @@ export const JOIN_SCREEN = "Join";
 export const EVENT_SCREEN = "Event"
 export const PROFILE_SCREEN = "Profile";
 export const ADD_CAR_SCREEN = "Add Car";
-export const LOADING_SCREEN = "Loading";
 
 export const OTHER_PROFILE_SCREEN = "OTHER_PROFILE"
 
