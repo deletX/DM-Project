@@ -12,9 +12,10 @@ from dmproject import settings
 
 def validate_date_not_in_past(date):
     """
+    Check if chosen date is not in the past
+
     Args:
         date (date): date to validate
-
     Returns:
     """
     if date.date() < timezone.now().date():
@@ -23,14 +24,18 @@ def validate_date_not_in_past(date):
 
 class Profile(models.Model):
     """
-    fdsfs
+    User profile class
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     score = models.FloatField(default=0)
     picture = models.ImageField(upload_to='profile_pictures', blank=True)
 
     def average_vote(self):
-        """"
+        """
+        Get average of received feedback
+
+        Returns:
+            avg (float): avg vote
         """
         return self.received_feedback.aggregate(Avg('vote'))['vote__avg']
 
@@ -39,6 +44,10 @@ class Profile(models.Model):
 
 
 class Car(models.Model):
+    """
+    Car class to manage owner, fuel, seats and consumption
+    """
+
     class FuelChoices:
         PETROL = 1
         DIESEL = 2
@@ -63,6 +72,10 @@ class Car(models.Model):
 
 
 class Event(models.Model):
+    """
+    Event class to manage name, description, address and other aspects
+    """
+
     class EventStatusChoices:
         JOINABLE = 0
         COMPUTING = 1
@@ -86,9 +99,18 @@ class Event(models.Model):
         unique_together = ['date_time', 'destination']
 
     def participant_count(self):
+        """
+        Get number of partecipants
+
+        Returns:
+            n (int): #partecipants
+        """
         return self.participant_set.count()
 
     def run(self):
+        """
+        Start the mock computation after checking partecipants and # seats
+        """
         from api.tasks import mock_algorithm_task
         participants = self.participant_count()
         avail_seats = self.participant_set.filter(car__isnull=False).aggregate(
@@ -116,6 +138,9 @@ class Event(models.Model):
 
 
 class Participant(models.Model):
+    """
+    Class for defining details of a partecipant like pick-up place and car
+    """
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     car = models.ForeignKey(Car, on_delete=models.CASCADE, null=True, blank=True, default=None)
     starting_address = models.CharField(max_length=100, blank=True)
@@ -126,12 +151,25 @@ class Participant(models.Model):
     is_driver = models.BooleanField(default=False)
 
     def has_given_feedback(self):
+        """
+        Check if partecipant has given a feedback for an event he joined
+        Returns:
+
+        """
         return Feedback.objects.filter(giver=self.id).exists()
 
     class Meta:
         unique_together = ['profile', 'event']
 
     def clean_fields(self, exclude=None):
+        """
+        Check if chosen car is valid
+        Args:
+            exclude:
+
+        Returns:
+
+        """
         if self.car:
             if not self.profile.car_set.filter(pk=self.car.id).exists():
                 raise ValidationError(_('Car should be one of the user\'s'))
@@ -141,6 +179,9 @@ class Participant(models.Model):
 
 
 class Feedback(models.Model):
+    """
+    Class to manage feedbacks between users
+    """
     giver = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='given_feedback')
     receiver = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='received_feedback')
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
@@ -155,6 +196,9 @@ class Feedback(models.Model):
 
 
 class Notification(models.Model):
+    """
+    Class to manage notifications
+    """
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='notifications')
     date_time = models.DateTimeField(default=timezone.now)
     title = models.CharField(max_length=100)
@@ -167,6 +211,15 @@ class Notification(models.Model):
 
 
 def create_profile(sender, **kwargs):
+    """
+    Create a new profile
+    Args:
+        sender:
+        **kwargs:
+
+    Returns:
+
+    """
     user = kwargs["instance"]
 
     if kwargs["created"]:
@@ -177,6 +230,16 @@ post_save.connect(create_profile, sender=User)
 
 
 def create_notification_for_feedback(sender, **kwargs):
+    """
+    Generate a notification when a feedback is sent
+
+    Args:
+        sender:
+        **kwargs:
+
+    Returns:
+
+    """
     feedback = kwargs["instance"]
     # TODO: add url
     if kwargs["created"]:
