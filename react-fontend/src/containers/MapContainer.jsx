@@ -10,7 +10,7 @@ import {connect} from "react-redux";
 import {addAlert, removeAllAlerts} from "../actions/alertActions";
 import axios from "axios";
 import PositionsDialog from "../components/map/PositionsDialog";
-import {nominatimToPrimarySecondary} from "../utils";
+import {nominatimToPrimarySecondary} from "../utils/utils";
 import Box from "@material-ui/core/Box";
 import {Map, Marker, TileLayer} from "react-leaflet";
 

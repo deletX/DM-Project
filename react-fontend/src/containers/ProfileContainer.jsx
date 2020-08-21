@@ -1,7 +1,7 @@
 import React, {Component, useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import {profilesURL} from "../constants/apiurls";
-import {headers, isAuthenticated} from "../utils";
+import {headers, isAuthenticated} from "../utils/utils";
 import axios from "axios"
 import {addAlert} from "../actions/alertActions";
 import ProfileComponent from "../components/profile/ProfileComponent";

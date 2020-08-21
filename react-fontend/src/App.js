@@ -8,7 +8,7 @@ import {BrowserRouter} from "react-router-dom";
 import {createBrowserHistory} from "history";
 
 import NavBar from "./components/navbar/NavBar";
-import theme from "./theme";
+import theme from "./utils/theme";
 import {ThemeProvider} from "@material-ui/core/styles";
 import {MuiPickersUtilsProvider} from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";

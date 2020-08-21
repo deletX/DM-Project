@@ -5,7 +5,7 @@ import React from "react";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import List from "@material-ui/core/List";
-import {nominatimToPrimarySecondary} from "../../utils";
+import {nominatimToPrimarySecondary} from "../../utils/utils";
 
 
 const PositionsDialog = ({open, close, positions, selectItem}) => {

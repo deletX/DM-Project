@@ -11,16 +11,27 @@ from dmproject import settings
 
 
 def validate_date_not_in_past(date):
+    """
+    Args:
+        date (date): date to validate
+
+    Returns:
+    """
     if date.date() < timezone.now().date():
         raise ValidationError("Date cannot be in the past")
 
 
 class Profile(models.Model):
+    """
+    fdsfs
+    """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     score = models.FloatField(default=0)
     picture = models.ImageField(upload_to='profile_pictures', blank=True)
 
     def average_vote(self):
+        """"
+        """
         return self.received_feedback.aggregate(Avg('vote'))['vote__avg']
 
     def __str__(self):

@@ -14,7 +14,7 @@ import EventContainer from "./containers/EventContainer";
 import ProfileContainer from "./containers/ProfileContainer";
 import LandingPageContainer from "./containers/LandingPageContainer";
 import NotFound404 from "./components/NotFound404";
-import {useQuery} from "./utils";
+import {useQuery} from "./utils/utils";
 
 
 const Login = (props) => {

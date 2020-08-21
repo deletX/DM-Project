@@ -13,7 +13,7 @@ import {defaultEventPic} from "../../constants/constants";
 import ReviewCreateComponent from "./create/ReviewCreateComponent";
 import axios from "axios"
 import {eventCreateURL, eventJoinURL} from "../../constants/apiurls";
-import {headers} from "../../utils";
+import {headers} from "../../utils/utils";
 import {addAlert} from "../../actions/alertActions";
 
 

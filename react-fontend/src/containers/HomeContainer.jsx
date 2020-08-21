@@ -7,7 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import {AddBox} from "@material-ui/icons";
 import {eventListURL} from "../constants/apiurls";
-import {headers, useQuery} from "../utils";
+import {headers, useQuery} from "../utils/utils";
 import {addAlert} from "../actions/alertActions";
 import axios from "axios";
 import ChipBox from "../components/event/ChipBox";

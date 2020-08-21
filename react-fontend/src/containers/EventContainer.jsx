@@ -18,12 +18,12 @@ import {useHistory} from "react-router-dom";
 import {eventPage, home, login} from "../constants/pagesurls";
 import AlertDialog from "../components/AlertDialog";
 import {createFeedbackURL, eventDetailURL, eventRunURL, participationEditURL} from "../constants/apiurls";
-import {headers, pridStringToLatLng} from "../utils";
+import {headers, pridStringToLatLng} from "../utils/utils";
 import JoinContainer from "./JoinContainer";
 import {connect} from "react-redux";
 import TextField from "@material-ui/core/TextField";
 import {KeyboardDatePicker, KeyboardTimePicker} from "@material-ui/pickers";
-import {white_text_theme} from "../theme";
+import {white_text_theme} from "../utils/theme";
 import {ThemeProvider} from "@material-ui/core/styles";
 import {PhotoCamera} from "@material-ui/icons";
 import MapContainer from "./MapContainer";
@@ -43,6 +43,7 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import Rating from "@material-ui/lab/Rating";
 import {Helmet} from "react-helmet";
+import {runEvent} from "../utils/api";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -202,10 +203,14 @@ const emptyEvent = {
     participant_set: []
 }
 
-const EventContainer = ({location, addAlert, token, profileId, isAuthenticated, isAuthLoading}) => {
+/**
+ * questo fafajfa f sshcdc sjcds c
+ */
+const EventContainer = (props) => {
+    const {location, addAlert, token, profileId, isAuthenticated, isAuthLoading} = props;
     let {id} = useParams();
     const [event, setEvent] = useState(location.state ? location.state : emptyEvent)
-    let history=useHistory()
+    let history = useHistory()
     const getEvent = () => {
         axios
             .get(
@@ -238,18 +243,30 @@ const EventContainer = ({location, addAlert, token, profileId, isAuthenticated, 
     )
 
     const run = () => {
-        axios
-            .get(
-                eventRunURL(id),
-                headers('application/json', token),
-            )
-            .then(res => {
+        runEvent(
+            id,
+            token,
+            (res) => {
                 setEvent({...event, status: 1})
-
-            })
-            .catch(err => {
-                addAlert("An error occurred while launching the computation :(", "error")
-            })
+            },
+            (err) => {
+            //notistack notifacions
+            addAlert("An error occurred while launching the computation :(", "error")
+            }
+    )
+        //
+        // axios
+        //     .get(
+        //         eventRunURL(id),
+        //         headers('application/json', token),
+        //     )
+        //     .then(res => {
+        //         setEvent({...event, status: 1})
+        //
+        //     })
+        //     .catch(err => {
+        //         addAlert("An error occurred while launching the computation :(", "error")
+        //     })
     }
 
 

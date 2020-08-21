@@ -7,7 +7,7 @@ import Button from "@material-ui/core/Button";
 import {addAlert} from "../actions/alertActions";
 import axios from "axios"
 import {eventJoinURL} from "../constants/apiurls";
-import {headers} from "../utils";
+import {headers} from "../utils/utils";
 import JoinComponent from "../components/event/JoinComponent";
 
 const useStyles = makeStyles((theme) => ({

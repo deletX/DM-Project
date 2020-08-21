@@ -1,6 +1,6 @@
 import React from 'react';
 import {makeStyles, ThemeProvider} from "@material-ui/core/styles";
-import {white_text_theme} from "../theme";
+import {white_text_theme} from "../utils/theme";
 import Typography from "@material-ui/core/Typography";
 import {white} from "color-name";
 import {landingpageback, landingpageEvent, landingpageProfile} from "../constants/constants";

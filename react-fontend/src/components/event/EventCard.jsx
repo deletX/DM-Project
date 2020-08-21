@@ -12,7 +12,7 @@ import JoinContainer from "../../containers/JoinContainer";
 import AlertDialog from "../AlertDialog";
 import axios from "axios"
 import {eventDetailURL, participationEditURL} from "../../constants/apiurls";
-import {headers} from "../../utils";
+import {headers} from "../../utils/utils";
 import {addAlert} from "../../actions/alertActions";
 import {useHistory} from "react-router-dom";
 import {eventPage} from "../../constants/pagesurls";
