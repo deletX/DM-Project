@@ -51,7 +51,7 @@ const AuthStack = createStackNavigator();
  *
  * @return {function()}
  */
-const drawerIcon = (navigation) => () => (
+export const drawerIcon = (navigation) => () => (
     <DrawerIcon navigation={navigation}/>
 )
 

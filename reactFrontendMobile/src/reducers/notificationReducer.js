@@ -15,7 +15,8 @@ import {
 const initialState = {
     loading: false,
     notifications: [],
-    error: false
+    error: false,
+    unReadCount: 0
 };
 
 /**
@@ -57,7 +58,8 @@ const notificationsError = (state, action) => (
  */
 const getNotificationSuccess = (state, action) => (
     updateObject(state, {
-        notifications: action.notifications
+        notifications: action.notifications,
+        unReadCount: action.notifications.filter(item => (!item.read)).length
     })
 );
 
@@ -71,9 +73,15 @@ const getNotificationSuccess = (state, action) => (
  */
 const notificationUpdate = (state, action) => {
     let {id, read} = action;
+    let tmpState = {...state};
+    if (read){
+        tmpState.unReadCount -= 1;
+    } else {
+        tmpState.unReadCount += 1;
+    }
     let index = state.notifications.findIndex((notification) => (notification.id === id));
-    state.notifications[index].read = read;
-    return state
+    tmpState.notifications[index].read = read;
+    return tmpState
 };
 
 /**

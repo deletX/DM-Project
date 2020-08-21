@@ -120,6 +120,7 @@ export const readNotification = (notificationId, read = true) => {
                 headers('application/json', access_token)
             )
             .then(res => {
+                // dispatch(retrieveNotifications());
                 dispatch(readSuccess(notificationId, read))
             })
             .catch(error => {

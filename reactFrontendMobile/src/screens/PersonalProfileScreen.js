@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {ScrollView, Text, View} from 'react-native';
+import {ScrollView, Text, View, StyleSheet} from 'react-native';
 import {Button, Colors, DataTable, Title} from "react-native-paper"
 import Icon from "react-native-vector-icons/MaterialIcons"
 import {connect} from 'react-redux';

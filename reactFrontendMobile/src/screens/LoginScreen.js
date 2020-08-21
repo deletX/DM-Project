@@ -42,10 +42,10 @@ const LoginScreen = (props) => {
      */
     const googleSignIn = () => {
         GoogleSignin.signIn().then((data) => {
-            console.log('scopes: ' + JSON.stringify(data.scopes));
-            console.log('serverAuthCode: ' + JSON.stringify(data.serverAuthCode));
-            console.log('ID token: ' + JSON.stringify(data.idToken));
-            console.log('user: ' + JSON.stringify(data.user));
+            // console.log('scopes: ' + JSON.stringify(data.scopes));
+            // console.log('serverAuthCode: ' + JSON.stringify(data.serverAuthCode));
+            // console.log('ID token: ' + JSON.stringify(data.idToken));
+            // console.log('user: ' + JSON.stringify(data.user));
             GoogleSignin.getTokens()
                 .then((res) => {
                     googleLogin(res.accessToken);

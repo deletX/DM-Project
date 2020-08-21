@@ -24,7 +24,7 @@ export const eventListURL = (joinable = true, joined = true, owned = false) => (
  *
  * @return {string}
  */
-export const eventDetailURL = (eventPk) => (`${eventCreateURL()}${eventPk}/`);
+export const eventDetailURL = (eventPk) => (apiBaseUrl + `events/${eventPk}/`);
 
 /**
  * events/<eventPk>/participants/
@@ -119,6 +119,18 @@ export const carsDetailURL = (profilePk, carPk) => (`${carsListURL(profilePk)}${
  * @return {string}
  */
 export const createFeedbackURL = (eventPk, receiverParticipantPk) => (`${participationEditURL(eventPk, receiverParticipantPk)}feedback/`);
+
+/**
+ * events/<eventPk>/participants/<participantPk>/
+ *
+ * @param {number} eventPk
+ * @param {number} participationPk
+ *
+ * @returns {string}
+ */
+export const participationEditURL = (eventPk, participationPk) => (
+    `${eventJoinURL(eventPk)}${participationPk}/`
+)
 
 /**
  * current-profile/notifications/

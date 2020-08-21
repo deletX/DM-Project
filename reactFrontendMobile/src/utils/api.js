@@ -33,7 +33,7 @@ export const postJoinedEvent = async (eventId, token, startingAddress, startingP
             {
                 starting_address: startingAddress,
                 starting_pos: startingPos,
-                car: carId === -1 ? null : carId
+                car: carId
             },
             headers('application/json', token)
         )

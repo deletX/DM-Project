@@ -106,7 +106,8 @@ const CustomDrawerContentComponent = (props) => {
 
     const notificationListItems = props.notifications.filter((notification) => !notification.read).map((notification) => (
         <NotificationDrawerItem key={notification.id} notification={notification} token={props.token}
-                                navigation={props.navigation}/>
+                                navigation={props.navigation}
+        readNotification={props.readNotification}/>
     ));
 
     return (

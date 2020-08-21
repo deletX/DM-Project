@@ -8,7 +8,7 @@ import {connect} from "react-redux";
  * Drawer hamburger Icon to open the drawer
  */
 const DrawerIcon = (props) => {
-    const unRead = props.notifications.filter((notification) => !notification.read)
+
     return (<View>
         <Icon
             name="menu"
@@ -19,14 +19,14 @@ const DrawerIcon = (props) => {
                 props.navigation.toggleDrawer()
             }}
         />
-        {unRead.length > 0 &&
-        <Badge style={{position: "absolute", top: 2, right: 15, maxWidth: 25}}>{unRead.length}</Badge>}
+        {props.unReadCount > 0 &&
+        <Badge style={{position: "absolute", top: 2, right: 15, maxWidth: 25}}>{props.unReadCount}</Badge>}
     </View>)
 }
 
 const mapStateToProps = (state) => {
     return {
-        notifications: state.notifications.notifications
+        unReadCount: state.notifications.unReadCount
     };
 };
 
