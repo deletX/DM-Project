@@ -43,7 +43,8 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import Rating from "@material-ui/lab/Rating";
 import {Helmet} from "react-helmet";
-import {runEvent} from "../utils/api";
+import {runEvent, getEventAxios, updateEvent, leaveEvent} from "../utils/api";
+import {useSnackbar} from 'notistack';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -204,649 +205,677 @@ const emptyEvent = {
 }
 
 /**
- * questo fafajfa f sshcdc sjcds c
+ * questo fa
  */
 const EventContainer = (props) => {
-    const {location, addAlert, token, profileId, isAuthenticated, isAuthLoading} = props;
-    let {id} = useParams();
-    const [event, setEvent] = useState(location.state ? location.state : emptyEvent)
-    let history = useHistory()
-    const getEvent = () => {
-        axios
-            .get(
-                eventDetailURL(id),
-                headers('application/json', token)
-            )
-            .then(res => {
-                setEvent(res.data)
-                setImageURL(res.data.picture)
-                setName(res.data.name)
-                setDescription(res.data.description)
-                setAddress(res.data.address)
-                setDestination(res.data.destination)
-                setDay(new Date(res.data.date_time))
-                setTime(new Date(res.data.date_time))
-            })
-            .catch(err => {
-                history.push(home)
-                addAlert("An error occurred while retrieving event data",)
-            })
-    }
+        const {location, addAlert, token, profileId, isAuthenticated, isAuthLoading} = props;
+        let {id} = useParams();
+        const [event, setEvent] = useState(location.state ? location.state : emptyEvent)
+        let history = useHistory();
+        const {enqueueSnackbar, closeSnackbar} = useSnackbar();
 
-    useEffect(() => {
-            if (!(isAuthenticated || isAuthLoading))
-                history.push(`${login}?next=${encodeURI(eventPage(id))}`)
-            else if (event.name === "" && isAuthenticated) {
-                getEvent()
-            }
-        }, [event, isAuthenticated, isAuthLoading]
-    )
-
-    const run = () => {
-        runEvent(
-            id,
-            token,
-            (res) => {
-                setEvent({...event, status: 1})
-            },
-            (err) => {
-            //notistack notifacions
-            addAlert("An error occurred while launching the computation :(", "error")
-            }
-    )
-        //
-        // axios
-        //     .get(
-        //         eventRunURL(id),
-        //         headers('application/json', token),
-        //     )
-        //     .then(res => {
-        //         setEvent({...event, status: 1})
-        //
-        //     })
-        //     .catch(err => {
-        //         addAlert("An error occurred while launching the computation :(", "error")
-        //     })
-    }
-
-
-    const [deleteOpen, setDeleteOpen] = useState(false)
-    const [joinOpen, setJoinOpen] = useState(false)
-    const [leaveOpen, setLeaveOpen] = useState(false)
-    const [notEnoughDrivers, setNotEnoughDrivers] = useState(false)
-    const [edit, setEdit] = useState(false)
-    const [isLoading, setIsLoading] = useState(false)
-
-    const [image, setImage] = useState(null)
-    const [imageURL, setImageURL] = useState(event.picture)
-    const [name, setName] = useState(event.name)
-    const [description, setDescription] = useState(event.description)
-    const [address, setAddress] = useState(event.address)
-    const [destination, setDestination] = useState(event.destination)
-
-    const date = new Date(event.date_time)
-
-    const [day, setDay] = useState(date)
-    const [time, setTime] = useState(date)
-
-    const update = () => {
-        let data;
-        setIsLoading(true)
-        if (image !== null) {
-            data = new FormData();
-            data.append("picture", image, image.name);
-            data.append("name", name);
-            data.append("description", description)
-            data.append("address", address)
-            data.append("destination", destination)
-            data.append("date_time", `${day.getUTCFullYear()}-${day.getUTCMonth() < 10 ? '0' : ''}${day.getUTCMonth() + 1}-${day.getUTCDate()} ${time.getUTCHours()}:${time.getUTCMinutes()}`)
-        } else {
-            data = {
-                name: name,
-                description: description,
-                address: address,
-                destination: destination,
-                date_time: `${day.getUTCFullYear()}-${day.getUTCMonth() < 10 ? '0' : ''}${day.getUTCMonth() + 1}-${day.getUTCDate()} ${time.getUTCHours()}:${time.getUTCMinutes()}`,
-            }
-        }
-        axios
-            .put(
-                eventDetailURL(id),
-                data,
-                headers(image !== null ? 'multipart/form-data' : 'application/json', token)
-            )
-            .then(res => {
-                setEvent(res.data)
-                setImageURL(res.data.picture)
-                setName(res.data.name)
-                setDescription(res.data.description)
-                setAddress(res.data.address)
-                setDestination(res.data.destination)
-                setDay(new Date(res.data.date_time))
-                setTime(new Date(res.data.date_time))
-                setIsLoading(false)
-                setEdit(false)
-            })
-            .catch(err => {
-                addAlert(err, "error")
-            })
-    }
-
-    const latitude = parseFloat(event.destination.split(' ')[1].slice(1));
-    const longitude = parseFloat(event.destination.split(' ')[2].slice(0, -1));
-
-    const classes = useStyles();
-    const isOwner = profileId === event.owner.id;
-    const isRunning = event.status === 1;
-    const isCompleted = event.status === 2;
-    const participation = event.participant_set.filter(participation => (participation.profile.id === profileId))
-    const expense = participation.length > 0 ? participation[0].expense : 0
-    const drivers = event.participant_set.filter(part => (part.car !== null))
-
-    let now = new Date()
-    now = new Date(now.getTime() + 3600 * 1000)
-    let date_tmp = day !== null && time !== null ? new Date(day.getFullYear(), day.getMonth(), day.getDate(), time.getHours(), time.getMinutes()) : new Date()
-    const valid = name.length > 0 && date_tmp > now && description.length > 0 && address !== "" && destination !== "";
-    const myCar = (participation.length > 0 && participation[0].car !== null) ? _.sortBy(event.participant_set.filter((item) => (item.car !== null && item.car.id === participation[0].car.id)), ['pickup_index']) : []
-
-    const [feedbackOpen, setFeedbackOpen] = useState(false)
-    const [comment, setComment] = useState("")
-    const [vote, setVote] = useState(3)
-    const [receiver, setReceiver] = useState(-1)
-
-    let directionsURL = ""
-    if (participation.length > 0 && participation[0].pickup_index === 0)
-        directionsURL = `https://www.google.com/maps/dir/?api=1&origin=${pridStringToLatLng(participation[0].starting_pos).join(",")}&destination=${pridStringToLatLng(event.destination).join(",")}&travelmode=driving&waypoints=${myCar.map(item => pridStringToLatLng(item.starting_pos).join(",")).join("%7C")}`
-
-
-    const feedbackMenuItems = myCar.length === 0 ? [] : myCar.map(item => (
-        <MenuItem value={item.profile.id}>{item.profile.first_name} {item.profile.last_name}</MenuItem>))
-    const sendFeedback = () => {
-        axios
-            .post(
-                createFeedbackURL(event.id, receiver),
-                {
-                    receiver: receiver,
-                    event: event.id,
-                    comment: comment,
-                    vote: vote,
+        const run = () => {
+            runEvent(
+                id,
+                token,
+                (res) => {
+                    setEvent({...event, status: 1})
+                    enqueueSnackbar("Computation has started", {
+                        variant: 'info',
+                    });
                 },
-                headers('application/json', token)
+                (err) => {
+                    enqueueSnackbar("Something went wrong while starting event [019]", {
+                        variant: 'warning',
+                    })
+                }
             )
-            .then((res) => {
-                setFeedbackOpen(false)
-                getEvent()
-                addAlert("Feedback left with success")
-            })
-            .catch((error) => {
-                console.log(error)
-                setFeedbackOpen(false)
-                addAlert("An error occurred while leaving the feedback", "error")
-            })
-    };
-
-
-    return (
-        <>
-            <Helmet>
-                <title>React App - {event.name}</title>
-                <meta name="description" content={event.description}/>
-            </Helmet>
-            <div className={classes.root}>
-                <div className={classes.header} style={{backgroundImage: `url(${imageURL})`}}>
-                    <div className={classes.scrim}>
-                        <ThemeProvider theme={white_text_theme}>
-                            <Grid container spacing={2} className={classes.headerGrid}>
-                                <Grid item xs={12} md={8}>
-                                    {!edit ?
-
-                                        <Typography variant="h2" component="h2" className={classes.mainTitle}>
-                                            {event.name}
-                                        </Typography>
-
-                                        :
-
-                                        <TextField
-                                            label="Name"
-                                            color="secondary"
-                                            fullWidth
-                                            multiline
-                                            rowsMax={3}
-                                            value={name}
-                                            onChange={(input) => {
-                                                setName(input.target.value)
-                                            }}
-                                            error={name.length <= 0}
-                                            className={classes.headerTextField}
-                                            InputProps={{
-                                                classes: {
-                                                    input: classes.headerTextFieldInput,
-                                                }
-                                            }}
-                                            required
-                                            helperText={name.length <= 0 ? "Required" : ""}
-                                        />
-
-                                    }
-                                </Grid>
-                                <Grid item xs={false} md={2}/>
-                                <Grid item xs={12} md={6}>
-                                    {!edit ?
-                                        <Typography variant="h5">
-                                            Date: {`${date.getDate()}/${date.getMonth() < 10 ? '0' : ''}${date.getMonth() + 1}/${date.getFullYear()} at ${date.getHours()}:${date.getMinutes()}`}
-                                        </Typography>
-                                        :
-                                        <>
-
-                                            <KeyboardDatePicker
-                                                color="secondary"
-                                                label="Date"
-                                                value={day}
-                                                placeholder="26/03/2020"
-                                                onChange={date => {
-                                                    setDay(date)
-                                                }}
-                                                minDate={new Date()}
-                                                format="dd/MM/yyyy"
-                                            />
-
-                                            <KeyboardTimePicker
-                                                color="secondary"
-                                                label="Time"
-                                                value={time}
-                                                placeholder="21:30"
-                                                ampm={false}
-                                                onChange={date => {
-                                                    setTime(date)
-                                                }}
-                                                mask="__:__"
-                                            />
-                                        </>
-                                    }
-                                </Grid>
-                                <Grid item xs={12} md={6}>
-                                    {!edit &&
-                                    <Typography variant="h5">
-                                        Destination: {event.address}
-                                    </Typography>
-                                    }
-                                </Grid>
-                            </Grid>
-                        </ThemeProvider>
-                        <div className={classes.buttons}>
-                            {isOwner &&
-                            <Button
-                                variant="contained"
-
-                                className={classes.runButton}
-                                color="primary"
-                                disabled={(isRunning || isCompleted) || edit}
-                                onClick={() => {
-                                    let availableSeats = drivers.map(item => item.car.tot_avail_seats).reduce((prev, curr) => (prev + curr), 0);
-                                    console.log(availableSeats)
-                                    console.log(event.participant_set.length)
-                                    if (availableSeats < event.participant_set.length || event.participant_set.length === 0) {
-                                        setNotEnoughDrivers(true)
-                                    } else {
-                                        setNotEnoughDrivers(false)
-                                        run()
-                                    }
-                                }}
-                            >
-                                Run
-                            </Button>
-                            }
-                            <ButtonGroup variant="contained"
-                                         color={isOwner ? (participation.length !== 0 ? "secondary" : "primary") : "primary"}>
-                                {participation.length !== 0 ?
-                                    <Button color="secondary" disabled={(isRunning || isCompleted) || edit}
-                                            onClick={() => {
-                                                setLeaveOpen(true)
-                                            }}
-                                    >
-                                        Leave
-                                    </Button>
-                                    :
-                                    <Button color="primary" disabled={isRunning || isCompleted || edit}
-                                            onClick={() => {
-                                                setJoinOpen(true)
-                                            }}
-                                    >
-                                        Join
-                                    </Button>
-                                }
-                                <Button color="secondary"
-                                        disabled={!edit ? !(isOwner && !(isRunning || isCompleted)) : !valid}
-                                        onClick={() => {
-                                            if (edit) {
-                                                update()
-                                            } else
-                                                setEdit(true)
-                                        }}
-                                >
-                                    {edit ? "Save" : "Edit"}
-                                </Button>
-                                <Button className={classes.deleteButton}
-                                        disabled={!(isOwner && !(isRunning))}
-                                        onClick={() => {
-                                            if (edit) {
-                                                setImageURL(event.picture)
-                                                setEdit(false)
-                                            } else
-                                                setDeleteOpen(true)
-                                        }}
-                                >
-                                    {edit ? "Cancel" : "Delete"}
-                                </Button>
-                            </ButtonGroup>
-                            {edit &&
-                            <>
-                                <input accept="image/*" className={classes.input} id="icon-button-file" type="file"
-                                       hidden
-                                       onChange={(input) => {
-                                           let fileReader = new FileReader();
-                                           let file = input.target.files[0];
-                                           fileReader.onloadend = () => {
-                                               setImageURL(fileReader.result)
-                                           }
-                                           setImage(file)
-                                           fileReader.readAsDataURL(file)
-                                       }}/>
-                                <label htmlFor="icon-button-file">
-                                    <Fab color="secondary" aria-label="upload picture" size="small"
-                                         className={classes.changePictureButton}>
-                                        <PhotoCamera/>
-                                    </Fab>
-                                </label>
-                            </>
-                            }
-                        </div>
-                    </div>
-                </div>
-                {isRunning || isLoading &&
-                <LinearProgress color="secondary" className={classes.loadingBar}/>
+            //
+            // axios
+            //     .get(
+            //         eventRunURL(id),
+            //         headers('application/json', token),
+            //     )
+            //     .then(res => {
+            //         setEvent({...event, status: 1})
+            //
+            //     })
+            //     .catch(err => {
+            //         addAlert("An error occurred while launching the computation :(", "error")
+            //     })
+        }
+        const getEvent = () => {
+            getEventAxios(
+                id,
+                token,
+                (res) => {
+                    setEvent(res.data)
+                    setImageURL(res.data.picture)
+                    setName(res.data.name)
+                    setDescription(res.data.description)
+                    setAddress(res.data.address)
+                    setDestination(res.data.destination)
+                    setDay(new Date(res.data.date_time))
+                    setTime(new Date(res.data.date_time))
+                },
+                (err) => {
+                    enqueueSnackbar("An error occurred while retrieving event data", {
+                        variant: 'warning',
+                    })
                 }
-                {isRunning &&
-                <Alert severity="info" className={classes.warning}>
-                    Thinking about the best routes. This may take a while. Come back later!
-                </Alert>
+            )
+            // axios
+            //     .get(
+            //         eventDetailURL(id),
+            //         headers('application/json', token)
+            //     )
+            //     .then(res => {
+            //         setEvent(res.data)
+            //         setImageURL(res.data.picture)
+            //         setName(res.data.name)
+            //         setDescription(res.data.description)
+            //         setAddress(res.data.address)
+            //         setDestination(res.data.destination)
+            //         setDay(new Date(res.data.date_time))
+            //         setTime(new Date(res.data.date_time))
+            //     })
+            //     .catch(err => {
+            //         history.push(home)
+            //         addAlert("An error occurred while retrieving event data",)
+            //     })
+        }
+
+        useEffect(() => {
+                if (!(isAuthenticated || isAuthLoading))
+                    history.push(`${login}?next=${encodeURI(eventPage(id))}`)
+                else if (event.name === "" && isAuthenticated) {
+                    getEvent()
                 }
-                {isCompleted &&
-                <Alert severity="success" className={classes.warning}>
-                    Beep beep boop, computation completed!
-                </Alert>
+            }, [event, isAuthenticated, isAuthLoading]
+        )
+
+
+        const [deleteOpen, setDeleteOpen] = useState(false)
+        const [joinOpen, setJoinOpen] = useState(false)
+        const [leaveOpen, setLeaveOpen] = useState(false)
+        const [notEnoughDrivers, setNotEnoughDrivers] = useState(false)
+        const [edit, setEdit] = useState(false)
+        const [isLoading, setIsLoading] = useState(false)
+
+        const [image, setImage] = useState(null)
+        const [imageURL, setImageURL] = useState(event.picture)
+        const [name, setName] = useState(event.name)
+        const [description, setDescription] = useState(event.description)
+        const [address, setAddress] = useState(event.address)
+        const [destination, setDestination] = useState(event.destination)
+
+        const date = new Date(event.date_time)
+
+        const [day, setDay] = useState(date)
+        const [time, setTime] = useState(date)
+
+        const update = () => {
+            let data;
+            setIsLoading(true)
+            if (image !== null) {
+                data = new FormData();
+                data.append("picture", image, image.name);
+                data.append("name", name);
+                data.append("description", description)
+                data.append("address", address)
+                data.append("destination", destination)
+                data.append("date_time", `${day.getUTCFullYear()}-${day.getUTCMonth() < 10 ? '0' : ''}${day.getUTCMonth() + 1}-${day.getUTCDate()} ${time.getUTCHours()}:${time.getUTCMinutes()}`)
+            } else {
+                data = {
+                    name: name,
+                    description: description,
+                    address: address,
+                    destination: destination,
+                    date_time: `${day.getUTCFullYear()}-${day.getUTCMonth() < 10 ? '0' : ''}${day.getUTCMonth() + 1}-${day.getUTCDate()} ${time.getUTCHours()}:${time.getUTCMinutes()}`,
                 }
-                {notEnoughDrivers &&
-                <Alert severity="error" className={classes.warning}>
-                    Oh no! It seems there aren't enough cars to bring all these people!
-                </Alert>
+            }
+            updateEvent(id, data, token,
+                image,
+                (res) => {
+                    setEvent(res.data)
+                    setImageURL(res.data.picture)
+                    setName(res.data.name)
+                    setDescription(res.data.description)
+                    setAddress(res.data.address)
+                    setDestination(res.data.destination)
+                    setDay(new Date(res.data.date_time))
+                    setTime(new Date(res.data.date_time))
+                    setIsLoading(false)
+                    setEdit(false)
+                    enqueueSnackbar("Event successfully updated", {
+                        variant: 'success',
+                    })
+                },
+                (err) => {
+                    enqueueSnackbar("An error occurred while updating event", {
+                        variant: 'warning',
+                    })
                 }
-                <div className={classes.body}>
-                    <div className={classes.element}>
-                        <Typography variant="h4">
-                            Description
-                        </Typography>
-                        {!edit ?
-                            <Typography component="div">
-                                {event.description.split("\n").map((i, key) => {
-                                    return <p key={key}>{i}</p>;
-                                })}
-                            </Typography>
-                            :
-                            <TextField
-                                color="secondary"
-                                fullWidth
-                                multiline
-                                rowsMax={6}
-                                value={description}
-                                onChange={(input) => {
-                                    setDescription(input.target.value)
-                                }}
-                                error={description.length <= 0}
-                                required
-                                helperText={description.length <= 0 ? "Required" : ""}/>
-                        }
-                    </div>
-                    <Divider className={classes.divider}/>
-                    <div className={classes.element}>
-                        <Typography variant="h4">
-                            Destination
-                        </Typography>
-                        {!edit ?
-                            <Box className={classes.mapBox}>
-                                <Map
-                                    center={[latitude, longitude]}
-                                    zoom={13}
-                                    className={classes.map}
-                                >
-                                    <TileLayer
-                                        attribution='&copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                    />
+            )
+        }
 
-                                    <Marker
-                                        position={{lat: latitude, lng: longitude}}
-                                    >
-                                        <Popup>
-                                            {event.address}
-                                        </Popup>
-                                    </Marker>
-                                </Map>
-                            </Box>
-                            :
-                            <MapContainer className={classes.mapContainer} addr={address} pos={destination}
-                                          setAddr={setAddress}
-                                          setPos={setDestination}/>
-                        }
-                    </div>
-                    {!edit &&
-                    <>
-                        <Divider className={classes.divider}/>
-                        {!(isRunning || isCompleted) &&
-                        <div className={`${classes.element} ${classes.participants}`}>
-                            <Typography variant="h4">
-                                Participants
-                            </Typography>
-                            <div className={classes.participantsContainer}>
-                                {event.participant_set.length === 0 ?
+        const latitude = parseFloat(event.destination.split(' ')[1].slice(1));
+        const longitude = parseFloat(event.destination.split(' ')[2].slice(0, -1));
 
-                                    <Typography>
-                                        Seems there's no one here... yet ;)
-                                    </Typography>
-                                    :
-                                    <ParticipantsContainer
-                                        participantSet={event.participant_set} profileId={profileId}/>
+        const classes = useStyles();
+        const isOwner = profileId === event.owner.id;
+        const isRunning = event.status === 1;
+        const isCompleted = event.status === 2;
+        const participation = event.participant_set.filter(participation => (participation.profile.id === profileId))
+        const expense = participation.length > 0 ? participation[0].expense : 0
+        const drivers = event.participant_set.filter(part => (part.car !== null))
 
-                                }
-                            </div>
-                        </div>
-                        }
-                    </>
-                    }
-                    {isCompleted &&
-                    <>
-                        {participation.length !== 0 &&
-                        <div className={`${classes.element} ${classes.participants}`}>
-                            <Typography variant="h4">
-                                Your Car
-                            </Typography>
-                            <Typography>
-                                Expenses: {expense}€
-                            </Typography>
-                            {participation[0].pickup_index === 0 &&
-                            <Button color="primary" variant="outlined" target="_blank" href={directionsURL}>
-                                Directions
-                            </Button>
-                            }
-                            <div className={classes.participantsContainer}>
-                                <ParticipantsContainer
-                                    participantSet={myCar}
-                                    profileId={profileId} onlyDriverIcon={true}/>
-                                <Button color="primary" disabled={(new Date()) < date} onClick={() => {
-                                    setReceiver(myCar[0].profile.id)
-                                    setFeedbackOpen(true)
-                                }}>
-                                    Submit Feedback
-                                </Button>
-                            </div>
+        let now = new Date()
+        now = new Date(now.getTime() + 3600 * 1000)
+        let date_tmp = day !== null && time !== null ? new Date(day.getFullYear(), day.getMonth(), day.getDate(), time.getHours(), time.getMinutes()) : new Date()
+        const valid = name.length > 0 && date_tmp > now && description.length > 0 && address !== "" && destination !== "";
+        const myCar = (participation.length > 0 && participation[0].car !== null) ? _.sortBy(event.participant_set.filter((item) => (item.car !== null && item.car.id === participation[0].car.id)), ['pickup_index']) : []
 
-                        </div>
-                        }
-                        {isOwner &&
-                        <>
-                            {participation.length !== 0 &&
-                            <Divider className={classes.divider}/>
-                            }
-                            <div className={classes.element}>
-                                <Typography variant="h4">
-                                    Other Cars
-                                </Typography>
-                                <div className={classes.participantsContainer}>
-                                    <OtherCarsParticipation participantSet={event.participant_set}
-                                                            profileId={profileId}/>
-                                </div>
-                            </div>
-                        </>
-                        }
-                    </>
-                    }
-                    {isRunning &&
-                    <div className={classes.element}>
-                        <Computing/>
-                    </div>
-                    }
-                </div>
+        const [feedbackOpen, setFeedbackOpen] = useState(false)
+        const [comment, setComment] = useState("")
+        const [vote, setVote] = useState(3)
+        const [receiver, setReceiver] = useState(-1)
 
-                <Dialog open={feedbackOpen} onClose={() => {
+        let directionsURL = ""
+        if (participation.length > 0 && participation[0].pickup_index === 0)
+            directionsURL = `https://www.google.com/maps/dir/?api=1&origin=${pridStringToLatLng(participation[0].starting_pos).join(",")}&destination=${pridStringToLatLng(event.destination).join(",")}&travelmode=driving&waypoints=${myCar.map(item => pridStringToLatLng(item.starting_pos).join(",")).join("%7C")}`
+
+
+        const feedbackMenuItems = myCar.length === 0 ? [] : myCar.map(item => (
+            <MenuItem value={item.profile.id}>{item.profile.first_name} {item.profile.last_name}</MenuItem>))
+        const sendFeedback = () => {
+            axios
+                .post(
+                    createFeedbackURL(event.id, receiver),
+                    {
+                        receiver: receiver,
+                        event: event.id,
+                        comment: comment,
+                        vote: vote,
+                    },
+                    headers('application/json', token)
+                )
+                .then((res) => {
                     setFeedbackOpen(false)
-                }} aria-labelledby="form-dialog-title">
-                    <DialogTitle id="form-dialog-title">Submit Feedback</DialogTitle>
-                    <DialogContent>
-                        <DialogContentText>
-                            We would love to know how your experience was!
-                        </DialogContentText>
-                        <div className={classes.feedbackForm}>
-                            <FormControl className={classes.formControl}>
-                                <InputLabel id="select-receiver-label">Receiver</InputLabel>
-                                <Select
-                                    labelId="select-receiver-label"
-                                    id="select-receiver"
-                                    value={receiver}
-                                    onChange={(value) => {
-                                        setReceiver(value.target.value)
+                    getEvent()
+                    addAlert("Feedback left with success")
+                })
+                .catch((error) => {
+                    console.log(error)
+                    setFeedbackOpen(false)
+                    addAlert("An error occurred while leaving the feedback", "error")
+                })
+        };
+
+
+        return (
+            <>
+                <Helmet>
+                    <title>React App - {event.name}</title>
+                    <meta name="description" content={event.description}/>
+                </Helmet>
+                <div className={classes.root}>
+                    <div className={classes.header} style={{backgroundImage: `url(${imageURL})`}}>
+                        <div className={classes.scrim}>
+                            <ThemeProvider theme={white_text_theme}>
+                                <Grid container spacing={2} className={classes.headerGrid}>
+                                    <Grid item xs={12} md={8}>
+                                        {!edit ?
+
+                                            <Typography variant="h2" component="h2" className={classes.mainTitle}>
+                                                {event.name}
+                                            </Typography>
+
+                                            :
+
+                                            <TextField
+                                                label="Name"
+                                                color="secondary"
+                                                fullWidth
+                                                multiline
+                                                rowsMax={3}
+                                                value={name}
+                                                onChange={(input) => {
+                                                    setName(input.target.value)
+                                                }}
+                                                error={name.length <= 0}
+                                                className={classes.headerTextField}
+                                                InputProps={{
+                                                    classes: {
+                                                        input: classes.headerTextFieldInput,
+                                                    }
+                                                }}
+                                                required
+                                                helperText={name.length <= 0 ? "Required" : ""}
+                                            />
+
+                                        }
+                                    </Grid>
+                                    <Grid item xs={false} md={2}/>
+                                    <Grid item xs={12} md={6}>
+                                        {!edit ?
+                                            <Typography variant="h5">
+                                                Date: {`${date.getDate()}/${date.getMonth() < 10 ? '0' : ''}${date.getMonth() + 1}/${date.getFullYear()} at ${date.getHours()}:${date.getMinutes()}`}
+                                            </Typography>
+                                            :
+                                            <>
+
+                                                <KeyboardDatePicker
+                                                    color="secondary"
+                                                    label="Date"
+                                                    value={day}
+                                                    placeholder="26/03/2020"
+                                                    onChange={date => {
+                                                        setDay(date)
+                                                    }}
+                                                    minDate={new Date()}
+                                                    format="dd/MM/yyyy"
+                                                />
+
+                                                <KeyboardTimePicker
+                                                    color="secondary"
+                                                    label="Time"
+                                                    value={time}
+                                                    placeholder="21:30"
+                                                    ampm={false}
+                                                    onChange={date => {
+                                                        setTime(date)
+                                                    }}
+                                                    mask="__:__"
+                                                />
+                                            </>
+                                        }
+                                    </Grid>
+                                    <Grid item xs={12} md={6}>
+                                        {!edit &&
+                                        <Typography variant="h5">
+                                            Destination: {event.address}
+                                        </Typography>
+                                        }
+                                    </Grid>
+                                </Grid>
+                            </ThemeProvider>
+                            <div className={classes.buttons}>
+                                {isOwner &&
+                                <Button
+                                    variant="contained"
+
+                                    className={classes.runButton}
+                                    color="primary"
+                                    disabled={(isRunning || isCompleted) || edit}
+                                    onClick={() => {
+                                        let availableSeats = drivers.map(item => item.car.tot_avail_seats).reduce((prev, curr) => (prev + curr), 0);
+                                        console.log(availableSeats)
+                                        console.log(event.participant_set.length)
+                                        if (availableSeats < event.participant_set.length || event.participant_set.length === 0) {
+                                            setNotEnoughDrivers(true)
+                                        } else {
+                                            setNotEnoughDrivers(false)
+                                            run()
+                                        }
                                     }}
                                 >
-                                    {feedbackMenuItems}
-                                </Select>
-                            </FormControl>
-                            <Rating
-                                name="rating"
-                                value={vote}
-                                precision={0.5}
-                                onChange={(event, newValue) => {
-                                    setVote(newValue);
-                                }}
-                            />
-                            <TextField
-                                value={comment}
-                                onChange={(input) => {
-                                    setComment(input.target.value)
-                                }}
-                                margin="dense"
-                                id="comment"
-                                label="Feedback"
-                                fullWidth
-                            />
-                        </div>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={() => {
-                            setFeedbackOpen(false)
-                        }} color="primary">
-                            Cancel
-                        </Button>
-                        <Button onClick={() => {
-                            setFeedbackOpen(true)
-                            sendFeedback()
-                        }} color="primary">
-                            Submit
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-
-                <AlertDialog
-                    open={leaveOpen}
-                    handleClose={() => {
-                        setLeaveOpen(false)
-                    }}
-                    title="Are you sure you want to leave?"
-                    contentText={`By clicking yes you will cancel your participation to "${event.name}". You will be able to re-join the event until the owner starts the computation!`}
-                    yesText="Yes"
-                    noText="No"
-                    onYes={() => {
-                        let participation = event.participant_set.filter(item => (item.profile.id === profileId))[0];
-                        axios
-                            .delete(
-                                participationEditURL(event.id, participation.id),
-                                headers('application/json', token)
-                            )
-                            .then(res => {
-                                addAlert("Successfully left the event", "success")
-                                setLeaveOpen(false)
-                                if (!isOwner) {
-                                    history.push(home)
+                                    Run
+                                </Button>
                                 }
-                            })
-                            .catch(err => {
-                                console.log(err)
-                                addAlert("Something went wrong while leaving", "error")
-                                setLeaveOpen(false)
-                            })
-                    }}
-                    onNo={() => {
-                        setLeaveOpen(false)
-                    }}
-                />
+                                <ButtonGroup variant="contained"
+                                             color={isOwner ? (participation.length !== 0 ? "secondary" : "primary") : "primary"}>
+                                    {participation.length !== 0 ?
+                                        <Button color="secondary" disabled={(isRunning || isCompleted) || edit}
+                                                onClick={() => {
+                                                    setLeaveOpen(true)
+                                                }}
+                                        >
+                                            Leave
+                                        </Button>
+                                        :
+                                        <Button color="primary" disabled={isRunning || isCompleted || edit}
+                                                onClick={() => {
+                                                    setJoinOpen(true)
+                                                }}
+                                        >
+                                            Join
+                                        </Button>
+                                    }
+                                    <Button color="secondary"
+                                            disabled={!edit ? !(isOwner && !(isRunning || isCompleted)) : !valid}
+                                            onClick={() => {
+                                                if (edit) {
+                                                    update()
+                                                } else
+                                                    setEdit(true)
+                                            }}
+                                    >
+                                        {edit ? "Save" : "Edit"}
+                                    </Button>
+                                    <Button className={classes.deleteButton}
+                                            disabled={!(isOwner && !(isRunning))}
+                                            onClick={() => {
+                                                if (edit) {
+                                                    setImageURL(event.picture)
+                                                    setEdit(false)
+                                                } else
+                                                    setDeleteOpen(true)
+                                            }}
+                                    >
+                                        {edit ? "Cancel" : "Delete"}
+                                    </Button>
+                                </ButtonGroup>
+                                {edit &&
+                                <>
+                                    <input accept="image/*" className={classes.input} id="icon-button-file" type="file"
+                                           hidden
+                                           onChange={(input) => {
+                                               let fileReader = new FileReader();
+                                               let file = input.target.files[0];
+                                               fileReader.onloadend = () => {
+                                                   setImageURL(fileReader.result)
+                                               }
+                                               setImage(file)
+                                               fileReader.readAsDataURL(file)
+                                           }}/>
+                                    <label htmlFor="icon-button-file">
+                                        <Fab color="secondary" aria-label="upload picture" size="small"
+                                             className={classes.changePictureButton}>
+                                            <PhotoCamera/>
+                                        </Fab>
+                                    </label>
+                                </>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    {isRunning || isLoading &&
+                    <LinearProgress color="secondary" className={classes.loadingBar}/>
+                    }
+                    {isRunning &&
+                    <Alert severity="info" className={classes.warning}>
+                        Thinking about the best routes. This may take a while. Come back later!
+                    </Alert>
+                    }
+                    {isCompleted &&
+                    <Alert severity="success" className={classes.warning}>
+                        Beep beep boop, computation completed!
+                    </Alert>
+                    }
+                    {notEnoughDrivers &&
+                    <Alert severity="error" className={classes.warning}>
+                        Oh no! It seems there aren't enough cars to bring all these people!
+                    </Alert>
+                    }
+                    <div className={classes.body}>
+                        <div className={classes.element}>
+                            <Typography variant="h4">
+                                Description
+                            </Typography>
+                            {!edit ?
+                                <Typography component="div">
+                                    {event.description.split("\n").map((i, key) => {
+                                        return <p key={key}>{i}</p>;
+                                    })}
+                                </Typography>
+                                :
+                                <TextField
+                                    color="secondary"
+                                    fullWidth
+                                    multiline
+                                    rowsMax={6}
+                                    value={description}
+                                    onChange={(input) => {
+                                        setDescription(input.target.value)
+                                    }}
+                                    error={description.length <= 0}
+                                    required
+                                    helperText={description.length <= 0 ? "Required" : ""}/>
+                            }
+                        </div>
+                        <Divider className={classes.divider}/>
+                        <div className={classes.element}>
+                            <Typography variant="h4">
+                                Destination
+                            </Typography>
+                            {!edit ?
+                                <Box className={classes.mapBox}>
+                                    <Map
+                                        center={[latitude, longitude]}
+                                        zoom={13}
+                                        className={classes.map}
+                                    >
+                                        <TileLayer
+                                            attribution='&copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                        />
 
-                <AlertDialog
-                    open={deleteOpen}
-                    handleClose={() => {
-                        setDeleteOpen(false)
-                    }}
-                    title="Are you sure you want to delete the event?"
-                    contentText={`You are going to delete the event "${event.name}". You will lose all the participations if you decide to recreate the event later. Proceed only if you are sure of what you're doing`}
-                    yesText="Yes"
-                    noText="No"
-                    onYes={() => {
-                        axios
-                            .delete(
-                                eventDetailURL(event.id),
-                                headers('application/json', token)
-                            )
-                            .then(res => {
-                                addAlert("Successfully deleted the event", "success")
-                                setDeleteOpen(false)
-                                history.push(home)
-                            })
-                            .catch(err => {
-                                console.log(err)
-                                addAlert("Something went wrong", "error")
-                                setDeleteOpen(false)
-                            })
-                    }}
-                    onNo={() => {
-                        setDeleteOpen(false)
-                    }}
-                />
-                <JoinContainer open={joinOpen} close={() => {
-                    setJoinOpen(false)
-                }} event={event} refreshEvents={() => {
-                    getEvent()
-                }}/>
-            </div>
-        </>
-    );
-};
+                                        <Marker
+                                            position={{lat: latitude, lng: longitude}}
+                                        >
+                                            <Popup>
+                                                {event.address}
+                                            </Popup>
+                                        </Marker>
+                                    </Map>
+                                </Box>
+                                :
+                                <MapContainer className={classes.mapContainer} addr={address} pos={destination}
+                                              setAddr={setAddress}
+                                              setPos={setDestination}/>
+                            }
+                        </div>
+                        {!edit &&
+                        <>
+                            <Divider className={classes.divider}/>
+                            {!(isRunning || isCompleted) &&
+                            <div className={`${classes.element} ${classes.participants}`}>
+                                <Typography variant="h4">
+                                    Participants
+                                </Typography>
+                                <div className={classes.participantsContainer}>
+                                    {event.participant_set.length === 0 ?
+
+                                        <Typography>
+                                            Seems there's no one here... yet ;)
+                                        </Typography>
+                                        :
+                                        <ParticipantsContainer
+                                            participantSet={event.participant_set} profileId={profileId}/>
+
+                                    }
+                                </div>
+                            </div>
+                            }
+                        </>
+                        }
+                        {isCompleted &&
+                        <>
+                            {participation.length !== 0 &&
+                            <div className={`${classes.element} ${classes.participants}`}>
+                                <Typography variant="h4">
+                                    Your Car
+                                </Typography>
+                                <Typography>
+                                    Expenses: {expense}€
+                                </Typography>
+                                {participation[0].pickup_index === 0 &&
+                                <Button color="primary" variant="outlined" target="_blank" href={directionsURL}>
+                                    Directions
+                                </Button>
+                                }
+                                <div className={classes.participantsContainer}>
+                                    <ParticipantsContainer
+                                        participantSet={myCar}
+                                        profileId={profileId} onlyDriverIcon={true}/>
+                                    <Button color="primary" disabled={(new Date()) < date} onClick={() => {
+                                        setReceiver(myCar[0].profile.id)
+                                        setFeedbackOpen(true)
+                                    }}>
+                                        Submit Feedback
+                                    </Button>
+                                </div>
+
+                            </div>
+                            }
+                            {isOwner &&
+                            <>
+                                {participation.length !== 0 &&
+                                <Divider className={classes.divider}/>
+                                }
+                                <div className={classes.element}>
+                                    <Typography variant="h4">
+                                        Other Cars
+                                    </Typography>
+                                    <div className={classes.participantsContainer}>
+                                        <OtherCarsParticipation participantSet={event.participant_set}
+                                                                profileId={profileId}/>
+                                    </div>
+                                </div>
+                            </>
+                            }
+                        </>
+                        }
+                        {isRunning &&
+                        <div className={classes.element}>
+                            <Computing/>
+                        </div>
+                        }
+                    </div>
+
+                    <Dialog open={feedbackOpen} onClose={() => {
+                        setFeedbackOpen(false)
+                    }} aria-labelledby="form-dialog-title">
+                        <DialogTitle id="form-dialog-title">Submit Feedback</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText>
+                                We would love to know how your experience was!
+                            </DialogContentText>
+                            <div className={classes.feedbackForm}>
+                                <FormControl className={classes.formControl}>
+                                    <InputLabel id="select-receiver-label">Receiver</InputLabel>
+                                    <Select
+                                        labelId="select-receiver-label"
+                                        id="select-receiver"
+                                        value={receiver}
+                                        onChange={(value) => {
+                                            setReceiver(value.target.value)
+                                        }}
+                                    >
+                                        {feedbackMenuItems}
+                                    </Select>
+                                </FormControl>
+                                <Rating
+                                    name="rating"
+                                    value={vote}
+                                    precision={0.5}
+                                    onChange={(event, newValue) => {
+                                        setVote(newValue);
+                                    }}
+                                />
+                                <TextField
+                                    value={comment}
+                                    onChange={(input) => {
+                                        setComment(input.target.value)
+                                    }}
+                                    margin="dense"
+                                    id="comment"
+                                    label="Feedback"
+                                    fullWidth
+                                />
+                            </div>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={() => {
+                                setFeedbackOpen(false)
+                            }} color="primary">
+                                Cancel
+                            </Button>
+                            <Button onClick={() => {
+                                setFeedbackOpen(true)
+                                sendFeedback()
+                            }} color="primary">
+                                Submit
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+
+                    <AlertDialog
+                        open={leaveOpen}
+                        handleClose={() => {
+                            setLeaveOpen(false)
+                        }}
+                        title="Are you sure you want to leave?"
+                        contentText={`By clicking yes you will cancel your participation to "${event.name}". You will be able to re-join the event until the owner starts the computation!`}
+                        yesText="Yes"
+                        noText="No"
+                        onYes={() => {
+                            let participation = event.participant_set.filter(item => (item.profile.id === profileId))[0];
+                            //leaveEvent(event.id, participation.id, token, isOwner, history,);
+                            axios
+                                .delete(
+                                    participationEditURL(event.id, participation.id),
+                                    headers('application/json', token)
+                                )
+                                .then(res => {
+                                    addAlert("Successfully left the event", "success")
+                                    setLeaveOpen(false)
+                                    if (!isOwner) {
+                                        history.push(home)
+                                    }
+                                })
+                                .catch(err => {
+                                    console.log(err)
+                                    addAlert("Something went wrong while leaving", "error")
+                                    setLeaveOpen(false)
+                                })
+                        }}
+                        onNo={() => {
+                            setLeaveOpen(false)
+                        }}
+                    />
+
+                    <AlertDialog
+                        open={deleteOpen}
+                        handleClose={() => {
+                            setDeleteOpen(false)
+                        }}
+                        title="Are you sure you want to delete the event?"
+                        contentText={`You are going to delete the event "${event.name}". You will lose all the participations if you decide to recreate the event later. Proceed only if you are sure of what you're doing`}
+                        yesText="Yes"
+                        noText="No"
+                        onYes={() => {
+                            axios
+                                .delete(
+                                    eventDetailURL(event.id),
+                                    headers('application/json', token)
+                                )
+                                .then(res => {
+                                    addAlert("Successfully deleted the event", "success")
+                                    setDeleteOpen(false)
+                                    history.push(home)
+                                })
+                                .catch(err => {
+                                    console.log(err)
+                                    addAlert("Something went wrong", "error")
+                                    setDeleteOpen(false)
+                                })
+                        }}
+                        onNo={() => {
+                            setDeleteOpen(false)
+                        }}
+                    />
+                    <JoinContainer open={joinOpen} close={() => {
+                        setJoinOpen(false)
+                    }} event={event} refreshEvents={() => {
+                        getEvent()
+                    }}/>
+                </div>
+            </>
+        );
+    }
+;
 
 function mapStateToProps(state) {
     return {
