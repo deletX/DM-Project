@@ -43,7 +43,7 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import Rating from "@material-ui/lab/Rating";
 import {Helmet} from "react-helmet";
-import {runEvent, getEventAxios, updateEvent, leaveEvent} from "../utils/api";
+import {runEvent, getEventAxios, updateEvent, leaveEvent, deleteEvent} from "../utils/api";
 import {useSnackbar} from 'notistack';
 
 const useStyles = makeStyles((theme) => ({
@@ -812,24 +812,42 @@ const EventContainer = (props) => {
                         noText="No"
                         onYes={() => {
                             let participation = event.participant_set.filter(item => (item.profile.id === profileId))[0];
-                            //leaveEvent(event.id, participation.id, token, isOwner, history,);
-                            axios
-                                .delete(
-                                    participationEditURL(event.id, participation.id),
-                                    headers('application/json', token)
-                                )
-                                .then(res => {
-                                    addAlert("Successfully left the event", "success")
+                            leaveEvent(event.id,
+                                participation.id,
+                                token,
+                                (res) => {
                                     setLeaveOpen(false)
                                     if (!isOwner) {
                                         history.push(home)
                                     }
-                                })
-                                .catch(err => {
-                                    console.log(err)
-                                    addAlert("Something went wrong while leaving", "error")
+                                    enqueueSnackbar("Successfully left the event", {
+                                        variant: 'success',
+                                    })
+                                },
+                                (err) => {
                                     setLeaveOpen(false)
-                                })
+                                    enqueueSnackbar("Something went wrong while leaving event", {
+                                        variant: 'warning',
+                                    })
+                                }
+                            )
+                            // axios
+                            //     .delete(
+                            //         participationEditURL(event.id, participation.id),
+                            //         headers('application/json', token)
+                            //     )
+                            //     .then(res => {
+                            //         addAlert("Successfully left the event", "success")
+                            //         setLeaveOpen(false)
+                            //         if (!isOwner) {
+                            //             history.push(home)
+                            //         }
+                            //     })
+                            //     .catch(err => {
+                            //         console.log(err)
+                            //         addAlert("Something went wrong while leaving", "error")
+                            //         setLeaveOpen(false)
+                            //     })
                         }}
                         onNo={() => {
                             setLeaveOpen(false)
@@ -846,21 +864,27 @@ const EventContainer = (props) => {
                         yesText="Yes"
                         noText="No"
                         onYes={() => {
-                            axios
-                                .delete(
-                                    eventDetailURL(event.id),
-                                    headers('application/json', token)
-                                )
-                                .then(res => {
-                                    addAlert("Successfully deleted the event", "success")
+                            deleteEvent(event.id, token,
+                                (res) => {
+                                    //addAlert("Successfully deleted the event", "success")
+
                                     setDeleteOpen(false)
                                     history.push(home)
-                                })
-                                .catch(err => {
-                                    console.log(err)
-                                    addAlert("Something went wrong", "error")
+                                    enqueueSnackbar("Successfully deleted the event", {
+                                        variant: 'success',
+                                    })
+
+                                },
+                                (err) => {
+                                    //console.log(err)
+                                    //addAlert("Something went wrong", "error")
                                     setDeleteOpen(false)
+                                    enqueueSnackbar("Something went wrong while deleting event", {
+                                        variant: 'warning',
+                                    })
                                 })
+
+
                         }}
                         onNo={() => {
                             setDeleteOpen(false)

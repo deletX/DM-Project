@@ -1,5 +1,5 @@
 import axios from "axios";
-import {eventDetailURL, eventRunURL} from "../constants/apiurls";
+import {eventDetailURL, eventRunURL, participationEditURL} from "../constants/apiurls";
 import {headers} from "./utils";
 import {home} from "../constants/pagesurls";
 
@@ -24,7 +24,6 @@ export const runEvent = (eventId, token, onSuccess, onError) => {
             onError(err);
         })
 }
-
 
 export const getEventAxios = (eventId, token, onSuccess, onError) => {
     axios
@@ -57,6 +56,32 @@ export const updateEvent = (eventId, data, token, image, onSuccess, onError) => 
         })
 }
 
-export const leaveEvent = () => {
+export const leaveEvent = (eventId, partecipationId, token, onSuccess, onError) => {
+    axios
+        .delete(
+            participationEditURL(eventId, partecipationId),
+            headers('application/json', token)
+        )
+        .then(res => {
+            onSuccess(res)
+        })
+        .catch(err => {
+            //console.log(err)
+            onError(err)
+            //addAlert("Something went wrong while leaving", "error")
+        })
+}
 
+export const deleteEvent = (eventId, token, onSuccess, onError) => {
+    axios
+        .delete(
+            eventDetailURL(eventId),
+            headers('application/json', token)
+        )
+        .then(res => {
+            onSuccess(res)
+        })
+        .catch(err => {
+            onError(err)
+        })
 }
