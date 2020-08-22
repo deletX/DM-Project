@@ -111,6 +111,7 @@ class CurrentProfileViewSet(viewsets.GenericViewSet, mixins.RetrieveModelMixin,
     """
     ./currentUser
     """
+    serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
     permission_classes = [IsAuthenticated, ]
 
@@ -199,9 +200,7 @@ class NotificationViewSet(viewsets.GenericViewSet, mixins.UpdateModelMixin, mixi
 class SocialView(ConvertTokenView):
     def post(self, request, *args, **kwargs):
         response = super(SocialView, self).post(request, *args, **kwargs)
-        """
-        response.data['user'] = AccessToken.objects.get(token=response.data['access_token']).user_id
-        """
+        # response.data['user'] = AccessToken.objects.get(token=response.data['access_token']).user_id
         return response
 
 
