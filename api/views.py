@@ -19,10 +19,10 @@ from django.core.exceptions import ValidationError, ObjectDoesNotExist
 
 
 class EventViewSet(viewsets.ModelViewSet):
-    '''
-     ./events?joinable=True&joined=True&owned=False
-     /events/<pk>?joinable=True&joined=True&owned=False
-    '''
+    """
+    ./events?joinable=True&joined=True&owned=False
+    /events/<pk>?joinable=True&joined=True&owned=False
+    """
 
     def get_object(self):
         queryset = self.queryset
@@ -66,9 +66,9 @@ class EventViewSet(viewsets.ModelViewSet):
 
 
 class EventRunAPI(viewsets.GenericViewSet, mixins.ListModelMixin):
-    ''''
+    """
     ./events/<pk>/run
-    '''
+    """
     queryset = Event.objects.all()
     permission_classes = [IsAuthenticated]
     authentication_classes = [OAuth2Authentication]
@@ -86,10 +86,10 @@ class EventRunAPI(viewsets.GenericViewSet, mixins.ListModelMixin):
 
 class ParticipantViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin,
                          mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin):
-    '''
+    """
     ./events/<pk>/participants
     ./events/<pk>/participants/<pk>
-    '''
+    """
     permission_classes = [IsAuthenticated, ]
 
     def get_queryset(self):
@@ -108,10 +108,9 @@ class ParticipantViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin,
 
 class CurrentProfileViewSet(viewsets.GenericViewSet, mixins.RetrieveModelMixin,
                             mixins.UpdateModelMixin):
-    '''
+    """
     ./currentUser
-    '''
-    serializer_class = ProfileSerializer
+    """
     queryset = Profile.objects.all()
     permission_classes = [IsAuthenticated, ]
 
@@ -122,9 +121,9 @@ class CurrentProfileViewSet(viewsets.GenericViewSet, mixins.RetrieveModelMixin,
 
 class CreateNewUserView(viewsets.GenericViewSet, mixins.CreateModelMixin, mixins.UpdateModelMixin,
                         mixins.DestroyModelMixin):
-    '''
+    """
     ./signup
-    '''
+    """
     queryset = User.objects.all()
 
     def get_serializer_class(self):
@@ -135,19 +134,19 @@ class CreateNewUserView(viewsets.GenericViewSet, mixins.CreateModelMixin, mixins
 
 
 class ProfileViewSet(viewsets.GenericViewSet, mixins.RetrieveModelMixin):
-    '''
+    """
     ./profiles/<pk>
-    '''
+    """
     serializer_class = ProfileSerializerOther
     queryset = Profile.objects.all()
     permission_classes = [IsAuthenticated, ]
 
 
 class CarViewSet(viewsets.ModelViewSet):
-    '''
+    """
     ./profiles/<pk>/cars
     ./profiles/<pk>/cars/<pk>
-    '''
+    """
     serializer_class = CarSerializer
     permission_classes = [IsAuthenticated, ]
 
@@ -175,9 +174,9 @@ class CarViewSet(viewsets.ModelViewSet):
 
 class FeedbackViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin, mixins.DestroyModelMixin,
                       mixins.UpdateModelMixin):
-    '''
+    """
     /events/<pk>/participants/<pk>/feedback/<pk>
-    '''
+    """
     serializer_class = FeedbackEditSerializer
     permission_classes = [IsAuthenticated, ]
 
@@ -186,10 +185,10 @@ class FeedbackViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin, mixins.D
 
 
 class NotificationViewSet(viewsets.GenericViewSet, mixins.UpdateModelMixin, mixins.ListModelMixin):
-    '''
+    """
     /current-profile/notifications
     /current-profile/notifications/<pk>
-    '''
+    """
     serializer_class = NotificationSerializer
     permission_classes = [IsAuthenticated, ]
 
@@ -200,7 +199,9 @@ class NotificationViewSet(viewsets.GenericViewSet, mixins.UpdateModelMixin, mixi
 class SocialView(ConvertTokenView):
     def post(self, request, *args, **kwargs):
         response = super(SocialView, self).post(request, *args, **kwargs)
-        # response.data['user'] = AccessToken.objects.get(token=response.data['access_token']).user_id
+        """
+        response.data['user'] = AccessToken.objects.get(token=response.data['access_token']).user_id
+        """
         return response
 
 
