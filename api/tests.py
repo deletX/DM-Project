@@ -12,6 +12,9 @@ from unittest import skip
 
 
 class EventViewSetAPITestCase(APITestCase):
+    """
+    Class for testing get, post, put and delete with events
+    """
 
     def setUp(self):
         self.username = "test_usr"
@@ -134,6 +137,7 @@ class EventViewSetAPITestCase(APITestCase):
 @skip("I don't want to start redis-server and celery worker now")
 class EventRunAPIAPITestCase(APITestCase):
     """
+    Class for testing run of events
     Don't Forget to start celery and redis
     """
 
@@ -195,6 +199,10 @@ class EventRunAPIAPITestCase(APITestCase):
 
 
 class ParticipantViewSetAPITestCase(APITestCase):
+    """
+    Class for testing get, post, put and delete of partecipants of an event
+    """
+
     def setUp(self):
         self.username = "test_usr"
         self.email = "test_email"
@@ -288,6 +296,9 @@ class ParticipantViewSetAPITestCase(APITestCase):
 
 
 class CurrentProfileViewSetAPITestCase(APITestCase):
+    """
+    Class for testing get and put of current profile info
+    """
     url = reverse("api:cur-prof")
 
     def setUp(self):
@@ -324,6 +335,9 @@ class CurrentProfileViewSetAPITestCase(APITestCase):
 
 
 class CreateNewUserViewAPITestCase(APITestCase):
+    """
+    Class for testing creation of new users
+    """
     url = reverse("api:signup")
 
     def setUp(self):
@@ -387,7 +401,10 @@ class CreateNewUserViewAPITestCase(APITestCase):
 
 
 class ProfileViewSetApiTestCase(APITestCase):
-    # get
+    """
+    Class for testing profile data
+    """
+
     def setUp(self):
         self.username = "test_usr"
         self.email = "test_email"
@@ -417,6 +434,9 @@ class ProfileViewSetApiTestCase(APITestCase):
 
 
 class CarViewSetAPITestCase(APITestCase):
+    """
+    Class for testing get, post, put and delete over car details
+    """
     def setUp(self):
         self.username = "test_usr"
         self.email = "test_email"
@@ -506,7 +526,9 @@ class CarViewSetAPITestCase(APITestCase):
 
 
 class FeedbackViewSetAPITestCase(APITestCase):
-    # post put delete
+    """
+    Class for testing get, post, put and delete for feedbacks
+    """
     def setUp(self):
         self.username = "test_usr"
         self.email = "test_email"
@@ -582,6 +604,9 @@ class FeedbackViewSetAPITestCase(APITestCase):
 
 
 class NotificationViewSetAPITestCase(APITestCase):
+    """
+    Class for testing get and put of notifications
+    """
     def setUp(self):
         self.username = "test_usr"
         self.email = "test_email"
