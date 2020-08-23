@@ -1,5 +1,5 @@
 import axios from "axios";
-import {eventDetailURL, eventRunURL, participationEditURL} from "../constants/apiurls";
+import {eventDetailURL, eventRunURL, participationEditURL, createFeedbackURL} from "../constants/apiurls";
 import {headers} from "./utils";
 import {home} from "../constants/pagesurls";
 
@@ -83,5 +83,26 @@ export const deleteEvent = (eventId, token, onSuccess, onError) => {
         })
         .catch(err => {
             onError(err)
+        })
+}
+
+export const postCreateFeedback = (eventId, receiver, comment, vote, token, onSuccess, onError) => {
+    axios
+        .post(
+            createFeedbackURL(eventId, receiver),
+            {
+                receiver: receiver,
+                event: eventId,
+                comment: comment,
+                vote: vote,
+            },
+            headers('application/json', token)
+        )
+        .then((res) => {
+            onSuccess(res)
+        })
+        .catch((err) => {
+            onError(err)
+            //handleError("Something went wrong while posting your feedback [014]", error)
         })
 }

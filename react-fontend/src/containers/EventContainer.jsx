@@ -43,7 +43,7 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import Rating from "@material-ui/lab/Rating";
 import {Helmet} from "react-helmet";
-import {runEvent, getEventAxios, updateEvent, leaveEvent, deleteEvent} from "../utils/api";
+import {runEvent, getEventAxios, updateEvent, leaveEvent, deleteEvent, postCreateFeedback} from "../utils/api";
 import {useSnackbar} from 'notistack';
 
 const useStyles = makeStyles((theme) => ({
@@ -389,27 +389,44 @@ const EventContainer = (props) => {
         const feedbackMenuItems = myCar.length === 0 ? [] : myCar.map(item => (
             <MenuItem value={item.profile.id}>{item.profile.first_name} {item.profile.last_name}</MenuItem>))
         const sendFeedback = () => {
-            axios
-                .post(
-                    createFeedbackURL(event.id, receiver),
-                    {
-                        receiver: receiver,
-                        event: event.id,
-                        comment: comment,
-                        vote: vote,
-                    },
-                    headers('application/json', token)
-                )
-                .then((res) => {
+            postCreateFeedback(event.id, receiver, comment, vote, token,
+                (res) => {
                     setFeedbackOpen(false)
                     getEvent()
-                    addAlert("Feedback left with success")
-                })
-                .catch((error) => {
-                    console.log(error)
+                    enqueueSnackbar("Feedback left with success", {
+                        variant: 'success',
+                    })
+                    //addAlert("Feedback left with success")
+                },
+                (err) => {
+                    //console.log(error)
                     setFeedbackOpen(false)
-                    addAlert("An error occurred while leaving the feedback", "error")
+                    enqueueSnackbar("Something went wrong while posting your feedback [014]", {
+                        variant: 'warning',
+                    })
+                    //addAlert("An error occurred while leaving the feedback", "error")
                 })
+            // axios
+            //     .post(
+            //         createFeedbackURL(event.id, receiver),
+            //         {
+            //             receiver: receiver,
+            //             event: event.id,
+            //             comment: comment,
+            //             vote: vote,
+            //         },
+            //         headers('application/json', token)
+            //     )
+            //     .then((res) => {
+            //         setFeedbackOpen(false)
+            //         getEvent()
+            //         addAlert("Feedback left with success")
+            //     })
+            //     .catch((error) => {
+            //         console.log(error)
+            //         setFeedbackOpen(false)
+            //         addAlert("An error occurred while leaving the feedback", "error")
+            //     })
         };
 
 
