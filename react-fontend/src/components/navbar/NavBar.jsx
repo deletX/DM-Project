@@ -4,7 +4,6 @@ import * as pagesURL from "../../constants/pagesurls";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import React, {useEffect} from "react";
-
 import {fade} from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {connect} from "react-redux";

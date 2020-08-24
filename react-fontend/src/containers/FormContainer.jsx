@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
-import {Container, Paper} from "@material-ui/core";
+import {Paper} from "@material-ui/core";
 import {white} from "color-name";
 
 

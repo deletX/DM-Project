@@ -6,15 +6,15 @@ import {white} from "color-name";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import {AddBox} from "@material-ui/icons";
-import {eventListURL} from "../constants/apiurls";
-import {headers, useQuery} from "../utils/utils";
+import {handleError, handleSuccess, useQuery} from "../utils/utils";
 import {addAlert} from "../actions/alertActions";
-import axios from "axios";
 import ChipBox from "../components/event/ChipBox";
 import EventCard from "../components/event/EventCard";
 import Grid from "@material-ui/core/Grid";
 import {Helmet} from "react-helmet";
 import {useHistory} from "react-router-dom";
+import {getEventsList} from "../utils/api";
+import {useSnackbar} from 'notistack';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -61,6 +61,7 @@ const HomeContainer = ({addError, isAuthenticated, isLoading, search, token}) =>
     let joinable = query.get("joinable") === null ? true : query.get("joinable") === "true"
     let joined = query.get("joined") === null ? true : query.get("joined") === "true"
     let owned = query.get("owned") === null ? false : query.get("owned") === "true"
+    const {enqueueSnackbar, closeSnackbar} = useSnackbar();
 
     useEffect(() => {
         if (!(isAuthenticated || isLoading))
@@ -91,14 +92,16 @@ const HomeContainer = ({addError, isAuthenticated, isLoading, search, token}) =>
                            joined = query.get("joined") === null ? true : query.get("joined") === "true",
                            owned = query.get("owned") === null ? false : query.get("owned") === "true") => {
         console.log(joinable, joined, owned)
-        axios
-            .get(eventListURL(joinable, joined, owned), headers('application/json', token))
-            .then((response) => {
-                setEvents(response.data)
+        getEventsList(joinable, joined, owned, token,
+            (res) => {
+                setEvents(res.data)
+                handleSuccess(enqueueSnackbar, "Successfully retrieved events list")
+            },
+            (err) => {
+                console.error(err)
+                handleError(enqueueSnackbar, "An Error occurred while retrieving events")
+                //addError("An Error occurred while retrieving events")
             })
-            .catch((err) => {
-                addError("An Error occurred while retrieving events")
-            });
     }
 
     if (events !== null)
