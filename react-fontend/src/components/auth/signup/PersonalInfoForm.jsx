@@ -11,8 +11,10 @@ import GoogleLogin from "react-google-login";
 import SvgIcon from "@material-ui/core/SvgIcon";
 import {ReactComponent as GoogleIcon} from '../../../icons/GoogleLogo.svg'
 import Alert from "@material-ui/lab/Alert";
-import axios from "axios"
 import AvatarCustom from "../../AvatarCustom";
+import {getProfileImage} from "../../../utils/api";
+import {handleError, handleSuccess} from "../../../utils/utils";
+import {useSnackbar} from 'notistack';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -66,6 +68,7 @@ const PersonalInfoForm = ({
     const classes = useStyles();
     const [emailHelperText, setEmailHelperText] = useState("");
     const [usernameHelperText, setUsernameHelperText] = useState("");
+    const {enqueueSnackbar, closeSnackbar} = useSnackbar();
 
     const validateEmail = (input) => {
         undoGoogleLogin();
@@ -127,15 +130,17 @@ const PersonalInfoForm = ({
                                 setEmail(input.profileObj.email)
                                 setUsername(username)
                                 setImageURL(input.profileObj.imageUrl)
-                                axios.get(input.profileObj.imageUrl, {responseType: 'blob'}).then(res => {
-                                    let blob = res.data
-
-                                    let type = res.data.type.split('/').pop()
-                                    blob.name = `${username}.${type}`
-                                    setImage(blob)
-                                })
-                                    .catch(err => {
+                                getProfileImage(input.profileObj.imageUrl,
+                                    (res) => {
+                                        let blob = res.data
+                                        let type = res.data.type.split('/').pop()
+                                        blob.name = `${username}.${type}`
+                                        setImage(blob)
+                                        handleSuccess(enqueueSnackbar, "Succefully retrieved profile image")
+                                    },
+                                    (err) => {
                                         console.log(err)
+                                        handleError(enqueueSnackbar, "Could not retrieve profile image")
                                     })
                                 handleNext()
                             }}

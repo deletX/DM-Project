@@ -13,8 +13,10 @@ import {defaultEventPic} from "../../constants/constants";
 import ReviewCreateComponent from "./create/ReviewCreateComponent";
 import axios from "axios"
 import {eventCreateURL, eventJoinURL} from "../../constants/apiurls";
-import {headers} from "../../utils/utils";
+import {handleError, handleSuccess, headers} from "../../utils/utils";
 import {addAlert} from "../../actions/alertActions";
+import {postCreateEvent, postJoinEvent} from "../../utils/api";
+import {useSnackbar} from 'notistack';
 
 
 function mapStateToProps(state) {
@@ -43,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
 
 const CreateComponent = ({addAlert, isAuthenticatedOrLoading}) => {
     const classes = useStyles();
-    let history=useHistory()
+    let history = useHistory()
 
     const [open, setOpen] = useState(false);
     const [name, setName] = useState("");
@@ -59,6 +61,7 @@ const CreateComponent = ({addAlert, isAuthenticatedOrLoading}) => {
     const [pos, setPos] = useState("");
     const [car, setCar] = useState(-1);
 
+    const {enqueueSnackbar, closeSnackbar} = useSnackbar();
 
     const getStepContent = (step, handleNext, isStepSkipped) => {
         switch (step) {
@@ -114,44 +117,32 @@ const CreateComponent = ({addAlert, isAuthenticatedOrLoading}) => {
             }
         }
 
-        axios
-            .post(
-                eventCreateURL(),
-                data,
-                image !== null ? headers('multipart/form-data', token) : headers('application/json', token)
-            )
-            .then(res => {
+        postCreateEvent(token, data, image,
+            (res) => {
                 addAlert("Event created successfully", "success")
                 history.goBack()
                 let event = res.data
                 console.log(res.data)
+                handleSuccess(enqueueSnackbar, "Event created successfully")
                 if (!isStepSkipped(2))
-                    axios
-                        .post(
-                            eventJoinURL(event.id),
-                            {
-                                starting_address: address,
-                                starting_pos: pos,
-                                car: car === -1 ? null : car
-                            },
-                            headers('application/json', token)
-                        )
-                        .then(res => {
-                                addAlert("Joined successfully", "success")
-                                if (open)
-                                    setOpen(false)
-                            }
-                        )
-                        .catch(err => {
-                                console.log(err)
-                                addAlert("An error occurred while joining", "error")
-                                if (open)
-                                    setOpen(false)
-                            }
-                        )
-            })
-            .catch(err => {
-                addAlert("An error occurred while creating the event", "error")
+                    postJoinEvent(event.id, address, pos, car, token,
+                        (res) => {
+                            //addAlert("Joined successfully", "success")
+                            handleSuccess(enqueueSnackbar, "Joined successfully")
+                            if (open)
+                                setOpen(false)
+                        },
+                        (err) => {
+                            console.log(err)
+                            //addAlert("An error occurred while joining", "error")
+                            handleError(enqueueSnackbar, "An error occurred while joining")
+                            if (open)
+                                setOpen(false)
+                        })
+            },
+            (err) => {
+                //addAlert("An error occurred while creating the event", "error")
+                handleError(enqueueSnackbar, "An error occurred while creating the event")
                 reset(true)
                 if (open)
                     setOpen(false)

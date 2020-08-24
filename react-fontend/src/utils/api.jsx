@@ -1,7 +1,12 @@
 import axios from "axios";
-import {eventDetailURL, eventRunURL, participationEditURL, createFeedbackURL} from "../constants/apiurls";
+import {
+    eventDetailURL,
+    eventRunURL,
+    participationEditURL,
+    createFeedbackURL,
+    eventCreateURL, eventJoinURL
+} from "../constants/apiurls";
 import {headers} from "./utils";
-import {home} from "../constants/pagesurls";
 
 
 /**
@@ -38,6 +43,44 @@ export const getEventAxios = (eventId, token, onSuccess, onError) => {
             onError(err);
             //addAlert("An error occurred while retrieving event data",)
         })
+}
+
+export const postCreateEvent = (token, data, image, onSuccess, onError) => {
+    axios
+        .post(
+            eventCreateURL(),
+            data,
+            image !== null ?
+                headers('multipart/form-data', token) :
+                headers('application/json', token)
+        )
+        .then((res) => {
+            onSuccess(res)
+        })
+        .catch((err) => {
+            onError(err)
+        })
+}
+
+export const postJoinEvent = (eventId, starting_address, starting_pos, car, token, onSuccess, onError) => {
+    axios
+        .post(
+            eventJoinURL(eventId),
+            {
+                starting_address: starting_address,
+                starting_pos: starting_pos,
+                car: car === -1 ? null : car
+            },
+            headers('application/json', token)
+        )
+        .then(res => {
+                onSuccess(res)
+            }
+        )
+        .catch(err => {
+                onError(err)
+            }
+        )
 }
 
 export const updateEvent = (eventId, data, token, image, onSuccess, onError) => {
@@ -104,5 +147,18 @@ export const postCreateFeedback = (eventId, receiver, comment, vote, token, onSu
         .catch((err) => {
             onError(err)
             //handleError("Something went wrong while posting your feedback [014]", error)
+        })
+}
+
+export const getProfileImage = (imageUrl, onSuccess, onError) => {
+    axios
+        .get(
+            imageUrl,
+            {responseType: 'blob'})
+        .then((res) => {
+            onSuccess(res)
+        })
+        .catch(err => {
+            onError(err)
         })
 }
