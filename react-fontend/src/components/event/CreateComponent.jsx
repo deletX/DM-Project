@@ -1,4 +1,4 @@
-import React, {Component, useState} from 'react';
+import React, {useState} from 'react';
 import {connect} from 'react-redux';
 import FormContainer from "../../containers/FormContainer";
 import {makeStyles} from "@material-ui/core/styles";
@@ -11,8 +11,6 @@ import {useHistory} from "react-router-dom";
 import {addEvent, login} from "../../constants/pagesurls";
 import {defaultEventPic} from "../../constants/constants";
 import ReviewCreateComponent from "./create/ReviewCreateComponent";
-import axios from "axios"
-import {eventCreateURL, eventJoinURL} from "../../constants/apiurls";
 import {handleError, handleSuccess, headers} from "../../utils/utils";
 import {addAlert} from "../../actions/alertActions";
 import {postCreateEvent, postJoinEvent} from "../../utils/api";
