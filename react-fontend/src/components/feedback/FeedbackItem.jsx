@@ -13,11 +13,9 @@ import TextField from "@material-ui/core/TextField";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
-import {editFeedbackURL} from "../../constants/apiurls";
-import {handleError, handleSuccess, headers} from "../../utils/utils";
+import {handleError, handleSuccess} from "../../utils/utils";
 import {connect} from "react-redux"
 import {addAlert} from "../../actions/alertActions";
-import axios from "axios"
 import {putEditFeedback} from "../../utils/api";
 import {useSnackbar} from 'notistack';
 
