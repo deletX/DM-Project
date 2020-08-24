@@ -95,7 +95,7 @@ const HomeContainer = ({addError, isAuthenticated, isLoading, search, token}) =>
         getEventsList(joinable, joined, owned, token,
             (res) => {
                 setEvents(res.data)
-                handleSuccess(enqueueSnackbar, "Successfully retrieved events list")
+                //handleSuccess(enqueueSnackbar, "Successfully retrieved events list")
             },
             (err) => {
                 console.error(err)

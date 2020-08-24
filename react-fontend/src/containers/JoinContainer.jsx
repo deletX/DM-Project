@@ -5,10 +5,10 @@ import {makeStyles} from "@material-ui/core/styles";
 import ModalContainer from "./ModalContainer";
 import Button from "@material-ui/core/Button";
 import {addAlert} from "../actions/alertActions";
-import axios from "axios"
-import {eventJoinURL} from "../constants/apiurls";
-import {headers} from "../utils/utils";
+import {handleError, handleSuccess} from "../utils/utils";
 import JoinComponent from "../components/event/JoinComponent";
+import {postJoinEvent} from "../utils/api";
+import {useSnackbar} from 'notistack';
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -22,6 +22,7 @@ const JoinContainer = ({addAlert, cars, token, open, close, event, refreshEvents
     const [addr, setAddr] = useState("");
     const [pos, setPos] = useState("");
     const [car, setCar] = useState(-1);
+    const {enqueueSnackbar, closeSnackbar} = useSnackbar();
 
     return (
         <>
@@ -37,32 +38,23 @@ const JoinContainer = ({addAlert, cars, token, open, close, event, refreshEvents
                 <JoinComponent car={car} setCar={setCar} addr={addr} setAddr={setAddr} pos={pos} setPos={setPos}/>
                 <Button variant="contained" className={classes.button} color="secondary" disabled={pos === ""}
                         onClick={() => {
-                            console.log(event.id)
-                            console.log(eventJoinURL(event.id))
-                            axios
-                                .post(
-                                    eventJoinURL(event.id),
-                                    {
-                                        starting_address: addr,
-                                        starting_pos: pos,
-                                        car: car === -1 ? null : car
-                                    },
-                                    headers('application/json', token)
-                                )
-                                .then(res => {
-                                        addAlert("Joined successfully", "success")
-                                        refreshEvents();
-                                        if (close)
-                                            close()
-                                    }
-                                )
-                                .catch(err => {
-                                        console.log(err)
-                                        addAlert("An error occurred while joining", "error")
-                                        if (close)
-                                            close()
-                                    }
-                                )
+                            //console.log(event.id)
+                            //console.log(eventJoinURL(event.id))
+                            postJoinEvent(event.id, addr, pos, car, token,
+                                (res) => {
+                                    //addAlert("Joined successfully", "success")
+                                    handleSuccess(enqueueSnackbar,"Joined successfully")
+                                    refreshEvents();
+                                    if (close)
+                                        close()
+                                },
+                                (err) => {
+                                    console.log(err)
+                                    handleError(enqueueSnackbar,"An error occurred while joining")
+                                    //addAlert("An error occurred while joining", "error")
+                                    if (close)
+                                        close()
+                                })
                         }}
                 >
                     join
