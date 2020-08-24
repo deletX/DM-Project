@@ -4,7 +4,7 @@ import {
     eventRunURL,
     participationEditURL,
     createFeedbackURL,
-    eventCreateURL, eventJoinURL
+    eventCreateURL, eventJoinURL, eventListURL
 } from "../constants/apiurls";
 import {headers} from "./utils";
 
@@ -34,6 +34,21 @@ export const getEventAxios = (eventId, token, onSuccess, onError) => {
     axios
         .get(
             eventDetailURL(eventId),
+            headers('application/json', token)
+        )
+        .then(res => {
+            onSuccess(res);
+        })
+        .catch(err => {
+            onError(err);
+            //addAlert("An error occurred while retrieving event data",)
+        })
+}
+
+export const getEventsList = (joinable, joined, owned, token, onSuccess, onError) => {
+    axios
+        .get(
+            eventListURL(joinable, joined, owned),
             headers('application/json', token)
         )
         .then(res => {

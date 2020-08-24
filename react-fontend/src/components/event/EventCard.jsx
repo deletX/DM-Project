@@ -12,11 +12,13 @@ import JoinContainer from "../../containers/JoinContainer";
 import AlertDialog from "../AlertDialog";
 import axios from "axios"
 import {eventDetailURL, participationEditURL} from "../../constants/apiurls";
-import {headers} from "../../utils/utils";
+import {handleError, handleSuccess, headers} from "../../utils/utils";
 import {addAlert} from "../../actions/alertActions";
 import {useHistory} from "react-router-dom";
 import {eventPage} from "../../constants/pagesurls";
 import LinearProgress from "@material-ui/core/LinearProgress";
+import {deleteEvent, leaveEvent} from "../../utils/api";
+import {useSnackbar} from 'notistack';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -40,12 +42,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const EventCard = ({addAlert, token, event, profileId, refreshEvents}) => {
-    let history=useHistory()
+    let history = useHistory()
     const classes = useStyles()
     const [joinOpen, setJoinOpen] = useState(false);
     const [leaveOpen, setLeaveOpen] = useState(false);
     const [deleteOpen, setDeleteOpen] = useState(false);
-    console.log(event.date_time)
+    //console.log(event.date_time)
+    const {enqueueSnackbar, closeSnackbar} = useSnackbar();
     let date = new Date(event.date_time)
 
     let isInEvent = event.participant_set.filter(item => (item.profile.id === profileId)).length > 0;
@@ -55,7 +58,7 @@ const EventCard = ({addAlert, token, event, profileId, refreshEvents}) => {
 
     return (
         <>
-            
+
             <Card className={classes.root}>
                 <CardActionArea
                     onClick={() => {
@@ -123,19 +126,17 @@ const EventCard = ({addAlert, token, event, profileId, refreshEvents}) => {
                 onYes={() => {
                     let participation = event.participant_set.filter(item => (item.profile.id === profileId))[0];
                     console.log(participation);
-                    axios
-                        .delete(
-                            participationEditURL(event.id, participation.id),
-                            headers('application/json', token)
-                        )
-                        .then(res => {
-                            addAlert("Successfully left the event", "success")
+                    leaveEvent(event.id, participation.id, token,
+                        (res) => {
+                            //addAlert("Successfully left the event", "success")
+                            handleSuccess(enqueueSnackbar, "Successfully left the event")
                             refreshEvents()
                             setLeaveOpen(false)
-                        })
-                        .catch(err => {
+                        },
+                        (err) => {
                             console.log(err)
-                            addAlert("Something went wrong while leaving", "error")
+                            //addAlert("Something went wrong while leaving", "error")
+                            handleError(enqueueSnackbar, "Something went wrong while leaving")
                             setLeaveOpen(false)
                         })
                 }}
@@ -154,20 +155,18 @@ const EventCard = ({addAlert, token, event, profileId, refreshEvents}) => {
                 yesText="Yes"
                 noText="No"
                 onYes={() => {
-                    axios
-                        .delete(
-                            eventDetailURL(event.id),
-                            headers('application/json', token)
-                        )
-                        .then(res => {
-                            addAlert("Successfully deleted the event", "success")
+                    deleteEvent(event.id, token,
+                        (res) => {
+                            //addAlert("Successfully deleted the event", "success")
                             refreshEvents()
                             setDeleteOpen(false)
-                        })
-                        .catch(err => {
+                            handleSuccess(enqueueSnackbar, "Successfully deleted the event")
+                        },
+                        (err) => {
                             console.log(err)
-                            addAlert("Something went wrong", "error")
+                            //addAlert("Something went wrong", "error")
                             setDeleteOpen(false)
+                            handleError(enqueueSnackbar,"Something went wrong while deleting event")
                         })
                 }}
                 onNo={() => {
