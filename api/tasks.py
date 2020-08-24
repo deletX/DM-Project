@@ -1,14 +1,10 @@
-from itertools import count
-from celery import shared_task
-import logging
 import datetime
-import time
-from .models import Participant, Event, Car, Profile
-from django.contrib.gis.db import models
-from django.contrib.gis.db.models import Q
-from django.contrib.gis.geos import Point
-from geopy.distance import distance
+import logging
 import sys
+import time
+from celery import shared_task
+from geopy.distance import distance
+from .models import Participant, Event, Car, Profile
 
 
 # tobermoved
@@ -30,6 +26,7 @@ class Algorithm:
     """
     Class to compute routes and costs for picking up all the partecipants sharing the same car
     """
+
     class Participant:
         def __init__(self, id, car, starting_pos):
             self.id = id
@@ -236,9 +233,9 @@ class Algorithm:
 
         drivers = self.get_drivers(self.participant_groups[0])
 
-        """ 
-        a tutti i partecipanti metto lo score = all'id così sono          tutti diversi, mentre l'expense dipende dalla macchina così sarà uguale per ogni macchina ma diverso tra le macchine inizializzo i guidatori con pickup_index a 0 
-        """
+        # a tutti i partecipanti metto lo score = all'id così sono tutti diversi, mentre l'expense dipende dalla
+        # macchina così sarà uguale per ogni macchina ma diverso tra le macchine inizializzo i guidatori con
+        # pickup_index a 0
 
         for participant in self.participant_groups[0]:
             participant.score = participant.id
@@ -246,10 +243,11 @@ class Algorithm:
                 participant.pickup_index = 0
                 consumption = Car.objects.get(id=participant.car).consumption
                 participant.expense = consumption * 4.2
-        """
-        scorrendo i guidatori metto riempio le macchine rispettando la disponibilità di posti, i passeggeri sono presi in ordine
-        (il primo guidatore avrà i primi passeggeri fino ad esaurimento posti, il secondo avrà i successivi e così via)
-        """
+
+        # scorrendo i guidatori metto riempio le macchine rispettando la disponibilità di posti, i passeggeri sono
+        # presi in ordine (il primo guidatore avrà i primi passeggeri fino ad esaurimento posti, il secondo avrà i
+        # successivi e così via)
+
         for driver in drivers:
             tot_avail_seats = Car.objects.get(id=driver.car).tot_avail_seats
             for i in range(tot_avail_seats - 1):
@@ -264,12 +262,12 @@ class Algorithm:
         timedelta = time2 - time1
         if timedelta.seconds < 120:
             time.sleep(30 - timedelta.seconds)
-        """
-        metto score diversi in ogni gruppo
-        metto i dati come servono
-        salvo un gruppo
-        expense uguali per ogni macchina ma diversi tra loro
-        """
+
+        # metto score diversi in ogni gruppo
+        # metto i dati come servono
+        # salvo un gruppo
+        # expense uguali per ogni macchina ma diversi tra loro
+
         pass
 
     def APCA(self):

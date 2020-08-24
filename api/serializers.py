@@ -1,9 +1,7 @@
-from .models import User, Profile, Car, Event, Participant, Feedback, Notification
-from rest_framework import serializers
 from django.db.utils import IntegrityError
-from drf_extra_fields.geo_fields import PointField
-from django.contrib.gis.geos.point import Point
 from django.utils import timezone
+from rest_framework import serializers
+from .models import User, Profile, Car, Event, Participant, Feedback, Notification
 
 
 def get_kwargs_request(request):

@@ -1,21 +1,12 @@
-import logging
-
+from django.core.exceptions import ValidationError
 from django.shortcuts import render
-from django.shortcuts import get_object_or_404
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
-from oauth2_provider.models import AccessToken
-from rest_framework.permissions import IsAuthenticated
-from rest_framework_social_oauth2.authentication import SocialAuthentication
-from rest_framework_social_oauth2.views import ConvertTokenView
-
-from .models import Event, Profile, User, Participant, Car
-from rest_framework import viewsets, mixins, views, status, generics
-from .serializers import *
-from rest_framework.response import Response
+from rest_framework import viewsets, mixins, status
 from rest_framework.exceptions import PermissionDenied
-from rest_framework.decorators import permission_classes, authentication_classes
-from .tasks import mock_algorithm_task
-from django.core.exceptions import ValidationError, ObjectDoesNotExist
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework_social_oauth2.views import ConvertTokenView
+from .serializers import *
 
 
 class EventViewSet(viewsets.ModelViewSet):

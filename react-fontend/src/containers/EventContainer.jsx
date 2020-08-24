@@ -225,7 +225,7 @@ const EventContainer = (props) => {
                     });
                 },
                 (err) => {
-                    enqueueSnackbar("Something went wrong while starting event [019]", {
+                    enqueueSnackbar("Something went wrong while launching the computation [016]", {
                         variant: 'warning',
                     })
                 }
@@ -259,7 +259,7 @@ const EventContainer = (props) => {
                     setTime(new Date(res.data.date_time))
                 },
                 (err) => {
-                    enqueueSnackbar("An error occurred while retrieving event data", {
+                    enqueueSnackbar("An error occurred while retrieving event data [003]", {
                         variant: 'warning',
                     })
                 }
@@ -843,7 +843,7 @@ const EventContainer = (props) => {
                                 },
                                 (err) => {
                                     setLeaveOpen(false)
-                                    enqueueSnackbar("Something went wrong while leaving event", {
+                                    enqueueSnackbar("Something went wrong while leaving [002]", {
                                         variant: 'warning',
                                     })
                                 }
@@ -896,7 +896,7 @@ const EventContainer = (props) => {
                                     //console.log(err)
                                     //addAlert("Something went wrong", "error")
                                     setDeleteOpen(false)
-                                    enqueueSnackbar("Something went wrong while deleting event", {
+                                    enqueueSnackbar("Something went wrong while deleting your event [015]", {
                                         variant: 'warning',
                                     })
                                 })

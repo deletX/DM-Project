@@ -1,14 +1,10 @@
-from django.contrib.auth.models import User
-import logging
-import os
-
-from .models import *
-from rest_framework.test import APITestCase
-from django.urls import reverse
 import json
-from django.utils import timezone, dateformat
-import subprocess
+import os
 from unittest import skip
+from django.urls import reverse
+from django.utils import timezone, dateformat
+from rest_framework.test import APITestCase
+from .models import *
 
 
 class EventViewSetAPITestCase(APITestCase):
