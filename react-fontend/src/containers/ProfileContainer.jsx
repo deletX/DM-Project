@@ -1,7 +1,7 @@
 import React, {Component, useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import {profilesURL} from "../constants/apiurls";
-import {headers, isAuthenticated} from "../utils/utils";
+import {handleError, handleSuccess, headers, isAuthenticated} from "../utils/utils";
 import axios from "axios"
 import {addAlert} from "../actions/alertActions";
 import ProfileComponent from "../components/profile/ProfileComponent";
@@ -12,6 +12,8 @@ import MyProfileComponent from "../components/profile/MyProfileComponent";
 import OtherProfileComponent from "../components/profile/OtherProfileComponent";
 import FormContainer from "./FormContainer";
 import {Helmet} from "react-helmet";
+import {getProfileData} from "../utils/api";
+import {useSnackbar} from 'notistack';
 
 function mapStateToProps(state) {
     return {
@@ -57,12 +59,13 @@ const emptyProfile = {
 }
 
 const ProfileContainer = ({location, addAlert, token, isAuthenticated, isLoading, profileId, profileRedux}) => {
-    let history=useHistory()
+    let history = useHistory()
     let {id} = useParams()
     id = parseInt(id)
 
     const [profile, setProfile] = useState(profileId === id ? profileRedux : emptyProfile)
     const [loading, setLoading] = useState(false)
+    const {enqueueSnackbar, closeSnackbar} = useSnackbar();
 
     useEffect(() => {
 
@@ -85,20 +88,21 @@ const ProfileContainer = ({location, addAlert, token, isAuthenticated, isLoading
         if (!loading) {
             setLoading(true)
             if (profileId !== id)
-                axios
-                    .get(profilesURL(id),
-                        headers('application/json', token))
-                    .then(res => {
+                getProfileData(id, token,
+                    (res) => {
                         setProfile(res.data)
                         setLoading(false)
-                    })
-                    .catch(err => {
+                        handleSuccess(enqueueSnackbar, "User profile successfully retrieved")
+                    },
+                    (err) => {
                         console.log(err)
-                        addAlert("An error occurred while retrieving the profile", "error")
+                        //addAlert("An error occurred while retrieving the profile", "error")
                         history.push(home)
                         setLoading(false)
+                        handleError(enqueueSnackbar, "An error occurred while retrieving user profile")
                     })
-            else {
+        else
+            {
                 setProfile(profileRedux)
                 setLoading(false)
             }

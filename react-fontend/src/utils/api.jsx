@@ -4,9 +4,10 @@ import {
     eventRunURL,
     participationEditURL,
     createFeedbackURL,
-    eventCreateURL, eventJoinURL, eventListURL, editFeedbackURL
+    eventCreateURL, eventJoinURL, eventListURL, editFeedbackURL, profilesURL
 } from "../constants/apiurls";
 import {headers} from "./utils";
+import {home} from "../constants/pagesurls";
 
 
 /**
@@ -190,6 +191,18 @@ export const getProfileImage = (imageUrl, onSuccess, onError) => {
         .get(
             imageUrl,
             {responseType: 'blob'})
+        .then((res) => {
+            onSuccess(res)
+        })
+        .catch(err => {
+            onError(err)
+        })
+}
+
+export const getProfileData = (profileId, token, onSuccess, onError) => {
+    axios
+        .get(profilesURL(profileId),
+            headers('application/json', token))
         .then((res) => {
             onSuccess(res)
         })
