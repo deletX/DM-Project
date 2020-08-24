@@ -12,6 +12,7 @@ import theme from "./utils/theme";
 import {ThemeProvider} from "@material-ui/core/styles";
 import {MuiPickersUtilsProvider} from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
+import {SnackbarProvider} from 'notistack';
 
 export const history = createBrowserHistory();
 
@@ -23,13 +24,16 @@ function App(props) {
 
     return (
         <BrowserRouter history={history}>
-
             <ThemeProvider theme={theme}>
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <NavBar/>
-                    <AlertContainer alerts={props.alerts}/>
-                    <BaseRouter {...props}/>
-                </MuiPickersUtilsProvider>
+                <SnackbarProvider maxSnack={3}>
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+
+                        <NavBar/>
+                        <AlertContainer alerts={props.alerts}/>
+                        <BaseRouter {...props}/>
+
+                    </MuiPickersUtilsProvider>
+                </SnackbarProvider>
             </ThemeProvider>
         </BrowserRouter>
     )

@@ -5,14 +5,11 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import {Provider} from "react-redux";
 import store from "./utils/store"
-import {SnackbarProvider} from 'notistack';
+
 
 ReactDOM.render(
     <Provider store={store}>
-        <SnackbarProvider maxSnack={3}>
-            <App/>
-        </SnackbarProvider>
-
+        <App/>
     </Provider>,
     document.getElementById('root')
 );

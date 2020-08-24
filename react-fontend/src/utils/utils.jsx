@@ -1,4 +1,5 @@
 import {useLocation} from "react-router";
+import {useSnackbar} from 'notistack';
 
 export const isAuthenticated = () => {
     const token = localStorage.getItem("token");
@@ -129,4 +130,17 @@ export const pridStringToLatLng = (position) => {
 
 export const useQuery = () => {
     return new URLSearchParams(useLocation().search);
+}
+
+export const handleError = (enqueueSnackbar, message, error) => {
+    enqueueSnackbar(message, {variant: 'error'});
+    console.log(error);
+}
+
+export const handleSuccess = (enqueueSnackbar, message) => {
+    enqueueSnackbar(message, {variant: 'success'});
+}
+
+export const handleInfo = (enqueueSnackbar, message) => {
+    enqueueSnackbar(message, {variant: 'info'});
 }

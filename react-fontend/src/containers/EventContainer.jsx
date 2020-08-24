@@ -8,7 +8,6 @@ import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Divider from "@material-ui/core/Divider";
 import {Map, Marker, Popup, TileLayer} from "react-leaflet";
-import axios from "axios";
 import Box from "@material-ui/core/Box";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Alert from "@material-ui/lab/Alert";
@@ -17,8 +16,7 @@ import {addAlert} from "../actions/alertActions";
 import {useHistory} from "react-router-dom";
 import {eventPage, home, login} from "../constants/pagesurls";
 import AlertDialog from "../components/AlertDialog";
-import {createFeedbackURL, eventDetailURL, eventRunURL, participationEditURL} from "../constants/apiurls";
-import {headers, pridStringToLatLng} from "../utils/utils";
+import {handleError, handleInfo, handleSuccess, pridStringToLatLng} from "../utils/utils";
 import JoinContainer from "./JoinContainer";
 import {connect} from "react-redux";
 import TextField from "@material-ui/core/TextField";
@@ -220,29 +218,12 @@ const EventContainer = (props) => {
                 token,
                 (res) => {
                     setEvent({...event, status: 1})
-                    enqueueSnackbar("Computation has started", {
-                        variant: 'info',
-                    });
+                    handleInfo(enqueueSnackbar, "Computation has started")
                 },
                 (err) => {
-                    enqueueSnackbar("Something went wrong while launching the computation [016]", {
-                        variant: 'warning',
-                    })
+                    handleError(enqueueSnackbar, "Something went wrong while launching the computation [016]")
                 }
             )
-            //
-            // axios
-            //     .get(
-            //         eventRunURL(id),
-            //         headers('application/json', token),
-            //     )
-            //     .then(res => {
-            //         setEvent({...event, status: 1})
-            //
-            //     })
-            //     .catch(err => {
-            //         addAlert("An error occurred while launching the computation :(", "error")
-            //     })
         }
         const getEvent = () => {
             getEventAxios(
@@ -259,30 +240,9 @@ const EventContainer = (props) => {
                     setTime(new Date(res.data.date_time))
                 },
                 (err) => {
-                    enqueueSnackbar("An error occurred while retrieving event data [003]", {
-                        variant: 'warning',
-                    })
+                    handleError(enqueueSnackbar, "An error occurred while retrieving event data [003]")
                 }
             )
-            // axios
-            //     .get(
-            //         eventDetailURL(id),
-            //         headers('application/json', token)
-            //     )
-            //     .then(res => {
-            //         setEvent(res.data)
-            //         setImageURL(res.data.picture)
-            //         setName(res.data.name)
-            //         setDescription(res.data.description)
-            //         setAddress(res.data.address)
-            //         setDestination(res.data.destination)
-            //         setDay(new Date(res.data.date_time))
-            //         setTime(new Date(res.data.date_time))
-            //     })
-            //     .catch(err => {
-            //         history.push(home)
-            //         addAlert("An error occurred while retrieving event data",)
-            //     })
         }
 
         useEffect(() => {
@@ -347,14 +307,10 @@ const EventContainer = (props) => {
                     setTime(new Date(res.data.date_time))
                     setIsLoading(false)
                     setEdit(false)
-                    enqueueSnackbar("Event successfully updated", {
-                        variant: 'success',
-                    })
+                    handleSuccess(enqueueSnackbar, "Event successfully updated")
                 },
                 (err) => {
-                    enqueueSnackbar("An error occurred while updating event", {
-                        variant: 'warning',
-                    })
+                    handleError(enqueueSnackbar, "An error occurred while updating event")
                 }
             )
         }
@@ -393,40 +349,13 @@ const EventContainer = (props) => {
                 (res) => {
                     setFeedbackOpen(false)
                     getEvent()
-                    enqueueSnackbar("Feedback left with success", {
-                        variant: 'success',
-                    })
-                    //addAlert("Feedback left with success")
+                    handleSuccess(enqueueSnackbar, "Feedback left with success")
                 },
                 (err) => {
                     //console.log(error)
                     setFeedbackOpen(false)
-                    enqueueSnackbar("Something went wrong while posting your feedback [014]", {
-                        variant: 'warning',
-                    })
-                    //addAlert("An error occurred while leaving the feedback", "error")
+                    handleError(enqueueSnackbar, "Something went wrong while posting your feedback [014]")
                 })
-            // axios
-            //     .post(
-            //         createFeedbackURL(event.id, receiver),
-            //         {
-            //             receiver: receiver,
-            //             event: event.id,
-            //             comment: comment,
-            //             vote: vote,
-            //         },
-            //         headers('application/json', token)
-            //     )
-            //     .then((res) => {
-            //         setFeedbackOpen(false)
-            //         getEvent()
-            //         addAlert("Feedback left with success")
-            //     })
-            //     .catch((error) => {
-            //         console.log(error)
-            //         setFeedbackOpen(false)
-            //         addAlert("An error occurred while leaving the feedback", "error")
-            //     })
         };
 
 
@@ -837,34 +766,13 @@ const EventContainer = (props) => {
                                     if (!isOwner) {
                                         history.push(home)
                                     }
-                                    enqueueSnackbar("Successfully left the event", {
-                                        variant: 'success',
-                                    })
+                                    handleSuccess(enqueueSnackbar, "Successfully left the event")
                                 },
                                 (err) => {
                                     setLeaveOpen(false)
-                                    enqueueSnackbar("Something went wrong while leaving [002]", {
-                                        variant: 'warning',
-                                    })
+                                    handleError(enqueueSnackbar, "Something went wrong while leaving [002]")
                                 }
                             )
-                            // axios
-                            //     .delete(
-                            //         participationEditURL(event.id, participation.id),
-                            //         headers('application/json', token)
-                            //     )
-                            //     .then(res => {
-                            //         addAlert("Successfully left the event", "success")
-                            //         setLeaveOpen(false)
-                            //         if (!isOwner) {
-                            //             history.push(home)
-                            //         }
-                            //     })
-                            //     .catch(err => {
-                            //         console.log(err)
-                            //         addAlert("Something went wrong while leaving", "error")
-                            //         setLeaveOpen(false)
-                            //     })
                         }}
                         onNo={() => {
                             setLeaveOpen(false)
@@ -883,25 +791,15 @@ const EventContainer = (props) => {
                         onYes={() => {
                             deleteEvent(event.id, token,
                                 (res) => {
-                                    //addAlert("Successfully deleted the event", "success")
-
                                     setDeleteOpen(false)
                                     history.push(home)
-                                    enqueueSnackbar("Successfully deleted the event", {
-                                        variant: 'success',
-                                    })
+                                    handleSuccess(enqueueSnackbar, "Successfully deleted the event")
 
                                 },
                                 (err) => {
-                                    //console.log(err)
-                                    //addAlert("Something went wrong", "error")
                                     setDeleteOpen(false)
-                                    enqueueSnackbar("Something went wrong while deleting your event [015]", {
-                                        variant: 'warning',
-                                    })
+                                    handleError(enqueueSnackbar, "Something went wrong while deleting your event [015]")
                                 })
-
-
                         }}
                         onNo={() => {
                             setDeleteOpen(false)
