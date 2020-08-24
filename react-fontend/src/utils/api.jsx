@@ -4,7 +4,7 @@ import {
     eventRunURL,
     participationEditURL,
     createFeedbackURL,
-    eventCreateURL, eventJoinURL, eventListURL
+    eventCreateURL, eventJoinURL, eventListURL, editFeedbackURL
 } from "../constants/apiurls";
 import {headers} from "./utils";
 
@@ -162,6 +162,26 @@ export const postCreateFeedback = (eventId, receiver, comment, vote, token, onSu
         .catch((err) => {
             onError(err)
             //handleError("Something went wrong while posting your feedback [014]", error)
+        })
+}
+
+export const putEditFeedback = (eventId, receiverId, feedbackId, comment, vote, token, onSuccess, onError) => {
+    axios
+        .put(
+            editFeedbackURL(eventId, receiverId, feedbackId),
+            {
+                receiver: receiverId,
+                event: eventId,
+                comment: comment,
+                vote: vote,
+            },
+            headers('application/json', token)
+        )
+        .then((res) => {
+            onSuccess(res)
+        })
+        .catch((err) => {
+            onError(err)
         })
 }
 

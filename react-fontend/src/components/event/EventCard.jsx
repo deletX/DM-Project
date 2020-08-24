@@ -10,8 +10,6 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import JoinContainer from "../../containers/JoinContainer";
 import AlertDialog from "../AlertDialog";
-import axios from "axios"
-import {eventDetailURL, participationEditURL} from "../../constants/apiurls";
 import {handleError, handleSuccess, headers} from "../../utils/utils";
 import {addAlert} from "../../actions/alertActions";
 import {useHistory} from "react-router-dom";

@@ -14,10 +14,12 @@ import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import {editFeedbackURL} from "../../constants/apiurls";
-import {headers} from "../../utils/utils";
+import {handleError, handleSuccess, headers} from "../../utils/utils";
 import {connect} from "react-redux"
 import {addAlert} from "../../actions/alertActions";
 import axios from "axios"
+import {putEditFeedback} from "../../utils/api";
+import {useSnackbar} from 'notistack';
 
 const useStyles = makeStyles((theme) => ({
     textContainer: {
@@ -41,6 +43,7 @@ const FeedbackItem = ({token, addAlert, feedback, edit = false}) => {
     const [feedbackState, setFeedback] = useState(feedback)
     const [vote, setVote] = useState(feedback.vote)
     const [comment, setComment] = useState(feedback.comment)
+    const {enqueueSnackbar, closeSnackbar} = useSnackbar();
     const classes = useStyles();
     return (
         <ListItem>
@@ -114,24 +117,17 @@ const FeedbackItem = ({token, addAlert, feedback, edit = false}) => {
                     </Button>
                     <Button onClick={() => {
                         console.log(feedback)
-                        axios
-                            .put(
-                                editFeedbackURL(feedback.event.id, feedback.receiver.id, feedback.id),
-                                {
-                                    receiver: feedback.receiver.id,
-                                    event: feedback.event.id,
-                                    comment: comment,
-                                    vote: vote,
-                                },
-                                headers('application/json', token)
-                            )
-                            .then((res) => {
+                        putEditFeedback(feedback.event.id, feedback.receiver.id,
+                            feedback.id, comment, vote, token,
+                            (res) => {
                                 setFeedbackOpen(false)
                                 setFeedback(res.data)
-                            })
-                            .catch(err => {
+                                handleSuccess(enqueueSnackbar, "Successfully edited your feedback")
+                            },
+                            (err) => {
                                 setFeedbackOpen(false)
-                                addAlert("An error occured while editing your feedback", "error")
+                                handleError(enqueueSnackbar, "An error occured while editing your feedback")
+                                //addAlert("An error occured while editing your feedback", "error")
                             })
                     }} color="primary">
                         Submit
