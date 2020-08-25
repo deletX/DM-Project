@@ -4,7 +4,7 @@ import {
     eventRunURL,
     participationEditURL,
     createFeedbackURL,
-    eventCreateURL, eventJoinURL, eventListURL, editFeedbackURL, profilesURL
+    eventCreateURL, eventJoinURL, eventListURL, editFeedbackURL, profilesURL, currentProfileURL, signupURL
 } from "../constants/apiurls";
 import {headers} from "./utils";
 
@@ -208,4 +208,34 @@ export const getProfileData = (profileId, token, onSuccess, onError) => {
         .catch(err => {
             onError(err)
         })
+}
+
+export const putChangeProfilePicture = (formData, token, onSuccess, onError) => {
+    axios
+        .put(
+            currentProfileURL(),
+            formData,
+            headers('multipart/form-data', token)
+        )
+        .then((res) => {
+           onSuccess(res)
+        })
+        .catch(err => {
+           onError(err)
+        })
+}
+
+export const putChangeUserData = (data, token, onSuccess, onError) => {
+    axios
+            .put(
+                signupURL(),
+                data,
+                headers('application/json', token)
+            )
+            .then((res) => {
+                onSuccess(res);
+            })
+            .catch(err => {
+                onError(err)
+            });
 }

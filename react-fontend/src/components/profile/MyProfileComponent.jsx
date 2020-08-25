@@ -7,12 +7,12 @@ import {TextField} from "@material-ui/core";
 import {PhotoCamera} from "@material-ui/icons";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
-import {changeUserData} from "../../actions/profileActions";
+import {changePicture, changeUserData} from "../../actions/profileActions";
 import {connect} from "react-redux";
 import ProfileComponent from "./ProfileComponent";
 import CarContainer from "../../containers/CarContainer";
 import {Helmet} from "react-helmet";
-
+import {useSnackbar} from 'notistack';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
 
 }))
 
-const MyProfileComponent = ({profile, changeUserData}) => {
+const MyProfileComponent = ({profile, changeUserData, changePicture}) => {
     const classes = useStyles();
 
     const [edit, setEdit] = useState(false)
@@ -51,6 +51,7 @@ const MyProfileComponent = ({profile, changeUserData}) => {
     // eslint-disable-next-line
     const [image, setImage] = useState(null)
     const [imageURL, setImageURL] = useState(profile.picture)
+    const {enqueueSnackbar,} = useSnackbar();
 
     const validateEmail = (input) => {
         if (input.target.value === null || input.target.value === "") {
@@ -152,7 +153,7 @@ const MyProfileComponent = ({profile, changeUserData}) => {
                            hidden
                            disabled={!edit}
                            onChange={(input) => {
-                               console.log("ok")
+                               console.log("image set")
                                let fileReader = new FileReader();
                                let file = input.target.files[0];
                                fileReader.onloadend = () => {
@@ -160,11 +161,11 @@ const MyProfileComponent = ({profile, changeUserData}) => {
                                }
                                setImage(file)
                                fileReader.readAsDataURL(file)
+                               //console.log(image, file)
                            }}/>
                     <label htmlFor="icon-button-file">
                         <Button disabled={!edit} color="secondary" aria-label="upload picture" variant="contained"
                                 component="span"
-
                                 className={classes.changePicButton}
                                 startIcon={<PhotoCamera/>}
                         >
@@ -191,7 +192,10 @@ const MyProfileComponent = ({profile, changeUserData}) => {
                         </Button>
                         <Button color="primary" disabled={!edit} onClick={() => {
                             setEdit(false)
-                            changeUserData(name, surname, email, newPassword)
+                            changeUserData(name, surname, email, newPassword, enqueueSnackbar)
+                            if(image !== null)
+                                changePicture(image, enqueueSnackbar)
+                            //console.log(image, file)
                         }}>
                             Save
                         </Button>
@@ -232,7 +236,11 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        changeUserData: (firstName, lastName, email, newPassword = "") => (dispatch(changeUserData(firstName, lastName, email, newPassword === "" ? null : newPassword)))
+        changeUserData: (firstName, lastName, email, newPassword = "", enqueueSnackbar) =>
+            (dispatch(
+                changeUserData(firstName, lastName, email,
+                    newPassword === "" ? null : newPassword, enqueueSnackbar))),
+        changePicture: (image, enqueueSnackbar) => (dispatch(changePicture(image, enqueueSnackbar)))
     };
 }
 

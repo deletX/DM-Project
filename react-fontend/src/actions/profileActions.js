@@ -9,10 +9,10 @@ import {
     USER_DATA_UPDATE
 } from "./types";
 import {carsDetailURL, carsListURL, currentProfileURL, signupURL} from "../constants/apiurls";
-import {headers} from "../utils/utils";
+import {handleError, handleSuccess, headers} from "../utils/utils";
 import {addAlert, alertError} from "./alertActions";
 import {authLogout} from "./authActions";
-
+import {putChangeProfilePicture, putChangeUserData} from "../utils/api";
 
 const start = () => (
     {
@@ -119,32 +119,30 @@ export const fetchProfile = () => {
     }
 };
 
-
-export const changePicture = (picture) => {
+export const changePicture = (picture, enqueueSnackbar) => {
     return async (dispatch) => {
         dispatch(start());
         let access_token = localStorage.getItem("access_token");
         let formData = new FormData();
         formData.append("picture", picture, picture.name);
-        return axios
-            .put(
-                currentProfileURL(),
-                formData,
-                headers('multipart/form-data', access_token)
-            )
-            .then(res => {
+        return putChangeProfilePicture(formData, access_token,
+            (res) => {
+                console.log("picture changed")
                 dispatch(successPictureUpdate(res.data.picture));
-                dispatch(addAlert("Picture changed successfully!", "success"));
-            })
-            .catch(error => {
-                dispatch(alertError(error));
+                //dispatch(addAlert("Picture changed successfully!", "success"));
+                handleSuccess(enqueueSnackbar, "Picture changed successfully!")
+            },
+            (err) => {
+                console.log("error picture changed")
+                dispatch(alertError(err));
                 dispatch(fail());
-                return error;
+                handleError(enqueueSnackbar, "Error while changing profile picture")
+                return err;
             })
     };
 }
 
-export const changeUserData = (first_name, last_name, email, password = null) => {
+export const changeUserData = (first_name, last_name, email, password = null, enqueueSnackbar) => {
     return async (dispatch) => {
         dispatch(start());
         let access_token = localStorage.getItem("access_token");
@@ -156,26 +154,24 @@ export const changeUserData = (first_name, last_name, email, password = null) =>
         if (password != null) {
             data.password = password;
         }
-        return axios
-            .put(
-                signupURL(),
-                data,
-                headers('application/json', access_token)
-            )
-            .then(res => {
+        return putChangeUserData(data, access_token,
+            (res) => {
+                console.log("Changed user data")
                 let {id, firstName, lastName, email} = res.data;
+                handleSuccess(enqueueSnackbar, "Successfully changed user data")
                 dispatch(changeUserDataSuccess(id, firstName, lastName, email));
-            })
-            .catch(error => {
-                dispatch(alertError(error));
+            },
+            (err) => {
+                dispatch(alertError(err));
                 dispatch(fail());
-                return error;
-            });
+                console.log("error changed user data")
+                handleError(enqueueSnackbar, "Error while changin user data")
+                return err;
+            })
     };
 }
 
-
-export const deleteUser = () => {
+export const deleteUser = () => { //not used
     return async (dispatch) => {
         dispatch(start());
         let access_token = localStorage.getItem("access_token");
@@ -197,8 +193,8 @@ export const deleteUser = () => {
     };
 }
 
-
 export const createCar = (name, totSeats, fuel, consumption) => {
+    //const {enqueueSnackbar, closeSnackbar} = useSnackbar();
     return async (dispatch) => {
         dispatch(start());
         let access_token = localStorage.getItem("access_token");
@@ -218,10 +214,12 @@ export const createCar = (name, totSeats, fuel, consumption) => {
             .then(res => {
                 let {id, name, tot_avail_seats, fuel, consumption} = res.data;
                 dispatch(createCarSuccess(id, name, tot_avail_seats, fuel, consumption))
+                console.log("Car added")
             })
             .catch(error => {
                 dispatch(alertError(error));
                 dispatch(fail());
+                console.error("Could not add car")
                 return error;
             })
     };
@@ -255,7 +253,6 @@ export const updateCar = (id, name, totSeats, fuel, consumption) => {
             })
     };
 }
-
 
 export const deleteCar = (id) => {
     return async (dispatch) => {
