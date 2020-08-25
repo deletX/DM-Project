@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {connect} from 'react-redux';
 import FormContainer from "../../containers/FormContainer";
-import {makeStyles} from "@material-ui/core/styles";
 import CardContainer from "../../containers/CardContainer";
 import NewEventFormComponent from "./create/NewEventFormComponent"
 import MapContainer from "../../containers/MapContainer";
@@ -11,7 +10,7 @@ import {useHistory} from "react-router-dom";
 import {addEvent, login} from "../../constants/pagesurls";
 import {defaultEventPic} from "../../constants/constants";
 import ReviewCreateComponent from "./create/ReviewCreateComponent";
-import {handleError, handleSuccess, headers} from "../../utils/utils";
+import {handleError, handleSuccess} from "../../utils/utils";
 import {addAlert} from "../../actions/alertActions";
 import {postCreateEvent, postJoinEvent} from "../../utils/api";
 import {useSnackbar} from 'notistack';
@@ -30,19 +29,19 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-const useStyles = makeStyles((theme) => ({
-    content: {
-        marginBottom: theme.spacing(2),
-        // width: '800px',
-        // display: 'flex',
-        // flexDirection: 'column',
-        // alignItems: 'center',
-        width: '43ch'
-    }
-}))
+// const useStyles = makeStyles((theme) => ({
+//     content: {
+//         marginBottom: theme.spacing(2),
+//         // width: '800px',
+//         // display: 'flex',
+//         // flexDirection: 'column',
+//         // alignItems: 'center',
+//         width: '43ch'
+//     }
+// }))
 
 const CreateComponent = ({addAlert, isAuthenticatedOrLoading}) => {
-    const classes = useStyles();
+    //const classes = useStyles();
     let history = useHistory()
 
     const [open, setOpen] = useState(false);
@@ -59,7 +58,7 @@ const CreateComponent = ({addAlert, isAuthenticatedOrLoading}) => {
     const [pos, setPos] = useState("");
     const [car, setCar] = useState(-1);
 
-    const {enqueueSnackbar, closeSnackbar} = useSnackbar();
+    const {enqueueSnackbar, } = useSnackbar();
 
     const getStepContent = (step, handleNext, isStepSkipped) => {
         switch (step) {
@@ -117,7 +116,7 @@ const CreateComponent = ({addAlert, isAuthenticatedOrLoading}) => {
 
         postCreateEvent(token, data, image,
             (res) => {
-                addAlert("Event created successfully", "success")
+                //addAlert("Event created successfully", "success")
                 history.goBack()
                 let event = res.data
                 console.log(res.data)
@@ -192,6 +191,8 @@ const CreateComponent = ({addAlert, isAuthenticatedOrLoading}) => {
                                 setCar(-1);
                                 setAddress("");
                                 setPos("");
+                                break;
+                            default:
                                 break;
                         }
                     }}

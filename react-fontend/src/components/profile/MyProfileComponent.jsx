@@ -48,6 +48,7 @@ const MyProfileComponent = ({profile, changeUserData}) => {
     const [surname, setSurname] = useState(profile.user.last_name)
     const [email, setEmail] = useState(profile.user.email)
     const [newPassword, setNewPassword] = useState("")
+    // eslint-disable-next-line
     const [image, setImage] = useState(null)
     const [imageURL, setImageURL] = useState(profile.picture)
 

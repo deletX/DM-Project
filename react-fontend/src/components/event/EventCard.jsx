@@ -10,7 +10,7 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import JoinContainer from "../../containers/JoinContainer";
 import AlertDialog from "../AlertDialog";
-import {handleError, handleSuccess, headers} from "../../utils/utils";
+import {handleError, handleSuccess} from "../../utils/utils";
 import {addAlert} from "../../actions/alertActions";
 import {useHistory} from "react-router-dom";
 import {eventPage} from "../../constants/pagesurls";
@@ -46,7 +46,7 @@ const EventCard = ({addAlert, token, event, profileId, refreshEvents}) => {
     const [leaveOpen, setLeaveOpen] = useState(false);
     const [deleteOpen, setDeleteOpen] = useState(false);
     //console.log(event.date_time)
-    const {enqueueSnackbar, closeSnackbar} = useSnackbar();
+    const {enqueueSnackbar, } = useSnackbar();
     let date = new Date(event.date_time)
 
     let isInEvent = event.participant_set.filter(item => (item.profile.id === profileId)).length > 0;

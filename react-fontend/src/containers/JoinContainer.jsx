@@ -22,7 +22,7 @@ const JoinContainer = ({addAlert, cars, token, open, close, event, refreshEvents
     const [addr, setAddr] = useState("");
     const [pos, setPos] = useState("");
     const [car, setCar] = useState(-1);
-    const {enqueueSnackbar, closeSnackbar} = useSnackbar();
+    const {enqueueSnackbar, } = useSnackbar();
 
     return (
         <>

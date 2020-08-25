@@ -1,5 +1,4 @@
 import {useLocation} from "react-router";
-import {useSnackbar} from 'notistack';
 
 export const isAuthenticated = () => {
     const token = localStorage.getItem("token");
@@ -143,4 +142,8 @@ export const handleSuccess = (enqueueSnackbar, message) => {
 
 export const handleInfo = (enqueueSnackbar, message) => {
     enqueueSnackbar(message, {variant: 'info'});
+}
+
+export const handleWarning = (enqueueSnackbar, message) => {
+    enqueueSnackbar(message, {variant: 'warning'});
 }

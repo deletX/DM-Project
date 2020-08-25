@@ -1,15 +1,11 @@
 import React from "react";
 import {Redirect, Route, Switch, useHistory} from "react-router-dom";
-import {createBrowserHistory} from "history";
 import FormContainer from "./containers/FormContainer";
 import SignupComponent from "./components/auth/SignupComponent";
 import LoginComponent from "./components/auth/LoginComponent";
 import HomeContainer from "./containers/HomeContainer";
-import MapContainer from "./containers/MapContainer";
-import JoinContainer from "./containers/JoinContainer";
 import CreateComponent from "./components/event/CreateComponent";
-import {addEvent, createEvent, home, login, profile, profile_id, signup} from "./constants/pagesurls";
-import {useLocation} from "react-router";
+import {addEvent, home, login, profile, profile_id, signup} from "./constants/pagesurls";
 import EventContainer from "./containers/EventContainer";
 import ProfileContainer from "./containers/ProfileContainer";
 import LandingPageContainer from "./containers/LandingPageContainer";

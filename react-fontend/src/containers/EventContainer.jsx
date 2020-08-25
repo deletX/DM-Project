@@ -16,7 +16,7 @@ import {addAlert} from "../actions/alertActions";
 import {useHistory} from "react-router-dom";
 import {eventPage, home, login} from "../constants/pagesurls";
 import AlertDialog from "../components/AlertDialog";
-import {handleError, handleInfo, handleSuccess, pridStringToLatLng} from "../utils/utils";
+import {handleError, handleInfo, handleSuccess, handleWarning, pridStringToLatLng} from "../utils/utils";
 import JoinContainer from "./JoinContainer";
 import {connect} from "react-redux";
 import TextField from "@material-ui/core/TextField";
@@ -29,7 +29,6 @@ import ParticipantsContainer from "./ParticipantsContainer";
 import Fab from "@material-ui/core/Fab";
 import Computing from "../components/participations/Computing";
 import OtherCarsParticipation from "../components/participations/OtherCarsParticipation";
-import _ from "lodash"
 import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -43,6 +42,7 @@ import Rating from "@material-ui/lab/Rating";
 import {Helmet} from "react-helmet";
 import {runEvent, getEventAxios, updateEvent, leaveEvent, deleteEvent, postCreateFeedback} from "../utils/api";
 import {useSnackbar} from 'notistack';
+import _ from "lodash";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -206,11 +206,12 @@ const emptyEvent = {
  * questo fa
  */
 const EventContainer = (props) => {
+        // eslint-disable-next-line
         const {location, addAlert, token, profileId, isAuthenticated, isAuthLoading} = props;
         let {id} = useParams();
         const [event, setEvent] = useState(location.state ? location.state : emptyEvent)
         let history = useHistory();
-        const {enqueueSnackbar, closeSnackbar} = useSnackbar();
+        const {enqueueSnackbar, } = useSnackbar();
 
         const run = () => {
             runEvent(
@@ -250,7 +251,7 @@ const EventContainer = (props) => {
                     history.push(`${login}?next=${encodeURI(eventPage(id))}`)
                 else if (event.name === "" && isAuthenticated) {
                     getEvent()
-                }
+                } // eslint-disable-next-line
             }, [event, isAuthenticated, isAuthLoading]
         )
 
@@ -459,7 +460,8 @@ const EventContainer = (props) => {
                                         console.log(availableSeats)
                                         console.log(event.participant_set.length)
                                         if (availableSeats < event.participant_set.length || event.participant_set.length === 0) {
-                                            setNotEnoughDrivers(true)
+                                            //setNotEnoughDrivers(true)
+                                            handleWarning(enqueueSnackbar, "Oh no! It seems there aren't enough cars to bring all these people!")
                                         } else {
                                             setNotEnoughDrivers(false)
                                             run()
@@ -536,7 +538,7 @@ const EventContainer = (props) => {
                             </div>
                         </div>
                     </div>
-                    {isRunning || isLoading &&
+                    {(isRunning || isLoading) &&
                     <LinearProgress color="secondary" className={classes.loadingBar}/>
                     }
                     {isRunning &&

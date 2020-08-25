@@ -1,5 +1,4 @@
 import React from 'react';
-import {makeStyles} from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
 import Divider from '@material-ui/core/Divider';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -9,19 +8,19 @@ import {useHistory} from "react-router-dom";
 import {connect} from 'react-redux';
 import {readNotification} from "../../actions/notificationsActions";
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        width: '100%',
-        maxWidth: '36ch',
-        backgroundColor: theme.palette.background.paper,
-    },
-    inline: {
-        display: 'inline',
-    },
-}));
+// const useStyles = makeStyles((theme) => ({
+//     root: {
+//         width: '100%',
+//         maxWidth: '36ch',
+//         backgroundColor: theme.palette.background.paper,
+//     },
+//     inline: {
+//         display: 'inline',
+//     },
+// }));
 
 const NotificationItem = ({notification, readNotification, readNotificationNavBar}) => {
-    const classes = useStyles();
+    //const classes = useStyles();
     let history = useHistory()
 
     return (

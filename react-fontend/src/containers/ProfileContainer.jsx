@@ -63,7 +63,7 @@ const ProfileContainer = ({location, addAlert, token, isAuthenticated, isLoading
 
     const [profile, setProfile] = useState(profileId === id ? profileRedux : emptyProfile)
     const [loading, setLoading] = useState(false)
-    const {enqueueSnackbar, closeSnackbar} = useSnackbar();
+    const {enqueueSnackbar, } = useSnackbar();
 
     useEffect(() => {
 
@@ -78,7 +78,7 @@ const ProfileContainer = ({location, addAlert, token, isAuthenticated, isLoading
             }
             if (profileId === id && !("givenFeedback" in profile)) {
                 setProfile(profileRedux)
-            }
+            } // eslint-disable-next-line
         }, [isAuthenticated, isLoading, profile, profileId, profileRedux, id]
     )
 

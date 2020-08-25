@@ -70,7 +70,7 @@ const MapContainer = ({addAlert, clearAlerts, addr, setAddr, pos, setPos, loadUs
     const classes = useStyles();
     let [addrError, setAddrError] = useState(false)
 
-    const [lastRequest, setLastRequest] = useState(new Date())
+    const [lastRequest, ] = useState(new Date())
 
     const [open, setOpen] = useState(false);
     const [positions, setPositions] = useState([]);

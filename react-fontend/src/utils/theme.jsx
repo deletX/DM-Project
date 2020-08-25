@@ -1,5 +1,4 @@
 import {createMuiTheme, responsiveFontSizes} from "@material-ui/core";
-import {white} from "color-name";
 
 let theme = createMuiTheme({
     palette: {

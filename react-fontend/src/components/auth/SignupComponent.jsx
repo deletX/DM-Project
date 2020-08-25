@@ -1,5 +1,4 @@
 import React, {useState} from "react";
-import {makeStyles} from "@material-ui/core/styles";
 import PersonalInfoForm from "./signup/PersonalInfoForm";
 import CarForm from "./signup/CarForm";
 import SummaryData from "./signup/SummaryData";
@@ -13,16 +12,16 @@ import CardContainer from "../../containers/CardContainer";
 import StepperContainer from "../../containers/StepperContainer";
 import {Helmet} from "react-helmet";
 
-const useStyles = makeStyles((theme) => ({
-
-    button: {
-        marginRight: theme.spacing(1),
-    },
-    instructions: {
-        marginTop: theme.spacing(1),
-        marginBottom: theme.spacing(1),
-    }
-}));
+// const useStyles = makeStyles((theme) => ({
+//
+//     button: {
+//         marginRight: theme.spacing(1),
+//     },
+//     instructions: {
+//         marginTop: theme.spacing(1),
+//         marginBottom: theme.spacing(1),
+//     }
+// }));
 
 function SignupComponent({authSignup, googleLogin, setPicture, postCar, addError}) {
     let history=useHistory()

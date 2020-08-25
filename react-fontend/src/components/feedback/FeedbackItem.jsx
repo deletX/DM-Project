@@ -41,7 +41,7 @@ const FeedbackItem = ({token, addAlert, feedback, edit = false}) => {
     const [feedbackState, setFeedback] = useState(feedback)
     const [vote, setVote] = useState(feedback.vote)
     const [comment, setComment] = useState(feedback.comment)
-    const {enqueueSnackbar, closeSnackbar} = useSnackbar();
+    const {enqueueSnackbar, } = useSnackbar();
     const classes = useStyles();
     return (
         <ListItem>

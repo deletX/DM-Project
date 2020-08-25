@@ -6,7 +6,7 @@ import {white} from "color-name";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import {AddBox} from "@material-ui/icons";
-import {handleError, handleSuccess, useQuery} from "../utils/utils";
+import {handleError, useQuery} from "../utils/utils";
 import {addAlert} from "../actions/alertActions";
 import ChipBox from "../components/event/ChipBox";
 import EventCard from "../components/event/EventCard";
@@ -61,13 +61,13 @@ const HomeContainer = ({addError, isAuthenticated, isLoading, search, token}) =>
     let joinable = query.get("joinable") === null ? true : query.get("joinable") === "true"
     let joined = query.get("joined") === null ? true : query.get("joined") === "true"
     let owned = query.get("owned") === null ? false : query.get("owned") === "true"
-    const {enqueueSnackbar, closeSnackbar} = useSnackbar();
+    const {enqueueSnackbar, } = useSnackbar();
 
     useEffect(() => {
         if (!(isAuthenticated || isLoading))
             history.push(`${login}?next=${encodeURI(home)}`)
         else if (isAuthenticated)
-            refreshEvents(joinable, joined, owned);
+            refreshEvents(joinable, joined, owned); // eslint-disable-next-line
     }, [joinable, joined, owned, isAuthenticated, isLoading]);
 
 

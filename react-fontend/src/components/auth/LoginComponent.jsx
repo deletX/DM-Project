@@ -1,8 +1,7 @@
 import React, {useState} from "react";
-import Typography from "@material-ui/core/Typography";
 import {makeStyles} from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
-import {home, signup} from "../../constants/pagesurls";
+import {home} from "../../constants/pagesurls";
 import {useHistory} from "react-router-dom";
 import { authLogin,  googleOAuthLogin} from "../../actions/authActions";
 import {connect} from "react-redux";
@@ -82,7 +81,7 @@ function SignupComponent({authLogin, googleLogin, addError, location}) {
 
     const [password, setPassword] = useState("");
     const [passwordError, setPasswordError] = useState(false);
-    const [open, setOpen] = useState(false);
+    const [open, ] = useState(false);
 
     const classes = useStyles();
 
@@ -104,7 +103,7 @@ function SignupComponent({authLogin, googleLogin, addError, location}) {
                             <GoogleLogin
                                 isSignedIn={false}
                                 onSuccess={(input) => {
-                                    let username = input.profileObj.email.split("@")[0]
+                                    //let username = input.profileObj.email.split("@")[0]
                                     googleLogin(input.accessToken).catch(err => {
                                         if (!err instanceof Error) {
                                             history.push(location.query.next ? decodeURI(location.query.next) : home)

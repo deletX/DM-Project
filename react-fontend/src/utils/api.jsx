@@ -7,7 +7,6 @@ import {
     eventCreateURL, eventJoinURL, eventListURL, editFeedbackURL, profilesURL
 } from "../constants/apiurls";
 import {headers} from "./utils";
-import {home} from "../constants/pagesurls";
 
 
 /**

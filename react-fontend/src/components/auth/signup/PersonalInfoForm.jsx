@@ -68,7 +68,7 @@ const PersonalInfoForm = ({
     const classes = useStyles();
     const [emailHelperText, setEmailHelperText] = useState("");
     const [usernameHelperText, setUsernameHelperText] = useState("");
-    const {enqueueSnackbar, closeSnackbar} = useSnackbar();
+    const {enqueueSnackbar, } = useSnackbar();
 
     const validateEmail = (input) => {
         undoGoogleLogin();
