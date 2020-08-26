@@ -7,6 +7,7 @@ import * as qs from "qs";
 import {headers} from "../utils/utils";
 import {clearProfileData, fetchProfile} from "./profileActions";
 import {clearNotifications, retrieveNotifications} from "./notificationsActions";
+import {postRefreshAuth} from "../utils/api";
 
 const start = () => ({
     type: AUTH_START,
@@ -37,18 +38,8 @@ const checkAuthTimeout = (expirationTime) => dispatch => {
 
 export const refreshAuth = (refresh_token) => {
     return async (dispatch) => {
-        return axios
-            .post(
-                tokenURL(),
-                qs.stringify({
-                    client_id: APP_CLIENTID,
-                    client_secret: APP_SECRET,
-                    grant_type: 'refresh_token',
-                    refresh_token: refresh_token,
-                }),
-                headers('application/x-www-form-urlencoded')
-            )
-            .then(res => {
+        return postRefreshAuth(refresh_token,
+            (res) => {
                 let access_token = res.data.access_token;
                 let refresh_token = res.data.refresh_token;
                 let expirationDate = new Date(new Date().getTime() + 3600 * 1000);
@@ -59,12 +50,40 @@ export const refreshAuth = (refresh_token) => {
                 dispatch(fetchProfile());
                 dispatch(retrieveNotifications());
                 dispatch(checkAuthTimeout(3600));
+            },
+            (err) => {
+                dispatch(fail(err));
+                dispatch(alertError(err));
+                return err;
             })
-            .catch(error => {
-                dispatch(fail(error));
-                dispatch(alertError(error));
-                return error;
-            });
+        // return axios
+        //     .post(
+        //         tokenURL(),
+        //         qs.stringify({
+        //             client_id: APP_CLIENTID,
+        //             client_secret: APP_SECRET,
+        //             grant_type: 'refresh_token',
+        //             refresh_token: refresh_token,
+        //         }),
+        //         headers('application/x-www-form-urlencoded')
+        //     )
+        //     .then(res => {
+        //         let access_token = res.data.access_token;
+        //         let refresh_token = res.data.refresh_token;
+        //         let expirationDate = new Date(new Date().getTime() + 3600 * 1000);
+        //         localStorage.setItem("access_token", access_token);
+        //         localStorage.setItem("refresh_token", refresh_token);
+        //         localStorage.setItem("expiration_date", expirationDate);
+        //         dispatch(success(access_token));
+        //         dispatch(fetchProfile());
+        //         dispatch(retrieveNotifications());
+        //         dispatch(checkAuthTimeout(3600));
+        //     })
+        //     .catch(error => {
+        //         dispatch(fail(error));
+        //         dispatch(alertError(error));
+        //         return error;
+        //     });
     };
 }
 

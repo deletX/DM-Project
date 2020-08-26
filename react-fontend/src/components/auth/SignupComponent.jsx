@@ -4,7 +4,7 @@ import CarForm from "./signup/CarForm";
 import SummaryData from "./signup/SummaryData";
 import {home} from "../../constants/pagesurls";
 import {useHistory} from "react-router-dom";
-import { authSignup, googleOAuthLogin} from "../../actions/authActions";
+import {authSignup, googleOAuthLogin} from "../../actions/authActions";
 import {connect} from "react-redux";
 import {changePicture, createCar} from "../../actions/profileActions";
 import {addAlert} from "../../actions/alertActions";
@@ -24,7 +24,7 @@ import {Helmet} from "react-helmet";
 // }));
 
 function SignupComponent({authSignup, googleLogin, setPicture, postCar, addError}) {
-    let history=useHistory()
+    let history = useHistory()
 
     const [email, setEmail] = useState("");
     const [emailError, setEmailError] = useState(false);

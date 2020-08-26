@@ -4,10 +4,14 @@ import {
     eventRunURL,
     participationEditURL,
     createFeedbackURL,
-    eventCreateURL, eventJoinURL, eventListURL, editFeedbackURL, profilesURL, currentProfileURL, signupURL
+    eventCreateURL, eventJoinURL, eventListURL, editFeedbackURL, profilesURL, currentProfileURL, signupURL, tokenURL
 } from "../constants/apiurls";
 import {headers} from "./utils";
-
+import {APP_CLIENTID, APP_SECRET} from "../constants/constants";
+import {fetchProfile} from "../actions/profileActions";
+import {retrieveNotifications} from "../actions/notificationsActions";
+import {alertError} from "../actions/alertActions";
+import * as qs from "qs";
 
 /**
  *
@@ -218,24 +222,44 @@ export const putChangeProfilePicture = (formData, token, onSuccess, onError) => 
             headers('multipart/form-data', token)
         )
         .then((res) => {
-           onSuccess(res)
+            onSuccess(res)
         })
         .catch(err => {
-           onError(err)
+            onError(err)
         })
 }
 
 export const putChangeUserData = (data, token, onSuccess, onError) => {
     axios
-            .put(
-                signupURL(),
-                data,
-                headers('application/json', token)
-            )
-            .then((res) => {
-                onSuccess(res);
-            })
-            .catch(err => {
-                onError(err)
-            });
+        .put(
+            signupURL(),
+            data,
+            headers('application/json', token)
+        )
+        .then((res) => {
+            onSuccess(res);
+        })
+        .catch(err => {
+            onError(err)
+        });
+}
+
+export const postRefreshAuth = (refreshToken, onSuccess, onError) => {
+    axios
+        .post(
+            tokenURL(),
+            qs.stringify({
+                client_id: APP_CLIENTID,
+                client_secret: APP_SECRET,
+                grant_type: 'refresh_token',
+                refresh_token: refreshToken,
+            }),
+            headers('application/x-www-form-urlencoded')
+        )
+        .then(res => {
+            onSuccess(res)
+        })
+        .catch(err => {
+            onError(err)
+        });
 }
