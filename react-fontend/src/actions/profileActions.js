@@ -12,7 +12,7 @@ import {carsDetailURL, carsListURL, signupURL} from "../constants/apiurls";
 import {handleError, handleSuccess, headers} from "../utils/utils";
 import {addAlert, alertError} from "./alertActions";
 import {authLogout} from "./authActions";
-import {getFetchProfile, putChangeProfilePicture, putChangeUserData} from "../utils/api";
+import {deleteProfile, getFetchProfile, putChangeProfilePicture, putChangeUserData} from "../utils/api";
 
 const start = () => (
     {
@@ -126,7 +126,7 @@ export const changePicture = (picture, enqueueSnackbar) => {
                 console.log("picture changed")
                 dispatch(successPictureUpdate(res.data.picture));
                 //dispatch(addAlert("Picture changed successfully!", "success"));
-                handleSuccess(enqueueSnackbar, "Picture changed successfully!")
+                handleSuccess(enqueueSnackbar, "Profile picture changed successfully!")
             },
             (err) => {
                 console.log("error picture changed")
@@ -171,20 +171,15 @@ export const deleteUser = () => { //not used
     return async (dispatch) => {
         dispatch(start());
         let access_token = localStorage.getItem("access_token");
-
-        return axios
-            .delete(
-                signupURL(),
-                headers('application/json', access_token)
-            )
-            .then(res => {
+        return deleteProfile(access_token,
+            (res) => {
                 addAlert("You have been deleted from the system!", "success");
                 dispatch(authLogout());
-            })
-            .catch(error => {
-                dispatch(alertError(error));
+            },
+            (err) => {
+                dispatch(alertError(err));
                 dispatch(fail());
-                return error;
+                return err;
             })
     };
 }

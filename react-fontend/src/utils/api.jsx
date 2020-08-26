@@ -235,6 +235,20 @@ export const getFetchProfile = (token, onSuccess, onError) => {
         })
 }
 
+export const deleteProfile = (token, onSuccess, onError) => {
+    axios
+        .delete(
+            signupURL(),
+            headers('application/json', token)
+        )
+        .then((res) => {
+            onSuccess(res)
+        })
+        .catch(err => {
+            onError(err)
+        })
+}
+
 export const putChangeProfilePicture = (formData, token, onSuccess, onError) => {
     axios
         .put(
