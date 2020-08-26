@@ -12,7 +12,7 @@ import {
     currentProfileURL,
     signupURL,
     tokenURL,
-    convertTokenURL, notificationListURL, notificationEditURL, carsListURL
+    convertTokenURL, notificationListURL, notificationEditURL, carsListURL, carsDetailURL
 } from "../constants/apiurls";
 import {headers} from "./utils";
 import {APP_CLIENTID, APP_SECRET} from "../constants/constants";
@@ -298,6 +298,41 @@ export const postCreateCar = (profileId, name, totSeats, fuel, consumption, toke
             onError(err)
         });
 }
+
+export const putUpdateCar = (profileId, id, name, totSeats, fuel, consumption, token, onSuccess, onError) => {
+    axios
+        .put(
+            carsDetailURL(profileId, id),
+            {
+                name: name,
+                tot_avail_seats: totSeats,
+                fuel: fuel,
+                consumption: consumption,
+            },
+            headers('application/json', token)
+        )
+        .then((res) => {
+            onSuccess(res);
+        })
+        .catch(err => {
+            onError(err)
+        });
+}
+
+export const deleteDeleteCar = (profileId, id, token, onSuccess, onError) => {
+    axios
+        .delete(
+            carsDetailURL(profileId, id),
+            headers('application/json', token)
+        )
+        .then((res) => {
+            onSuccess(res);
+        })
+        .catch(err => {
+            onError(err)
+        });
+}
+
 
 export const postRefreshAuth = (refreshToken, onSuccess, onError) => {
     axios
