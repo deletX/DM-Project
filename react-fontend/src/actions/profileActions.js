@@ -8,11 +8,11 @@ import {
     PROFILE_PICTURE_UPDATE,
     USER_DATA_UPDATE
 } from "./types";
-import {carsDetailURL, carsListURL, currentProfileURL, signupURL} from "../constants/apiurls";
+import {carsDetailURL, carsListURL, signupURL} from "../constants/apiurls";
 import {handleError, handleSuccess, headers} from "../utils/utils";
 import {addAlert, alertError} from "./alertActions";
 import {authLogout} from "./authActions";
-import {putChangeProfilePicture, putChangeUserData} from "../utils/api";
+import {getFetchProfile, putChangeProfilePicture, putChangeUserData} from "../utils/api";
 
 const start = () => (
     {
@@ -100,21 +100,17 @@ export const fetchProfile = () => {
     return async (dispatch) => {
         dispatch(start());
         let access_token = localStorage.getItem("access_token");
-        return axios
-            .get(
-                currentProfileURL(),
-                headers('application/json', access_token)
-            )
-            .then(res => {
+        return getFetchProfile(access_token,
+            (res) => {
                 let {id, user, picture, score, car_set, average_vote, received_feedback, given_feedback} = res.data;
                 localStorage.setItem("profile_id", id);
                 // dispatch(removeAllAlerts());
                 dispatch(getSuccess(id, user, picture, score, car_set, average_vote, received_feedback, given_feedback));
-            })
-            .catch(error => {
+            },
+            (err) => {
                 dispatch(fail());
-                dispatch(alertError(error));
-                return error;
+                dispatch(alertError(err));
+                return err;
             })
     }
 };

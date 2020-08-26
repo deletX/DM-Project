@@ -153,6 +153,7 @@ export const deleteEvent = (eventId, token, onSuccess, onError) => {
         })
 }
 
+
 export const postCreateFeedback = (eventId, receiver, comment, vote, token, onSuccess, onError) => {
     axios
         .post(
@@ -194,6 +195,7 @@ export const putEditFeedback = (eventId, receiverId, feedbackId, comment, vote, 
         })
 }
 
+
 export const getProfileImage = (imageUrl, onSuccess, onError) => {
     axios
         .get(
@@ -211,6 +213,20 @@ export const getProfileData = (profileId, token, onSuccess, onError) => {
     axios
         .get(profilesURL(profileId),
             headers('application/json', token))
+        .then((res) => {
+            onSuccess(res)
+        })
+        .catch(err => {
+            onError(err)
+        })
+}
+
+export const getFetchProfile = (token, onSuccess, onError) => {
+    axios
+        .get(
+            currentProfileURL(),
+            headers('application/json', token)
+        )
         .then((res) => {
             onSuccess(res)
         })
@@ -248,6 +264,7 @@ export const putChangeUserData = (data, token, onSuccess, onError) => {
             onError(err)
         });
 }
+
 
 export const postRefreshAuth = (refreshToken, onSuccess, onError) => {
     axios
@@ -331,6 +348,7 @@ export const postAuthSignup = (username, firstName, lastName, email, password, o
             onError(err)
         });
 }
+
 
 export const getNotifications = (token, onSuccess, onError) => {
     axios
