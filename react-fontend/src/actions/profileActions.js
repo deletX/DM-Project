@@ -12,7 +12,7 @@ import {carsDetailURL, carsListURL, signupURL} from "../constants/apiurls";
 import {handleError, handleSuccess, headers} from "../utils/utils";
 import {addAlert, alertError} from "./alertActions";
 import {authLogout} from "./authActions";
-import {deleteProfile, getFetchProfile, putChangeProfilePicture, putChangeUserData} from "../utils/api";
+import {deleteProfile, getFetchProfile, postCreateCar, putChangeProfilePicture, putChangeUserData} from "../utils/api";
 
 const start = () => (
     {
@@ -184,35 +184,49 @@ export const deleteUser = () => { //not used
     };
 }
 
-export const createCar = (name, totSeats, fuel, consumption) => {
-    //const {enqueueSnackbar, closeSnackbar} = useSnackbar();
+export const createCar = (name, totSeats, fuel, consumption, enqueueSnackbar) => {
     return async (dispatch) => {
         dispatch(start());
         let access_token = localStorage.getItem("access_token");
         let profileId = localStorage.getItem("profile_id");
-
-        return axios
-            .post(
-                carsListURL(profileId),
-                {
-                    name: name,
-                    tot_avail_seats: totSeats,
-                    fuel: fuel,
-                    consumption: consumption,
-                },
-                headers('application/json', access_token)
-            )
-            .then(res => {
+        console.log(name, totSeats, consumption)
+        return postCreateCar(profileId, name, totSeats, fuel, consumption, access_token,
+            (res) => {
                 let {id, name, tot_avail_seats, fuel, consumption} = res.data;
                 dispatch(createCarSuccess(id, name, tot_avail_seats, fuel, consumption))
+                //handleSuccess(enqueueSnackbar, "Successufully added car")
                 console.log("Car added")
-            })
-            .catch(error => {
-                dispatch(alertError(error));
+            },
+            (err) => {
+                dispatch(alertError(err));
                 dispatch(fail());
                 console.error("Could not add car")
-                return error;
+                //handleError(enqueueSnackbar, "Error while adding car")
+                return err;
             })
+        //
+        // return axios
+        //     .post(
+        //         carsListURL(profileId),
+        //         {
+        //             name: name,
+        //             tot_avail_seats: totSeats,
+        //             fuel: fuel,
+        //             consumption: consumption,
+        //         },
+        //         headers('application/json', access_token)
+        //     )
+        //     .then(res => {
+        //         let {id, name, tot_avail_seats, fuel, consumption} = res.data;
+        //         dispatch(createCarSuccess(id, name, tot_avail_seats, fuel, consumption))
+        //         console.log("Car added")
+        //     })
+        //     .catch(error => {
+        //         dispatch(alertError(error));
+        //         dispatch(fail());
+        //         console.error("Could not add car")
+        //         return error;
+        //     })
     };
 }
 

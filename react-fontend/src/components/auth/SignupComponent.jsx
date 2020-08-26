@@ -49,6 +49,7 @@ function SignupComponent({authSignup, googleLogin, setPicture, postCar, addError
 
     const [open, setOpen] = useState(false);
     const {enqueueSnackbar,} = useSnackbar();
+
     const getStepContent = (step, handleNext) => {
         switch (step) {
             case 0:
@@ -88,7 +89,7 @@ function SignupComponent({authSignup, googleLogin, setPicture, postCar, addError
                     restart(true);
                 } else {
                     if (carName !== "") {
-                        postCar(carName, totSeats, fuel, consumption).then(
+                        postCar(carName, totSeats, fuel, consumption, enqueueSnackbar).then(
                             () => {
                                 if (image !== null && imageURL !== "") {
                                     setPicture(image).then(() => {
@@ -113,7 +114,7 @@ function SignupComponent({authSignup, googleLogin, setPicture, postCar, addError
                     restart(true);
                 } else {
                     if (carName !== "") {
-                        postCar(carName, totSeats, fuel, consumption)
+                        postCar(carName, totSeats, fuel, consumption, enqueueSnackbar)
                             .then(() => {
                                     if (image !== null && imageURL !== "") {
                                         setPicture(image).then(() => {
@@ -176,7 +177,7 @@ const mapDispatchToProps = (dispatch) => {
         authSignup: (username, firstName, lastName, email, password, enqueueSnackbar) => dispatch(authSignup(username, firstName, lastName, email, password, enqueueSnackbar)),
         googleLogin: (googleToken, enqueueSnackbar) => dispatch(googleOAuthLogin(googleToken, enqueueSnackbar)),
         setPicture: (image) => dispatch(changePicture(image)),
-        postCar: (carName, totSeats, fuel, consumption) => dispatch(createCar(carName, totSeats, fuel, consumption)),
+        postCar: (carName, totSeats, fuel, consumption, enqueueSnackbar) => dispatch(createCar(carName, totSeats, fuel, consumption, enqueueSnackbar)),
         addError: (text) => dispatch(addAlert(text, "error")),
     };
 };

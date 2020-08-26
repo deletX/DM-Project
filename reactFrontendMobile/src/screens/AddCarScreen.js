@@ -5,6 +5,7 @@ import {FUEL} from "../constants/constants";
 import {connect} from 'react-redux';
 import {createCar, deleteCar, updateCar} from "../actions/profileActions";
 import {alertAreYouSure} from "../utils/utils";
+import {useSnackbar} from 'notistack';
 
 /**
  * Text input for car name and helper text
@@ -91,6 +92,8 @@ const AddCarScreen = (props) => {
     const [seats, setSeats] = React.useState(props.route.params.edit ? props.route.params.car.tot_avail_seats : 4)
     const [consumption, setConsumption] = React.useState(props.route.params.edit ? props.route.params.car.consumption : 10)
     const [nameError, setNameError] = React.useState(false)
+    const {enqueueSnackbar, closeSnackbar} = useSnackbar();
+
     return (
         <ScrollView>
             <View style={styles.mainView}>
@@ -157,7 +160,7 @@ const AddCarScreen = (props) => {
                                 if (name.length === 0) {
                                     setNameError(true)
                                 } else {
-                                    props.createCar(name, fuel, seats, consumption)
+                                    props.createCar(name, fuel, seats, consumption, enqueueSnackbar)
                                     props.navigation.goBack()
                                 }
                             }
@@ -196,7 +199,7 @@ function mapDispatchToProps(dispatch) {
     return {
         deleteCar: (id) => dispatch(deleteCar(id)),
         editCar: (id, name, fuel, seats, consumption) => dispatch(updateCar(id, name, seats, fuel, consumption)),
-        createCar: (name, fuel, seats, consumption) => dispatch(createCar(name, seats, fuel, consumption)),
+        createCar: (name, fuel, seats, consumption, enqueueSnackbar) => dispatch(createCar(name, seats, fuel, consumption, enqueueSnackbar)),
     };
 }
 

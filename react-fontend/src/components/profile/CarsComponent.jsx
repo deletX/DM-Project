@@ -40,20 +40,6 @@ const tableIcons = {
     ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref}/>)
 };
 
-function mapStateToProps(state) {
-    return {
-        profile: state.profile,
-    };
-}
-
-function mapDispatchToProps(dispatch) {
-    return {
-        createCar: (name, seats, consumption, fuel, resolve) => dispatch(createCar(name, seats, fuel, consumption, resolve)),
-        deleteCar: (id, resolve) => dispatch(deleteCar(id, resolve)),
-        updateCar: (id, name, seats, consumption, fuel) => dispatch(updateCar(id, name, seats, fuel, consumption))
-    };
-}
-
 class CarsComponent extends Component {
 
     constructor(props) {
@@ -169,6 +155,20 @@ class CarsComponent extends Component {
     }
 
     ;
+}
+
+function mapStateToProps(state) {
+    return {
+        profile: state.profile,
+    };
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        createCar: (name, seats, consumption, fuel, resolve) => dispatch(createCar(name, seats, fuel, consumption, resolve)),
+        deleteCar: (id, resolve) => dispatch(deleteCar(id, resolve)),
+        updateCar: (id, name, seats, consumption, fuel) => dispatch(updateCar(id, name, seats, fuel, consumption))
+    };
 }
 
 export default connect(

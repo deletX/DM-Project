@@ -12,7 +12,7 @@ import {
     currentProfileURL,
     signupURL,
     tokenURL,
-    convertTokenURL, notificationListURL, notificationEditURL
+    convertTokenURL, notificationListURL, notificationEditURL, carsListURL
 } from "../constants/apiurls";
 import {headers} from "./utils";
 import {APP_CLIENTID, APP_SECRET} from "../constants/constants";
@@ -279,6 +279,25 @@ export const putChangeUserData = (data, token, onSuccess, onError) => {
         });
 }
 
+export const postCreateCar = (profileId, name, totSeats, fuel, consumption, token, onSuccess, onError) => {
+    axios
+        .post(
+            carsListURL(profileId),
+            {
+                name: name,
+                tot_avail_seats: totSeats,
+                fuel: fuel,
+                consumption: consumption,
+            },
+            headers('application/json', token)
+        )
+        .then((res) => {
+            onSuccess(res);
+        })
+        .catch(err => {
+            onError(err)
+        });
+}
 
 export const postRefreshAuth = (refreshToken, onSuccess, onError) => {
     axios
