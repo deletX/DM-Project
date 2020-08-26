@@ -1,7 +1,4 @@
-import {notificationEditURL, notificationListURL} from "../constants/apiurls";
-import {headers} from "../utils/utils";
 import {alertError} from "./alertActions";
-import axios from "axios";
 import {
     GET_NOTIFICATIONS_SUCCESS,
     NOTIFICATION_UPDATE,
@@ -9,6 +6,7 @@ import {
     NOTIFICATIONS_START,
     CLEAR_NOTIFICATIONS
 } from "./types";
+import {getNotifications, putReadNotifications} from "../utils/api";
 
 const start = () => (
     {
@@ -53,21 +51,17 @@ export const retrieveNotifications = () => {
     return async (dispatch) => {
         dispatch(start());
         let access_token = localStorage.getItem("access_token");
-        return axios
-            .get(
-                notificationListURL(),
-                headers('application/json', access_token)
-            )
-            .then(res => {
+        return getNotifications(access_token,
+            (res) => {
                 dispatch(getSuccess(res.data))
                 setTimeout(() => {
                     retrieveNotifications()
                 }, 60)
-            })
-            .catch(error => {
-                dispatch(alertError(error));
+            },
+            (err) => {
+                dispatch(alertError(err));
                 dispatch(fail());
-                return error;
+                return err;
             })
     };
 }
@@ -76,21 +70,14 @@ export const readNotification = (notificationId, read = true) => {
     return async (dispatch) => {
         dispatch(start());
         let access_token = localStorage.getItem("access_token");
-        return axios
-            .put(
-                notificationEditURL(notificationId),
-                {
-                    read: read
-                },
-                headers('application/json', access_token)
-            )
-            .then(res => {
+        return putReadNotifications(access_token,notificationId,read,
+            (res) => {
                 dispatch(readSuccess(notificationId, read))
-            })
-            .catch(error => {
-                dispatch(alertError(error));
+            },
+            (err) => {
+                dispatch(alertError(err));
                 dispatch(fail());
-                return error;
+                return err;
             })
     };
 }

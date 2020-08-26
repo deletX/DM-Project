@@ -12,7 +12,7 @@ import {
     currentProfileURL,
     signupURL,
     tokenURL,
-    convertTokenURL
+    convertTokenURL, notificationListURL, notificationEditURL
 } from "../constants/apiurls";
 import {headers} from "./utils";
 import {APP_CLIENTID, APP_SECRET} from "../constants/constants";
@@ -327,6 +327,36 @@ export const postAuthSignup = (username, firstName, lastName, email, password, o
         .then(res => {
             onSuccess(res)
         })
+        .catch(err => {
+            onError(err)
+        });
+}
+
+export const getNotifications = (token, onSuccess, onError) => {
+    axios
+        .get(
+            notificationListURL(),
+            headers('application/json', token)
+        )
+        .then((res) => {
+            onSuccess(res);
+        })
+        .catch(err => {
+            onError(err)
+        });
+}
+
+export const putReadNotifications = (token, notificationId, read, onSuccess, onError) => {
+    axios
+        .put(
+            notificationEditURL(notificationId),
+            {
+                read: read
+            },
+            headers('application/json', token)
+        ).then((res) => {
+        onSuccess(res);
+    })
         .catch(err => {
             onError(err)
         });
