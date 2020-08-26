@@ -16,6 +16,7 @@ import {addAlert} from "../../actions/alertActions";
 import CardContainer from "../../containers/CardContainer";
 import AvatarCustom from "../AvatarCustom";
 import {Helmet} from "react-helmet";
+import {useSnackbar} from 'notistack';
 
 const useStyles = makeStyles((theme) => ({
     title: {
@@ -87,6 +88,8 @@ function SignupComponent({authLogin, googleLogin, addError, location}) {
 
     const disabled = !(username.length > 0 && password.length > 0);
 
+    const {enqueueSnackbar, } = useSnackbar();
+
     return (
         <CardContainer title="Log in!" open={open}>
             <Helmet>
@@ -104,7 +107,7 @@ function SignupComponent({authLogin, googleLogin, addError, location}) {
                                 isSignedIn={false}
                                 onSuccess={(input) => {
                                     //let username = input.profileObj.email.split("@")[0]
-                                    googleLogin(input.accessToken).catch(err => {
+                                    googleLogin(input.accessToken, enqueueSnackbar).catch(err => {
                                         if (!err instanceof Error) {
                                             history.push(location.query.next ? decodeURI(location.query.next) : home)
                                         } else {
@@ -176,7 +179,7 @@ function SignupComponent({authLogin, googleLogin, addError, location}) {
                                 className={classes.button}
                                 disabled={disabled}
                                 onClick={() => {
-                                    authLogin(username, password).catch(err => {
+                                    authLogin(username, password, enqueueSnackbar).catch(err => {
                                         if (!err instanceof Error) {
                                             history.push(location.query.next ? decodeURI(location.query.next) : home)
                                         } else {
@@ -198,8 +201,8 @@ function SignupComponent({authLogin, googleLogin, addError, location}) {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        authLogin: (username, password) => dispatch(authLogin(username, password)),
-        googleLogin: (googleToken) => dispatch(googleOAuthLogin(googleToken)),
+        authLogin: (username, password, enqueueSnackbar) => dispatch(authLogin(username, password, enqueueSnackbar)),
+        googleLogin: (googleToken, enqueueSnackbar) => dispatch(googleOAuthLogin(googleToken, enqueueSnackbar)),
         addError: (text) => dispatch(addAlert(text, "error")),
     };
 };

@@ -4,13 +4,18 @@ import {
     eventRunURL,
     participationEditURL,
     createFeedbackURL,
-    eventCreateURL, eventJoinURL, eventListURL, editFeedbackURL, profilesURL, currentProfileURL, signupURL, tokenURL
+    eventCreateURL,
+    eventJoinURL,
+    eventListURL,
+    editFeedbackURL,
+    profilesURL,
+    currentProfileURL,
+    signupURL,
+    tokenURL,
+    convertTokenURL
 } from "../constants/apiurls";
 import {headers} from "./utils";
 import {APP_CLIENTID, APP_SECRET} from "../constants/constants";
-import {fetchProfile} from "../actions/profileActions";
-import {retrieveNotifications} from "../actions/notificationsActions";
-import {alertError} from "../actions/alertActions";
 import * as qs from "qs";
 
 /**
@@ -255,6 +260,69 @@ export const postRefreshAuth = (refreshToken, onSuccess, onError) => {
                 refresh_token: refreshToken,
             }),
             headers('application/x-www-form-urlencoded')
+        )
+        .then(res => {
+            onSuccess(res)
+        })
+        .catch(err => {
+            onError(err)
+        });
+}
+
+export const postGoogleOAuthLogin = (googleToken, onSuccess, onError) => {
+    axios
+        .post(
+            convertTokenURL(),
+            qs.stringify({
+                client_id: APP_CLIENTID,
+                client_secret: APP_SECRET,
+                grant_type: 'convert_token',
+                backend: 'google-oauth2',
+                token: googleToken
+            }),
+            headers("application/x-www-form-urlencoded")
+        )
+        .then(res => {
+            onSuccess(res)
+        })
+        .catch(err => {
+            onError(err)
+        });
+}
+
+export const postAuthLogin = (username, password, onSuccess, onError) => {
+    axios
+        .post(
+            tokenURL(),
+            qs.stringify({
+                client_id: APP_CLIENTID,
+                client_secret: APP_SECRET,
+                grant_type: 'password',
+                username: username,
+                password: password,
+            }),
+            headers("application/x-www-form-urlencoded")
+        )
+        .then(res => {
+            onSuccess(res)
+        })
+        .catch(err => {
+            onError(err)
+        });
+}
+
+export const postAuthSignup = (username, firstName, lastName, email, password, onSuccess, onError) => {
+    axios
+        .post(
+            signupURL(),
+            {
+                username: username,
+                first_name: firstName,
+                last_name: lastName,
+                email: email,
+                password: password
+            },
+            headers('application/json')
         )
         .then(res => {
             onSuccess(res)

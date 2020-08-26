@@ -11,6 +11,7 @@ import {addAlert} from "../../actions/alertActions";
 import CardContainer from "../../containers/CardContainer";
 import StepperContainer from "../../containers/StepperContainer";
 import {Helmet} from "react-helmet";
+import {useSnackbar} from 'notistack';
 
 // const useStyles = makeStyles((theme) => ({
 //
@@ -47,6 +48,7 @@ function SignupComponent({authSignup, googleLogin, setPicture, postCar, addError
     const [googleAccessToken, setGoogleAccessToken] = useState("");
 
     const [open, setOpen] = useState(false);
+    const {enqueueSnackbar,} = useSnackbar();
     const getStepContent = (step, handleNext) => {
         switch (step) {
             case 0:
@@ -78,7 +80,7 @@ function SignupComponent({authSignup, googleLogin, setPicture, postCar, addError
         if (!open)
             setOpen(true);
         else if (isGoogleLogin) {
-            googleLogin(googleAccessToken).then((value) => {
+            googleLogin(googleAccessToken, enqueueSnackbar).then((value) => {
                 if (value instanceof Error) {
                     addError("An error occurred while signing you up with google")
                     console.log(value)
@@ -103,7 +105,7 @@ function SignupComponent({authSignup, googleLogin, setPicture, postCar, addError
                 }
             })
         } else {
-            authSignup(username, firstName, lastName, email, password).then((value) => {
+            authSignup(username, firstName, lastName, email, password, enqueueSnackbar).then((value) => {
                 if (value instanceof Error) {
                     addError("An error occurred while signing you up")
                     console.log(value)
@@ -171,8 +173,8 @@ function SignupComponent({authSignup, googleLogin, setPicture, postCar, addError
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        authSignup: (username, firstName, lastName, email, password) => dispatch(authSignup(username, firstName, lastName, email, password)),
-        googleLogin: (googleToken) => dispatch(googleOAuthLogin(googleToken)),
+        authSignup: (username, firstName, lastName, email, password, enqueueSnackbar) => dispatch(authSignup(username, firstName, lastName, email, password, enqueueSnackbar)),
+        googleLogin: (googleToken, enqueueSnackbar) => dispatch(googleOAuthLogin(googleToken, enqueueSnackbar)),
         setPicture: (image) => dispatch(changePicture(image)),
         postCar: (carName, totSeats, fuel, consumption) => dispatch(createCar(carName, totSeats, fuel, consumption)),
         addError: (text) => dispatch(addAlert(text, "error")),

@@ -1,13 +1,9 @@
-import axios from "axios";
-import {convertTokenURL, tokenURL, signupURL} from "../constants/apiurls";
 import {alertError, removeAllAlerts} from './alertActions';
 import {AUTH_ERROR, AUTH_LOGOUT, AUTH_START, AUTH_SUCCESS} from "./types";
-import {APP_CLIENTID, APP_SECRET} from "../constants/constants";
-import * as qs from "qs";
-import {headers} from "../utils/utils";
+import {handleError, handleSuccess} from "../utils/utils";
 import {clearProfileData, fetchProfile} from "./profileActions";
 import {clearNotifications, retrieveNotifications} from "./notificationsActions";
-import {postRefreshAuth} from "../utils/api";
+import {postAuthLogin, postAuthSignup, postGoogleOAuthLogin, postRefreshAuth} from "../utils/api";
 
 const start = () => ({
     type: AUTH_START,
@@ -50,6 +46,7 @@ export const refreshAuth = (refresh_token) => {
                 dispatch(fetchProfile());
                 dispatch(retrieveNotifications());
                 dispatch(checkAuthTimeout(3600));
+                console.log("retrieved access token")
             },
             (err) => {
                 dispatch(fail(err));
@@ -87,23 +84,11 @@ export const refreshAuth = (refresh_token) => {
     };
 }
 
-export const googleOAuthLogin = (google_token) => {
+export const googleOAuthLogin = (google_token, enqueueSnackbar) => {
     return async (dispatch) => {
         dispatch(start());
-
-        return axios
-            .post(
-                convertTokenURL(),
-                qs.stringify({
-                    client_id: APP_CLIENTID,
-                    client_secret: APP_SECRET,
-                    grant_type: 'convert_token',
-                    backend: 'google-oauth2',
-                    token: google_token
-                }),
-                headers("application/x-www-form-urlencoded")
-            )
-            .then(res => {
+        return postGoogleOAuthLogin(google_token,
+            (res) => {
                 let access_token = res.data.access_token;
                 let refresh_token = res.data.refresh_token;
                 let expirationDate = new Date(new Date().getTime() + 3600 * 1000);
@@ -114,32 +99,23 @@ export const googleOAuthLogin = (google_token) => {
                 dispatch(retrieveNotifications());
                 dispatch(checkAuthTimeout(3600));
                 dispatch(fetchProfile());
+                console.log("retrieved google access token")
+                handleSuccess(enqueueSnackbar, "Logged in with Google successfully!")
+            },
+            (err) => {
+                dispatch(fail(err));
+                dispatch(alertError(err));
+                handleError(enqueueSnackbar, "Error while logging in with Google")
+                return err;
             })
-            .catch(error => {
-                dispatch(fail(error));
-                dispatch(alertError(error));
-                return error;
-            });
     };
 }
 
-export const authLogin = (username, password) => {
+export const authLogin = (username, password, enqueueSnackbar) => {
     return async (dispatch) => {
         dispatch(start());
-
-        return axios
-            .post(
-                tokenURL(),
-                qs.stringify({
-                    client_id: APP_CLIENTID,
-                    client_secret: APP_SECRET,
-                    grant_type: 'password',
-                    username: username,
-                    password: password,
-                }),
-                headers("application/x-www-form-urlencoded")
-            )
-            .then(res => {
+        return postAuthLogin(username, password,
+            (res) => {
                 let access_token = res.data.access_token;
                 let refresh_token = res.data.refresh_token;
                 let expirationDate = new Date(new Date().getTime() + 3600 * 1000);
@@ -149,43 +125,34 @@ export const authLogin = (username, password) => {
                 dispatch(success(access_token));
                 dispatch(checkAuthTimeout(3600));
                 dispatch(retrieveNotifications());
+                console.log("logged in successfully")
+                handleSuccess(enqueueSnackbar, "Logged in successfully!")
                 return dispatch(fetchProfile());
-
-
+            },
+            (err) => {
+                dispatch(fail(err));
+                //dispatch(alertError(err));
+                console.log("error while logging in")
+                handleError(enqueueSnackbar, "Error while logging in")
+                return err;
             })
-            .catch(error => {
-                dispatch(fail(error));
-                dispatch(alertError(error));
-                return error;
-            });
     };
 }
 
-
-export const authSignup = (username, first_name, last_name, email, password) => {
+export const authSignup = (username, first_name, last_name, email, password, enqueueSnackbar) => {
     return async (dispatch) => {
         dispatch(start());
-        // we return the promise in order to use wait till the end using "then"
-        return axios
-            .post(
-                signupURL(),
-                {
-                    username: username,
-                    first_name: first_name,
-                    last_name: last_name,
-                    email: email,
-                    password: password
-                },
-                headers('application/json')
-            )
-            .then(res => {
-                return dispatch(authLogin(username, password))
+        return postAuthSignup(username, first_name, last_name, email, password,
+            (res) => {
+                handleSuccess(enqueueSnackbar, "Successfully signed up")
+                return dispatch(authLogin(username, password, enqueueSnackbar))
+            },
+            (err) => {
+                dispatch(fail(err));
+                dispatch(alertError(err));
+                handleError(enqueueSnackbar, "Error while signing up")
+                return err;
             })
-            .catch(error => {
-                dispatch(fail(error));
-                dispatch(alertError(error));
-                return error;
-            });
     };
 }
 

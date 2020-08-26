@@ -7,7 +7,7 @@ import {GoogleSignin, GoogleSigninButton,} from '@react-native-community/google-
 import {CLIENT_ID} from '../constants/constants';
 import {authLogin, googleOAuthLogin} from '../actions/authActions';
 import {HOME_SCREEN} from '../constants/screens';
-
+import {useSnackbar} from 'notistack';
 /**
  * Login screen. It is possible to login through:
  * - Google OAuth
@@ -23,6 +23,7 @@ const LoginScreen = (props) => {
     } = props;
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
+    const {enqueueSnackbar,} = useSnackbar();
 
     if (isAuthenticated) {
         navigation.navigate(HOME_SCREEN);
@@ -90,7 +91,7 @@ const LoginScreen = (props) => {
                         contentStyle={styles.loginText}
                         style={[styles.login, {marginTop: 60}]}
                         onPress={() => {
-                            authLogin(username, password);
+                            authLogin(username, password, enqueueSnackbar);
                         }}
                         mode="contained"
                         color={Colors.orange600}>
@@ -135,8 +136,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        authLogin: (username, password) => dispatch(authLogin(username, password)),
-        googleLogin: (googleToken) => dispatch(googleOAuthLogin(googleToken)),
+        authLogin: (username, password, enqueueSnackbar ) => dispatch(authLogin(username, password, enqueueSnackbar)),
+        googleLogin: (googleToken, enqueueSnackbar) => dispatch(googleOAuthLogin(googleToken, enqueueSnackbar)),
     };
 };
 
