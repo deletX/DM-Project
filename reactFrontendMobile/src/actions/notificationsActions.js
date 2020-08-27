@@ -6,7 +6,7 @@ import {
     NOTIFICATIONS_ERROR,
     NOTIFICATIONS_START
 } from "./types";
-import {getNotifications, putReadNotifications} from "../../../react-fontend/src/utils/api";
+import {getNotifications, putReadNotifications} from "../utils/api";
 
 /**
  * Notification retrieval begun action object

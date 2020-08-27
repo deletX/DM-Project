@@ -1,4 +1,3 @@
-import axios from "axios";
 import {
     CAR_CREATE,
     CAR_DELETE,
@@ -8,9 +7,9 @@ import {
     PROFILE_OP_ERROR,
     PROFILE_OP_START
 } from "./types";
-import {carsDetailURL, carsListURL, currentProfileURL} from "../constants/apiurls";
-import {handleError, headers} from "../utils/utils";
+import {handleError} from "../utils/utils";
 import AsyncStorage from '@react-native-community/async-storage'
+import {deleteDeleteCar, getFetchProfile, postCreateCar, putUpdateCar} from "../utils/api";
 
 /**
  * Profile operation start action object
@@ -150,23 +149,36 @@ export const fetchProfile = () => {
     return async (dispatch) => {
         dispatch(start());
         let access_token = await AsyncStorage.getItem("access_token");
-        return axios
-            .get(
-                currentProfileURL(),
-                headers('application/json', access_token)
-            )
-            .then(res => {
+        return getFetchProfile(access_token,
+            (res) => {
                 let {id, user, picture, score, car_set, average_vote, received_feedback, given_feedback} = res.data;
 
                 AsyncStorage.setItem("profile_id", id.toString());
 
                 dispatch(getSuccess(id, user, picture, score, car_set, average_vote, received_feedback, given_feedback));
-            })
-            .catch(error => {
+            },
+            (err) => {
                 dispatch(fail());
-                handleError("Something went wrong while retrieving your profile [008]", error)
-                return error;
+                handleError("Something went wrong while retrieving your profile [008]", err)
+                return err;
             })
+        // return axios
+        //     .get(
+        //         currentProfileURL(),
+        //         headers('application/json', access_token)
+        //     )
+        //     .then(res => {
+        //         let {id, user, picture, score, car_set, average_vote, received_feedback, given_feedback} = res.data;
+        //
+        //         AsyncStorage.setItem("profile_id", id.toString());
+        //
+        //         dispatch(getSuccess(id, user, picture, score, car_set, average_vote, received_feedback, given_feedback));
+        //     })
+        //     .catch(error => {
+        //         dispatch(fail());
+        //         handleError("Something went wrong while retrieving your profile [008]", error)
+        //         return error;
+        //     })
     }
 };
 
@@ -186,27 +198,37 @@ export const createCar = (name, totSeats, fuel, consumption) => {
         let access_token = await AsyncStorage.getItem("access_token");
         let profileId = parseInt(await AsyncStorage.getItem("profile_id"));
 
-        return axios
-            .post(
-                carsListURL(profileId),
-                {
-                    name: name,
-                    tot_avail_seats: totSeats,
-                    fuel: fuel,
-                    consumption: consumption,
-                },
-                headers('application/json', access_token)
-            )
-            .then(res => {
+        return postCreateCar(profileId, name, totSeats, fuel, consumption, access_token,
+            (res) => {
                 let {id, name, tot_avail_seats, fuel, consumption} = res.data;
-
                 dispatch(createCarSuccess(id, name, tot_avail_seats, fuel, consumption))
-            })
-            .catch(error => {
+            },
+            (err) => {
                 dispatch(fail());
-                handleError("Something went wrong while creating the car [009]", error)
-                return error;
+                handleError("Something went wrong while creating the car [009]", err)
+                return err;
             })
+        // return axios
+        //     .post(
+        //         carsListURL(profileId),
+        //         {
+        //             name: name,
+        //             tot_avail_seats: totSeats,
+        //             fuel: fuel,
+        //             consumption: consumption,
+        //         },
+        //         headers('application/json', access_token)
+        //     )
+        //     .then(res => {
+        //         let {id, name, tot_avail_seats, fuel, consumption} = res.data;
+        //
+        //         dispatch(createCarSuccess(id, name, tot_avail_seats, fuel, consumption))
+        //     })
+        //     .catch(error => {
+        //         dispatch(fail());
+        //         handleError("Something went wrong while creating the car [009]", error)
+        //         return error;
+        //     })
     };
 }
 
@@ -226,28 +248,37 @@ export const updateCar = (id, name, totSeats, fuel, consumption) => {
         dispatch(start());
         let access_token = await AsyncStorage.getItem("access_token");
         let profileId = parseInt(await AsyncStorage.getItem("profile_id"));
-
-        return axios
-            .put(
-                carsDetailURL(profileId, id),
-                {
-                    name: name,
-                    tot_avail_seats: totSeats,
-                    fuel: fuel,
-                    consumption: consumption,
-                },
-                headers('application/json', access_token)
-            )
-            .then(res => {
+        return putUpdateCar(profileId, id, name, totSeats, fuel, consumption, access_token,
+            (res) => {
                 let {id, name, tot_avail_seats, fuel, consumption} = res.data;
-
                 dispatch(changeCarSuccess(id, name, tot_avail_seats, fuel, consumption))
-            })
-            .catch(error => {
+            },
+            (err) => {
                 dispatch(fail());
-                handleError("Something went wrong while editing the car [010]", error)
-                return error;
+                handleError("Something went wrong while editing the car [010]", err)
+                return err;
             })
+        // return axios
+        //     .put(
+        //         carsDetailURL(profileId, id),
+        //         {
+        //             name: name,
+        //             tot_avail_seats: totSeats,
+        //             fuel: fuel,
+        //             consumption: consumption,
+        //         },
+        //         headers('application/json', access_token)
+        //     )
+        //     .then(res => {
+        //         let {id, name, tot_avail_seats, fuel, consumption} = res.data;
+        //
+        //         dispatch(changeCarSuccess(id, name, tot_avail_seats, fuel, consumption))
+        //     })
+        //     .catch(error => {
+        //         dispatch(fail());
+        //         handleError("Something went wrong while editing the car [010]", error)
+        //         return error;
+        //     })
     };
 }
 
@@ -263,19 +294,27 @@ export const deleteCar = (id) => {
         dispatch(start());
         let access_token = await AsyncStorage.getItem("access_token");
         let profileId = parseInt(await AsyncStorage.getItem("profile_id"));
-
-        return axios
-            .delete(
-                carsDetailURL(profileId, id),
-                headers('application/json', access_token)
-            )
-            .then(res => {
+        return deleteDeleteCar(profileId, id, access_token,
+            (res) => {
                 dispatch(deleteCarSuccess(id));
-            })
-            .catch(error => {
+            },
+            (err) => {
                 dispatch(fail());
-                handleError("Something went wrong while deleting the car [011]", error)
-                return error;
+                handleError("Something went wrong while deleting the car [011]", err)
+                return err;
             })
+        // return axios
+        //     .delete(
+        //         carsDetailURL(profileId, id),
+        //         headers('application/json', access_token)
+        //     )
+        //     .then(res => {
+        //         dispatch(deleteCarSuccess(id));
+        //     })
+        //     .catch(error => {
+        //         dispatch(fail());
+        //         handleError("Something went wrong while deleting the car [011]", error)
+        //         return error;
+        //     })
     };
 }

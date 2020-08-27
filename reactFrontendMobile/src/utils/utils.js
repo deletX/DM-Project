@@ -1,9 +1,9 @@
 import AsyncStorage from '@react-native-community/async-storage'
 import {EVENT_SCREEN, PROFILE_STACK} from "../constants/screens";
-import axios from "axios";
-import {eventDetailURL, nominatimCoordinatesToAddressURL} from "../constants/apiurls";
+import {nominatimCoordinatesToAddressURL} from "../constants/apiurls";
 import Toast from 'react-native-simple-toast';
 import {Alert} from "react-native";
+import {getEventDetail} from "./api";
 
 /**
  * Check authentication by looking for the token item inside AsyncStorage
@@ -200,20 +200,30 @@ export const URLtoScreenWithProps = async (url, token = "") => {
     } else {
         screenWithProps["screen"] = EVENT_SCREEN;
         let id = parseInt(splitUrl[2])
-        await axios
-            .get(
-                eventDetailURL(id),
-                headers('application/json', token)
-            )
-            .then(res => {
+        await getEventDetail(id, token,
+            (res) => {
                 screenWithProps["props"] = {
                     id: id,
                     event: res.data,
                 }
-            })
-            .catch(err => {
+            },
+            (err) => {
                 handleError("Something went wrong while retrieving event [003]", err)
             })
+        // await axios
+        //     .get(
+        //         eventDetailURL(id),
+        //         headers('application/json', token)
+        //     )
+        //     .then(res => {
+        //         screenWithProps["props"] = {
+        //             id: id,
+        //             event: res.data,
+        //         }
+        //     })
+        //     .catch(err => {
+        //         handleError("Something went wrong while retrieving event [003]", err)
+        //     })
 
     }
     return screenWithProps;
@@ -226,17 +236,20 @@ export const URLtoScreenWithProps = async (url, token = "") => {
  * @param {boolean} cancelable
  * @return {function(): *}
  */
-export const alertAreYouSure = (onPressYes, cancelable = true) => () => Alert.alert(
-    "Are you sure?",
-    "There is no coming back",
-    [
-        {text: "No", style: 'cancel'},
-        {
-            text: "Yes", onPress: onPressYes
-        }
-    ],
-    {cancelable: cancelable}
-)
+export const alertAreYouSure = (onPressYes, cancelable = true) => () => {
+    console.log("im inside edit alert")
+    Alert.alert(
+        "Are you sure?",
+        "There is no coming back",
+        [
+            {text: "No", style: 'cancel'},
+            {
+                text: "Yes", onPress: onPressYes
+            }
+        ],
+        {cancelable: cancelable}
+    )
+}
 
 /**
  * Creates the directions link, that will open google maps with the starting position, being my selected location
