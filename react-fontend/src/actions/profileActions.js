@@ -7,7 +7,7 @@ import {
     PROFILE_PICTURE_UPDATE,
     USER_DATA_UPDATE
 } from "./types";
-import {handleError, handleSuccess, headers} from "../utils/utils";
+import {handleError, handleSuccess} from "../utils/utils";
 import {addAlert, alertError} from "./alertActions";
 import {authLogout} from "./authActions";
 import {

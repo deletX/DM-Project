@@ -53,34 +53,6 @@ export const refreshAuth = (refresh_token) => {
                 dispatch(alertError(err));
                 return err;
             })
-        // return axios
-        //     .post(
-        //         tokenURL(),
-        //         qs.stringify({
-        //             client_id: APP_CLIENTID,
-        //             client_secret: APP_SECRET,
-        //             grant_type: 'refresh_token',
-        //             refresh_token: refresh_token,
-        //         }),
-        //         headers('application/x-www-form-urlencoded')
-        //     )
-        //     .then(res => {
-        //         let access_token = res.data.access_token;
-        //         let refresh_token = res.data.refresh_token;
-        //         let expirationDate = new Date(new Date().getTime() + 3600 * 1000);
-        //         localStorage.setItem("access_token", access_token);
-        //         localStorage.setItem("refresh_token", refresh_token);
-        //         localStorage.setItem("expiration_date", expirationDate);
-        //         dispatch(success(access_token));
-        //         dispatch(fetchProfile());
-        //         dispatch(retrieveNotifications());
-        //         dispatch(checkAuthTimeout(3600));
-        //     })
-        //     .catch(error => {
-        //         dispatch(fail(error));
-        //         dispatch(alertError(error));
-        //         return error;
-        //     });
     };
 }
 

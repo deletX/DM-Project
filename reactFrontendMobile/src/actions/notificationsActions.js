@@ -1,6 +1,3 @@
-import {notificationEditURL, notificationListURL} from "../constants/apiurls";
-import {handleError, headers} from '../utils/utils';
-import axios from "axios";
 import AsyncStorage from '@react-native-community/async-storage'
 import {
     CLEAR_NOTIFICATIONS,
@@ -9,6 +6,7 @@ import {
     NOTIFICATIONS_ERROR,
     NOTIFICATIONS_START
 } from "./types";
+import {getNotifications, putReadNotifications} from "../../../react-fontend/src/utils/api";
 
 /**
  * Notification retrieval begun action object
@@ -81,21 +79,16 @@ export const retrieveNotifications = () => {
     return async (dispatch) => {
         dispatch(start());
         let access_token = await AsyncStorage.getItem("access_token");
-        return axios
-            .get(
-                notificationListURL(),
-                headers('application/json', access_token)
-            )
-            .then(res => {
+        return getNotifications(access_token,
+            (res) => {
                 dispatch(getSuccess(res.data))
                 setTimeout(() => {
                     retrieveNotifications()
                 }, 60)
-            })
-            .catch((error) => {
+            },
+            (err) => {
                 dispatch(fail());
-                handleError("Something went wrong while retrieving notifications [006]")
-                return error;
+                return err;
             })
     };
 }
@@ -111,22 +104,16 @@ export const readNotification = (notificationId, read = true) => {
     return async (dispatch) => {
         dispatch(start());
         let access_token = await AsyncStorage.getItem("access_token");
-        return axios
-            .put(
-                notificationEditURL(notificationId),
-                {
-                    read: read
-                },
-                headers('application/json', access_token)
-            )
-            .then(res => {
+        return putReadNotifications(access_token, notificationId, read,
+            (res) => {
                 // dispatch(retrieveNotifications());
                 dispatch(readSuccess(notificationId, read))
-            })
-            .catch(error => {
+            },
+            (err) => {
                 dispatch(fail());
-                handleError("Something went wrong while reading the notification [007]")
-                return error;
+                console.log("Something went wrong while reading the notification [007], ", err);
+                //handleError("Something went wrong while reading the notification [007]")
+                return err;
             })
     };
 }
