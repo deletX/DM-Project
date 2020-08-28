@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {ScrollView, StyleSheet, View} from "react-native"
+import {Alert, ScrollView, StyleSheet, View} from "react-native"
 import {Button, Caption, Colors, HelperText, RadioButton, TextInput} from "react-native-paper";
 import {FUEL} from "../constants/constants";
 import {connect} from 'react-redux';
@@ -138,10 +138,23 @@ const AddCarScreen = (props) => {
                         color={Colors.red800}
                         onPress={() => {
                             console.log("you wanna delete")
-                            alertAreYouSure(() => {
-                                props.deleteCar(props.route.params.car.id)
-                                props.navigation.goBack()
-                            })
+                            // alertAreYouSure(() => {
+                            //     props.deleteCar(props.route.params.car.id)
+                            //     props.navigation.goBack()
+                            // })
+                            Alert.alert(
+                                "Are you sure?",
+                                "There is no coming back",
+                                [
+                                    {text: "No", style: 'cancel'},
+                                    {
+                                        text: "Yes", onPress: () => {
+                                            props.deleteCar(props.route.params.car.id)
+                                            props.navigation.goBack()
+                                        }
+                                    }
+                                ]
+                            )
 
                         }}>
                         Delete
@@ -152,10 +165,24 @@ const AddCarScreen = (props) => {
                         onPress={() => {
                             if (props.route.params.edit) {
                                 console.log("you wanna save")
-                                alertAreYouSure(() => {
-                                    props.editCar(props.route.params.car.id, name, fuel, seats, consumption)
-                                    props.navigation.goBack()
-                                })
+                                /*alertAreYouSure(() => {
+                                            props.editCar(props.route.params.car.id, name, fuel, seats, consumption)
+                                            props.navigation.goBack()
+                                        });
+                                        this version is not working*/
+                                Alert.alert(
+                                    "Are you sure?",
+                                    "There is no coming back",
+                                    [
+                                        {text: "No", style: 'cancel'},
+                                        {
+                                            text: "Yes", onPress: () => {
+                                                props.editCar(props.route.params.car.id, name, fuel, seats, consumption)
+                                                props.navigation.goBack()
+                                            }
+                                        }
+                                    ]
+                                )
                             } else {
                                 if (name.length === 0) {
                                     setNameError(true)
