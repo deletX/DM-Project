@@ -208,7 +208,7 @@ export const URLtoScreenWithProps = async (url, token = "") => {
                 }
             },
             (err) => {
-                handleError("Something went wrong while retrieving event [003]", err)
+
             })
         // await axios
         //     .get(
@@ -274,6 +274,14 @@ export const createDirectionLink = (participation, event, myCar) => {
  * @param error
  */
 export const handleError = (msg, error) => {
-    Toast.show(msg)
+    Toast.show(msg, Toast.LONG)
     console.log(error)
+}
+
+export const handleSuccess = (msg) => {
+    Toast.show(msg, Toast.SHORT)
+}
+
+export const handleInfo = (msg) => {
+    Toast.show(msg, Toast.LONG)
 }

@@ -4,6 +4,7 @@ import {Chip, Colors} from "react-native-paper"
 import EventComponent from "../components/event/EventComponent";
 import {connect} from 'react-redux';
 import {getListEvent} from "../utils/api";
+import {handleError} from "../utils/utils";
 
 /**
  * Screen shows all the event got with relative filter selected with Chips ({@link Chip}.
@@ -26,8 +27,10 @@ const EventsListScreen = (props) => {
             (res) => {
                 setEvents(res.data);
                 setRefreshing(false);
-            }, () => {
+            },
+            (err) => {
                 setRefreshing(false);
+                handleError("Something went wrong while retrieving the events [017]", err)
             })
     }, [joinable, joined, owned, setEvents, setRefreshing]);
 

@@ -11,7 +11,7 @@ import {
     notificationListURL,
     tokenURL, convertTokenURL, currentProfileURL, carsListURL, carsDetailURL
 } from "../constants/apiurls";
-import {handleError, headers, selectItem} from "./utils";
+import {handleError, handleSuccess, headers, selectItem} from "./utils";
 import {APP_CLIENTID, APP_SECRET} from "../constants/constants";
 import * as qs from "qs";
 
@@ -26,7 +26,7 @@ import * as qs from "qs";
  * @param {string} token
  * @param {function()} onSuccess
  */
-export const runEvent = (eventId, token, onSuccess) => {
+export const runEvent = (eventId, token, onSuccess, onError) => {
     axios
         .get(
             eventRunURL(eventId),
@@ -34,8 +34,10 @@ export const runEvent = (eventId, token, onSuccess) => {
         )
         .then(res => {
             onSuccess(res)
+            handleSuccess("Computation started")
         })
         .catch(err => {
+            onError(err)
             handleError("Something went wrong while launching the computation [016]", err)
         })
 }
@@ -51,6 +53,7 @@ export const getEventDetail = (eventId, token, onSuccess, onError) => {
         })
         .catch(err => {
             onError(err)
+            handleError("Something went wrong while retrieving event [003]", err)
         })
 }
 
@@ -64,16 +67,15 @@ export const getEventDetail = (eventId, token, onSuccess, onError) => {
  * @param {function()} onSuccess
  * @param {function()} onError
  */
-export const getListEvent = (joinable, joined, owned, token, onSuccess, onError = () => {
-}) => {
+export const getListEvent = (joinable, joined, owned, token, onSuccess, onError) => {
     axios
         .get(eventListURL(joinable, joined, owned), headers('application/json', token))
         .then((res) => {
             onSuccess(res)
         })
         .catch((err) => {
-            handleError("Something went wrong while retrieving the events [017]", err)
-            onError()
+            onError(err)
+            handleError("Error while retrieving events list", err)
         });
 }
 
@@ -89,7 +91,7 @@ export const getListEvent = (joinable, joined, owned, token, onSuccess, onError 
  *
  * @return {Promise<void>}
  */
-export const postJoinedEvent = async (eventId, token, startingAddress, startingPos, carId, onSuccess) => {
+export const postJoinedEvent = async (eventId, token, startingAddress, startingPos, carId, onSuccess, onError) => {
     axios
         .post(
             eventJoinURL(eventId),
@@ -102,10 +104,11 @@ export const postJoinedEvent = async (eventId, token, startingAddress, startingP
         )
         .then(res => {
                 onSuccess(res)
-
+                handleSuccess("Successfully joined the event!")
             }
         )
         .catch(err => {
+                onError(err)
                 handleError("Something went wrong while joining the event [013]", err)
             }
         )
@@ -129,6 +132,7 @@ export const deleteLeaveEvent = async (eventID, token, participationID, onSucces
         )
         .then(res => {
             onSuccess(res);
+            handleSuccess("Successfully left event")
         })
         .catch(err => {
             handleError("Something went wrong while leaving [002]", err)
@@ -151,6 +155,7 @@ export const deleteEvent = (eventId, token, onSuccess) => {
         )
         .then(res => {
             onSuccess(res)
+            handleSuccess("Deleted event successfully")
         })
         .catch(err => {
             handleError("Something went wrong while deleting your event [015]", err)
@@ -182,6 +187,7 @@ export const postCreateFeedback = (eventId, receiver, comment, vote, token, onSu
         )
         .then((res) => {
             onSuccess(res)
+            handleSuccess("Successfully created feedback")
         })
         .catch((error) => {
             handleError("Something went wrong while posting your feedback [014]", error)

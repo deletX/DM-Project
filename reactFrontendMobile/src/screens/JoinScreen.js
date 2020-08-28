@@ -127,7 +127,12 @@ const JoinScreen = (props) => {
      */
     const joinWithGPS = async () => {
         let payload = await getNominatimInfo(GPSPositionLatitude, GPSPositionLongitude);
-        await postJoinedEvent(props.route.params.id, props.token, payload[0], payload[1], carsID[car], (res) => (navigation.navigate(HOME_SCREEN, {refresh: true})));
+        await postJoinedEvent(props.route.params.id, props.token,
+            payload[0], payload[1], carsID[car],
+            (res) => (navigation.navigate(HOME_SCREEN, {refresh: true})),
+            (err)=>{
+
+            });
     }
 
     /**
@@ -135,7 +140,12 @@ const JoinScreen = (props) => {
      */
     const joinWithMarker = async () => {
         let payload = await getNominatimInfo(MarkerPositionLatitude, MarkerPositionLongitude);
-        await postJoinedEvent(props.route.params.id, props.token, payload[0], payload[1], carsID[car], (res) => (navigation.navigate(HOME_SCREEN, {refresh: true})));
+        await postJoinedEvent(props.route.params.id, props.token,
+            payload[0], payload[1], carsID[car],
+            (res) => (navigation.navigate(HOME_SCREEN, {refresh: true})),
+            (err)=>{
+
+            });
     }
 
     return (
