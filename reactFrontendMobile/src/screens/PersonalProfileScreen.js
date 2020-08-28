@@ -45,6 +45,7 @@ const PersonalProfileScreen = (props) => {
     ))
 
     return (
+        <View style={{flex: 1}}>
         <ScrollView contentContainerStyle={styles.scrollViewContentContainerStyle}>
             <ProfileHeader profile={props.profile}/>
             <View style={styles.feedbackAndCarsContainer}>
@@ -68,6 +69,7 @@ const PersonalProfileScreen = (props) => {
                 <CarTable>{cars}</CarTable>
             </View>
         </ScrollView>
+        </View>
     );
 };
 
@@ -75,7 +77,7 @@ const styles = StyleSheet.create({
     addCarButton: {position: "absolute", right: 0},
     carContainer: {flex: 0, flexDirection: 'row', marginTop: 10},
     feedbackAndCarsContainer: {width: "90%"},
-    scrollViewContentContainerStyle: {flex: 1, alignItems: 'center'},
+    scrollViewContentContainerStyle: {alignItems: 'center'},
     text: {fontWeight: "bold", color: Colors.deepOrange700}
 })
 
