@@ -70,9 +70,11 @@ const PersonalInfoForm = ({
                               setGoogleAccessToken, handleNext
                           }) => {
     const classes = useStyles();
+    const {enqueueSnackbar,} = useSnackbar();
+        
     const [emailHelperText, setEmailHelperText] = useState("");
     const [usernameHelperText, setUsernameHelperText] = useState("");
-    const {enqueueSnackbar,} = useSnackbar();
+
 
     const validateEmail = (input) => {
         undoGoogleLogin();
