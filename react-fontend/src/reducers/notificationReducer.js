@@ -10,6 +10,7 @@ import {
 const initialState = {
     loading: false,
     notifications: [],
+    unReadCount: 0,
     error: false
 };
 
@@ -28,15 +29,30 @@ const notificationsError = (state, action) => (
 
 const getNotificationSuccess = (state, action) => (
     updateObject(state, {
-        notifications: action.notifications
+        notifications: action.notifications,
+        unReadCount: action.notifications.filter(item => (!item.read)).length
     })
 );
 
+/**
+ * Notification edit handler
+ *
+ * @param {{}} state
+ * @param {{}} action
+ *
+ * @returns {{}}
+ */
 const notificationUpdate = (state, action) => {
     let {id, read} = action;
+    let tmpState = {...state};
+    if (read) {
+        tmpState.unReadCount -= 1;
+    } else {
+        tmpState.unReadCount += 1;
+    }
     let index = state.notifications.findIndex((notification) => (notification.id === id));
-    state.notifications[index].read = read;
-    return state
+    tmpState.notifications[index].read = read;
+    return tmpState
 };
 
 const notificationReducer = (state = initialState, action) => {

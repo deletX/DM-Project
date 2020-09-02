@@ -10,7 +10,7 @@ import {readNotification} from "../../actions/notificationsActions";
 import {useSnackbar} from "notistack";
 
 
-const NotificationItem = ({notification, readNotification, readNotificationNavBar}) => {
+const NotificationItem = ({notification, readNotification}) => {
     const {enqueueSnackbar,} = useSnackbar()
     let history = useHistory()
 
@@ -19,7 +19,6 @@ const NotificationItem = ({notification, readNotification, readNotificationNavBa
             <ListItem alignItems="flex-start" button disabled={notification.read}
                       onClick={() => {
                           readNotification(notification.id, enqueueSnackbar);
-                          readNotificationNavBar()
                           history.push(notification.url)
                       }}>
                 <ListItemAvatar>
@@ -39,10 +38,6 @@ const NotificationItem = ({notification, readNotification, readNotificationNavBa
 }
 
 
-function mapStateToProps(state) {
-    return {};
-}
-
 function mapDispatchToProps(dispatch) {
     return {
         readNotification: (id, enqueueSnackbar) => dispatch(readNotification(id, enqueueSnackbar))
@@ -51,5 +46,5 @@ function mapDispatchToProps(dispatch) {
 
 
 export default connect(
-    mapStateToProps, mapDispatchToProps
+    null, mapDispatchToProps
 )(NotificationItem);

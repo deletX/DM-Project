@@ -77,26 +77,26 @@ const carCreate = (state, action) => {
     console.log("create")
     console.log(action)
 
-    const carSet = state.carSet;
+    const carSet = {...state}.carSet;
     carSet.push({id: id, name: name, tot_avail_seats: totSeats, fuel: fuel, consumption: consumption});
-    return {...state, carSet: carSet, loading: false};
+    return updateObject(state, {carSet: carSet, loading: false});
 };
 
 const carUpdate = (state, action) => {
     let {id, name, totSeats, fuel, consumption} = action;
     let index = state.carSet.findIndex((car) => (car.id === id));
-    let carSet = state.carSet;
+    let carSet = {...state}.carSet;
     console.log("edit")
     console.log(action)
     carSet[index].name = name;
     carSet[index].tot_avail_seats = totSeats;
     carSet[index].fuel = fuel;
     carSet[index].consumption = consumption;
-    return {...state, carSet: carSet, loading: false};
+    return updateObject(state, {carSet: carSet, loading: false});
 };
 
 const carDelete = (state, action) => {
-    let carSet = state.carSet.filter((car) => (car.id !== action.id));
+    let carSet = {...state}.carSet.filter((car) => (car.id !== action.id));
     return updateObject(state, {
         carSet: carSet,
         loading: false,
