@@ -61,8 +61,7 @@ class Car(models.Model):
 
     name = models.CharField(max_length=50)
     tot_avail_seats = models.IntegerField(validators=[MinValueValidator(2), MaxValueValidator(9)])
-    consumption = models.FloatField(default=10.0, validators=[MinValueValidator(0)])
-    # l/100km
+    consumption = models.FloatField(default=10.0, validators=[MinValueValidator(0)])  # l/100km
     fuel = models.SmallIntegerField(choices=FuelChoices.choices, default=1)
     owner = models.ForeignKey(Profile, on_delete=models.CASCADE)
 
@@ -99,18 +98,18 @@ class Event(models.Model):
 
     def participant_count(self):
         """
-        Get number of partecipants
+        Get number of participants
 
         Returns:
-            n (int): #partecipants
+            n (int): #participants
         """
         return self.participant_set.count()
 
     def run(self):
         """
-        Start the mock computation after checking partecipants and # seats
+        Start the mock computation after checking participants and # seats
         """
-        from api.tasks import mock_algorithm_task
+        from api.tasks import mock_algorithm_task, algorithm_task
         participants = self.participant_count()
         avail_seats = self.participant_set.filter(car__isnull=False).aggregate(
             avail_seats=Sum('car__tot_avail_seats'))['avail_seats']
@@ -127,8 +126,7 @@ class Event(models.Model):
             if settings.DEBUG:
                 mock_algorithm_task.delay(self.id)
             else:
-                # TODO change this thing
-                raise ValidationError("REAL TASK YET NOT DEFINED")
+                algorithm_task.delay(self.id)
         else:
             raise ValidationError("Cannot run an event that is not joinable")
 
@@ -138,7 +136,7 @@ class Event(models.Model):
 
 class Participant(models.Model):
     """
-    Class for defining details of a partecipant like pick-up place and car
+    Class for defining details of a participant like pick-up place and car
     """
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     car = models.ForeignKey(Car, on_delete=models.CASCADE, null=True, blank=True, default=None)
@@ -151,7 +149,7 @@ class Participant(models.Model):
 
     def has_given_feedback(self):
         """
-        Check if partecipant has given a feedback for an event he joined
+        Check if participant has given a feedback for an event he joined
         Returns:
 
         """
@@ -211,13 +209,7 @@ class Notification(models.Model):
 
 def create_profile(sender, **kwargs):
     """
-    Create a new profile
-    Args:
-        sender:
-        **kwargs:
-
-    Returns:
-
+    Create a new profile when an user is created
     """
     user = kwargs["instance"]
 
@@ -231,16 +223,8 @@ post_save.connect(create_profile, sender=User)
 def create_notification_for_feedback(sender, **kwargs):
     """
     Generate a notification when a feedback is sent
-
-    Args:
-        sender:
-        **kwargs:
-
-    Returns:
-
     """
     feedback = kwargs["instance"]
-    # TODO: add url
     if kwargs["created"]:
         notification = Notification.objects.create(profile=feedback.receiver, title="New feedback",
                                                    content="User {} gave you a {} star rating".format(
