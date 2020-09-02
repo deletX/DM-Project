@@ -4,6 +4,20 @@ import Rating from "@material-ui/lab/Rating";
 import {white} from "color-name";
 import AvatarCustom from "../AvatarCustom";
 
+const ProfileComponent = ({profile}) => {
+    const classes = useStyles();
+    
+    return (
+        <div className={classes.root}>
+            <AvatarCustom alt={`${profile.user.first_name} ${profile.user.last_name}`} src={profile.picture}
+                          className={classes.avatar}>
+            </AvatarCustom>
+            <Rating readOnly value={profile.average_vote === null ? 0 : profile.average_vote}
+                    disabled={profile.average_vote === null} precision={.5} size="large" className={classes.rating}/>
+        </div>
+    )
+};
+
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
@@ -26,17 +40,5 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-const ProfileComponent = ({profile}) => {
-    const classes = useStyles();
-    return (
-        <div className={classes.root}>
-            <AvatarCustom alt={`${profile.user.first_name} ${profile.user.last_name}`} src={profile.picture}
-                          className={classes.avatar}>
-            </AvatarCustom>
-            <Rating readOnly value={profile.average_vote === null ? 0 : profile.average_vote}
-                    disabled={profile.average_vote === null} precision={.5} size="large" className={classes.rating}/>
-        </div>
-    )
-};
 
 export default ProfileComponent;

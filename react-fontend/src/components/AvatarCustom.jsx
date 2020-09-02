@@ -2,12 +2,6 @@ import React from 'react';
 import Avatar from "@material-ui/core/Avatar";
 import {makeStyles} from "@material-ui/core/styles";
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        color: theme.palette.getContrastText(theme.palette.secondary.dark),
-        backgroundColor: theme.palette.secondary.dark,
-    },
-}));
 
 const AvatarCustom = ({children, src, alt, className, firstName, lastName}) => {
     const classes = useStyles();
@@ -29,5 +23,11 @@ const AvatarCustom = ({children, src, alt, className, firstName, lastName}) => {
         </Avatar>
     );
 };
+const useStyles = makeStyles((theme) => ({
+    root: {
+        color: theme.palette.getContrastText(theme.palette.secondary.dark),
+        backgroundColor: theme.palette.secondary.dark,
+    },
+}));
 
 export default AvatarCustom;

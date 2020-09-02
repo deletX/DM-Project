@@ -5,16 +5,6 @@ import FeedbacksComponent from "../feedback/FeedbacksComponent";
 import {makeStyles} from "@material-ui/core/styles";
 import {Helmet} from "react-helmet";
 
-const useStyles = makeStyles((theme) => ({
-    grid: {
-        marginBottom: theme.spacing(5),
-    },
-    feedbacks: {
-        marginBottom: theme.spacing(8),
-    }
-
-}))
-
 const OtherProfileComponent = ({profile}) => {
     const classes = useStyles();
     return (
@@ -45,5 +35,15 @@ const OtherProfileComponent = ({profile}) => {
         </div>
     )
 };
+
+const useStyles = makeStyles((theme) => ({
+    grid: {
+        marginBottom: theme.spacing(5),
+    },
+    feedbacks: {
+        marginBottom: theme.spacing(8),
+    }
+
+}))
 
 export default OtherProfileComponent;

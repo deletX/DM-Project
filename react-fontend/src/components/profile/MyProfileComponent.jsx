@@ -14,44 +14,24 @@ import CarContainer from "../../containers/CarContainer";
 import {Helmet} from "react-helmet";
 import {useSnackbar} from 'notistack';
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        margin: `${theme.spacing(4)}px ${theme.spacing(3)}px ${theme.spacing(5)}px`,
-        [theme.breakpoints.down('sm')]: {
-            margin: `${theme.spacing(4)}px ${theme.spacing(1)}px ${theme.spacing(5)}px`,
-        },
-    },
-    feedbacks: {
-        margin: `${theme.spacing(5)}px ${theme.spacing(8)}px`,
-    },
-    changePicButton: {
-        width: "100%",
-        height: "100%",
-    },
-    buttonGroup: {
-        width: "100%",
-        "& > *": {
-            width: "50%"
-        }
-    },
-    element: {
-        marginTop: theme.spacing(3),
-    }
-
-}))
-
 const MyProfileComponent = ({profile, changeUserData, changePicture}) => {
     const classes = useStyles();
+    const {enqueueSnackbar,} = useSnackbar();
 
     const [edit, setEdit] = useState(false)
     const [name, setName] = useState(profile.user.first_name)
     const [surname, setSurname] = useState(profile.user.last_name)
     const [email, setEmail] = useState(profile.user.email)
     const [newPassword, setNewPassword] = useState("")
-    // eslint-disable-next-line
+
+    const [emailHelperText, setEmailHelperText] = useState("");
+    const [emailError, setEmailError] = useState(false);
+    const [passwordError, setPasswordError] = useState(false);
+    const [passwordHelperText, setPasswordHelperText] = useState("");
+
     const [image, setImage] = useState(null)
     const [imageURL, setImageURL] = useState(profile.picture)
-    const {enqueueSnackbar,} = useSnackbar();
+
 
     const validateEmail = (input) => {
         if (input.target.value === null || input.target.value === "") {
@@ -79,10 +59,6 @@ const MyProfileComponent = ({profile, changeUserData, changePicture}) => {
         setNewPassword(input.target.value)
     };
 
-    const [emailHelperText, setEmailHelperText] = useState("");
-    const [emailError, setEmailError] = useState(false);
-    const [passwordError, setPasswordError] = useState(false);
-    const [passwordHelperText, setPasswordHelperText] = useState("");
     return (
         <div className={classes.root}>
             <Helmet>
@@ -228,9 +204,32 @@ const MyProfileComponent = ({profile, changeUserData, changePicture}) => {
 };
 
 
-function mapStateToProps(state) {
-    return {};
-}
+const useStyles = makeStyles((theme) => ({
+    root: {
+        margin: `${theme.spacing(4)}px ${theme.spacing(3)}px ${theme.spacing(5)}px`,
+        [theme.breakpoints.down('sm')]: {
+            margin: `${theme.spacing(4)}px ${theme.spacing(1)}px ${theme.spacing(5)}px`,
+        },
+    },
+    feedbacks: {
+        margin: `${theme.spacing(5)}px ${theme.spacing(8)}px`,
+    },
+    changePicButton: {
+        width: "100%",
+        height: "100%",
+    },
+    buttonGroup: {
+        width: "100%",
+        "& > *": {
+            width: "50%"
+        }
+    },
+    element: {
+        marginTop: theme.spacing(3),
+    }
+
+}))
+
 
 function mapDispatchToProps(dispatch) {
     return {
@@ -243,5 +242,5 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(
-    mapStateToProps, mapDispatchToProps
+    null, mapDispatchToProps
 )(MyProfileComponent);
