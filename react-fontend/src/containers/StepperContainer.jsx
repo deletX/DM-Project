@@ -7,9 +7,8 @@ import StepLabel from "@material-ui/core/StepLabel";
 import Button from "@material-ui/core/Button";
 
 import StepContent from "@material-ui/core/StepContent";
-import {connect} from "react-redux";
-import {addAlert} from "../actions/alertActions";
-
+import {handleError} from "../utils/utils";
+import {useSnackbar} from "notistack";
 
 const useStyles = makeStyles((theme) => ({
     button: {
@@ -22,7 +21,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-function StepperContainer({addError, getSteps, getStepContent, isStepValid, isStepOptional, clear, uploadData, finalButtonText, next}) {
+function StepperContainer({getSteps, getStepContent, isStepValid, isStepOptional, clear, uploadData, finalButtonText, next}) {
+
+    const {enqueueSnackbar,} = useSnackbar()
 
     useEffect(() => {
         if (activeStep === steps.length) {
@@ -56,7 +57,7 @@ function StepperContainer({addError, getSteps, getStepContent, isStepValid, isSt
 
     const handleSkip = () => {
         if (!isStepOptional(activeStep)) {
-            addError("You can't skip a step that isn't optional.");
+            handleError(enqueueSnackbar, "You can't skip a step that isn't optional.");
         }
         clear(activeStep)
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -133,11 +134,5 @@ function StepperContainer({addError, getSteps, getStepContent, isStepValid, isSt
     )
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        addError: (text) => dispatch(addAlert(text, "error")),
-    };
-};
 
-
-export default connect(null, mapDispatchToProps)(StepperContainer)
+export default StepperContainer

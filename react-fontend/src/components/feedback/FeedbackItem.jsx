@@ -15,7 +15,6 @@ import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import {handleError, handleSuccess} from "../../utils/utils";
 import {connect} from "react-redux"
-import {addAlert} from "../../actions/alertActions";
 import {putEditFeedback} from "../../utils/api";
 import {useSnackbar} from 'notistack';
 
@@ -41,7 +40,7 @@ const FeedbackItem = ({token, addAlert, feedback, edit = false}) => {
     const [feedbackState, setFeedback] = useState(feedback)
     const [vote, setVote] = useState(feedback.vote)
     const [comment, setComment] = useState(feedback.comment)
-    const {enqueueSnackbar, } = useSnackbar();
+    const {enqueueSnackbar,} = useSnackbar();
     const classes = useStyles();
     return (
         <ListItem>
@@ -142,13 +141,7 @@ function mapStateToProps(state) {
     };
 }
 
-function mapDispatchToProps(dispatch) {
-    return {
-        addAlert: (text, style) => (dispatch(addAlert(text, style)))
-    };
-}
-
 
 export default connect(
-    mapStateToProps, mapDispatchToProps
+    mapStateToProps,
 )(FeedbackItem);

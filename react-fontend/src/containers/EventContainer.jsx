@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {makeStyles} from "@material-ui/core/styles";
+import {makeStyles, ThemeProvider} from "@material-ui/core/styles";
 import {white} from "color-name";
 import red from '@material-ui/core/colors/red';
 import Typography from "@material-ui/core/Typography";
@@ -12,7 +12,6 @@ import Box from "@material-ui/core/Box";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Alert from "@material-ui/lab/Alert";
 import {useParams} from "react-router";
-import {addAlert} from "../actions/alertActions";
 import {useHistory} from "react-router-dom";
 import {eventPage, home, login} from "../constants/pagesurls";
 import AlertDialog from "../components/AlertDialog";
@@ -22,7 +21,6 @@ import {connect} from "react-redux";
 import TextField from "@material-ui/core/TextField";
 import {KeyboardDatePicker, KeyboardTimePicker} from "@material-ui/pickers";
 import {white_text_theme} from "../utils/theme";
-import {ThemeProvider} from "@material-ui/core/styles";
 import {PhotoCamera} from "@material-ui/icons";
 import MapContainer from "./MapContainer";
 import ParticipantsContainer from "./ParticipantsContainer";
@@ -40,7 +38,7 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import Rating from "@material-ui/lab/Rating";
 import {Helmet} from "react-helmet";
-import {runEvent, getEventAxios, updateEvent, leaveEvent, deleteEvent, postCreateFeedback} from "../utils/api";
+import {deleteEvent, getEventAxios, leaveEvent, postCreateFeedback, runEvent, updateEvent} from "../utils/api";
 import {useSnackbar} from 'notistack';
 import _ from "lodash";
 
@@ -211,7 +209,7 @@ const EventContainer = (props) => {
         let {id} = useParams();
         const [event, setEvent] = useState(location.state ? location.state : emptyEvent)
         let history = useHistory();
-        const {enqueueSnackbar, } = useSnackbar();
+        const {enqueueSnackbar,} = useSnackbar();
 
         const run = () => {
             runEvent(
@@ -827,12 +825,7 @@ function mapStateToProps(state) {
     };
 }
 
-function mapDispatchToProps(dispatch) {
-    return {
-        addAlert: (text, style) => dispatch(addAlert(text, style)),
-    };
-}
 
 export default connect(
-    mapStateToProps, mapDispatchToProps
+    mapStateToProps,
 )(EventContainer);

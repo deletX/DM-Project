@@ -7,22 +7,10 @@ import {useHistory} from "react-router-dom";
 import {authSignup, googleOAuthLogin} from "../../actions/authActions";
 import {connect} from "react-redux";
 import {changePicture, createCar} from "../../actions/profileActions";
-import {addAlert} from "../../actions/alertActions";
 import CardContainer from "../../containers/CardContainer";
 import StepperContainer from "../../containers/StepperContainer";
 import {Helmet} from "react-helmet";
 import {useSnackbar} from 'notistack';
-
-// const useStyles = makeStyles((theme) => ({
-//
-//     button: {
-//         marginRight: theme.spacing(1),
-//     },
-//     instructions: {
-//         marginTop: theme.spacing(1),
-//         marginBottom: theme.spacing(1),
-//     }
-// }));
 
 function SignupComponent({authSignup, googleLogin, setPicture, postCar, addError}) {
     let history = useHistory()
@@ -92,14 +80,14 @@ function SignupComponent({authSignup, googleLogin, setPicture, postCar, addError
                         postCar(carName, totSeats, fuel, consumption, enqueueSnackbar).then(
                             () => {
                                 if (image !== null && imageURL !== "") {
-                                    setPicture(image).then(() => {
+                                    setPicture(image, enqueueSnackbar).then(() => {
                                         history.push(home)
                                     })
                                 }
                             }
                         )
                     } else if (image !== null && imageURL !== "") {
-                        setPicture(image).then(() => {
+                        setPicture(image, enqueueSnackbar).then(() => {
                             history.push(home)
                         })
                     }
@@ -117,14 +105,14 @@ function SignupComponent({authSignup, googleLogin, setPicture, postCar, addError
                         postCar(carName, totSeats, fuel, consumption, enqueueSnackbar)
                             .then(() => {
                                     if (image !== null && imageURL !== "") {
-                                        setPicture(image).then(() => {
+                                        setPicture(image, enqueueSnackbar).then(() => {
                                             history.push(home)
                                         })
                                     }
                                 }
                             )
                     } else if (image !== null && imageURL !== "") {
-                        setPicture(image).then(() => {
+                        setPicture(image, enqueueSnackbar).then(() => {
                             history.push(home)
                         })
                     }
@@ -176,9 +164,8 @@ const mapDispatchToProps = (dispatch) => {
     return {
         authSignup: (username, firstName, lastName, email, password, enqueueSnackbar) => dispatch(authSignup(username, firstName, lastName, email, password, enqueueSnackbar)),
         googleLogin: (googleToken, enqueueSnackbar) => dispatch(googleOAuthLogin(googleToken, enqueueSnackbar)),
-        setPicture: (image) => dispatch(changePicture(image)),
+        setPicture: (image, enqueueSnackbar) => dispatch(changePicture(image, enqueueSnackbar)),
         postCar: (carName, totSeats, fuel, consumption, enqueueSnackbar) => dispatch(createCar(carName, totSeats, fuel, consumption, enqueueSnackbar)),
-        addError: (text) => dispatch(addAlert(text, "error")),
     };
 };
 

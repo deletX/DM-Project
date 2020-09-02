@@ -1,5 +1,7 @@
 import {
-    CAR_CREATE, CAR_DELETE, CAR_UPDATE,
+    CAR_CREATE,
+    CAR_DELETE,
+    CAR_UPDATE,
     CLEAR_PROFILE_DATA,
     GET_PROFILE_SUCCESS,
     PROFILE_OP_ERROR,
@@ -8,16 +10,16 @@ import {
     USER_DATA_UPDATE
 } from "./types";
 import {handleError, handleSuccess} from "../utils/utils";
-import {addAlert, alertError} from "./alertActions";
+
 import {authLogout} from "./authActions";
 import {
+    deleteDeleteCar,
     deleteProfile,
     getFetchProfile,
     postCreateCar,
     putChangeProfilePicture,
     putChangeUserData,
-    putUpdateCar,
-    deleteDeleteCar
+    putUpdateCar
 } from "../utils/api";
 
 
@@ -103,7 +105,7 @@ export const clearProfileData = () => {
 }
 
 
-export const fetchProfile = () => {
+export const fetchProfile = (enqueueSnackbar) => {
     return async (dispatch) => {
         dispatch(start());
         let access_token = localStorage.getItem("access_token");
@@ -111,12 +113,11 @@ export const fetchProfile = () => {
             (res) => {
                 let {id, user, picture, score, car_set, average_vote, received_feedback, given_feedback} = res.data;
                 localStorage.setItem("profile_id", id);
-                // dispatch(removeAllAlerts());
                 dispatch(getSuccess(id, user, picture, score, car_set, average_vote, received_feedback, given_feedback));
             },
             (err) => {
                 dispatch(fail());
-                dispatch(alertError(err));
+                handleError(enqueueSnackbar, "Something went wrong while retrieving the profile")
                 return err;
             })
     }
@@ -130,16 +131,12 @@ export const changePicture = (picture, enqueueSnackbar) => {
         formData.append("picture", picture, picture.name);
         return putChangeProfilePicture(formData, access_token,
             (res) => {
-                console.log("picture changed")
                 dispatch(successPictureUpdate(res.data.picture));
-                //dispatch(addAlert("Picture changed successfully!", "success"));
                 handleSuccess(enqueueSnackbar, "Profile picture changed successfully!")
             },
             (err) => {
-                console.log("error picture changed")
-                dispatch(alertError(err));
                 dispatch(fail());
-                handleError(enqueueSnackbar, "Error while changing profile picture")
+                handleError(enqueueSnackbar, "Something went wrong while changing profile picture")
                 return err;
             })
     };
@@ -159,33 +156,30 @@ export const changeUserData = (first_name, last_name, email, password = null, en
         }
         return putChangeUserData(data, access_token,
             (res) => {
-                console.log("Changed user data")
                 let {id, firstName, lastName, email} = res.data;
                 handleSuccess(enqueueSnackbar, "Successfully changed user data")
                 dispatch(changeUserDataSuccess(id, firstName, lastName, email));
             },
             (err) => {
-                dispatch(alertError(err));
                 dispatch(fail());
-                console.log("error changed user data")
-                handleError(enqueueSnackbar, "Error while changin user data")
+                handleError(enqueueSnackbar, "Something went wrong while changing user data")
                 return err;
             })
     };
 }
 
-export const deleteUser = () => { //not used
+export const deleteUser = (enqueueSnackbar) => { //not used
     return async (dispatch) => {
         dispatch(start());
         let access_token = localStorage.getItem("access_token");
         return deleteProfile(access_token,
-            (res) => {
-                addAlert("You have been deleted from the system!", "success");
+            () => {
+                handleSuccess(enqueueSnackbar, "You have been successfully removed from the system!")
                 dispatch(authLogout());
             },
             (err) => {
-                dispatch(alertError(err));
                 dispatch(fail());
+                handleError(enqueueSnackbar, "Something went wrong while deleting you")
                 return err;
             })
     };
@@ -201,43 +195,18 @@ export const createCar = (name, totSeats, fuel, consumption, enqueueSnackbar) =>
             (res) => {
                 let {id, name, tot_avail_seats, fuel, consumption} = res.data;
                 dispatch(createCarSuccess(id, name, tot_avail_seats, fuel, consumption))
-                //handleSuccess(enqueueSnackbar, "Successufully added car")
-                console.log("Car added")
+                handleSuccess(enqueueSnackbar, "Successfully added a car")
             },
             (err) => {
-                dispatch(alertError(err));
                 dispatch(fail());
-                console.error("Could not add car")
-                //handleError(enqueueSnackbar, "Error while adding car")
+                handleError(enqueueSnackbar, "Something went wrong while adding a car")
                 return err;
             })
-        //
-        // return axios
-        //     .post(
-        //         carsListURL(profileId),
-        //         {
-        //             name: name,
-        //             tot_avail_seats: totSeats,
-        //             fuel: fuel,
-        //             consumption: consumption,
-        //         },
-        //         headers('application/json', access_token)
-        //     )
-        //     .then(res => {
-        //         let {id, name, tot_avail_seats, fuel, consumption} = res.data;
-        //         dispatch(createCarSuccess(id, name, tot_avail_seats, fuel, consumption))
-        //         console.log("Car added")
-        //     })
-        //     .catch(error => {
-        //         dispatch(alertError(error));
-        //         dispatch(fail());
-        //         console.error("Could not add car")
-        //         return error;
-        //     })
+
     };
 }
 
-export const updateCar = (id, name, totSeats, fuel, consumption) => {
+export const updateCar = (id, name, totSeats, fuel, consumption, enqueueSnackbar) => {
     return async (dispatch) => {
         dispatch(start());
         let access_token = localStorage.getItem("access_token");
@@ -248,25 +217,25 @@ export const updateCar = (id, name, totSeats, fuel, consumption) => {
                 dispatch(changeCarSuccess(id, name, tot_avail_seats, fuel, consumption))
             },
             (err) => {
-                dispatch(alertError(err));
+                handleError(enqueueSnackbar, "Something went wrong while updating your car")
                 dispatch(fail());
                 return err;
             })
     };
 }
 
-export const deleteCar = (id) => {
+export const deleteCar = (id, enqueueSnackbar) => {
     return async (dispatch) => {
         dispatch(start());
         let access_token = localStorage.getItem("access_token");
         let profileId = localStorage.getItem("profile_id");
         return deleteDeleteCar(profileId, id, access_token,
-            (res) => {
+            () => {
                 dispatch(deleteCarSuccess(id));
             },
             (err) => {
-                dispatch(alertError(err));
                 dispatch(fail());
+                handleError(enqueueSnackbar, "Something went wrong while deleting your car")
                 return err;
             })
     };

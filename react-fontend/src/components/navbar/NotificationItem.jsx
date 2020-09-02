@@ -7,27 +7,18 @@ import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import {useHistory} from "react-router-dom";
 import {connect} from 'react-redux';
 import {readNotification} from "../../actions/notificationsActions";
+import {useSnackbar} from "notistack";
 
-// const useStyles = makeStyles((theme) => ({
-//     root: {
-//         width: '100%',
-//         maxWidth: '36ch',
-//         backgroundColor: theme.palette.background.paper,
-//     },
-//     inline: {
-//         display: 'inline',
-//     },
-// }));
 
 const NotificationItem = ({notification, readNotification, readNotificationNavBar}) => {
-    //const classes = useStyles();
+    const {enqueueSnackbar,} = useSnackbar()
     let history = useHistory()
 
     return (
         <>
             <ListItem alignItems="flex-start" button disabled={notification.read}
                       onClick={() => {
-                          readNotification(notification.id);
+                          readNotification(notification.id, enqueueSnackbar);
                           readNotificationNavBar()
                           history.push(notification.url)
                       }}>
@@ -54,7 +45,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        readNotification: (id) => dispatch(readNotification(id))
+        readNotification: (id, enqueueSnackbar) => dispatch(readNotification(id, enqueueSnackbar))
     };
 }
 

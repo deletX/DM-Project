@@ -11,7 +11,6 @@ import Button from "@material-ui/core/Button";
 import JoinContainer from "../../containers/JoinContainer";
 import AlertDialog from "../AlertDialog";
 import {handleError, handleSuccess} from "../../utils/utils";
-import {addAlert} from "../../actions/alertActions";
 import {useHistory} from "react-router-dom";
 import {eventPage} from "../../constants/pagesurls";
 import LinearProgress from "@material-ui/core/LinearProgress";
@@ -46,7 +45,7 @@ const EventCard = ({addAlert, token, event, profileId, refreshEvents}) => {
     const [leaveOpen, setLeaveOpen] = useState(false);
     const [deleteOpen, setDeleteOpen] = useState(false);
     //console.log(event.date_time)
-    const {enqueueSnackbar, } = useSnackbar();
+    const {enqueueSnackbar,} = useSnackbar();
     let date = new Date(event.date_time)
 
     let isInEvent = event.participant_set.filter(item => (item.profile.id === profileId)).length > 0;
@@ -164,7 +163,7 @@ const EventCard = ({addAlert, token, event, profileId, refreshEvents}) => {
                             console.log(err)
                             //addAlert("Something went wrong", "error")
                             setDeleteOpen(false)
-                            handleError(enqueueSnackbar,"Something went wrong while deleting event")
+                            handleError(enqueueSnackbar, "Something went wrong while deleting event")
                         })
                 }}
                 onNo={() => {
@@ -186,13 +185,7 @@ function mapStateToProps(state) {
     };
 }
 
-function mapDispatchToProps(dispatch) {
-    return {
-        addAlert: (text, style) => dispatch(addAlert(text, style)),
-    }
-}
 
 export default connect(
     mapStateToProps,
-    mapDispatchToProps
 )(EventCard);

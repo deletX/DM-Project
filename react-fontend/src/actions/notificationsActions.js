@@ -1,12 +1,12 @@
-import {alertError} from "./alertActions";
 import {
+    CLEAR_NOTIFICATIONS,
     GET_NOTIFICATIONS_SUCCESS,
     NOTIFICATION_UPDATE,
     NOTIFICATIONS_ERROR,
-    NOTIFICATIONS_START,
-    CLEAR_NOTIFICATIONS
+    NOTIFICATIONS_START
 } from "./types";
 import {getNotifications, putReadNotifications} from "../utils/api";
+import {handleError} from "../utils/utils";
 
 const start = () => (
     {
@@ -47,7 +47,7 @@ export const clearNotifications = () => {
     };
 }
 
-export const retrieveNotifications = () => {
+export const retrieveNotifications = (enqueueSnackbar) => {
     return async (dispatch) => {
         dispatch(start());
         let access_token = localStorage.getItem("access_token");
@@ -59,23 +59,23 @@ export const retrieveNotifications = () => {
                 }, 60)
             },
             (err) => {
-                dispatch(alertError(err));
+                handleError(enqueueSnackbar, "Something went wrong while retrieving your notifications")
                 dispatch(fail());
                 return err;
             })
     };
 }
 
-export const readNotification = (notificationId, read = true) => {
+export const readNotification = (notificationId, read = true, enqueueSnackbar) => {
     return async (dispatch) => {
         dispatch(start());
         let access_token = localStorage.getItem("access_token");
-        return putReadNotifications(access_token,notificationId,read,
+        return putReadNotifications(access_token, notificationId, read,
             (res) => {
                 dispatch(readSuccess(notificationId, read))
             },
             (err) => {
-                dispatch(alertError(err));
+                handleError(enqueueSnackbar, "Something went wrong while reading the notificaiton")
                 dispatch(fail());
                 return err;
             })

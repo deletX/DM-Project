@@ -7,7 +7,6 @@ import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import {AddBox} from "@material-ui/icons";
 import {handleError, useQuery} from "../utils/utils";
-import {addAlert} from "../actions/alertActions";
 import ChipBox from "../components/event/ChipBox";
 import EventCard from "../components/event/EventCard";
 import Grid from "@material-ui/core/Grid";
@@ -61,7 +60,7 @@ const HomeContainer = ({addError, isAuthenticated, isLoading, search, token}) =>
     let joinable = query.get("joinable") === null ? true : query.get("joinable") === "true"
     let joined = query.get("joined") === null ? true : query.get("joined") === "true"
     let owned = query.get("owned") === null ? false : query.get("owned") === "true"
-    const {enqueueSnackbar, } = useSnackbar();
+    const {enqueueSnackbar,} = useSnackbar();
 
     useEffect(() => {
         if (!(isAuthenticated || isLoading))
@@ -152,10 +151,4 @@ const mapStateToProps = state => {
     };
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        addError: (text) => dispatch(addAlert(text, "error")),
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(HomeContainer)
+export default connect(mapStateToProps,)(HomeContainer)

@@ -6,13 +6,12 @@ import {makeStyles} from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import SearchIcon from '@material-ui/icons/Search';
 import Typography from "@material-ui/core/Typography";
-import {connect} from "react-redux";
-import {addAlert, removeAllAlerts} from "../actions/alertActions";
 import axios from "axios";
 import PositionsDialog from "../components/map/PositionsDialog";
-import {nominatimToPrimarySecondary} from "../utils/utils";
+import {handleError, handleInfo, nominatimToPrimarySecondary} from "../utils/utils";
 import Box from "@material-ui/core/Box";
 import {Map, Marker, TileLayer} from "react-leaflet";
+import {useSnackbar} from "notistack";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -44,7 +43,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const MapContainer = ({addAlert, clearAlerts, addr, setAddr, pos, setPos, loadUserPosition = true}) => {
+const MapContainer = ({addr, setAddr, pos, setPos, loadUserPosition = true}) => {
+    const {enqueueSnackbar,} = useSnackbar()
 
     useEffect(() => {
         if (pos === "" && navigator.geolocation && loadUserPosition) {
@@ -54,10 +54,9 @@ const MapContainer = ({addAlert, clearAlerts, addr, setAddr, pos, setPos, loadUs
                     .then((res) => {
                         console.log(res.data)
                         selectItem(res.data, position.coords.latitude, position.coords.longitude);
-                        clearAlerts();
                     })
                     .catch((error) => {
-                        addAlert("An error occurred while retrieving your location")
+                        handleError(enqueueSnackbar, "Something went wrong while retrieving your position")
                     })
             })
         }
@@ -70,7 +69,7 @@ const MapContainer = ({addAlert, clearAlerts, addr, setAddr, pos, setPos, loadUs
     const classes = useStyles();
     let [addrError, setAddrError] = useState(false)
 
-    const [lastRequest, ] = useState(new Date())
+    const [lastRequest,] = useState(new Date())
 
     const [open, setOpen] = useState(false);
     const [positions, setPositions] = useState([]);
@@ -105,15 +104,14 @@ const MapContainer = ({addAlert, clearAlerts, addr, setAddr, pos, setPos, loadUs
             .get(`https://nominatim.openstreetmap.org/search/?q=${encodeURI(addr)}&format=json&limit=3&addressdetails=1&dedupe=1`,)
             .then(res => {
                 if (res.data.length === 0) {
-                    addAlert("No positions found for given address", "info")
+                    handleInfo(enqueueSnackbar, "No positions found for given address")
                     return;
                 }
                 setPositions(res.data);
                 setOpen(true);
-                clearAlerts();
             })
             .catch(err => {
-                addAlert("An error occurred while retrieving positions")
+                handleError(enqueueSnackbar, "Something went wrong while retrieving positions")
             })
     }
 
@@ -196,10 +194,9 @@ const MapContainer = ({addAlert, clearAlerts, addr, setAddr, pos, setPos, loadUs
                                     .then(res => {
                                         console.log(res.data)
                                         selectItem(res.data, ev.target._latlng.lat, ev.target._latlng.lng);
-                                        clearAlerts();
                                         setAddrError(false);
                                     }).catch(error => {
-                                    addAlert("An error occurred while retrieving your selected location")
+                                    handleError(enqueueSnackbar, "Something went wrong while retrieving your selected location")
                                 })
                             }}
 
@@ -219,11 +216,5 @@ const MapContainer = ({addAlert, clearAlerts, addr, setAddr, pos, setPos, loadUs
     )
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        addAlert: (text, style = "error") => (dispatch(addAlert(text, style))),
-        clearAlerts: () => (dispatch(removeAllAlerts())),
-    }
-}
 
-export default connect(null, mapDispatchToProps)(MapContainer);
+export default MapContainer

@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import {handleError, handleSuccess} from "../utils/utils";
-import {addAlert} from "../actions/alertActions";
 import ProfileComponent from "../components/profile/ProfileComponent";
 import {useParams} from "react-router";
 import {useHistory} from "react-router-dom";
@@ -32,13 +31,6 @@ function mapStateToProps(state) {
     };
 }
 
-
-function mapDispatchToProps(dispatch) {
-    return {
-        addAlert: (text, style) => dispatch(addAlert(text, style))
-    };
-}
-
 const emptyProfile = {
     average_vote: null,
     car_set: [],
@@ -63,7 +55,7 @@ const ProfileContainer = ({location, addAlert, token, isAuthenticated, isLoading
 
     const [profile, setProfile] = useState(profileId === id ? profileRedux : emptyProfile)
     const [loading, setLoading] = useState(false)
-    const {enqueueSnackbar, } = useSnackbar();
+    const {enqueueSnackbar,} = useSnackbar();
 
     useEffect(() => {
 
@@ -94,13 +86,11 @@ const ProfileContainer = ({location, addAlert, token, isAuthenticated, isLoading
                     },
                     (err) => {
                         console.log(err)
-                        //addAlert("An error occurred while retrieving the profile", "error")
                         history.push(home)
                         setLoading(false)
                         handleError(enqueueSnackbar, "An error occurred while retrieving user profile")
                     })
-        else
-            {
+            else {
                 setProfile(profileRedux)
                 setLoading(false)
             }
@@ -126,7 +116,7 @@ const ProfileContainer = ({location, addAlert, token, isAuthenticated, isLoading
 
 
 export default connect(
-    mapStateToProps, mapDispatchToProps
+    mapStateToProps,
 )(ProfileContainer);
 
 

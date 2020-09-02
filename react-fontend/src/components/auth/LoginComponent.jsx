@@ -3,7 +3,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import {home} from "../../constants/pagesurls";
 import {useHistory} from "react-router-dom";
-import { authLogin,  googleOAuthLogin} from "../../actions/authActions";
+import {authLogin, googleOAuthLogin} from "../../actions/authActions";
 import {connect} from "react-redux";
 import Grid from "@material-ui/core/Grid";
 import GoogleLogin from "react-google-login";
@@ -12,7 +12,6 @@ import SvgIcon from "@material-ui/core/SvgIcon";
 import {ReactComponent as GoogleIcon} from "../../icons/GoogleLogo.svg";
 import TextField from "@material-ui/core/TextField";
 import LockIcon from '@material-ui/icons/Lock';
-import {addAlert} from "../../actions/alertActions";
 import CardContainer from "../../containers/CardContainer";
 import AvatarCustom from "../AvatarCustom";
 import {Helmet} from "react-helmet";
@@ -76,19 +75,19 @@ const useStyles = makeStyles((theme) => ({
 
 
 function SignupComponent({authLogin, googleLogin, addError, location}) {
-    let history=useHistory()
+    let history = useHistory()
     const [username, setUsername] = useState("");
     const [usernameError, setUsernameError] = useState(false);
 
     const [password, setPassword] = useState("");
     const [passwordError, setPasswordError] = useState(false);
-    const [open, ] = useState(false);
+    const [open,] = useState(false);
 
     const classes = useStyles();
 
     const disabled = !(username.length > 0 && password.length > 0);
 
-    const {enqueueSnackbar, } = useSnackbar();
+    const {enqueueSnackbar,} = useSnackbar();
 
     return (
         <CardContainer title="Log in!" open={open}>
@@ -203,7 +202,6 @@ const mapDispatchToProps = (dispatch) => {
     return {
         authLogin: (username, password, enqueueSnackbar) => dispatch(authLogin(username, password, enqueueSnackbar)),
         googleLogin: (googleToken, enqueueSnackbar) => dispatch(googleOAuthLogin(googleToken, enqueueSnackbar)),
-        addError: (text) => dispatch(addAlert(text, "error")),
     };
 };
 

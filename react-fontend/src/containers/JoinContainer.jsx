@@ -4,7 +4,6 @@ import Typography from "@material-ui/core/Typography";
 import {makeStyles} from "@material-ui/core/styles";
 import ModalContainer from "./ModalContainer";
 import Button from "@material-ui/core/Button";
-import {addAlert} from "../actions/alertActions";
 import {handleError, handleSuccess} from "../utils/utils";
 import JoinComponent from "../components/event/JoinComponent";
 import {postJoinEvent} from "../utils/api";
@@ -22,7 +21,7 @@ const JoinContainer = ({addAlert, cars, token, open, close, event, refreshEvents
     const [addr, setAddr] = useState("");
     const [pos, setPos] = useState("");
     const [car, setCar] = useState(-1);
-    const {enqueueSnackbar, } = useSnackbar();
+    const {enqueueSnackbar,} = useSnackbar();
 
     return (
         <>
@@ -43,14 +42,14 @@ const JoinContainer = ({addAlert, cars, token, open, close, event, refreshEvents
                             postJoinEvent(event.id, addr, pos, car, token,
                                 (res) => {
                                     //addAlert("Joined successfully", "success")
-                                    handleSuccess(enqueueSnackbar,"Joined successfully")
+                                    handleSuccess(enqueueSnackbar, "Joined successfully")
                                     refreshEvents();
                                     if (close)
                                         close()
                                 },
                                 (err) => {
                                     console.log(err)
-                                    handleError(enqueueSnackbar,"An error occurred while joining")
+                                    handleError(enqueueSnackbar, "An error occurred while joining")
                                     //addAlert("An error occurred while joining", "error")
                                     if (close)
                                         close()
@@ -71,11 +70,5 @@ function mapStateToProps(state) {
     };
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        addAlert: (text, style = "error") => (dispatch(addAlert(text, style))),
-    };
-}
 
-
-export default connect(mapStateToProps, mapDispatchToProps)(JoinContainer);
+export default connect(mapStateToProps,)(JoinContainer);

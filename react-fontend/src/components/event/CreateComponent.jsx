@@ -11,7 +11,6 @@ import {addEvent, login} from "../../constants/pagesurls";
 import {defaultEventPic} from "../../constants/constants";
 import ReviewCreateComponent from "./create/ReviewCreateComponent";
 import {handleError, handleSuccess} from "../../utils/utils";
-import {addAlert} from "../../actions/alertActions";
 import {postCreateEvent, postJoinEvent} from "../../utils/api";
 import {useSnackbar} from 'notistack';
 
@@ -23,25 +22,9 @@ function mapStateToProps(state) {
     };
 }
 
-function mapDispatchToProps(dispatch) {
-    return {
-        addAlert: (text, style) => dispatch(addAlert(text, style)),
-    };
-}
 
-// const useStyles = makeStyles((theme) => ({
-//     content: {
-//         marginBottom: theme.spacing(2),
-//         // width: '800px',
-//         // display: 'flex',
-//         // flexDirection: 'column',
-//         // alignItems: 'center',
-//         width: '43ch'
-//     }
-// }))
+const CreateComponent = ({isAuthenticatedOrLoading}) => {
 
-const CreateComponent = ({addAlert, isAuthenticatedOrLoading}) => {
-    //const classes = useStyles();
     let history = useHistory()
 
     const [open, setOpen] = useState(false);
@@ -58,7 +41,7 @@ const CreateComponent = ({addAlert, isAuthenticatedOrLoading}) => {
     const [pos, setPos] = useState("");
     const [car, setCar] = useState(-1);
 
-    const {enqueueSnackbar, } = useSnackbar();
+    const {enqueueSnackbar,} = useSnackbar();
 
     const getStepContent = (step, handleNext, isStepSkipped) => {
         switch (step) {
@@ -124,21 +107,18 @@ const CreateComponent = ({addAlert, isAuthenticatedOrLoading}) => {
                 if (!isStepSkipped(2))
                     postJoinEvent(event.id, address, pos, car, token,
                         (res) => {
-                            //addAlert("Joined successfully", "success")
                             handleSuccess(enqueueSnackbar, "Joined successfully")
                             if (open)
                                 setOpen(false)
                         },
                         (err) => {
                             console.log(err)
-                            //addAlert("An error occurred while joining", "error")
                             handleError(enqueueSnackbar, "An error occurred while joining")
                             if (open)
                                 setOpen(false)
                         })
             },
             (err) => {
-                //addAlert("An error occurred while creating the event", "error")
                 handleError(enqueueSnackbar, "An error occurred while creating the event")
                 reset(true)
                 if (open)
@@ -206,5 +186,5 @@ const CreateComponent = ({addAlert, isAuthenticatedOrLoading}) => {
 
 
 export default connect(
-    mapStateToProps, mapDispatchToProps
+    mapStateToProps,
 )(CreateComponent);

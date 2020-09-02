@@ -1,7 +1,6 @@
-import React, {Component} from 'react';
+import React, {Component, forwardRef} from 'react';
 import {connect} from 'react-redux';
 import MaterialTable from "material-table";
-import {forwardRef} from 'react';
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import Check from '@material-ui/icons/Check';
@@ -19,6 +18,7 @@ import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import {createCar, deleteCar, updateCar} from "../../actions/profileActions";
 import {withWidth} from "@material-ui/core";
+import {withSnackbar} from "notistack";
 
 const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref}/>),
@@ -128,7 +128,7 @@ class CarsComponent extends Component {
                                 if (name === undefined || tot_avail_seats < 2 || tot_avail_seats > 9 || consumption <= 0)
                                     reject()
                                 else {
-                                    this.props.createCar(name, tot_avail_seats, consumption, fuel)
+                                    this.props.createCar(name, tot_avail_seats, consumption, fuel, this.props.enqueueSnackbar)
                                     resolve();
                                 }
                             }),
@@ -138,13 +138,13 @@ class CarsComponent extends Component {
                                 if (name === "" || tot_avail_seats < 2 || tot_avail_seats > 9 || consumption <= 0)
                                     reject()
                                 else {
-                                    this.props.updateCar(oldData.id, name, tot_avail_seats, consumption, fuel)
+                                    this.props.updateCar(oldData.id, name, tot_avail_seats, consumption, fuel, this.props.enqueueSnackbar)
                                     resolve();
                                 }
                             }),
                         onRowDelete: oldData =>
                             new Promise((resolve, reject) => {
-                                this.props.deleteCar(oldData.id)
+                                this.props.deleteCar(oldData.id, this.props.enqueueSnackbar)
                                 resolve();
                             })
                     }}
@@ -165,13 +165,13 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        createCar: (name, seats, consumption, fuel, resolve) => dispatch(createCar(name, seats, fuel, consumption, resolve)),
-        deleteCar: (id, resolve) => dispatch(deleteCar(id, resolve)),
-        updateCar: (id, name, seats, consumption, fuel) => dispatch(updateCar(id, name, seats, fuel, consumption))
+        createCar: (name, seats, consumption, fuel, resolve, enqueueSnackbar) => dispatch(createCar(name, seats, fuel, consumption, resolve, enqueueSnackbar)),
+        deleteCar: (id, enqueueSnackbar, resolve) => dispatch(deleteCar(id, enqueueSnackbar, resolve)),
+        updateCar: (id, name, seats, consumption, fuel, enqueueSnackbar) => dispatch(updateCar(id, name, seats, fuel, consumption, enqueueSnackbar))
     };
 }
 
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(withWidth()(CarsComponent));
+)(withWidth()(withSnackbar(CarsComponent)));
