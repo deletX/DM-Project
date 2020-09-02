@@ -17,45 +17,23 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import {deleteEvent, leaveEvent} from "../../utils/api";
 import {useSnackbar} from 'notistack';
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        maxWidth: 300,
-        maxHeight: 310,
-        width: '50vw',
-        minWidth: 250,
-    },
-    media: {
-        height: 140,
-    },
-    primaryButton: {
-        color: theme.palette.primary.dark,
-    },
-    secondaryButton: {
-        color: theme.palette.secondary.dark,
-    },
-    delete: {
-        color: "darkred",
-    },
-}));
-
-const EventCard = ({addAlert, token, event, profileId, refreshEvents}) => {
+const EventCard = ({token, event, profileId, refreshEvents}) => {
     let history = useHistory()
     const classes = useStyles()
+    const {enqueueSnackbar,} = useSnackbar();
+
     const [joinOpen, setJoinOpen] = useState(false);
     const [leaveOpen, setLeaveOpen] = useState(false);
     const [deleteOpen, setDeleteOpen] = useState(false);
 
-    const {enqueueSnackbar,} = useSnackbar();
     let date = new Date(event.date_time)
 
     let isInEvent = event.participant_set.filter(item => (item.profile.id === profileId)).length > 0;
-
 
     let isOwner = event.owner.id === profileId;
 
     return (
         <>
-
             <Card className={classes.root}>
                 <CardActionArea
                     onClick={() => {
@@ -124,7 +102,6 @@ const EventCard = ({addAlert, token, event, profileId, refreshEvents}) => {
                     let participation = event.participant_set.filter(item => (item.profile.id === profileId))[0];
                     leaveEvent(event.id, participation.id, token,
                         (res) => {
-                            //addAlert("Successfully left the event", "success")
                             handleSuccess(enqueueSnackbar, "Successfully left the event")
                             refreshEvents()
                             setLeaveOpen(false)
@@ -172,6 +149,27 @@ const EventCard = ({addAlert, token, event, profileId, refreshEvents}) => {
         </>
     )
 }
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        maxWidth: 300,
+        maxHeight: 310,
+        width: '50vw',
+        minWidth: 250,
+    },
+    media: {
+        height: 140,
+    },
+    primaryButton: {
+        color: theme.palette.primary.dark,
+    },
+    secondaryButton: {
+        color: theme.palette.secondary.dark,
+    },
+    delete: {
+        color: "darkred",
+    },
+}));
 
 
 function mapStateToProps(state) {
