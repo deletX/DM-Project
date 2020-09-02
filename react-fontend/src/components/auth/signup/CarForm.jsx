@@ -1,77 +1,11 @@
 import React, {useState} from "react";
 import {makeStyles} from "@material-ui/core/styles";
-import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import InputAdornment from "@material-ui/core/InputAdornment";
-
-const CarNameTextField = (props) => (
-    <Grid item xs={12} sm={6}>
-        <TextField fullWidth id="car-name" label="Name" placeholder="Fiat Uno 1992"
-                   value={props.value}
-                   onChange={props.onChange}
-                   onBlur={props.onBlur}
-                   error={props.error}
-                   required
-                   helperText={props.helperText}
-                   autoComplete="name"/>
-    </Grid>
-)
-
-const CarTotalSeatsSelect = (props) => (
-    <Grid item xs={12} sm={6}>
-        <FormControl variant="outlined">
-            <InputLabel id="tot-seats-label">Seats</InputLabel>
-            <Select id="tot-seats" label="Seats" labelId="tot-seats-label" value={props.value}
-                    onChange={props.onChange}>
-                <MenuItem value={2}>2</MenuItem>
-                <MenuItem value={3}>3</MenuItem>
-                <MenuItem value={4}>4</MenuItem>
-                <MenuItem value={5}>5</MenuItem>
-                <MenuItem value={6}>6</MenuItem>
-                <MenuItem value={7}>7</MenuItem>
-                <MenuItem value={8}>8</MenuItem>
-                <MenuItem value={9}>9</MenuItem>
-            </Select>
-        </FormControl>
-    </Grid>
-)
-
-const CarFuelSelect = (props) => (
-    <Grid item xs={12} sm={6}>
-        <FormControl variant="outlined">
-            <InputLabel id="fuel-label">Fuel</InputLabel>
-            <Select id="fuel" labelId="fuel-label" label="Fuel" value={props.value}
-                    onChange={props.onChange}>
-                <MenuItem value={1}>Petrol</MenuItem>
-                <MenuItem value={2}>Diesel</MenuItem>
-                <MenuItem value={3}>Gas</MenuItem>
-                <MenuItem value={4}>Electric</MenuItem>
-            </Select>
-        </FormControl>
-    </Grid>
-)
-
-const CarConsumptionTextInput = (props) => (
-    <Grid item xs={12} sm={6}>
-        <TextField
-            type="number"
-            helperText="Between 1 and 25"
-            step={0.01}
-            label="Consumption"
-            value={props.value}
-            InputProps={{
-                endAdornment: <InputAdornment position="end">l/100Km</InputAdornment>,
-            }}
-            onChange={props.onChange}
-            onBlur={props.onBlur}
-
-        />
-    </Grid>
-)
+import CarTotalSeatsSelect from "./car/CarTotalSeatsSelect";
+import CarFuelSelect from "./car/CarFuelSelect";
+import CarConsumptionTextInput from "./car/CarConsumptionTextInput";
+import CarNameTextField from "./car/CarNameTextField";
 
 const CarForm = ({
                      name, setName, totSeats, setTotSeats,
@@ -85,7 +19,7 @@ const CarForm = ({
         <div className={classes.root}>
             <FormControl variant="outlined" className={classes.form}>
                 <Grid container spacing={2}>
-                    
+
                     <CarNameTextField
                         value={name}
                         onChange={(input) => {
