@@ -5,40 +5,13 @@ import TextField from "@material-ui/core/TextField";
 import {PhotoCamera} from "@material-ui/icons";
 import Input from "@material-ui/core/Input";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import {CLIENT_ID} from "../../../constants/constants";
 import Grid from "@material-ui/core/Grid";
-import GoogleLogin from "react-google-login";
-import SvgIcon from "@material-ui/core/SvgIcon";
-import {ReactComponent as GoogleIcon} from '../../../icons/GoogleLogo.svg'
 import Alert from "@material-ui/lab/Alert";
 import AvatarCustom from "../../AvatarCustom";
 import {getProfileImage} from "../../../utils/api";
 import {handleError, handleSuccess} from "../../../utils/utils";
 import {useSnackbar} from 'notistack';
-
-
-const GoogleLoginButton = (props) => {
-    const classes = useStyles();
-
-    return (
-        <Grid item xs={12}>
-            <GoogleLogin
-                isSignedIn={false}
-                onSuccess={props.onSuccess}
-                onFailure={() => {
-                }}
-                clientId={CLIENT_ID} render={renderProps => (
-                <Button variant="contained"
-                        className={classes.googleLogin}
-                        onClick={renderProps.onClick}
-                        startIcon={<SvgIcon component={GoogleIcon} viewBox="0 0 533.5 544.3"/>}
-                >
-                    Signup with Google
-                </Button>
-            )}/>
-        </Grid>
-    )
-}
+import GoogleLoginButton from "../GoogleLoginButton";
 
 const ImageButton = (props) => {
     const classes = useStyles();
@@ -71,7 +44,7 @@ const PersonalInfoForm = ({
                           }) => {
     const classes = useStyles();
     const {enqueueSnackbar,} = useSnackbar();
-        
+
     const [emailHelperText, setEmailHelperText] = useState("");
     const [usernameHelperText, setUsernameHelperText] = useState("");
 
