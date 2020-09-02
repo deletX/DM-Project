@@ -12,47 +12,6 @@ import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import FormControl from "@material-ui/core/FormControl";
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        marginBottom: theme.spacing(5),
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
-    form: {
-        width: '100%',
-    },
-
-    button: {
-        marginRight: theme.spacing(1),
-        marginBottom: theme.spacing(1),
-    },
-    imageInput: {
-        display: 'none',
-    },
-    imageProgress: {
-        marginLeft: theme.spacing(1),
-    },
-    img: {
-        color: theme.palette.getContrastText(theme.palette.secondary.dark),
-        backgroundColor: theme.palette.secondary.dark,
-        margin: 10,
-        width: '100%',
-        height: '25vw',
-        maxHeight: "175px",
-    },
-    instruction: {
-        marginBottom: theme.spacing(2),
-    },
-    divider: {
-        width: '100%',
-        marginTop: theme.spacing(2),
-        marginBottom: theme.spacing(2),
-    }
-
-}));
-
 const ReviewCreateComponent = ({cars, name, date, description, imageURL, car, address, destination, isStepSkipped}) => {
     const classes = useStyles();
 
@@ -62,13 +21,11 @@ const ReviewCreateComponent = ({cars, name, date, description, imageURL, car, ad
     carMenuItems.push(<MenuItem key={uuid()} value={-1}>No car</MenuItem>)
 
     return (
-
         <div className={classes.root}>
             <Avatar variant="rounded" src={imageURL} className={classes.img}/>
 
             <form className={classes.form} autoComplete="off">
                 <Grid container spacing={2}>
-
                     <Grid item xs={12}>
                         <TextField variant="outlined" fullWidth id="name" label="Name" placeholder="Awesome Gig"
                                    value={name}
@@ -162,6 +119,47 @@ const ReviewCreateComponent = ({cars, name, date, description, imageURL, car, ad
         </div>
     );
 };
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        marginBottom: theme.spacing(5),
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    form: {
+        width: '100%',
+    },
+
+    button: {
+        marginRight: theme.spacing(1),
+        marginBottom: theme.spacing(1),
+    },
+    imageInput: {
+        display: 'none',
+    },
+    imageProgress: {
+        marginLeft: theme.spacing(1),
+    },
+    img: {
+        color: theme.palette.getContrastText(theme.palette.secondary.dark),
+        backgroundColor: theme.palette.secondary.dark,
+        margin: 10,
+        width: '100%',
+        height: '25vw',
+        maxHeight: "175px",
+    },
+    instruction: {
+        marginBottom: theme.spacing(2),
+    },
+    divider: {
+        width: '100%',
+        marginTop: theme.spacing(2),
+        marginBottom: theme.spacing(2),
+    }
+
+}));
 
 function mapStateToProps(state) {
     return {
