@@ -82,7 +82,6 @@ const ProfileContainer = ({location, addAlert, token, isAuthenticated, isLoading
                     (res) => {
                         setProfile(res.data)
                         setLoading(false)
-                        handleSuccess(enqueueSnackbar, "User profile successfully retrieved")
                     },
                     (err) => {
                         console.log(err)
