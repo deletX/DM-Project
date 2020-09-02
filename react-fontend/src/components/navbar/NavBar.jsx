@@ -26,7 +26,6 @@ import logo from "../../icons/logo.svg"
 import {setSearch} from "../../actions/searchActions";
 import {useHistory} from "react-router-dom";
 
-
 function NavBar({isAuthenticated, notifications, authLogout, setSearch, search, unReadCount}) {
     let history = useHistory();
     const classes = useStyles();
