@@ -16,47 +16,51 @@ import {getProfileImage} from "../../../utils/api";
 import {handleError, handleSuccess} from "../../../utils/utils";
 import {useSnackbar} from 'notistack';
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        marginBottom: theme.spacing(2),
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
-    form: {
-        width: '100%',
-    },
 
-    button: {
-        marginRight: theme.spacing(1),
-        marginBottom: theme.spacing(1),
-    },
-    imageInput: {
-        display: 'none',
-    },
-    imageProgress: {
-        marginLeft: theme.spacing(1),
-    },
-    imgPreview: {
-        color: theme.palette.getContrastText(theme.palette.secondary.dark),
-        backgroundColor: theme.palette.secondary.dark,
-        margin: 10,
-        maxWidth: '9ch',
-        minWidth: '6ch',
-        maxHeight: '9ch',
-        minHeight: '6ch',
-    },
-    googleLogin: {
-        width: '100%',
-        backgroundColor: "white"
-    },
-    editAlert: {
-        width: '90%'
-    }
+const GoogleLogin = (props) => {
+    const classes = useStyles();
 
-}));
+    return (
+        <Grid item xs={12}>
+            <GoogleLogin
+                isSignedIn={false}
+                onSuccess={props.onSuccess}
+                onFailure={() => {
+                }}
+                clientId={CLIENT_ID} render={renderProps => (
+                <Button variant="contained"
+                        className={classes.googleLogin}
+                        onClick={renderProps.onClick}
+                        startIcon={<SvgIcon component={GoogleIcon} viewBox="0 0 533.5 544.3"/>}
+                >
+                    Signup with Google
+                </Button>
+            )}/>
+        </Grid>
+    )
+}
 
+const ImageButton = (props) => {
+    const classes = useStyles();
+    return (
+        <Grid item xs={12}>
+            <Button
+                fullWidth
+                variant="contained"
+                color="secondary"
+                component="label"
+                justify="flex-end"
+                className={classes.button}
+                startIcon={<PhotoCamera/>}
+            >Picture
+                <Input className={classes.imageInput} type="file" controlled="true" onChange={props.onClick}/>
+                {props.loading &&
+                <CircularProgress size="2ch" className={classes.imageProgress}/>
+                }
+            </Button>
+        </Grid>
+    )
+}
 
 const PersonalInfoForm = ({
                               firstName, setFirstName, lastName, setLastName, username, setUsername,
@@ -118,46 +122,35 @@ const PersonalInfoForm = ({
 
             <form className={classes.form}>
                 <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                        <GoogleLogin
-                            isSignedIn={false}
-                            onSuccess={(input) => {
-                                let username = input.profileObj.email.split("@")[0].replace(' ', '_').replace('.', '_')
-                                setGoogleAccessToken(input.accessToken)
-                                setGoogleLogin(true)
-                                setFirstName(input.profileObj.givenName)
-                                setLastName(input.profileObj.familyName)
-                                setEmail(input.profileObj.email)
-                                setUsername(username)
-                                setImageURL(input.profileObj.imageUrl)
-                                getProfileImage(input.profileObj.imageUrl,
-                                    (res) => {
-                                        let blob = res.data
-                                        let type = res.data.type.split('/').pop()
-                                        blob.name = `${username}.${type}`
-                                        setImage(blob)
-                                        handleSuccess(enqueueSnackbar, "Succefully retrieved profile image")
-                                    },
-                                    (err) => {
-                                        handleError(enqueueSnackbar, "Could not retrieve profile image", err)
-                                    })
-                                handleNext()
-                            }}
-                            onFailure={() => {
-                            }}
-                            clientId={CLIENT_ID} render={renderProps => (
-                            <Button variant="contained"
-                                    className={classes.googleLogin}
-                                    onClick={renderProps.onClick}
-                                    startIcon={<SvgIcon component={GoogleIcon} viewBox="0 0 533.5 544.3"/>}
-                            >
-                                Signup with Google
-                            </Button>
-                        )}/>
-                    </Grid>
+                    <GoogleLogin
+                        onSuccess={(input) => {
+                            let username = input.profileObj.email.split("@")[0].replace(' ', '_').replace('.', '_')
+                            setGoogleAccessToken(input.accessToken)
+                            setGoogleLogin(true)
+                            setFirstName(input.profileObj.givenName)
+                            setLastName(input.profileObj.familyName)
+                            setEmail(input.profileObj.email)
+                            setUsername(username)
+                            setImageURL(input.profileObj.imageUrl)
+                            getProfileImage(input.profileObj.imageUrl,
+                                (res) => {
+                                    let blob = res.data
+                                    let type = res.data.type.split('/').pop()
+                                    blob.name = `${username}.${type}`
+                                    setImage(blob)
+                                    handleSuccess(enqueueSnackbar, "Succefully retrieved profile image")
+                                },
+                                (err) => {
+                                    handleError(enqueueSnackbar, "Could not retrieve profile image", err)
+                                })
+                            handleNext()
+                        }}
+                    />
+
                     {isGoogleLogin &&
                     <Grid item xs={12}>
-                        <Alert className={classes.editAlert} severity="warning">Editing these info will undo your Google
+                        <Alert className={classes.editAlert} severity="warning">Editing these info will undo your
+                            Google
                             Signup</Alert>
                     </Grid>
                     }
@@ -216,49 +209,76 @@ const PersonalInfoForm = ({
                                    error={passwordError}
                                    value={password}
                                    type="password"
-                                   helperText={"Password should contain at least a lower case, an upper case, a number and a special character [! @ # $ % ^ & *] and be at least 8 characters long and shouldn't contain whitespaces"}
+                                   helperText={"Password should contain at least a lower case, an upper case, " +
+                                   "a number and a special character [! @ # $ % ^ & *] and be at least 8 characters " +
+                                   "long and shouldn't contain whitespaces"}
                                    onChange={validatePassword}
                                    onBlur={validatePassword}
                                    autoComplete="new-password"
                         />
                     </Grid>
-                    <Grid item xs={12}>
-                        <Button
-                            fullWidth
-                            variant="contained"
-                            color="secondary"
-                            component="label"
-                            justify="flex-end"
-                            className={classes.button}
-                            startIcon={<PhotoCamera/>}
-                        >Picture
 
-                            <Input className={classes.imageInput} type="file" controlled="true" onChange={(input) => {
-                                undoGoogleLogin();
-                                setImage("loading");
-                                let fileReader = new FileReader();
-                                let file = input.target.files[0];
-                                fileReader.onloadend = () => {
-                                    setImageURL(fileReader.result)
-                                }
-                                setImage(file)
-                                fileReader.readAsDataURL(file)
+                    <ImageButton
+                        onClick={(input) => {
+                            undoGoogleLogin();
+                            setImage("loading");
+                            let fileReader = new FileReader();
+                            let file = input.target.files[0];
+                            fileReader.onloadend = () => {
+                                setImageURL(fileReader.result)
+                            }
+                            setImage(file)
+                            fileReader.readAsDataURL(file)
 
-                            }}/>
-                            {image === "loading" ? (
-                                <>
-                                    <CircularProgress size="2ch" className={classes.imageProgress}/>
-                                </>
-                            ) : (
-                                <>
-                                </>
-                            )}
-                        </Button>
-                    </Grid>
+                        }}
+                        loading={image === "loading"}
+                    />
+                   
                 </Grid>
             </form>
         </div>
     )
 };
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        marginBottom: theme.spacing(2),
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    form: {
+        width: '100%',
+    },
+
+    button: {
+        marginRight: theme.spacing(1),
+        marginBottom: theme.spacing(1),
+    },
+    imageInput: {
+        display: 'none',
+    },
+    imageProgress: {
+        marginLeft: theme.spacing(1),
+    },
+    imgPreview: {
+        color: theme.palette.getContrastText(theme.palette.secondary.dark),
+        backgroundColor: theme.palette.secondary.dark,
+        margin: 10,
+        maxWidth: '9ch',
+        minWidth: '6ch',
+        maxHeight: '9ch',
+        minHeight: '6ch',
+    },
+    googleLogin: {
+        width: '100%',
+        backgroundColor: "white"
+    },
+    editAlert: {
+        width: '90%'
+    }
+
+}));
 
 export default PersonalInfoForm;
