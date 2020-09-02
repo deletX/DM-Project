@@ -9,19 +9,14 @@ import JoinComponent from "../components/event/JoinComponent";
 import {postJoinEvent} from "../utils/api";
 import {useSnackbar} from 'notistack';
 
-const useStyles = makeStyles((theme) => ({
-    button: {
-        width: '90%',
-        marginBottom: theme.spacing(2),
-    },
-}))
 
 const JoinContainer = ({addAlert, cars, token, open, close, event, refreshEvents}) => {
     const classes = useStyles();
+    const {enqueueSnackbar,} = useSnackbar();
+
     const [addr, setAddr] = useState("");
     const [pos, setPos] = useState("");
     const [car, setCar] = useState(-1);
-    const {enqueueSnackbar,} = useSnackbar();
 
     return (
         <>
@@ -31,17 +26,12 @@ const JoinContainer = ({addAlert, cars, token, open, close, event, refreshEvents
                                 <Typography variant="h5" align="center">
                                     Join!
                                 </Typography>}
-
             >
-
                 <JoinComponent car={car} setCar={setCar} addr={addr} setAddr={setAddr} pos={pos} setPos={setPos}/>
                 <Button variant="contained" className={classes.button} color="secondary" disabled={pos === ""}
                         onClick={() => {
-                            //console.log(event.id)
-                            //console.log(eventJoinURL(event.id))
                             postJoinEvent(event.id, addr, pos, car, token,
                                 (res) => {
-                                    //addAlert("Joined successfully", "success")
                                     handleSuccess(enqueueSnackbar, "Joined successfully")
                                     refreshEvents();
                                     if (close)
@@ -50,7 +40,6 @@ const JoinContainer = ({addAlert, cars, token, open, close, event, refreshEvents
                                 (err) => {
                                     console.log(err)
                                     handleError(enqueueSnackbar, "An error occurred while joining")
-                                    //addAlert("An error occurred while joining", "error")
                                     if (close)
                                         close()
                                 })
@@ -62,6 +51,14 @@ const JoinContainer = ({addAlert, cars, token, open, close, event, refreshEvents
         </>
     )
 }
+
+const useStyles = makeStyles((theme) => ({
+    button: {
+        width: '90%',
+        marginBottom: theme.spacing(2),
+    },
+}))
+
 
 function mapStateToProps(state) {
     return {

@@ -27,7 +27,6 @@ function App(props) {
                         <TryAutoSignup {...props}/>
                         <NavBar/>
                         <BaseRouter {...props}/>
-
                     </MuiPickersUtilsProvider>
                 </SnackbarProvider>
             </ThemeProvider>

@@ -5,36 +5,21 @@ import {Stepper} from "@material-ui/core";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
 import Button from "@material-ui/core/Button";
-
 import StepContent from "@material-ui/core/StepContent";
 import {handleError} from "../utils/utils";
 import {useSnackbar} from "notistack";
 
-const useStyles = makeStyles((theme) => ({
-    button: {
-        marginRight: theme.spacing(1),
-    },
-    instructions: {
-        marginTop: theme.spacing(1),
-        marginBottom: theme.spacing(1),
-    }
-}));
-
 
 function StepperContainer({getSteps, getStepContent, isStepValid, isStepOptional, clear, uploadData, finalButtonText, next}) {
-
+    const classes = useStyles();
     const {enqueueSnackbar,} = useSnackbar()
 
-    useEffect(() => {
-        if (activeStep === steps.length) {
-            uploadData(reset, isStepSkipped)
-        }
-    })
     const steps = getSteps();
-    const classes = useStyles();
+
     const [activeStep, setActiveStep] = useState(0);
     const [skipped, setSkipped] = useState(new Set());
 
+    const disabled = !isStepValid(activeStep);
 
     const isStepSkipped = (step) => {
         return skipped.has(step);
@@ -81,8 +66,11 @@ function StepperContainer({getSteps, getStepContent, isStepValid, isStepOptional
         setActiveStep(0);
     }
 
-
-    const disabled = !isStepValid(activeStep);
+    useEffect(() => {
+        if (activeStep === steps.length) {
+            uploadData(reset, isStepSkipped)
+        }
+    })
 
     return (
         <Stepper activeStep={activeStep} orientation="vertical">
@@ -95,6 +83,7 @@ function StepperContainer({getSteps, getStepContent, isStepValid, isStepOptional
                 if (isStepSkipped(index)) {
                     stepProps.completed = false;
                 }
+
                 return (
                     <Step key={label} {...stepProps}>
                         <StepLabel {...labelProps}>{label}</StepLabel>
@@ -133,6 +122,17 @@ function StepperContainer({getSteps, getStepContent, isStepValid, isStepOptional
         </Stepper>
     )
 }
+
+
+const useStyles = makeStyles((theme) => ({
+    button: {
+        marginRight: theme.spacing(1),
+    },
+    instructions: {
+        marginTop: theme.spacing(1),
+        marginBottom: theme.spacing(1),
+    }
+}));
 
 
 export default StepperContainer

@@ -6,6 +6,31 @@ import Box from "@material-ui/core/Box";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import {makeStyles} from "@material-ui/core/styles";
 
+
+const CardContainer = ({children, title, loading = true, open = false}) => {
+    const classes = useStyles();
+
+    return (
+        <div className={classes.root}>
+            <Typography variant="h5" align="center" className={classes.title}>
+                {title}
+            </Typography>
+            <Divider/>
+            {children}
+            {loading &&
+            <Backdrop className={classes.backdrop} open={open}>
+                <Box className={classes.loading}>
+                    <Typography className={classes.loadingTypography}>
+                        Loading your data!
+                    </Typography>
+                    <CircularProgress color="inherit"/>
+                </Box>
+            </Backdrop>
+            }
+        </div>
+    );
+};
+
 const useStyles = makeStyles((theme) => ({
 
     button: {
@@ -39,29 +64,5 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(1),
     },
 }))
-const CardContainer = ({children, title, loading = true, open = false}) => {
-    const classes = useStyles();
-    return (
-        <div className={classes.root}>
-            <Typography variant="h5" align="center" className={classes.title}>
-                {title}
-            </Typography>
-            <Divider/>
-            {children}
-            {loading &&
-            <Backdrop className={classes.backdrop} open={open}>
-                <Box className={classes.loading}>
-                    <Typography className={classes.loadingTypography}>
-                        Loading your data!
-                    </Typography>
-                    <CircularProgress color="inherit"/>
-                </Box>
-            </Backdrop>
-
-            }
-
-        </div>
-    );
-};
 
 export default CardContainer;

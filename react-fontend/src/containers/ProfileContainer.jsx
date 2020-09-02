@@ -12,24 +12,6 @@ import {Helmet} from "react-helmet";
 import {getProfileData} from "../utils/api";
 import {useSnackbar} from 'notistack';
 
-function mapStateToProps(state) {
-    return {
-        token: state.auth.token,
-        isAuthenticated: state.auth.token !== undefined,
-        isLoading: state.auth.loading,
-        profileId: state.profile.id,
-        profileRedux: {
-            average_vote: state.profile.averageVote,
-            car_set: state.profile.carSet,
-            id: state.profile.id,
-            picture: state.profile.picture,
-            received_feedback: state.profile.receivedFeedback,
-            score: state.profile.score,
-            user: state.profile.user,
-            given_feedback: state.profile.givenFeedback,
-        }
-    };
-}
 
 const emptyProfile = {
     average_vote: null,
@@ -50,29 +32,13 @@ const emptyProfile = {
 
 const ProfileContainer = ({location, addAlert, token, isAuthenticated, isLoading, profileId, profileRedux}) => {
     let history = useHistory()
+    const {enqueueSnackbar,} = useSnackbar();
+
     let {id} = useParams()
     id = parseInt(id)
 
     const [profile, setProfile] = useState(profileId === id ? profileRedux : emptyProfile)
     const [loading, setLoading] = useState(false)
-    const {enqueueSnackbar,} = useSnackbar();
-
-    useEffect(() => {
-
-            if (!(isAuthenticated || isLoading))
-                history.push(`${login}?next=${encodeURI(location.pathname)}`)
-            else if (profile.id === -1 && isAuthenticated) {
-                if (profileId === id) {
-                    setProfile(profileRedux)
-                } else {
-                    getProfile()
-                }
-            }
-            if (profileId === id && !("givenFeedback" in profile)) {
-                setProfile(profileRedux)
-            } // eslint-disable-next-line
-        }, [isAuthenticated, isLoading, profile, profileId, profileRedux, id]
-    )
 
     const getProfile = () => {
         if (!loading) {
@@ -95,6 +61,24 @@ const ProfileContainer = ({location, addAlert, token, isAuthenticated, isLoading
             }
         }
     };
+
+    useEffect(() => {
+
+            if (!(isAuthenticated || isLoading))
+                history.push(`${login}?next=${encodeURI(location.pathname)}`)
+            else if (profile.id === -1 && isAuthenticated) {
+                if (profileId === id) {
+                    setProfile(profileRedux)
+                } else {
+                    getProfile()
+                }
+            }
+            if (profileId === id && !("givenFeedback" in profile)) {
+                setProfile(profileRedux)
+            } // eslint-disable-next-line
+        }, [isAuthenticated, isLoading, profile, profileId, profileRedux, id]
+    )
+
     return (
         <FormContainer effect={() => {
         }}>
@@ -111,6 +95,26 @@ const ProfileContainer = ({location, addAlert, token, isAuthenticated, isLoading
             }
         </FormContainer>
     );
+}
+
+
+function mapStateToProps(state) {
+    return {
+        token: state.auth.token,
+        isAuthenticated: state.auth.token !== undefined,
+        isLoading: state.auth.loading,
+        profileId: state.profile.id,
+        profileRedux: {
+            average_vote: state.profile.averageVote,
+            car_set: state.profile.carSet,
+            id: state.profile.id,
+            picture: state.profile.picture,
+            received_feedback: state.profile.receivedFeedback,
+            score: state.profile.score,
+            user: state.profile.user,
+            given_feedback: state.profile.givenFeedback,
+        }
+    };
 }
 
 

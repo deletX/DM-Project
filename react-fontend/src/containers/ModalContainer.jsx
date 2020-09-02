@@ -4,6 +4,29 @@ import Divider from "@material-ui/core/Divider";
 import Modal from "@material-ui/core/Modal";
 import Paper from "@material-ui/core/Paper";
 
+
+const ModalContainer = (props) => {
+    const classes = useStyles();
+
+    return (
+
+        <Modal className={classes.root} open={props.open} onClose={props.close} disableEnforceFocus={true}
+               disableAutoFocus={true}
+               style={{display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column'}}>
+            <Paper className={classes.paper}>
+                <div className={classes.header}>
+                    {props.header}
+                </div>
+                <Divider style={{width: '95%'}}/>
+                <div className={classes.children}>
+                    {props.children}
+                </div>
+            </Paper>
+        </Modal>
+    )
+}
+
+
 const useStyles = makeStyles((theme) => ({
     root: {
         '& *': {
@@ -42,24 +65,5 @@ const useStyles = makeStyles((theme) => ({
     },
 }))
 
-const ModalContainer = (props) => {
-    const classes = useStyles();
-    return (
-
-        <Modal className={classes.root} open={props.open} onClose={props.close} disableEnforceFocus={true}
-               disableAutoFocus={true}
-               style={{display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column'}}>
-            <Paper className={classes.paper}>
-                <div className={classes.header}>
-                    {props.header}
-                </div>
-                <Divider style={{width: '95%'}}/>
-                <div className={classes.children}>
-                    {props.children}
-                </div>
-            </Paper>
-        </Modal>
-    )
-}
 
 export default ModalContainer

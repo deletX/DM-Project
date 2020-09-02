@@ -4,6 +4,22 @@ import {Paper} from "@material-ui/core";
 import {white} from "color-name";
 
 
+const FormContainer = ({children, effect}) => {
+    const classes = useStyles();
+
+    useEffect(() => {
+        effect()
+    });
+
+    return (
+        <div className={classes.root}>
+            <Paper className={classes.formPaper}>
+                {children}
+            </Paper>
+        </div>
+    )
+}
+
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
@@ -32,21 +48,5 @@ const useStyles = makeStyles((theme) => ({
         display: 'inline',
     },
 }));
-
-const FormContainer = ({children, effect}) => {
-    useEffect(() => {
-        effect()
-    });
-    const classes = useStyles();
-
-    return (
-        <div className={classes.root}>
-            <Paper className={classes.formPaper}>
-                {children}
-            </Paper>
-        </div>
-    )
-}
-
 
 export default FormContainer;

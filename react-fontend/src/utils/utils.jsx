@@ -1,5 +1,6 @@
 import {useLocation} from "react-router";
 
+
 export const isAuthenticated = () => {
     const token = localStorage.getItem("token");
     if (token === undefined) {
@@ -9,7 +10,6 @@ export const isAuthenticated = () => {
         return expirationDate > new Date();
     }
 };
-
 
 export const updateObject = (oldObject, updatedProperties) => {
     return {
@@ -38,7 +38,6 @@ export const headers = (content_type, access_token = null, otherHeaders = {}, ot
     };
     return headers
 };
-
 
 export const nominatimToPrimarySecondary = (position) => {
     let primary = "";
@@ -120,8 +119,6 @@ export const nominatimToPrimarySecondary = (position) => {
 
     return {primary, secondary}
 }
-
-
 
 export const pridStringToLatLng = (position) => {
     let latlng = position.split(' ')

@@ -16,6 +16,234 @@ import Divider from "@material-ui/core/Divider";
 import CardMedia from "@material-ui/core/CardMedia";
 
 
+const ProfileCard = (props) => {
+    const {profile} = props
+    return (
+        <Card className={props.className}>
+            <CardContent style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+            }}>
+                <Avatar src={profile.picture} style={{height: "60px", width: "60px"}}/>
+                <Typography variant="h6">
+                    {profile.firstName} {profile.lastName}
+                </Typography>
+                <Rating value={profile.vote} precision={.5} readOnly/>
+            </CardContent>
+        </Card>
+    )
+}
+
+const EventCard = (props) => {
+    const {event} = props;
+
+    return (
+        <Card className={props.className}>
+            <CardMedia
+                component="img"
+                image={event.picture}
+                title={event.name}
+                style={{
+                    height: "60%"
+                }}
+            />
+            <CardContent>
+                <Typography gutterBottom variant="h5" component="h2" noWrap>
+                    {event.name}
+                </Typography>
+                <Typography variant="body2" color="textSecondary" component="p" noWrap>
+                    Date: {event.date}
+                </Typography>
+                <Typography variant="body2" color="textSecondary" component="p" noWrap>
+                    Location: {event.address}
+                </Typography>
+            </CardContent>
+        </Card>
+    )
+}
+
+const profiles = [
+    {
+        id: 1,
+        picture: landingpageProfile(1),
+        firstName: "Laura",
+        lastName: "Onio",
+        vote: 4.5,
+    },
+    {
+        id: 2,
+        picture: landingpageProfile(2),
+        firstName: "Luca",
+        lastName: "Siciliano",
+        vote: 4,
+    },
+    {
+        id: 3,
+        picture: landingpageProfile(3),
+        firstName: "Angelica",
+        lastName: "Piccio",
+        vote: 5,
+    },
+    {
+        id: 4,
+        picture: landingpageProfile(4),
+        firstName: "Cinzia",
+        lastName: "Fiorentino",
+        vote: 4
+    },
+    {
+        id: 5,
+        picture: landingpageProfile(5),
+        firstName: "Luigi",
+        lastName: "Gallo",
+        vote: 5
+    },
+    {
+        id: 6,
+        picture: landingpageProfile(6),
+        firstName: "Franco",
+        lastName: "Schiavone",
+        vote: 4.5
+    }
+]
+
+const events = [
+    {
+        id: 1,
+        picture: landingpageEvent(1),
+        name: "Venice Trip",
+        date: "28/02/2020",
+        address: "Rio Terà Sant'Andrea, 460, 30135 Venezia VE",
+    },
+    {
+        id: 2,
+        picture: landingpageEvent(2),
+        name: "Stairway 66 Bar Night",
+        date: "29/12/2019",
+        address: "Via IV Novembre, N 6, 42010 Rio Saliceto RE",
+    },
+    {
+        id: 3,
+        picture: landingpageEvent(3),
+        name: "New Year in Venice",
+        date: "31/12/2019",
+        address: "Rio Terà Sant'Andrea, 460, 30135 Venezia VE",
+    },
+    {
+        id: 4,
+        picture: landingpageEvent(4),
+        name: "Live Radio",
+        date: "07/03/2020",
+        address: "Via E. De Amicis, 59, 41012 Carpi MO",
+    },
+    {
+        id: 5,
+        picture: landingpageEvent(5),
+        name: "Hospitality on the beach",
+        date: "13/05/2019",
+        address: "Ul. Petrića Glava 34, 22240, Tisno, Croatia",
+    },
+    {
+        id: 6,
+        picture: landingpageEvent(6),
+        name: "Aperitif party",
+        date: "19/12/2019",
+        address: "Corso Sempione, 1, 20145 Milano MI",
+    },
+
+]
+
+const LandingPageContainer = () => {
+    const classes = useStyles()
+
+    const profileCards = profiles.map(item => (
+        <ListItem><ProfileCard profile={item} key={item.id} className={classes.profileCard}/> </ListItem>))
+
+    const eventCards = events.map(item => (
+        <ListItem><EventCard event={item} key={item.id} className={classes.eventCard}/></ListItem>
+    ))
+
+    return (
+        <div>
+            <div className={classes.root}>
+                <div className={classes.header}>
+                    <div className={classes.scrim}>
+                        <ThemeProvider theme={white_text_theme}>
+                            <div className={classes.content}>
+                                <Typography variant="h1" className={classes.title}>
+                                    DM Project
+                                </Typography>
+                                <Typography className={classes.cta}>
+                                    Stop driving by yourself. Need to go to an event? Want to organize a travel with
+                                    your
+                                    buddies? Join and manage your events or join someone else's!
+                                </Typography>
+                            </div>
+                            <div className={classes.buttons}>
+                                <Button href={signup} variant="contained" color="primary">
+                                    Sign up
+                                </Button>
+                                <Button href={login} color="secondary">
+                                    See events
+                                </Button>
+                            </div>
+                        </ThemeProvider>
+                    </div>
+                </div>
+                <div className={classes.body}>
+                    <div className={classes.element}>
+                        <Typography variant="h2">
+                            Drivers
+                        </Typography>
+                        <Typography>
+                            Here some of our awesome members, we hope we'll meet each other soon!
+                        </Typography>
+                        <List className={classes.horizontalList}>
+                            {profileCards}
+                        </List>
+                    </div>
+                    <Divider/>
+                    <div className={classes.element}>
+
+                        <Typography variant="h2">
+                            New Events
+                        </Typography>
+                        <Typography>
+                            Here some of the extraordinary events we had here, join so you are not going to miss
+                            anything like this
+                        </Typography>
+                        <List className={classes.horizontalList}>
+                            {eventCards}
+                        </List>
+                    </div>
+                    <Divider/>
+                    <div className={classes.element}>
+                        <Typography variant="h2">
+                            Join Now!
+                        </Typography>
+                        <Typography>
+                            We would love to have you in our community! Click the join button and be ready for your next
+                            big event with new and amazing friends!
+                        </Typography>
+                        <div style={{
+                            height: "20vh",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                        }}>
+                            <Button size="large" variant="contained" color="primary" href={signup}>
+                                Join!
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+
 const useStyles = makeStyles((theme) => ({
     root: {
         width: '100%',
@@ -128,231 +356,5 @@ const useStyles = makeStyles((theme) => ({
 
 }))
 
-const ProfileCard = (props) => {
-    const {profile} = props
-    return (
-        <Card className={props.className}>
-            <CardContent style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-            }}>
-                <Avatar src={profile.picture} style={{height: "60px", width: "60px"}}/>
-                <Typography variant="h6">
-                    {profile.firstName} {profile.lastName}
-                </Typography>
-                <Rating value={profile.vote} precision={.5} readOnly/>
-            </CardContent>
-        </Card>
-    )
-}
-
-const EventCard = (props) => {
-    const {event} = props;
-
-    return (
-        <Card className={props.className}>
-            <CardMedia
-                component="img"
-                image={event.picture}
-                title={event.name}
-                style={{
-                    height: "60%"
-                }}
-            />
-            <CardContent>
-                <Typography gutterBottom variant="h5" component="h2" noWrap>
-                    {event.name}
-                </Typography>
-                <Typography variant="body2" color="textSecondary" component="p" noWrap>
-                    Date: {event.date}
-                </Typography>
-                <Typography variant="body2" color="textSecondary" component="p" noWrap>
-                    Location: {event.address}
-                </Typography>
-            </CardContent>
-        </Card>
-    )
-}
-
-const profiles = [
-    {
-        id: 1,
-        picture: landingpageProfile(1),
-        firstName: "Laura",
-        lastName: "Onio",
-        vote: 4.5,
-    },
-    {
-        id: 2,
-        picture: landingpageProfile(2),
-        firstName: "Luca",
-        lastName: "Siciliano",
-        vote: 4,
-    },
-    {
-        id: 3,
-        picture: landingpageProfile(3),
-        firstName: "Angelica",
-        lastName: "Piccio",
-        vote: 5,
-    },
-    {
-        id: 4,
-        picture: landingpageProfile(4),
-        firstName: "Cinzia",
-        lastName: "Fiorentino",
-        vote: 4
-    },
-    {
-        id: 5,
-        picture: landingpageProfile(5),
-        firstName: "Luigi",
-        lastName: "Gallo",
-        vote: 5
-    },
-    {
-        id: 6,
-        picture: landingpageProfile(6),
-        firstName: "Franco",
-        lastName: "Schiavone",
-        vote: 4.5
-    }
-]
-const events = [
-    {
-        id: 1,
-        picture: landingpageEvent(1),
-        name: "Venice Trip",
-        date: "28/02/2020",
-        address: "Rio Terà Sant'Andrea, 460, 30135 Venezia VE",
-    },
-    {
-        id: 2,
-        picture: landingpageEvent(2),
-        name: "Stairway 66 Bar Night",
-        date: "29/12/2019",
-        address: "Via IV Novembre, N 6, 42010 Rio Saliceto RE",
-    },
-    {
-        id: 3,
-        picture: landingpageEvent(3),
-        name: "New Year in Venice",
-        date: "31/12/2019",
-        address: "Rio Terà Sant'Andrea, 460, 30135 Venezia VE",
-    },
-    {
-        id: 4,
-        picture: landingpageEvent(4),
-        name: "Live Radio",
-        date: "07/03/2020",
-        address: "Via E. De Amicis, 59, 41012 Carpi MO",
-    },
-    {
-        id: 5,
-        picture: landingpageEvent(5),
-        name: "Hospitality on the beach",
-        date: "13/05/2019",
-        address: "Ul. Petrića Glava 34, 22240, Tisno, Croatia",
-    },
-    {
-        id: 6,
-        picture: landingpageEvent(6),
-        name: "Aperitif party",
-        date: "19/12/2019",
-        address: "Corso Sempione, 1, 20145 Milano MI",
-    },
-
-]
-
-
-const LandingPageContainer = () => {
-    const classes = useStyles()
-
-    const profileCards = profiles.map(item => (
-        <ListItem><ProfileCard profile={item} key={item.id} className={classes.profileCard}/> </ListItem>))
-
-    const eventCards = events.map(item => (
-        <ListItem><EventCard event={item} key={item.id} className={classes.eventCard}/></ListItem>
-    ))
-
-    return (
-        <div>
-            <div className={classes.root}>
-                <div className={classes.header}>
-                    <div className={classes.scrim}>
-                        <ThemeProvider theme={white_text_theme}>
-                            <div className={classes.content}>
-                                <Typography variant="h1" className={classes.title}>
-                                    DM Project
-                                </Typography>
-                                <Typography className={classes.cta}>
-                                    Stop driving by yourself. Need to go to an event? Want to organize a travel with
-                                    your
-                                    buddies? Join and manage your events or join someone else's!
-                                </Typography>
-                            </div>
-                            <div className={classes.buttons}>
-                                <Button href={signup} variant="contained" color="primary">
-                                    Sign up
-                                </Button>
-                                <Button href={login} color="secondary">
-                                    See events
-                                </Button>
-                            </div>
-                        </ThemeProvider>
-                    </div>
-                </div>
-                <div className={classes.body}>
-                    <div className={classes.element}>
-                        <Typography variant="h2">
-                            Drivers
-                        </Typography>
-                        <Typography>
-                            Here some of our awesome members, we hope we'll meet each other soon!
-                        </Typography>
-                        <List className={classes.horizontalList}>
-                            {profileCards}
-                        </List>
-                    </div>
-                    <Divider/>
-                    <div className={classes.element}>
-
-                        <Typography variant="h2">
-                            New Events
-                        </Typography>
-                        <Typography>
-                            Here some of the extraordinary events we had here, join so you are not going to miss
-                            anything like this
-                        </Typography>
-                        <List className={classes.horizontalList}>
-                            {eventCards}
-                        </List>
-                    </div>
-                    <Divider/>
-                    <div className={classes.element}>
-                        <Typography variant="h2">
-                            Join Now!
-                        </Typography>
-                        <Typography>
-                            We would love to have you in our community! Click the join button and be ready for your next
-                            big event with new and amazing friends!
-                        </Typography>
-                        <div style={{
-                            height: "20vh",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                        }}>
-                            <Button size="large" variant="contained" color="primary" href={signup}>
-                                Join!
-                            </Button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-};
 
 export default LandingPageContainer;

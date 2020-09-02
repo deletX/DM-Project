@@ -42,148 +42,6 @@ import {deleteEvent, getEventAxios, leaveEvent, postCreateFeedback, runEvent, up
 import {useSnackbar} from 'notistack';
 import _ from "lodash";
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        width: '100%',
-        backgroundColor: white,
-        alignItems: 'center',
-        flexDirection: 'column',
-        display: 'flex',
-        flexWrap: "nowrap",
-        marginBottom: "10vh",
-
-    },
-    header: {
-        alignItems: 'center',
-        flexDirection: 'column',
-        display: 'flex',
-        width: "100%",
-        height: "400px",
-        [theme.breakpoints.up('lg')]: {
-            height: "440px",
-        },
-        // minHeight: "250px",
-        [theme.breakpoints.down('sm')]: {
-            minHeight: "91vh",
-        },
-        backgroundPosition: "center",
-        backgroundSize: "cover",
-        color: "white",
-        marginBottom: "13px"
-    },
-    scrim: {
-        height: "calc(100% + 200px)",
-        width: "100%",
-        alignItems: 'center',
-        flexDirection: 'column',
-        display: 'flex',
-        backgroundColor: "rgba(0,0,0,0.40)",
-        [theme.breakpoints.down('sm')]: {
-            minHeight: "91vh",
-        },
-        position: "relative",
-    },
-    headerGrid: {
-        margin: "30px",
-        width: "90%",
-        "& h5": {
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            display: "-webkit-box",
-            "-webkit-line-clamp": 1,
-            "-webkit-box-orient": "vertical",
-        }
-
-    },
-    mainTitle: {
-        marginBottom: "1em",
-        overflow: "hidden",
-        textOverflow: "ellipsis",
-        display: "-webkit-box",
-        "-webkit-line-clamp": 3,
-        "-webkit-box-orient": "vertical",
-        [theme.breakpoints.down('sm')]: {
-            "-webkit-line-clamp": 6,
-        },
-    },
-    runButton: {
-        marginRight: theme.spacing(3),
-        borderRadius: 100,
-    },
-    deleteButton: {
-        color: "white",
-        backgroundColor: red[500],
-        "&:hover": {
-            backgroundColor: red[500],
-        },
-    },
-    buttons: {
-        width: "90%",
-        position: "absolute",
-        bottom: "20px",
-    },
-    body: {
-        width: "60%",
-        [theme.breakpoints.down('sm')]: {
-            width: "92%",
-        },
-    },
-    element: {
-        "&>*": {
-            margin: theme.spacing(1),
-        }
-    },
-    divider: {
-        width: "100%",
-        margin: "15px 0 10px 0"
-    },
-    map: {
-        width: '100%',
-        height: '75vh'
-    },
-    loadingBar: {
-        width: "100%",
-        marginTop: "-13px",
-    },
-    warning: {
-        width: "60%",
-        margin: theme.spacing(2),
-    },
-    headerTextFieldInput: {
-        fontSize: "3em",
-        lineHeight: "1.1em",
-    },
-    headerTextField: {
-        marginBottom: theme.spacing(5),
-    },
-    changePictureButton: {
-        marginLeft: theme.spacing(3)
-    },
-    mapBox: {
-        margin: theme.spacing(2),
-        display: "block",
-    },
-    mapContainer: {
-        "& .map": {
-            maxHeight: '75vh'
-        }
-    },
-    participantsContainer: {
-        width: "96%",
-        marginLeft: "6vw",
-        [theme.breakpoints.down('md')]: {
-            marginLeft: "2vw",
-        }
-    },
-    feedbackForm: {
-        display: "flex",
-        flexDirection: "column",
-        "&>*": {
-            margin: theme.spacing(1),
-        }
-    }
-
-}))
 
 const emptyEvent = {
     name: "",
@@ -204,12 +62,84 @@ const emptyEvent = {
  * questo fa
  */
 const EventContainer = (props) => {
+        let history = useHistory();
+        const classes = useStyles();
+        const {enqueueSnackbar,} = useSnackbar();
+
+        const [deleteOpen, setDeleteOpen] = useState(false)
+        const [joinOpen, setJoinOpen] = useState(false)
+        const [leaveOpen, setLeaveOpen] = useState(false)
+        const [notEnoughDrivers, setNotEnoughDrivers] = useState(false)
+        const [edit, setEdit] = useState(false)
+        const [isLoading, setIsLoading] = useState(false)
+
         // eslint-disable-next-line
         const {location, addAlert, token, profileId, isAuthenticated, isAuthLoading} = props;
         let {id} = useParams();
         const [event, setEvent] = useState(location.state ? location.state : emptyEvent)
-        let history = useHistory();
-        const {enqueueSnackbar,} = useSnackbar();
+        const date = new Date(event.date_time)
+        const [image, setImage] = useState(null)
+        const [imageURL, setImageURL] = useState(event.picture)
+        const [name, setName] = useState(event.name)
+        const [description, setDescription] = useState(event.description)
+        const [address, setAddress] = useState(event.address)
+        const [destination, setDestination] = useState(event.destination)
+        const [day, setDay] = useState(date)
+        const [time, setTime] = useState(date)
+
+
+        const [feedbackOpen, setFeedbackOpen] = useState(false)
+        const [comment, setComment] = useState("")
+        const [vote, setVote] = useState(3)
+        const [receiver, setReceiver] = useState(-1)
+
+        const latitude = parseFloat(event.destination.split(' ')[1].slice(1));
+        const longitude = parseFloat(event.destination.split(' ')[2].slice(0, -1));
+
+        const isOwner = profileId === event.owner.id;
+        const isRunning = event.status === 1;
+        const isCompleted = event.status === 2;
+        const participation = event.participant_set.filter(participation => (participation.profile.id === profileId))
+        const expense = participation.length > 0 ? participation[0].expense : 0
+        const drivers = event.participant_set.filter(part => (part.car !== null))
+
+        let now = new Date()
+        now = new Date(now.getTime() + 3600 * 1000)
+
+        let date_tmp = day !== null && time !== null ? new Date(day.getFullYear(), day.getMonth(), day.getDate(), time.getHours(), time.getMinutes()) : new Date()
+        const valid = name.length > 0 && date_tmp > now && description.length > 0 && address !== "" && destination !== "";
+
+        const myCar = (participation.length > 0 && participation[0].car !== null) ? _.sortBy(event.participant_set.filter((item) => (item.car !== null && item.car.id === participation[0].car.id)), ['pickup_index']) : []
+
+        let directionsURL = ""
+        if (participation.length > 0 && participation[0].pickup_index === 0)
+            directionsURL = `https://www.google.com/maps/dir/?api=1&origin=${pridStringToLatLng(participation[0].starting_pos).join(",")}&destination=${pridStringToLatLng(event.destination).join(",")}&travelmode=driving&waypoints=${myCar.map(item => pridStringToLatLng(item.starting_pos).join(",")).join("%7C")}`
+
+        const feedbackMenuItems = myCar.length === 0 ? [] : myCar.map(item => (
+            <MenuItem value={item.profile.id}>{item.profile.first_name} {item.profile.last_name}</MenuItem>))
+
+        const sendFeedback = () => {
+            postCreateFeedback(event.id, receiver, comment, vote, token,
+                (res) => {
+                    setFeedbackOpen(false)
+                    getEvent()
+                    handleSuccess(enqueueSnackbar, "Feedback left with success")
+                },
+                (err) => {
+                    //console.log(error)
+                    setFeedbackOpen(false)
+                    handleError(enqueueSnackbar, "Something went wrong while posting your feedback [014]")
+                })
+        };
+
+        useEffect(() => {
+                if (!(isAuthenticated || isAuthLoading))
+                    history.push(`${login}?next=${encodeURI(eventPage(id))}`)
+                else if (event.name === "" && isAuthenticated) {
+                    getEvent()
+                } // eslint-disable-next-line
+            }, [event, isAuthenticated, isAuthLoading]
+        )
 
         const run = () => {
             runEvent(
@@ -224,6 +154,7 @@ const EventContainer = (props) => {
                 }
             )
         }
+
         const getEvent = () => {
             getEventAxios(
                 id,
@@ -243,35 +174,6 @@ const EventContainer = (props) => {
                 }
             )
         }
-
-        useEffect(() => {
-                if (!(isAuthenticated || isAuthLoading))
-                    history.push(`${login}?next=${encodeURI(eventPage(id))}`)
-                else if (event.name === "" && isAuthenticated) {
-                    getEvent()
-                } // eslint-disable-next-line
-            }, [event, isAuthenticated, isAuthLoading]
-        )
-
-
-        const [deleteOpen, setDeleteOpen] = useState(false)
-        const [joinOpen, setJoinOpen] = useState(false)
-        const [leaveOpen, setLeaveOpen] = useState(false)
-        const [notEnoughDrivers, setNotEnoughDrivers] = useState(false)
-        const [edit, setEdit] = useState(false)
-        const [isLoading, setIsLoading] = useState(false)
-
-        const [image, setImage] = useState(null)
-        const [imageURL, setImageURL] = useState(event.picture)
-        const [name, setName] = useState(event.name)
-        const [description, setDescription] = useState(event.description)
-        const [address, setAddress] = useState(event.address)
-        const [destination, setDestination] = useState(event.destination)
-
-        const date = new Date(event.date_time)
-
-        const [day, setDay] = useState(date)
-        const [time, setTime] = useState(date)
 
         const update = () => {
             let data;
@@ -313,50 +215,6 @@ const EventContainer = (props) => {
                 }
             )
         }
-
-        const latitude = parseFloat(event.destination.split(' ')[1].slice(1));
-        const longitude = parseFloat(event.destination.split(' ')[2].slice(0, -1));
-
-        const classes = useStyles();
-        const isOwner = profileId === event.owner.id;
-        const isRunning = event.status === 1;
-        const isCompleted = event.status === 2;
-        const participation = event.participant_set.filter(participation => (participation.profile.id === profileId))
-        const expense = participation.length > 0 ? participation[0].expense : 0
-        const drivers = event.participant_set.filter(part => (part.car !== null))
-
-        let now = new Date()
-        now = new Date(now.getTime() + 3600 * 1000)
-        let date_tmp = day !== null && time !== null ? new Date(day.getFullYear(), day.getMonth(), day.getDate(), time.getHours(), time.getMinutes()) : new Date()
-        const valid = name.length > 0 && date_tmp > now && description.length > 0 && address !== "" && destination !== "";
-        const myCar = (participation.length > 0 && participation[0].car !== null) ? _.sortBy(event.participant_set.filter((item) => (item.car !== null && item.car.id === participation[0].car.id)), ['pickup_index']) : []
-
-        const [feedbackOpen, setFeedbackOpen] = useState(false)
-        const [comment, setComment] = useState("")
-        const [vote, setVote] = useState(3)
-        const [receiver, setReceiver] = useState(-1)
-
-        let directionsURL = ""
-        if (participation.length > 0 && participation[0].pickup_index === 0)
-            directionsURL = `https://www.google.com/maps/dir/?api=1&origin=${pridStringToLatLng(participation[0].starting_pos).join(",")}&destination=${pridStringToLatLng(event.destination).join(",")}&travelmode=driving&waypoints=${myCar.map(item => pridStringToLatLng(item.starting_pos).join(",")).join("%7C")}`
-
-
-        const feedbackMenuItems = myCar.length === 0 ? [] : myCar.map(item => (
-            <MenuItem value={item.profile.id}>{item.profile.first_name} {item.profile.last_name}</MenuItem>))
-        const sendFeedback = () => {
-            postCreateFeedback(event.id, receiver, comment, vote, token,
-                (res) => {
-                    setFeedbackOpen(false)
-                    getEvent()
-                    handleSuccess(enqueueSnackbar, "Feedback left with success")
-                },
-                (err) => {
-                    //console.log(error)
-                    setFeedbackOpen(false)
-                    handleError(enqueueSnackbar, "Something went wrong while posting your feedback [014]")
-                })
-        };
-
 
         return (
             <>
@@ -815,6 +673,150 @@ const EventContainer = (props) => {
         );
     }
 ;
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        width: '100%',
+        backgroundColor: white,
+        alignItems: 'center',
+        flexDirection: 'column',
+        display: 'flex',
+        flexWrap: "nowrap",
+        marginBottom: "10vh",
+
+    },
+    header: {
+        alignItems: 'center',
+        flexDirection: 'column',
+        display: 'flex',
+        width: "100%",
+        height: "400px",
+        [theme.breakpoints.up('lg')]: {
+            height: "440px",
+        },
+        // minHeight: "250px",
+        [theme.breakpoints.down('sm')]: {
+            minHeight: "91vh",
+        },
+        backgroundPosition: "center",
+        backgroundSize: "cover",
+        color: "white",
+        marginBottom: "13px"
+    },
+    scrim: {
+        height: "calc(100% + 200px)",
+        width: "100%",
+        alignItems: 'center',
+        flexDirection: 'column',
+        display: 'flex',
+        backgroundColor: "rgba(0,0,0,0.40)",
+        [theme.breakpoints.down('sm')]: {
+            minHeight: "91vh",
+        },
+        position: "relative",
+    },
+    headerGrid: {
+        margin: "30px",
+        width: "90%",
+        "& h5": {
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            display: "-webkit-box",
+            "-webkit-line-clamp": 1,
+            "-webkit-box-orient": "vertical",
+        }
+
+    },
+    mainTitle: {
+        marginBottom: "1em",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        display: "-webkit-box",
+        "-webkit-line-clamp": 3,
+        "-webkit-box-orient": "vertical",
+        [theme.breakpoints.down('sm')]: {
+            "-webkit-line-clamp": 6,
+        },
+    },
+    runButton: {
+        marginRight: theme.spacing(3),
+        borderRadius: 100,
+    },
+    deleteButton: {
+        color: "white",
+        backgroundColor: red[500],
+        "&:hover": {
+            backgroundColor: red[500],
+        },
+    },
+    buttons: {
+        width: "90%",
+        position: "absolute",
+        bottom: "20px",
+    },
+    body: {
+        width: "60%",
+        [theme.breakpoints.down('sm')]: {
+            width: "92%",
+        },
+    },
+    element: {
+        "&>*": {
+            margin: theme.spacing(1),
+        }
+    },
+    divider: {
+        width: "100%",
+        margin: "15px 0 10px 0"
+    },
+    map: {
+        width: '100%',
+        height: '75vh'
+    },
+    loadingBar: {
+        width: "100%",
+        marginTop: "-13px",
+    },
+    warning: {
+        width: "60%",
+        margin: theme.spacing(2),
+    },
+    headerTextFieldInput: {
+        fontSize: "3em",
+        lineHeight: "1.1em",
+    },
+    headerTextField: {
+        marginBottom: theme.spacing(5),
+    },
+    changePictureButton: {
+        marginLeft: theme.spacing(3)
+    },
+    mapBox: {
+        margin: theme.spacing(2),
+        display: "block",
+    },
+    mapContainer: {
+        "& .map": {
+            maxHeight: '75vh'
+        }
+    },
+    participantsContainer: {
+        width: "96%",
+        marginLeft: "6vw",
+        [theme.breakpoints.down('md')]: {
+            marginLeft: "2vw",
+        }
+    },
+    feedbackForm: {
+        display: "flex",
+        flexDirection: "column",
+        "&>*": {
+            margin: theme.spacing(1),
+        }
+    }
+
+}))
+
 
 function mapStateToProps(state) {
     return {

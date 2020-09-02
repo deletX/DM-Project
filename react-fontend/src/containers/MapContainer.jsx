@@ -13,58 +13,14 @@ import {Map, Marker, TileLayer} from "react-leaflet";
 import {useSnackbar} from "notistack";
 import {getNominatimAddress, getNominatimInfo} from "../utils/api";
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        marginBottom: theme.spacing(2),
-        marginTop: theme.spacing(2),
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-    },
-    form: {
-        width: '100%',
-    },
-    button: {
-        width: '100%',
-        marginTop: 12,
-    },
-
-    map: {
-        width: '100%',
-        height: '100%',
-        maxHeight: "40vh",
-    },
-    mapBox: {
-        margin: theme.spacing(2),
-        display: "block",
-    }
-
-}));
-
 
 const MapContainer = ({addr, setAddr, pos, setPos, loadUserPosition = true}) => {
+    const classes = useStyles();
     const {enqueueSnackbar,} = useSnackbar();
-
-    useEffect(() => {
-        if (pos === "" && navigator.geolocation && loadUserPosition) {
-            navigator.geolocation.getCurrentPosition((position) => {
-                getNominatimInfo(position.coords.latitude, position.coords.longitude,
-                    (res) => {
-                        //console.log(res.data)
-                        selectItem(res.data, position.coords.latitude, position.coords.longitude);
-                    },
-                    (err) => {
-                        handleError(enqueueSnackbar, "Something went wrong while retrieving your position")
-                    })
-            })
-        }
-    })
 
     const [latitude, setLatitude] = useState(pos !== "" ? parseFloat(pos.split(' ')[1].slice(1)) : 44.629430);
     const [longitude, setLongitude] = useState(pos !== "" ? parseFloat(pos.split(' ')[2].slice(0, -1)) : 10.948296);
 
-    const classes = useStyles();
     let [addrError, setAddrError] = useState(false)
 
     const [lastRequest,] = useState(new Date())
@@ -121,6 +77,22 @@ const MapContainer = ({addr, setAddr, pos, setPos, loadUserPosition = true}) => 
             setTimeout(getMapData, now - lastRequest);
         }
     }
+
+    useEffect(() => {
+        if (pos === "" && navigator.geolocation && loadUserPosition) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                getNominatimInfo(position.coords.latitude, position.coords.longitude,
+                    (res) => {
+                        //console.log(res.data)
+                        selectItem(res.data, position.coords.latitude, position.coords.longitude);
+                    },
+                    (err) => {
+                        handleError(enqueueSnackbar, "Something went wrong while retrieving your position")
+                    })
+            })
+        }
+    })
+
     return (
         <div className={classes.root}>
             <FormControl variant="outlined" className={classes.form}>
@@ -211,6 +183,36 @@ const MapContainer = ({addr, setAddr, pos, setPos, loadUserPosition = true}) => 
         </div>
     )
 }
+
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        marginBottom: theme.spacing(2),
+        marginTop: theme.spacing(2),
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    form: {
+        width: '100%',
+    },
+    button: {
+        width: '100%',
+        marginTop: 12,
+    },
+
+    map: {
+        width: '100%',
+        height: '100%',
+        maxHeight: "40vh",
+    },
+    mapBox: {
+        margin: theme.spacing(2),
+        display: "block",
+    }
+
+}));
 
 
 export default MapContainer
