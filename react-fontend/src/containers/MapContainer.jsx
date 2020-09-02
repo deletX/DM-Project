@@ -6,12 +6,12 @@ import {makeStyles} from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import SearchIcon from '@material-ui/icons/Search';
 import Typography from "@material-ui/core/Typography";
-import axios from "axios";
 import PositionsDialog from "../components/map/PositionsDialog";
 import {handleError, handleInfo, nominatimToPrimarySecondary} from "../utils/utils";
 import Box from "@material-ui/core/Box";
 import {Map, Marker, TileLayer} from "react-leaflet";
 import {useSnackbar} from "notistack";
+import {getNominatimAddress, getNominatimInfo} from "../utils/api";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -44,24 +44,22 @@ const useStyles = makeStyles((theme) => ({
 
 
 const MapContainer = ({addr, setAddr, pos, setPos, loadUserPosition = true}) => {
-    const {enqueueSnackbar,} = useSnackbar()
+    const {enqueueSnackbar,} = useSnackbar();
 
     useEffect(() => {
         if (pos === "" && navigator.geolocation && loadUserPosition) {
             navigator.geolocation.getCurrentPosition((position) => {
-                axios
-                    .get(`https://nominatim.openstreetmap.org/reverse/?lat=${position.coords.latitude}&lon=${position.coords.longitude}&format=json&addressdetails=1`,)
-                    .then((res) => {
-                        console.log(res.data)
+                getNominatimInfo(position.coords.latitude, position.coords.longitude,
+                    (res) => {
+                        //console.log(res.data)
                         selectItem(res.data, position.coords.latitude, position.coords.longitude);
-                    })
-                    .catch((error) => {
+                    },
+                    (err) => {
                         handleError(enqueueSnackbar, "Something went wrong while retrieving your position")
                     })
             })
         }
     })
-
 
     const [latitude, setLatitude] = useState(pos !== "" ? parseFloat(pos.split(' ')[1].slice(1)) : 44.629430);
     const [longitude, setLongitude] = useState(pos !== "" ? parseFloat(pos.split(' ')[2].slice(0, -1)) : 10.948296);
@@ -100,17 +98,16 @@ const MapContainer = ({addr, setAddr, pos, setPos, loadUserPosition = true}) => 
     }
 
     const getMapData = () => {
-        axios
-            .get(`https://nominatim.openstreetmap.org/search/?q=${encodeURI(addr)}&format=json&limit=3&addressdetails=1&dedupe=1`,)
-            .then(res => {
+        getNominatimAddress(addr,
+            (res) => {
                 if (res.data.length === 0) {
                     handleInfo(enqueueSnackbar, "No positions found for given address")
                     return;
                 }
                 setPositions(res.data);
                 setOpen(true);
-            })
-            .catch(err => {
+            },
+            (err) => {
                 handleError(enqueueSnackbar, "Something went wrong while retrieving positions")
             })
     }
@@ -189,17 +186,16 @@ const MapContainer = ({addr, setAddr, pos, setPos, loadUserPosition = true}) => 
                         <Marker
                             draggable={true}
                             onDragend={(ev) => {
-                                axios
-                                    .get(`https://nominatim.openstreetmap.org/reverse/?lat=${ev.target._latlng.lat}&lon=${ev.target._latlng.lng}&format=json&addressdetails=1`,)
-                                    .then(res => {
-                                        console.log(res.data)
+                                getNominatimInfo(ev.target._latlng.lat, ev.target._latlng.lng,
+                                    (res) => {
+                                        //console.log(res.data)
                                         selectItem(res.data, ev.target._latlng.lat, ev.target._latlng.lng);
                                         setAddrError(false);
-                                    }).catch(error => {
-                                    handleError(enqueueSnackbar, "Something went wrong while retrieving your selected location")
-                                })
+                                    },
+                                    (err) => {
+                                        handleError(enqueueSnackbar, "Something went wrong while retrieving your selected location")
+                                    })
                             }}
-
                             position={{lat: latitude, lng: longitude}}
                         >
                         </Marker>

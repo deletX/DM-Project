@@ -88,7 +88,7 @@ const PersonalInfoForm = ({
                                     let type = res.data.type.split('/').pop()
                                     blob.name = `${username}.${type}`
                                     setImage(blob)
-                                    handleSuccess(enqueueSnackbar, "Succefully retrieved profile image")
+                                    handleSuccess(enqueueSnackbar, "Successfully retrieved profile image")
                                 },
                                 (err) => {
                                     handleError(enqueueSnackbar, "Could not retrieve profile image", err)

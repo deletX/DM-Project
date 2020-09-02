@@ -12,6 +12,9 @@ export const eventJoinURL = (eventPk) => (`${eventDetailURL(eventPk)}participant
 
 export const nominatimCoordinatesToAddressURL = (latitude, longitude) => (`https://nominatim.openstreetmap.org/reverse/?lat=${latitude}&lon=${longitude}&format=json&addressdetails=1`);
 
+export const nominatimSearchAddressURL = (addr) => (
+    `https://nominatim.openstreetmap.org/search/?q=${encodeURI(addr)}&format=json&limit=3&addressdetails=1&dedupe=1`
+)
 export const eventRunURL = (eventPk) => (`${eventDetailURL(eventPk)}run/`);
 
 export const participationEditURL = (eventPk, participantPk) => (`${eventJoinURL(eventPk)}${participantPk}/`);
@@ -36,5 +39,6 @@ export const editFeedbackURL = (eventPk, receiverParticipantPk, feedbackPk) => (
 
 export const notificationListURL = () => (`${currentProfileURL()}notifications/`);
 export const notificationEditURL = (notificationPk) => (`${notificationListURL()}${notificationPk}`)
+
 
 

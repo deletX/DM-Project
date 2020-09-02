@@ -12,7 +12,13 @@ import {
     currentProfileURL,
     signupURL,
     tokenURL,
-    convertTokenURL, notificationListURL, notificationEditURL, carsListURL, carsDetailURL
+    convertTokenURL,
+    notificationListURL,
+    notificationEditURL,
+    carsListURL,
+    carsDetailURL,
+    nominatimCoordinatesToAddressURL,
+    nominatimSearchAddressURL
 } from "../constants/apiurls";
 import {headers} from "./utils";
 import {APP_CLIENTID, APP_SECRET} from "../constants/constants";
@@ -220,6 +226,7 @@ export const getProfileData = (profileId, token, onSuccess, onError) => {
             onError(err)
         })
 }
+
 
 export const getFetchProfile = (token, onSuccess, onError) => {
     axios
@@ -447,3 +454,27 @@ export const putReadNotifications = (token, notificationId, read, onSuccess, onE
             onError(err)
         });
 }
+
+export const getNominatimInfo = (latitude, longitude, onSuccess, onError) => {
+    axios.get(nominatimCoordinatesToAddressURL(latitude, longitude))
+        .then((res) => {
+                onSuccess(res)
+            }
+        )
+        .catch((err) => {
+            onError(err)
+        })
+}
+
+export const getNominatimAddress = (address, onSuccess, onError) => {
+    axios
+        .get(nominatimSearchAddressURL(address))
+        .then((res) => {
+                onSuccess(res)
+            }
+        )
+        .catch((err) => {
+            onError(err)
+        })
+}
+

@@ -25,7 +25,6 @@ function SignupComponent({authLogin, googleLogin, location}) {
     const [password, setPassword] = useState("");
     const [passwordError, setPasswordError] = useState(false);
 
-
     const disabled = !(username.length > 0 && password.length > 0);
 
     return (

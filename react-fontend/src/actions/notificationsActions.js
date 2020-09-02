@@ -75,7 +75,7 @@ export const readNotification = (notificationId, read = true, enqueueSnackbar) =
                 dispatch(readSuccess(notificationId, read))
             },
             (err) => {
-                handleError(enqueueSnackbar, "Something went wrong while reading the notificaiton", err)
+                handleError(enqueueSnackbar, "Something went wrong while reading the notifications", err)
                 dispatch(fail());
                 return err;
             })
