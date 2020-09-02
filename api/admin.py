@@ -44,5 +44,3 @@ class ProfileAdmin(admin.ModelAdmin):
 admin.site.register(Event, EventAdmin)
 
 admin.site.register(Profile, ProfileAdmin)
-
-# Register your models here.

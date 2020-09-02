@@ -11,7 +11,9 @@ from .serializers import *
 
 class EventViewSet(viewsets.ModelViewSet):
     """
-    ./events?joinable=True&joined=True&owned=False
+    CRUD viewset for events
+
+    /events?joinable=True&joined=True&owned=False
     /events/<pk>?joinable=True&joined=True&owned=False
     """
 
@@ -46,9 +48,6 @@ class EventViewSet(viewsets.ModelViewSet):
     authentication_classes = [OAuth2Authentication]
     queryset = Event.objects.all()
 
-    # authentication_classes = [OAuth2Authentication, ]
-    # permission_classes = [IsAuthenticated, ]
-
     def destroy(self, request, pk=None, *args, **kwargs):
         event = Event.objects.get(id=pk)
         if event.owner.user != request.user:
@@ -58,7 +57,9 @@ class EventViewSet(viewsets.ModelViewSet):
 
 class EventRunAPI(viewsets.GenericViewSet, mixins.ListModelMixin):
     """
-    ./events/<pk>/run
+    ViewSet to start event execution
+
+    /events/<pk>/run
     """
     queryset = Event.objects.all()
     permission_classes = [IsAuthenticated]
@@ -78,8 +79,10 @@ class EventRunAPI(viewsets.GenericViewSet, mixins.ListModelMixin):
 class ParticipantViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin,
                          mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin):
     """
-    ./events/<pk>/participants
-    ./events/<pk>/participants/<pk>
+    Participant CRUD viewset
+
+    /events/<pk>/participants
+    /events/<pk>/participants/<pk>
     """
     permission_classes = [IsAuthenticated, ]
 
@@ -100,7 +103,8 @@ class ParticipantViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin,
 class CurrentProfileViewSet(viewsets.GenericViewSet, mixins.RetrieveModelMixin,
                             mixins.UpdateModelMixin):
     """
-    ./currentUser
+    User profile viewset: get and put allowed
+    /current-profile
     """
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
@@ -114,7 +118,8 @@ class CurrentProfileViewSet(viewsets.GenericViewSet, mixins.RetrieveModelMixin,
 class CreateNewUserView(viewsets.GenericViewSet, mixins.CreateModelMixin, mixins.UpdateModelMixin,
                         mixins.DestroyModelMixin):
     """
-    ./signup
+    Signup Viewset: post, put and delete
+    /signup
     """
     queryset = User.objects.all()
 
@@ -127,7 +132,8 @@ class CreateNewUserView(viewsets.GenericViewSet, mixins.CreateModelMixin, mixins
 
 class ProfileViewSet(viewsets.GenericViewSet, mixins.RetrieveModelMixin):
     """
-    ./profiles/<pk>
+    ViewSet that handles ``get`` on other profile data
+    /profiles/<pk>
     """
     serializer_class = ProfileSerializerOther
     queryset = Profile.objects.all()
@@ -136,8 +142,10 @@ class ProfileViewSet(viewsets.GenericViewSet, mixins.RetrieveModelMixin):
 
 class CarViewSet(viewsets.ModelViewSet):
     """
-    ./profiles/<pk>/cars
-    ./profiles/<pk>/cars/<pk>
+    Car CRUD viewset
+
+    /profiles/<pk>/cars
+    /profiles/<pk>/cars/<pk>
     """
     serializer_class = CarSerializer
     permission_classes = [IsAuthenticated, ]
@@ -167,6 +175,8 @@ class CarViewSet(viewsets.ModelViewSet):
 class FeedbackViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin, mixins.DestroyModelMixin,
                       mixins.UpdateModelMixin):
     """
+    Create, delete update feedback view set
+
     /events/<pk>/participants/<pk>/feedback/<pk>
     """
     serializer_class = FeedbackEditSerializer
@@ -178,6 +188,8 @@ class FeedbackViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin, mixins.D
 
 class NotificationViewSet(viewsets.GenericViewSet, mixins.UpdateModelMixin, mixins.ListModelMixin):
     """
+    Notification viewset. Enable get(list) and update
+
     /current-profile/notifications
     /current-profile/notifications/<pk>
     """

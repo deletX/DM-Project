@@ -5,13 +5,7 @@ from django.db.models.signals import post_save
 
 def create_profile(sender, **kwargs):
     """
-    Create a new profile
-
-    Args:
-        **kwargs:
-
-    Returns:
-
+    Create a new profile when a user is created
     """
     user = kwargs["instance"]
     if kwargs["created"]:
@@ -24,11 +18,6 @@ post_save.connect(create_profile, sender=User)
 def create_notification_for_feedback(sender, **kwargs):
     """
     Create a new notification when a feedback has been given
-    Args:
-        **kwargs:
-
-    Returns:
-
     """
     feedback = kwargs["instance"]
 

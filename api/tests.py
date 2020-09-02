@@ -34,7 +34,6 @@ class EventViewSetAPITestCase(APITestCase):
         response = self.client.get(url)
         self.assertEqual(len(response.data), Event.objects.count())
         self.assertEqual(response.data[0]["name"], self.name)
-        # Create your tests here.
 
     def test_post_events(self):
         url = reverse("api:events-list")
@@ -79,7 +78,6 @@ class EventViewSetAPITestCase(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["name"], self.name)
 
-    # @skip("Check why on first run fails and on succeeding ones it does")
     def test_get_event_detail_non_existing(self):
         url = reverse("api:events-detail", kwargs={'pk': 666})
         with self.assertRaises(Event.DoesNotExist):
@@ -130,10 +128,11 @@ class EventViewSetAPITestCase(APITestCase):
         self.assertEqual(Event.objects.count(), 2)
 
 
-@skip("I don't want to start redis-server and celery worker now")
+@skip("Comment the skip if you started celery and redis")
 class EventRunAPIAPITestCase(APITestCase):
     """
     Class for testing run of events
+
     Don't Forget to start celery and redis
     """
 
@@ -433,6 +432,7 @@ class CarViewSetAPITestCase(APITestCase):
     """
     Class for testing get, post, put and delete over car details
     """
+
     def setUp(self):
         self.username = "test_usr"
         self.email = "test_email"
@@ -525,6 +525,7 @@ class FeedbackViewSetAPITestCase(APITestCase):
     """
     Class for testing get, post, put and delete for feedbacks
     """
+
     def setUp(self):
         self.username = "test_usr"
         self.email = "test_email"
@@ -603,6 +604,7 @@ class NotificationViewSetAPITestCase(APITestCase):
     """
     Class for testing get and put of notifications
     """
+
     def setUp(self):
         self.username = "test_usr"
         self.email = "test_email"

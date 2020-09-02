@@ -2,17 +2,25 @@ from django.urls import include, path
 from rest_framework_nested import routers
 from .views import *
 
+# API router
 router = routers.SimpleRouter()
+
+# events base url
 router.register(r'events', EventViewSet, basename='events')
+
+# profile base url
 router.register(r'profiles', ProfileViewSet, basename='profiles')
 
+# nested profile router for cars
 profile_router = routers.NestedSimpleRouter(router, r'profiles', lookup='profile')
 profile_router.register(r'cars', CarViewSet, basename='cars')
 
+# nested events router for participation and execution
 events_router = routers.NestedSimpleRouter(router, r'events', lookup='event')
 events_router.register(r'participants', ParticipantViewSet, basename='participants')
 events_router.register(r'run', EventRunAPI, basename='run')
 
+# nested participation router for feedback
 participant_router = routers.NestedSimpleRouter(events_router, r'participants', lookup='participant')
 participant_router.register(r'feedback', FeedbackViewSet, basename='feedback')
 

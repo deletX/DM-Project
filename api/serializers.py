@@ -9,26 +9,16 @@ def get_kwargs_request(request):
 
 
 class EventRelatedField(serializers.RelatedField):
-    # See https://naveenlabs.com/2018/12/25/custom-serializer-related-field-using-django-rest-framework/
+    """
+    Serializer used to represent an event when a foreign key is present
+
+    See https://naveenlabs.com/2018/12/25/custom-serializer-related-field-using-django-rest-framework/
+    """
+
     def get_queryset(self):
-        """
-        Get all the events
-
-        Returns:
-
-        """
         return Event.objects.all()
 
     def to_internal_value(self, data):
-        """
-        Find an event by its id
-
-        Args:
-            data (int): event id
-
-        Returns:
-
-        """
         try:
             try:
                 event_id = data
@@ -48,12 +38,12 @@ class EventRelatedField(serializers.RelatedField):
 
     def to_representation(self, value):
         """
-        Get some information of an event
+        Give the short ``dict`` representation of an event
 
         Args:
             value (int): event id
 
-        Returns:
+        Returns: event ``dict``
 
         """
         event = Event.objects.filter(pk=value.pk).first()
@@ -64,7 +54,12 @@ class EventRelatedField(serializers.RelatedField):
 
 
 class ProfileRelatedField(serializers.RelatedField):
-    # See https://naveenlabs.com/2018/12/25/custom-serializer-related-field-using-django-rest-framework/
+    """
+    Serializer used to represent a profile fk
+
+    See https://naveenlabs.com/2018/12/25/custom-serializer-related-field-using-django-rest-framework/
+    """
+
     def get_queryset(self):
         return Profile.objects.all()
 
@@ -88,12 +83,13 @@ class ProfileRelatedField(serializers.RelatedField):
 
     def to_representation(self, value):
         """
-        Get profile details by its id
+        Give the short ``dict`` representation of a profile
 
         Args:
             value (int): profile id
 
         Returns:
+            (dict) Profile
 
         """
         profile = Profile.objects.filter(id=value.id).first()
@@ -114,7 +110,7 @@ class ProfileRelatedField(serializers.RelatedField):
 
 class UserSerializer(serializers.ModelSerializer):
     """
-    Serializer class to get user info
+    Serializer class to represent user
     """
 
     class Meta:
@@ -124,7 +120,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class UserEditSerializer(serializers.ModelSerializer):
     """
-    Serializere class to edit user info
+    Serializer class to edit user info
     """
     password = serializers.CharField(max_length=128, write_only=True, required=False)
 
@@ -137,7 +133,7 @@ class UserEditSerializer(serializers.ModelSerializer):
         Update name, last name and email of a user
 
         Args:
-            instance:
+            instance: new user :dict
             validated_data:
 
         Returns:
@@ -156,7 +152,7 @@ class UserEditSerializer(serializers.ModelSerializer):
 
 class UserCreateSerializer(serializers.ModelSerializer):
     """
-    Serializer class to create user
+    Serializer class to create a user
     """
     password = serializers.CharField(max_length=128, write_only=True, required=True)
 
@@ -165,15 +161,6 @@ class UserCreateSerializer(serializers.ModelSerializer):
         fields = ('id', 'username', 'first_name', 'last_name', 'email', 'password')
 
     def create(self, validated_data):
-        """
-        Create new user
-
-        Args:
-            validated_data:
-
-        Returns:
-
-        """
         user = User.objects.create_user(**validated_data)
         return user
 
@@ -190,12 +177,6 @@ class CarSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         """
         Add new car to a profile
-
-        Args:
-            validated_data:
-
-        Returns:
-
         """
         current_user = self.context['request'].user.id
         owner_profile = Profile.objects.get(user=current_user)
@@ -204,13 +185,9 @@ class CarSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         """
-        Update car info
+        Update car info.
 
-        Args:
-            instance:
-            validated_data:
-
-        Returns:
+        Check if is owner (otherwise raises a ``ValidationError``)
 
         """
         current_user = self.context['request'].user
@@ -238,18 +215,14 @@ class NotificationSerializer(serializers.ModelSerializer):
         fields = ['id', 'date_time', 'title', 'content', 'read', 'url']
 
     def create(self, validated_data):
+        """
+        It should not possible to create a notification
+        """
         raise serializers.ValidationError('You shouldn\'t create Notifications')
 
     def update(self, instance, validated_data):
         """
         Set a notification as "read"
-
-        Args:
-            instance:
-            validated_data:
-
-        Returns:
-
         """
         instance.read = validated_data.get("read", instance.read)
         instance.save()
@@ -284,6 +257,20 @@ class FeedbackEditSerializer(serializers.ModelSerializer):
         fields = ['id', 'giver', 'receiver', 'event', 'comment', 'vote']
 
     def create(self, validated_data):
+        """
+        Creates a feedback.
+
+        Verifies that:
+             - creator is not receiver
+             - creator attended the given event
+             - receiver attended the given event
+             - the event has occurred
+             - the receiver was in the same car as the creator
+
+        Returns:
+            created instance
+
+        """
         current_user = self.context['request'].user
         owner_profile = Profile.objects.get(user=current_user)
         event = validated_data.get("event")
@@ -308,6 +295,10 @@ class FeedbackEditSerializer(serializers.ModelSerializer):
         return instance
 
     def update(self, instance, validated_data):
+        """
+        Change a given feedback, given it should be able to do so
+
+        """
         current_user = self.context['request'].user
         owner_profile = Profile.objects.get(user=current_user)
         event = validated_data.get("event", instance.event)
@@ -325,6 +316,9 @@ class FeedbackEditSerializer(serializers.ModelSerializer):
 
 
 class ProfileSerializerOther(serializers.ModelSerializer):
+    """
+    Profile serializer for other users
+    """
     car_set = CarSerializer(many=True)
     user = UserSerializer()
     received_feedback = FeedbackSerializer(many=True, read_only=True)
@@ -343,7 +337,6 @@ class ProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer(required=False, read_only=True)
     received_feedback = FeedbackSerializer(many=True, read_only=True)
     given_feedback = FeedbackSerializer(many=True, read_only=True)
-    # notifications = NotificationSerializer(many=True, read_only=True)
     score = serializers.ReadOnlyField()
     picture = serializers.ImageField(allow_null=True)
 
@@ -367,6 +360,9 @@ class ParticipantCreateEditSerializer(serializers.ModelSerializer):
         fields = ['id', 'profile', 'starting_address', 'starting_pos', 'car', 'event']
 
     def create(self, validated_data):
+        """
+        Creates a participation (i.e. join the event) if the event exists, is joinable, and hasn't been joined already
+        """
         current_user = self.context['request'].user
         owner_profile = Profile.objects.get(user=current_user)
         _id = get_kwargs_request(self.context["request"])["event_pk"]
@@ -383,8 +379,10 @@ class ParticipantCreateEditSerializer(serializers.ModelSerializer):
         return participant
 
     def update(self, instance, validated_data):
+        """
+        Change a participation if it is possible
+        """
         current_user = self.context['request'].user
-        owner_profile = Profile.objects.get(user=current_user)
         event = validated_data.get("event", instance.event)
         car = validated_data.get("car", instance.car)
         if event != instance.event:
@@ -422,7 +420,6 @@ class EventSerializer(serializers.ModelSerializer):
     owner = ProfileRelatedField(read_only=True, required=False)
     status = serializers.ChoiceField(choices=[0, 1, 2], default=0, read_only=True)
     participant_set = ParticipantSerializer(many=True, read_only=True, required=False)
-    # default="SRID=4326;POINT (44.629418 10.948245)"
     destination = serializers.CharField()
 
     class Meta:
@@ -431,14 +428,19 @@ class EventSerializer(serializers.ModelSerializer):
                   'participant_set']
 
     def create(self, validated_data):
+        """
+        Creates an Event
+        """
         current_user = self.context['request'].user
         owner_profile = Profile.objects.get(user=current_user)
         event = Event.objects.create(**validated_data, owner=owner_profile)
         return event
 
     def update(self, instance, validated_data):
+        """
+        Update the event infos if the user is the owner
+        """
         current_user = self.context['request'].user
-        owner_profile = Profile.objects.get(user=current_user)
         if current_user != instance.owner.user:
             raise serializers.ValidationError('You aren\'t allowed to update someone else\'s event')
         instance.name = validated_data.get("name", instance.name)
