@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
-import {handleError, handleSuccess} from "../utils/utils";
+import {handleError} from "../utils/utils";
 import ProfileComponent from "../components/profile/ProfileComponent";
 import {useParams} from "react-router";
 import {useHistory} from "react-router-dom";
