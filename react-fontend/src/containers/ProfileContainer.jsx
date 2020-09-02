@@ -99,7 +99,7 @@ const ProfileContainer = ({location, addAlert, token, isAuthenticated, isLoading
         <FormContainer effect={() => {
         }}>
             <Helmet>
-                <title>React App - Profile Page</title>
+                <title>DM Project - Profile Page</title>
             </Helmet>
             {("given_feedback" in profile) ?
                 <MyProfileComponent profile={profile}/>

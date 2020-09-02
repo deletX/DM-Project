@@ -116,7 +116,7 @@ const HomeContainer = ({addError, isAuthenticated, isLoading, search, token}) =>
     return (
         <div className={classes.root}>
             <Helmet>
-                <title>React App - Event Page</title>
+                <title>DM Project - Event Page</title>
                 <meta name="description" content="Main Home page"/>
             </Helmet>
             <div className={classes.firstLine}>

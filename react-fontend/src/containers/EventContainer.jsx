@@ -361,7 +361,7 @@ const EventContainer = (props) => {
         return (
             <>
                 <Helmet>
-                    <title>React App - {event.name}</title>
+                    <title>DM Project - {event.name}</title>
                     <meta name="description" content={event.description}/>
                 </Helmet>
                 <div className={classes.root}>

@@ -12,7 +12,7 @@ const NotFound404 = () => {
             margin: 50,
         }}>
             <Helmet>
-                <title>React App - Not Found :(</title>
+                <title>DM Project - Not Found :(</title>
             </Helmet>
             <img src={vectorpaint} alt="404"
                  style={{width: "80%", height: "80%", maxWidth: "300px", maxHeight: "300px", margin: 30}}/>

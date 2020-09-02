@@ -10,7 +10,7 @@ const OtherProfileComponent = ({profile}) => {
     return (
         <div>
             <Helmet>
-                <title>React App - {profile.username ? profile.username : ""} profile</title>
+                <title>DM Project - {profile.username ? profile.username : ""} profile</title>
                 <meta name="description" content="Profile page"/>
             </Helmet>
             <Grid container spacing={5} className={classes.grid}>

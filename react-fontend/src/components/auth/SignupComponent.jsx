@@ -99,7 +99,7 @@ function SignupComponent({authSignup, googleLogin, setPicture, postCar}) {
     return (
         <CardContainer title="Sign up!" open={open}>
             <Helmet>
-                <title>React App - Signup</title>
+                <title>DM Project - Signup</title>
             </Helmet>
             <StepperContainer
                 getSteps={() => (

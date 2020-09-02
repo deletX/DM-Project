@@ -62,7 +62,7 @@ const MyProfileComponent = ({profile, changeUserData, changePicture}) => {
     return (
         <div className={classes.root}>
             <Helmet>
-                <title>React App - Your Profile</title>
+                <title>DM Project - Your Profile</title>
             </Helmet>
             <ProfileComponent profile={{...profile, picture: imageURL}}/>
             <Grid container spacing={3}>

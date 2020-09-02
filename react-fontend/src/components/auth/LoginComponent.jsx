@@ -31,7 +31,7 @@ function SignupComponent({authLogin, googleLogin, location}) {
     return (
         <CardContainer title="Log in!">
             <Helmet>
-                <title>React App - Login</title>
+                <title>DM Project - Login</title>
             </Helmet>
             <div className={classes.formContainer}>
                 <AvatarCustom className={classes.imgPreview}>
