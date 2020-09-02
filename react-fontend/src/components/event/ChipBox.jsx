@@ -4,17 +4,6 @@ import DoneIcon from '@material-ui/icons/Done';
 import {makeStyles} from "@material-ui/core/styles";
 import {white} from "color-name";
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-        width: '100%',
-        backgroundColor: white,
-        alignItems: 'left',
-        display: 'flex',
-    },
-    chip: {
-        marginRight: 15,
-    }
-}));
 
 const ChipBox = ({joinable, joined, owned, setJoinable, setJoined, setOwned}) => {
     const classes = useStyles()
@@ -44,5 +33,17 @@ const ChipBox = ({joinable, joined, owned, setJoinable, setJoined, setOwned}) =>
         </div>
     )
 }
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        width: '100%',
+        backgroundColor: white,
+        alignItems: 'left',
+        display: 'flex',
+    },
+    chip: {
+        marginRight: 15,
+    }
+}));
 
 export default ChipBox;
