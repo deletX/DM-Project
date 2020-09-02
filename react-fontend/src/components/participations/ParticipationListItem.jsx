@@ -12,28 +12,9 @@ import {useHistory} from "react-router-dom";
 import {profile} from "../../constants/pagesurls";
 import AvatarCustom from "../AvatarCustom";
 
-const useStyles = makeStyles((theme) => ({
-    textContainer: {
-        position: "relative",
-        width: "100%",
-    },
-    rating: {},
-    car: {
-        top: "0px",
-        position: "absolute",
-        right: "3px"
-    },
-    feet: {
-        top: "0px",
-        position: "absolute",
-        right: "3px"
-    },
-    name: {},
-}));
-
 const ParticipationListItem = ({participation, onlyDriverIcon = false, profileId = undefined}) => {
     const classes = useStyles();
-    let history=useHistory()
+    let history = useHistory()
 
     return (
         <>
@@ -82,5 +63,26 @@ const ParticipationListItem = ({participation, onlyDriverIcon = false, profileId
         </>
     );
 };
+
+
+const useStyles = makeStyles((theme) => ({
+    textContainer: {
+        position: "relative",
+        width: "100%",
+    },
+    rating: {},
+    car: {
+        top: "0px",
+        position: "absolute",
+        right: "3px"
+    },
+    feet: {
+        top: "0px",
+        position: "absolute",
+        right: "3px"
+    },
+    name: {},
+}));
+
 
 export default ParticipationListItem;
