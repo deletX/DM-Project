@@ -117,7 +117,7 @@ export const fetchProfile = (enqueueSnackbar) => {
             },
             (err) => {
                 dispatch(fail());
-                handleError(enqueueSnackbar, "Something went wrong while retrieving the profile")
+                handleError(enqueueSnackbar, "Something went wrong while retrieving the profile", err)
                 return err;
             })
     }
@@ -136,7 +136,7 @@ export const changePicture = (picture, enqueueSnackbar) => {
             },
             (err) => {
                 dispatch(fail());
-                handleError(enqueueSnackbar, "Something went wrong while changing profile picture")
+                handleError(enqueueSnackbar, "Something went wrong while changing profile picture", err)
                 return err;
             })
     };
@@ -162,7 +162,7 @@ export const changeUserData = (first_name, last_name, email, password = null, en
             },
             (err) => {
                 dispatch(fail());
-                handleError(enqueueSnackbar, "Something went wrong while changing user data")
+                handleError(enqueueSnackbar, "Something went wrong while changing user data", err)
                 return err;
             })
     };
@@ -179,7 +179,7 @@ export const deleteUser = (enqueueSnackbar) => { //not used
             },
             (err) => {
                 dispatch(fail());
-                handleError(enqueueSnackbar, "Something went wrong while deleting you")
+                handleError(enqueueSnackbar, "Something went wrong while deleting you", err)
                 return err;
             })
     };
@@ -190,7 +190,6 @@ export const createCar = (name, totSeats, fuel, consumption, enqueueSnackbar) =>
         dispatch(start());
         let access_token = localStorage.getItem("access_token");
         let profileId = localStorage.getItem("profile_id");
-        console.log(name, totSeats, consumption)
         return postCreateCar(profileId, name, totSeats, fuel, consumption, access_token,
             (res) => {
                 let {id, name, tot_avail_seats, fuel, consumption} = res.data;
@@ -199,7 +198,7 @@ export const createCar = (name, totSeats, fuel, consumption, enqueueSnackbar) =>
             },
             (err) => {
                 dispatch(fail());
-                handleError(enqueueSnackbar, "Something went wrong while adding a car")
+                handleError(enqueueSnackbar, "Something went wrong while adding a car", err)
                 return err;
             })
 
@@ -217,7 +216,7 @@ export const updateCar = (id, name, totSeats, fuel, consumption, enqueueSnackbar
                 dispatch(changeCarSuccess(id, name, tot_avail_seats, fuel, consumption))
             },
             (err) => {
-                handleError(enqueueSnackbar, "Something went wrong while updating your car")
+                handleError(enqueueSnackbar, "Something went wrong while updating your car", err)
                 dispatch(fail());
                 return err;
             })
@@ -235,7 +234,7 @@ export const deleteCar = (id, enqueueSnackbar) => {
             },
             (err) => {
                 dispatch(fail());
-                handleError(enqueueSnackbar, "Something went wrong while deleting your car")
+                handleError(enqueueSnackbar, "Something went wrong while deleting your car", err)
                 return err;
             })
     };

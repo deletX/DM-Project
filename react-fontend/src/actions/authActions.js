@@ -48,7 +48,7 @@ export const refreshAuth = (refresh_token, enqueueSnackbar) => {
             },
             (err) => {
                 dispatch(fail(err));
-                handleError(enqueueSnackbar, "Something went wrong while refreshing your authentication")
+                handleError(enqueueSnackbar, "Something went wrong while refreshing your authentication", err)
                 return err;
             })
     };
@@ -73,7 +73,7 @@ export const googleOAuthLogin = (google_token, enqueueSnackbar) => {
             },
             (err) => {
                 dispatch(fail(err));
-                handleError(enqueueSnackbar, "Something went wrong while logging in with Google")
+                handleError(enqueueSnackbar, "Something went wrong while logging in with Google", err)
                 return err;
             })
     };
@@ -98,7 +98,7 @@ export const authLogin = (username, password, enqueueSnackbar) => {
             },
             (err) => {
                 dispatch(fail(err));
-                handleError(enqueueSnackbar, "Something went wrong while logging in")
+                handleError(enqueueSnackbar, "Something went wrong while logging in", err)
                 return err;
             })
     };
@@ -114,7 +114,7 @@ export const authSignup = (username, first_name, last_name, email, password, enq
             },
             (err) => {
                 dispatch(fail(err));
-                handleError(enqueueSnackbar, "Somethign went wrong while signing up")
+                handleError(enqueueSnackbar, "Somethign went wrong while signing up", err)
                 return err;
             })
     };

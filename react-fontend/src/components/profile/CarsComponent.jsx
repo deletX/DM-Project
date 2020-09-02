@@ -124,7 +124,7 @@ class CarsComponent extends Component {
                         onRowAdd: newData =>
                             new Promise((resolve, reject) => {
                                 const {name, tot_avail_seats, consumption, fuel} = newData
-                                console.log(newData)
+
                                 if (name === undefined || tot_avail_seats < 2 || tot_avail_seats > 9 || consumption <= 0)
                                     reject()
                                 else {

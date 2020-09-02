@@ -68,7 +68,7 @@ const PersonalInfoForm = ({
     const classes = useStyles();
     const [emailHelperText, setEmailHelperText] = useState("");
     const [usernameHelperText, setUsernameHelperText] = useState("");
-    const {enqueueSnackbar, } = useSnackbar();
+    const {enqueueSnackbar,} = useSnackbar();
 
     const validateEmail = (input) => {
         undoGoogleLogin();
@@ -139,8 +139,7 @@ const PersonalInfoForm = ({
                                         handleSuccess(enqueueSnackbar, "Succefully retrieved profile image")
                                     },
                                     (err) => {
-                                        console.log(err)
-                                        handleError(enqueueSnackbar, "Could not retrieve profile image")
+                                        handleError(enqueueSnackbar, "Could not retrieve profile image", err)
                                     })
                                 handleNext()
                             }}

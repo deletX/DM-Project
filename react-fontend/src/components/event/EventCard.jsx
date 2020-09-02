@@ -44,7 +44,7 @@ const EventCard = ({addAlert, token, event, profileId, refreshEvents}) => {
     const [joinOpen, setJoinOpen] = useState(false);
     const [leaveOpen, setLeaveOpen] = useState(false);
     const [deleteOpen, setDeleteOpen] = useState(false);
-    //console.log(event.date_time)
+
     const {enqueueSnackbar,} = useSnackbar();
     let date = new Date(event.date_time)
 
@@ -122,7 +122,6 @@ const EventCard = ({addAlert, token, event, profileId, refreshEvents}) => {
                 noText="No"
                 onYes={() => {
                     let participation = event.participant_set.filter(item => (item.profile.id === profileId))[0];
-                    console.log(participation);
                     leaveEvent(event.id, participation.id, token,
                         (res) => {
                             //addAlert("Successfully left the event", "success")
@@ -131,9 +130,7 @@ const EventCard = ({addAlert, token, event, profileId, refreshEvents}) => {
                             setLeaveOpen(false)
                         },
                         (err) => {
-                            console.log(err)
-                            //addAlert("Something went wrong while leaving", "error")
-                            handleError(enqueueSnackbar, "Something went wrong while leaving")
+                            handleError(enqueueSnackbar, "Something went wrong while leaving", err)
                             setLeaveOpen(false)
                         })
                 }}
@@ -154,16 +151,15 @@ const EventCard = ({addAlert, token, event, profileId, refreshEvents}) => {
                 onYes={() => {
                     deleteEvent(event.id, token,
                         (res) => {
-                            //addAlert("Successfully deleted the event", "success")
+
                             refreshEvents()
                             setDeleteOpen(false)
                             handleSuccess(enqueueSnackbar, "Successfully deleted the event")
                         },
                         (err) => {
-                            console.log(err)
-                            //addAlert("Something went wrong", "error")
+
                             setDeleteOpen(false)
-                            handleError(enqueueSnackbar, "Something went wrong while deleting event")
+                            handleError(enqueueSnackbar, "Something went wrong while deleting event", err)
                         })
                 }}
                 onNo={() => {

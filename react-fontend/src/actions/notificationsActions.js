@@ -59,7 +59,7 @@ export const retrieveNotifications = (enqueueSnackbar) => {
                 }, 60)
             },
             (err) => {
-                handleError(enqueueSnackbar, "Something went wrong while retrieving your notifications")
+                handleError(enqueueSnackbar, "Something went wrong while retrieving your notifications", err)
                 dispatch(fail());
                 return err;
             })
@@ -75,7 +75,7 @@ export const readNotification = (notificationId, read = true, enqueueSnackbar) =
                 dispatch(readSuccess(notificationId, read))
             },
             (err) => {
-                handleError(enqueueSnackbar, "Something went wrong while reading the notificaiton")
+                handleError(enqueueSnackbar, "Something went wrong while reading the notificaiton", err)
                 dispatch(fail());
                 return err;
             })

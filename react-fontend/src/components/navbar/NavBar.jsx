@@ -1,6 +1,7 @@
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import * as pagesURL from "../../constants/pagesurls";
+import {login, myProfile, signup} from "../../constants/pagesurls";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import React, {useEffect} from "react";
@@ -20,8 +21,6 @@ import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
 import NotificationItem from "./NotificationItem";
 import Divider from "@material-ui/core/Divider";
-import {login, myProfile} from "../../constants/pagesurls";
-import {signup} from "../../constants/pagesurls";
 import {authLogout} from "../../actions/authActions";
 import logo from "../../icons/logo.svg"
 import {setSearch} from "../../actions/searchActions";
@@ -254,7 +253,6 @@ function NavBar({isAuthenticated, notifications, authLogout, setSearch, search})
                                     }}
                                     inputProps={{'aria-label': 'search'}}
                                     onChange={(input) => {
-                                        console.log(input.target.value)
                                         setSearch(input.target.value)
                                     }}
                                 />

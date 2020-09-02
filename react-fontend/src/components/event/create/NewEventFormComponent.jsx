@@ -47,7 +47,6 @@ const useStyles = makeStyles((theme) => ({
 const NewEventFormComponent = ({name, setName, date, setDate, description, setDescription, image, setImage, imageURL, setImageURL}) => {
     const classes = useStyles();
 
-    //TODO use state here with two dates one for day and one for time and use a merger to setDate
     const [day, setDay] = useState(new Date(date))
     const [time, setTime] = useState(new Date(date))
 

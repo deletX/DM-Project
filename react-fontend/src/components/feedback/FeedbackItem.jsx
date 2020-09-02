@@ -113,7 +113,6 @@ const FeedbackItem = ({token, addAlert, feedback, edit = false}) => {
                         Cancel
                     </Button>
                     <Button onClick={() => {
-                        console.log(feedback)
                         putEditFeedback(feedback.event.id, feedback.receiver.id,
                             feedback.id, comment, vote, token,
                             (res) => {
@@ -123,8 +122,7 @@ const FeedbackItem = ({token, addAlert, feedback, edit = false}) => {
                             },
                             (err) => {
                                 setFeedbackOpen(false)
-                                handleError(enqueueSnackbar, "An error occured while editing your feedback")
-                                //addAlert("An error occured while editing your feedback", "error")
+                                handleError(enqueueSnackbar, "An error occured while editing your feedback", err)
                             })
                     }} color="primary">
                         Submit

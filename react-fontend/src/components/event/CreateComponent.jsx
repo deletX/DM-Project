@@ -74,7 +74,6 @@ const CreateComponent = ({isAuthenticatedOrLoading}) => {
 
     const uploadData = (reset, isStepSkipped) => {
         if (open) return;
-        console.log("uploading")
 
         let token = localStorage.getItem("access_token");
         let data;
@@ -102,7 +101,6 @@ const CreateComponent = ({isAuthenticatedOrLoading}) => {
                 //addAlert("Event created successfully", "success")
                 history.goBack()
                 let event = res.data
-                console.log(res.data)
                 handleSuccess(enqueueSnackbar, "Event created successfully")
                 if (!isStepSkipped(2))
                     postJoinEvent(event.id, address, pos, car, token,
@@ -112,14 +110,13 @@ const CreateComponent = ({isAuthenticatedOrLoading}) => {
                                 setOpen(false)
                         },
                         (err) => {
-                            console.log(err)
-                            handleError(enqueueSnackbar, "An error occurred while joining")
+                            handleError(enqueueSnackbar, "An error occurred while joining", err)
                             if (open)
                                 setOpen(false)
                         })
             },
             (err) => {
-                handleError(enqueueSnackbar, "An error occurred while creating the event")
+                handleError(enqueueSnackbar, "An error occurred while creating the event", err)
                 reset(true)
                 if (open)
                     setOpen(false)

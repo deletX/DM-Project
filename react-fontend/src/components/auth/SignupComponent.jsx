@@ -12,7 +12,7 @@ import StepperContainer from "../../containers/StepperContainer";
 import {Helmet} from "react-helmet";
 import {useSnackbar} from 'notistack';
 
-function SignupComponent({authSignup, googleLogin, setPicture, postCar, addError}) {
+function SignupComponent({authSignup, googleLogin, setPicture, postCar}) {
     let history = useHistory()
 
     const [email, setEmail] = useState("");
@@ -71,8 +71,6 @@ function SignupComponent({authSignup, googleLogin, setPicture, postCar, addError
         else if (isGoogleLogin) {
             googleLogin(googleAccessToken, enqueueSnackbar).then((value) => {
                 if (value instanceof Error) {
-                    addError("An error occurred while signing you up with google")
-                    console.log(value)
                     setOpen(false);
                     restart(true);
                 } else {
@@ -96,8 +94,6 @@ function SignupComponent({authSignup, googleLogin, setPicture, postCar, addError
         } else {
             authSignup(username, firstName, lastName, email, password, enqueueSnackbar).then((value) => {
                 if (value instanceof Error) {
-                    addError("An error occurred while signing you up")
-                    console.log(value)
                     setOpen(false);
                     restart(true);
                 } else {

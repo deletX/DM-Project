@@ -74,7 +74,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-function SignupComponent({authLogin, googleLogin, addError, location}) {
+function SignupComponent({authLogin, googleLogin, location}) {
     let history = useHistory()
     const [username, setUsername] = useState("");
     const [usernameError, setUsernameError] = useState(false);
@@ -109,9 +109,6 @@ function SignupComponent({authLogin, googleLogin, addError, location}) {
                                     googleLogin(input.accessToken, enqueueSnackbar).catch(err => {
                                         if (!err instanceof Error) {
                                             history.push(location.query.next ? decodeURI(location.query.next) : home)
-                                        } else {
-                                            addError("An error occurred while logging you in with google")
-                                            console.log(err)
                                         }
                                     })
 
@@ -181,9 +178,6 @@ function SignupComponent({authLogin, googleLogin, addError, location}) {
                                     authLogin(username, password, enqueueSnackbar).catch(err => {
                                         if (!err instanceof Error) {
                                             history.push(location.query.next ? decodeURI(location.query.next) : home)
-                                        } else {
-                                            addError("An error occurred while logging you in")
-                                            console.log(err)
                                         }
                                     })
                                 }}

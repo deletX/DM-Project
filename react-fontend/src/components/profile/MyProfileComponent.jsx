@@ -153,7 +153,7 @@ const MyProfileComponent = ({profile, changeUserData, changePicture}) => {
                            hidden
                            disabled={!edit}
                            onChange={(input) => {
-                               console.log("image set")
+
                                let fileReader = new FileReader();
                                let file = input.target.files[0];
                                fileReader.onloadend = () => {
@@ -161,7 +161,6 @@ const MyProfileComponent = ({profile, changeUserData, changePicture}) => {
                                }
                                setImage(file)
                                fileReader.readAsDataURL(file)
-                               //console.log(image, file)
                            }}/>
                     <label htmlFor="icon-button-file">
                         <Button disabled={!edit} color="secondary" aria-label="upload picture" variant="contained"
@@ -193,9 +192,8 @@ const MyProfileComponent = ({profile, changeUserData, changePicture}) => {
                         <Button color="primary" disabled={!edit} onClick={() => {
                             setEdit(false)
                             changeUserData(name, surname, email, newPassword, enqueueSnackbar)
-                            if(image !== null)
+                            if (image !== null)
                                 changePicture(image, enqueueSnackbar)
-                            //console.log(image, file)
                         }}>
                             Save
                         </Button>
