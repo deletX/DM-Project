@@ -14,6 +14,7 @@ import {useSnackbar} from 'notistack';
 
 function SignupComponent({authSignup, googleLogin, setPicture, postCar}) {
     let history = useHistory()
+    const {enqueueSnackbar,} = useSnackbar();
 
     const [email, setEmail] = useState("");
     const [emailError, setEmailError] = useState(false);
@@ -26,7 +27,6 @@ function SignupComponent({authSignup, googleLogin, setPicture, postCar}) {
     const [image, setImage] = useState(null);
     const [imageURL, setImageURL] = useState("");
 
-
     const [carName, setCarName] = useState("");
     const [totSeats, setTotSeats] = useState(4);
     const [consumption, setConsumption] = useState(10);
@@ -36,7 +36,6 @@ function SignupComponent({authSignup, googleLogin, setPicture, postCar}) {
     const [googleAccessToken, setGoogleAccessToken] = useState("");
 
     const [open, setOpen] = useState(false);
-    const {enqueueSnackbar,} = useSnackbar();
 
     const getStepContent = (step, handleNext) => {
         switch (step) {
@@ -64,57 +63,36 @@ function SignupComponent({authSignup, googleLogin, setPicture, postCar}) {
         }
     };
 
+    const uploadCarAndPicture = (restart) => (value) => {
+        if (value instanceof Error) {
+            setOpen(false);
+            restart(true);
+        } else {
+            if (carName !== "") {
+                postCar(carName, totSeats, fuel, consumption, enqueueSnackbar)
+                    .then(() => {
+                            if (image !== null && imageURL !== "") {
+                                setPicture(image, enqueueSnackbar).then(() => {
+                                    history.push(home)
+                                })
+                            }
+                        }
+                    )
+            } else if (image !== null && imageURL !== "") {
+                setPicture(image, enqueueSnackbar).then(() => {
+                    history.push(home)
+                })
+            }
+        }
+    }
 
-    const uploadData = (restart) => {
+    const login = (restart) => {
         if (!open)
             setOpen(true);
         else if (isGoogleLogin) {
-            googleLogin(googleAccessToken, enqueueSnackbar).then((value) => {
-                if (value instanceof Error) {
-                    setOpen(false);
-                    restart(true);
-                } else {
-                    if (carName !== "") {
-                        postCar(carName, totSeats, fuel, consumption, enqueueSnackbar).then(
-                            () => {
-                                if (image !== null && imageURL !== "") {
-                                    setPicture(image, enqueueSnackbar).then(() => {
-                                        history.push(home)
-                                    })
-                                }
-                            }
-                        )
-                    } else if (image !== null && imageURL !== "") {
-                        setPicture(image, enqueueSnackbar).then(() => {
-                            history.push(home)
-                        })
-                    }
-                }
-            })
+            googleLogin(googleAccessToken, enqueueSnackbar).then(uploadCarAndPicture(restart))
         } else {
-            authSignup(username, firstName, lastName, email, password, enqueueSnackbar).then((value) => {
-                if (value instanceof Error) {
-                    setOpen(false);
-                    restart(true);
-                } else {
-                    if (carName !== "") {
-                        postCar(carName, totSeats, fuel, consumption, enqueueSnackbar)
-                            .then(() => {
-                                    if (image !== null && imageURL !== "") {
-                                        setPicture(image, enqueueSnackbar).then(() => {
-                                            history.push(home)
-                                        })
-                                    }
-                                }
-                            )
-                    } else if (image !== null && imageURL !== "") {
-                        setPicture(image, enqueueSnackbar).then(() => {
-                            history.push(home)
-                        })
-                    }
-
-                }
-            })
+            authSignup(username, firstName, lastName, email, password, enqueueSnackbar).then(uploadCarAndPicture(restart))
         }
     }
 
@@ -149,7 +127,7 @@ function SignupComponent({authSignup, googleLogin, setPicture, postCar}) {
                         setConsumption(10)
                     }
                 }}
-                uploadData={uploadData}
+                uploadData={login}
                 finalButtonText="Sign Up!"
             />
         </CardContainer>
