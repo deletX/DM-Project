@@ -189,6 +189,7 @@ export const authLogin = (username, password) => {
             },
             (err) => {
                 handleError("Incorrect username and/or password! [005]", err)
+                dispatch(fail(err))
                 return err;
             })
         // return axios
