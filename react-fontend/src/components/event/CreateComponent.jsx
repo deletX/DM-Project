@@ -14,20 +14,11 @@ import {handleError, handleSuccess} from "../../utils/utils";
 import {postCreateEvent, postJoinEvent} from "../../utils/api";
 import {useSnackbar} from 'notistack';
 
-
-function mapStateToProps(state) {
-    return {
-        isAuthenticatedOrLoading: state.auth.token !== undefined || state.auth.loading,
-        loading: state.auth.loading,
-    };
-}
-
-
 const CreateComponent = ({isAuthenticatedOrLoading}) => {
 
     let history = useHistory()
+    const {enqueueSnackbar,} = useSnackbar();
 
-    const [open, setOpen] = useState(false);
     const [name, setName] = useState("");
     const [date, setDate] = useState(new Date((new Date()).getTime() + 5400 * 1000));
     const [description, setDescription] = useState("");
@@ -41,7 +32,7 @@ const CreateComponent = ({isAuthenticatedOrLoading}) => {
     const [pos, setPos] = useState("");
     const [car, setCar] = useState(-1);
 
-    const {enqueueSnackbar,} = useSnackbar();
+    const [open, setOpen] = useState(false);
 
     const getStepContent = (step, handleNext, isStepSkipped) => {
         switch (step) {
@@ -123,6 +114,42 @@ const CreateComponent = ({isAuthenticatedOrLoading}) => {
             })
     }
 
+    const isStepValid = (step) => {
+        let now = new Date()
+        now = new Date(now.getTime() + 3600 * 1000)
+        switch (step) {
+            case 0:
+                return name.length > 0 && date > now && description.length > 0;
+            case 1:
+                return destinationPos !== "" && destination !== "";
+            case 2:
+                return pos !== "" && address !== "";
+            default:
+                return true;
+        }
+    }
+
+    const clear = (step) => {
+        switch (step) {
+            case 0:
+                setName("")
+                setDescription("")
+                setDate(Date.now())
+                break;
+            case 1:
+                setDestination("");
+                setDestinationPos("");
+                break;
+            case 2:
+                setCar(-1);
+                setAddress("");
+                setPos("");
+                break;
+            default:
+                break;
+        }
+    }
+    
     return (
         <FormContainer
             effect={() => {
@@ -136,49 +163,24 @@ const CreateComponent = ({isAuthenticatedOrLoading}) => {
                         ["Event Details", "Destination", "Join", "Review"]
                     )}
                     getStepContent={getStepContent}
-                    isStepValid={(step) => {
-                        let now = new Date()
-                        now = new Date(now.getTime() + 3600 * 1000)
-                        switch (step) {
-                            case 0:
-                                return name.length > 0 && date > now && description.length > 0;
-                            case 1:
-                                return destinationPos !== "" && destination !== "";
-                            case 2:
-                                return pos !== "" && address !== "";
-                            default:
-                                return true;
-                        }
-                    }}
+                    isStepValid={isStepValid}
                     isStepOptional={(step) => {
                         return step === 2;
                     }}
-                    clear={(step) => {
-                        switch (step) {
-                            case 0:
-                                setName("")
-                                setDescription("")
-                                setDate(Date.now())
-                                break;
-                            case 1:
-                                setDestination("");
-                                setDestinationPos("");
-                                break;
-                            case 2:
-                                setCar(-1);
-                                setAddress("");
-                                setPos("");
-                                break;
-                            default:
-                                break;
-                        }
-                    }}
+                    clear={clear}
                     uploadData={uploadData}
                     finalButtonText="Add Event"
                 />
             </CardContainer>
         </FormContainer>
     );
+}
+
+function mapStateToProps(state) {
+    return {
+        isAuthenticatedOrLoading: state.auth.token !== undefined || state.auth.loading,
+        loading: state.auth.loading,
+    };
 }
 
 
