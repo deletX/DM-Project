@@ -17,7 +17,7 @@ import {handleError, handleSuccess} from "../../../utils/utils";
 import {useSnackbar} from 'notistack';
 
 
-const GoogleLogin = (props) => {
+const GoogleLoginButton = (props) => {
     const classes = useStyles();
 
     return (
@@ -122,7 +122,7 @@ const PersonalInfoForm = ({
 
             <form className={classes.form}>
                 <Grid container spacing={2}>
-                    <GoogleLogin
+                    <GoogleLoginButton
                         onSuccess={(input) => {
                             let username = input.profileObj.email.split("@")[0].replace(' ', '_').replace('.', '_')
                             setGoogleAccessToken(input.accessToken)
@@ -233,7 +233,7 @@ const PersonalInfoForm = ({
                         }}
                         loading={image === "loading"}
                     />
-                   
+
                 </Grid>
             </form>
         </div>
