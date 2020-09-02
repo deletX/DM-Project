@@ -130,6 +130,10 @@ First:
 Second:
 - `cd reactFrontendMobile/ && npx react-native run-android`
 
+### RN set app icon
+- https://medium.com/@ansonmathew/app-icon-in-react-native-ios-and-android-6165757e3fdb
+- https://romannurik.github.io/AndroidAssetStudio/icons-launcher.html#foreground.type=image&foreground.space.trim=1&foreground.space.pad=0.25&foreColor=rgba(96%2C%20125%2C%20139%2C%200)&backColor=rgb(255%2C%20255%2C%20255)&crop=0&backgroundShape=square&effects=none&name=ic_launcher
+
 
 ### RN Google Sign in
 - https://dev.to/anwargul0x/get-started-with-react-native-google-sign-in-18i5
