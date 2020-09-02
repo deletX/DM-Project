@@ -18,30 +18,16 @@ import {connect} from "react-redux"
 import {putEditFeedback} from "../../utils/api";
 import {useSnackbar} from 'notistack';
 
-const useStyles = makeStyles((theme) => ({
-    textContainer: {
-        position: "relative",
-        width: "100%",
-    },
-    rating: {
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-    },
-    name: {},
-    comment: {
-        overflowY: "auto",
-        maxHeight: "200px",
-    }
-}));
+const FeedbackItem = ({token, feedback, edit = false}) => {
+    const classes = useStyles();
+    const {enqueueSnackbar,} = useSnackbar();
 
-const FeedbackItem = ({token, addAlert, feedback, edit = false}) => {
     const [feedbackOpen, setFeedbackOpen] = useState(false)
     const [feedbackState, setFeedback] = useState(feedback)
+
     const [vote, setVote] = useState(feedback.vote)
     const [comment, setComment] = useState(feedback.comment)
-    const {enqueueSnackbar,} = useSnackbar();
-    const classes = useStyles();
+
     return (
         <ListItem>
             <ListItemAvatar>
@@ -77,6 +63,7 @@ const FeedbackItem = ({token, addAlert, feedback, edit = false}) => {
                 </Button>
                 }
             </div>
+
             <Dialog open={feedbackOpen} onClose={() => {
                 setFeedbackOpen(false)
             }} aria-labelledby="form-dialog-title">
@@ -122,7 +109,7 @@ const FeedbackItem = ({token, addAlert, feedback, edit = false}) => {
                             },
                             (err) => {
                                 setFeedbackOpen(false)
-                                handleError(enqueueSnackbar, "An error occured while editing your feedback", err)
+                                handleError(enqueueSnackbar, "Something went wrong while editing your feedback", err)
                             })
                     }} color="primary">
                         Submit
@@ -132,6 +119,23 @@ const FeedbackItem = ({token, addAlert, feedback, edit = false}) => {
         </ListItem>
     )
 };
+
+const useStyles = makeStyles((theme) => ({
+    textContainer: {
+        position: "relative",
+        width: "100%",
+    },
+    rating: {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+    },
+    name: {},
+    comment: {
+        overflowY: "auto",
+        maxHeight: "200px",
+    }
+}));
 
 function mapStateToProps(state) {
     return {
