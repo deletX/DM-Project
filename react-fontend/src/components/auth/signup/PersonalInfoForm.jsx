@@ -1,10 +1,6 @@
-import Button from "@material-ui/core/Button";
 import React, {useState} from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
-import {PhotoCamera} from "@material-ui/icons";
-import Input from "@material-ui/core/Input";
-import CircularProgress from "@material-ui/core/CircularProgress";
 import Grid from "@material-ui/core/Grid";
 import Alert from "@material-ui/lab/Alert";
 import AvatarCustom from "../../AvatarCustom";
@@ -12,28 +8,7 @@ import {getProfileImage} from "../../../utils/api";
 import {handleError, handleSuccess} from "../../../utils/utils";
 import {useSnackbar} from 'notistack';
 import GoogleLoginButton from "../GoogleLoginButton";
-
-const ImageButton = (props) => {
-    const classes = useStyles();
-    return (
-        <Grid item xs={12}>
-            <Button
-                fullWidth
-                variant="contained"
-                color="secondary"
-                component="label"
-                justify="flex-end"
-                className={classes.button}
-                startIcon={<PhotoCamera/>}
-            >Picture
-                <Input className={classes.imageInput} type="file" controlled="true" onChange={props.onClick}/>
-                {props.loading &&
-                <CircularProgress size="2ch" className={classes.imageProgress}/>
-                }
-            </Button>
-        </Grid>
-    )
-}
+import ImageButton from "../../ImageButton";
 
 const PersonalInfoForm = ({
                               firstName, setFirstName, lastName, setLastName, username, setUsername,
@@ -230,12 +205,6 @@ const useStyles = makeStyles((theme) => ({
     button: {
         marginRight: theme.spacing(1),
         marginBottom: theme.spacing(1),
-    },
-    imageInput: {
-        display: 'none',
-    },
-    imageProgress: {
-        marginLeft: theme.spacing(1),
     },
     imgPreview: {
         color: theme.palette.getContrastText(theme.palette.secondary.dark),
