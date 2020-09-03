@@ -64,7 +64,7 @@ const MapContainer = ({addr, setAddr, pos, setPos, loadUserPosition = true}) => 
                 setOpen(true);
             },
             (err) => {
-                handleError(enqueueSnackbar, "Something went wrong while retrieving positions")
+                handleError(enqueueSnackbar, "Something went wrong while retrieving positions", err)
             })
     }
 
@@ -73,7 +73,6 @@ const MapContainer = ({addr, setAddr, pos, setPos, loadUserPosition = true}) => 
         if (now - lastRequest > 1000) {
             getMapData()
         } else {
-            //console.log("will")
             setTimeout(getMapData, now - lastRequest);
         }
     }
@@ -83,11 +82,10 @@ const MapContainer = ({addr, setAddr, pos, setPos, loadUserPosition = true}) => 
             navigator.geolocation.getCurrentPosition((position) => {
                 getNominatimInfo(position.coords.latitude, position.coords.longitude,
                     (res) => {
-                        //console.log(res.data)
                         selectItem(res.data, position.coords.latitude, position.coords.longitude);
                     },
                     (err) => {
-                        handleError(enqueueSnackbar, "Something went wrong while retrieving your position")
+                        handleError(enqueueSnackbar, "Something went wrong while retrieving your position", err)
                     })
             })
         }
@@ -165,7 +163,8 @@ const MapContainer = ({addr, setAddr, pos, setPos, loadUserPosition = true}) => 
                                         setAddrError(false);
                                     },
                                     (err) => {
-                                        handleError(enqueueSnackbar, "Something went wrong while retrieving your selected location")
+                                        handleError(enqueueSnackbar, "Something went wrong while retrieving " +
+                                            "your selected location", err)
                                     })
                             }}
                             position={{lat: latitude, lng: longitude}}

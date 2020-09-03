@@ -38,8 +38,7 @@ const JoinContainer = ({addAlert, cars, token, open, close, event, refreshEvents
                                         close()
                                 },
                                 (err) => {
-                                    console.log(err)
-                                    handleError(enqueueSnackbar, "An error occurred while joining")
+                                    handleError(enqueueSnackbar, "An error occurred while joining", err)
                                     if (close)
                                         close()
                                 })

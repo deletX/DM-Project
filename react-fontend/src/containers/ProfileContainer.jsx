@@ -50,10 +50,9 @@ const ProfileContainer = ({location, addAlert, token, isAuthenticated, isLoading
                         setLoading(false)
                     },
                     (err) => {
-                        console.log(err)
                         history.push(home)
                         setLoading(false)
-                        handleError(enqueueSnackbar, "An error occurred while retrieving user profile")
+                        handleError(enqueueSnackbar, "An error occurred while retrieving user profile", err)
                     })
             else {
                 setProfile(profileRedux)
@@ -75,7 +74,7 @@ const ProfileContainer = ({location, addAlert, token, isAuthenticated, isLoading
             }
             if (profileId === id && !("givenFeedback" in profile)) {
                 setProfile(profileRedux)
-            } // eslint-disable-next-line
+            }
         }, [isAuthenticated, isLoading, profile, profileId, profileRedux, id]
     )
 

@@ -36,32 +36,25 @@ const HomeContainer = ({addError, isAuthenticated, isLoading, search, token}) =>
 
     const setJoinable = (joinable) => {
         history.push(homeJoinableJoinedOwned(joinable, joined, owned))
-        // refreshEvents(joinable, joined, owned);
     }
 
     const setJoined = (joined) => {
         history.push(homeJoinableJoinedOwned(joinable, joined, owned))
-        // refreshEvents(joinable, joined, owned);
     }
 
     const setOwned = (owned) => {
         history.push(homeJoinableJoinedOwned(joinable, joined, owned))
-        // refreshEvents(joinable, joined, owned);
     }
 
     const refreshEvents = (joinable = query.get("joinable") === null ? true : query.get("joinable") === "true",
                            joined = query.get("joined") === null ? true : query.get("joined") === "true",
                            owned = query.get("owned") === null ? false : query.get("owned") === "true") => {
-        //console.log(joinable, joined, owned)
         getEventsList(joinable, joined, owned, token,
             (res) => {
                 setEvents(res.data)
-                //handleSuccess(enqueueSnackbar, "Successfully retrieved events list")
             },
             (err) => {
-                console.error(err)
-                handleError(enqueueSnackbar, "An Error occurred while retrieving events")
-                //addError("An Error occurred while retrieving events")
+                handleError(enqueueSnackbar, "An Error occurred while retrieving events", err)
             })
     }
 
@@ -69,7 +62,7 @@ const HomeContainer = ({addError, isAuthenticated, isLoading, search, token}) =>
         if (!(isAuthenticated || isLoading))
             history.push(`${login}?next=${encodeURI(home)}`)
         else if (isAuthenticated)
-            refreshEvents(joinable, joined, owned); // eslint-disable-next-line
+            refreshEvents(joinable, joined, owned);
     }, [joinable, joined, owned, isAuthenticated, isLoading]);
 
     if (eventsFiltered !== null)

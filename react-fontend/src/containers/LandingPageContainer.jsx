@@ -180,7 +180,8 @@ const LandingPageContainer = () => {
                                     DM Project
                                 </Typography>
                                 <Typography className={classes.cta}>
-                                    Stop driving by yourself. Need to go to an event? Want to organize a travel with your buddies? Join and manage your events or join someone else's!
+                                    Stop driving by yourself. Need to go to an event? Want to organize a travel with
+                                    your buddies? Join and manage your events or join someone else's!
                                 </Typography>
                             </div>
                             <div className={classes.buttons}>
@@ -213,7 +214,8 @@ const LandingPageContainer = () => {
                             New Events
                         </Typography>
                         <Typography>
-                            Here some of the extraordinary events we had here, join so you are not going to miss anything like this
+                            Here some of the extraordinary events we had here, join so you are not going to miss
+                            anything like this
                         </Typography>
                         <List className={classes.horizontalList}>
                             {eventCards}
@@ -225,7 +227,8 @@ const LandingPageContainer = () => {
                             Join Now!
                         </Typography>
                         <Typography>
-                            We would love to have you in our community! Click the join button and be ready for your next big event with new and amazing friends!
+                            We would love to have you in our community! Click the join button and be ready for your next
+                            big event with new and amazing friends!
                         </Typography>
                         <div style={{
                             height: "20vh",
@@ -265,7 +268,6 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.up('lg')]: {
             height: "600px",
         },
-        // minHeight: "250px",
         [theme.breakpoints.down('sm')]: {
             height: "calc(100vh - 60px)",
             minHeight: "600px",
@@ -336,10 +338,6 @@ const useStyles = makeStyles((theme) => ({
         },
         marginBottom: "20px"
     },
-    // divider: {
-    //     width: "100%",
-    //     margin: "15px 0 10px 0"
-    // },
     profileCard: {
         width: "200px",
     },

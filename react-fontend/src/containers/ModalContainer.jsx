@@ -43,7 +43,6 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: 'column',
         alignItems: 'center',
         display: 'flex',
-        // flexWrap: 'wrap',
         maxWidth: "60%",
         maxHeight: "90%",
         minWidth: '300px',
