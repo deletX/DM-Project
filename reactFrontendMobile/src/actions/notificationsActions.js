@@ -7,6 +7,7 @@ import {
     NOTIFICATIONS_START
 } from "./types";
 import {getNotifications, putReadNotifications} from "../utils/api";
+import {handleError} from "../utils/utils";
 
 /**
  * Notification retrieval begun action object
@@ -106,13 +107,11 @@ export const readNotification = (notificationId, read = true) => {
         let access_token = await AsyncStorage.getItem("access_token");
         return putReadNotifications(access_token, notificationId, read,
             (res) => {
-                // dispatch(retrieveNotifications());
                 dispatch(readSuccess(notificationId, read))
             },
             (err) => {
                 dispatch(fail());
-                console.log("Something went wrong while reading the notification [007], ", err);
-                //handleError("Something went wrong while reading the notification [007]")
+                handleError("Something went wrong while reading the notification [007]")
                 return err;
             })
     };

@@ -137,11 +137,6 @@ const AddCarScreen = (props) => {
                         icon={"delete"}
                         color={Colors.red800}
                         onPress={() => {
-                            console.log("you wanna delete")
-                            // alertAreYouSure(() => {
-                            //     props.deleteCar(props.route.params.car.id)
-                            //     props.navigation.goBack()
-                            // })
                             Alert.alert(
                                 "Are you sure?",
                                 "There is no coming back",
@@ -164,12 +159,6 @@ const AddCarScreen = (props) => {
                         icon={"content-save"}
                         onPress={() => {
                             if (props.route.params.edit) {
-                                console.log("you wanna save")
-                                /*alertAreYouSure(() => {
-                                            props.editCar(props.route.params.car.id, name, fuel, seats, consumption)
-                                            props.navigation.goBack()
-                                        });
-                                        this version is not working*/
                                 Alert.alert(
                                     "Are you sure?",
                                     "There is no coming back",
