@@ -42,14 +42,14 @@ export const runEvent = (eventId, token, onSuccess, onError) => {
         })
 }
 
-export const getEventDetail = (eventId, token, onSuccess, onError) => {
-    axios
+export const getEventDetail = async (eventId, token, onSuccess, onError) => {
+    return axios
         .get(
             eventDetailURL(eventId),
             headers('application/json', token),
         )
         .then(res => {
-            onSuccess(res)
+            return onSuccess(res)
         })
         .catch(err => {
             onError(err)

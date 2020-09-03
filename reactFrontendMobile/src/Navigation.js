@@ -100,6 +100,11 @@ const Profile = (props) => {
                                      title: `${route.params.edit ? "Edit car" : "Add car"}`,
                                      headerRight: drawerIcon(props.navigation)
                                  })}/>
+            <ProfileStack.Screen name={OTHER_PROFILE_SCREEN} component={ProfileScreen}
+                                 options={({route}) => ({
+                                     title: `Profile - ${route.params.profile.user.username}`,
+                                     headerRight: drawerIcon(props.navigation)
+                                 })}/>
         </ProfileStack.Navigator>
     );
 };
