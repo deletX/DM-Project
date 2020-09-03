@@ -20,7 +20,8 @@ export const history = createBrowserHistory();
 function App(props) {
 
     return (
-        <BrowserRouter history={history}>
+        /*<BrowserRouter history={history}>*/
+        <BrowserRouter>
             <ThemeProvider theme={theme}>
                 <SnackbarProvider maxSnack={3}>
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>

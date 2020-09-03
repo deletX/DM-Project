@@ -52,7 +52,7 @@ const HomeContainer = ({addError, isAuthenticated, isLoading, search, token}) =>
     const refreshEvents = (joinable = query.get("joinable") === null ? true : query.get("joinable") === "true",
                            joined = query.get("joined") === null ? true : query.get("joined") === "true",
                            owned = query.get("owned") === null ? false : query.get("owned") === "true") => {
-        console.log(joinable, joined, owned)
+        //console.log(joinable, joined, owned)
         getEventsList(joinable, joined, owned, token,
             (res) => {
                 setEvents(res.data)

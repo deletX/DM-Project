@@ -52,7 +52,13 @@ function NavBar({isAuthenticated, notifications, authLogout, setSearch, search, 
         setMobileMoreAnchorEl(event.currentTarget);
     };
 
-    let notificationListItem = notifications.map((notification) => (
+    //console.log(notifications);
+    let notificationsByDescDate = notifications.sort(
+        function (a, b) {
+            return new Date(b.date_time) - new Date(a.date_time)
+        })
+    //console.log("ordered ",notificationsByDescDate);
+    let notificationListItem = notificationsByDescDate.map((notification) => (
         <NotificationItem
             key={notification.id}
             notification={notification}
@@ -128,7 +134,10 @@ function NavBar({isAuthenticated, notifications, authLogout, setSearch, search, 
             <div
                 className={classes.list}
                 role="presentation"
-                onClick={toggleDrawer(false)}
+                onClick={
+                    toggleDrawer(false)
+
+                }
                 onKeyDown={toggleDrawer(false)}>
                 <Divider/>
                 <Typography className={classes.drawerTitle} variant="h6">
