@@ -90,7 +90,8 @@ function StepperContainer({getSteps, getStepContent, isStepValid, isStepOptional
                         <StepContent>
                             {getStepContent(index, handleNext, isStepSkipped)}
                             <div>
-                                <Button disabled={activeStep === 0} onClick={handleBack}
+                                <Button disabled={activeStep === 0}
+                                        onClick={handleBack}
                                         className={classes.button}>
                                     Back
                                 </Button>

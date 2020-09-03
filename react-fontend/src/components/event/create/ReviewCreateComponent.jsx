@@ -16,9 +16,19 @@ const ReviewCreateComponent = ({cars, name, date, description, imageURL, car, ad
     const classes = useStyles();
 
     let carMenuItems = cars.map(car => (
-        <MenuItem key={car.id} value={car.id}>{car.name}, {car.tot_avail_seats} seats</MenuItem>
+        <MenuItem
+            key={car.id}
+            value={car.id}>
+            {car.name}, {car.tot_avail_seats} seats
+        </MenuItem>
     ))
-    carMenuItems.push(<MenuItem key={uuid()} value={-1}>No car</MenuItem>)
+    carMenuItems.push(
+        <MenuItem
+            key={uuid()}
+            value={-1}>
+            No car
+        </MenuItem>
+    )
 
     return (
         <div className={classes.root}>
@@ -27,13 +37,19 @@ const ReviewCreateComponent = ({cars, name, date, description, imageURL, car, ad
             <form className={classes.form} autoComplete="off">
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
-                        <TextField variant="outlined" fullWidth id="name" label="Name" placeholder="Awesome Gig"
-                                   value={name}
-                                   InputProps={{
-                                       readOnly: true,
-                                   }}
+                        <TextField
+                            variant="outlined"
+                            fullWidth
+                            id="name"
+                            label="Name"
+                            placeholder="Awesome Gig"
+                            value={name}
+                            InputProps={{
+                                readOnly: true,
+                            }}
                         />
                     </Grid>
+
                     <Grid item xs={12} sm={6}>
                         <KeyboardDatePicker
                             readOnly
@@ -47,6 +63,7 @@ const ReviewCreateComponent = ({cars, name, date, description, imageURL, car, ad
                             }}
                         />
                     </Grid>
+
                     <Grid item xs={12} sm={6}>
                         <KeyboardTimePicker
                             readOnly
@@ -60,6 +77,7 @@ const ReviewCreateComponent = ({cars, name, date, description, imageURL, car, ad
                             mask="__:__"
                         />
                     </Grid>
+
                     <Grid item xs={12}>
                         <TextField
                             fullWidth
@@ -74,6 +92,7 @@ const ReviewCreateComponent = ({cars, name, date, description, imageURL, car, ad
                             }}
                         />
                     </Grid>
+
                     <Grid item xs={12}>
                         <TextField
                             fullWidth
@@ -85,6 +104,7 @@ const ReviewCreateComponent = ({cars, name, date, description, imageURL, car, ad
                             }}
                         />
                     </Grid>
+
                     {!isStepSkipped(2) &&
                     <>
                         <Grid item xs={12}>
@@ -92,15 +112,22 @@ const ReviewCreateComponent = ({cars, name, date, description, imageURL, car, ad
                         </Grid>
                         <Grid item xs={12}>
                             <FormControl variant={"outlined"} className={classes.form}>
-                                <InputLabel id="car-label">Car</InputLabel>
-                                <Select id="car" label="Car" labelId="car-label" value={car}
-                                        inputProps={{
-                                            readOnly: true,
-                                        }}>
+                                <InputLabel id="car-label">
+                                    Car
+                                </InputLabel>
+                                <Select
+                                    id="car"
+                                    label="Car"
+                                    labelId="car-label"
+                                    value={car}
+                                    inputProps={{
+                                        readOnly: true,
+                                    }}>
                                     {carMenuItems}
                                 </Select>
                             </FormControl>
                         </Grid>
+
                         <Grid item xs={12}>
                             <TextField
                                 fullWidth

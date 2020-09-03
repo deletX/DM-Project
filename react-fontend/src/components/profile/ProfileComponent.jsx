@@ -6,14 +6,22 @@ import AvatarCustom from "../AvatarCustom";
 
 const ProfileComponent = ({profile}) => {
     const classes = useStyles();
-    
+
     return (
         <div className={classes.root}>
-            <AvatarCustom alt={`${profile.user.first_name} ${profile.user.last_name}`} src={profile.picture}
-                          className={classes.avatar}>
+            <AvatarCustom
+                alt={`${profile.user.first_name} ${profile.user.last_name}`}
+                src={profile.picture}
+                className={classes.avatar}>
             </AvatarCustom>
-            <Rating readOnly value={profile.average_vote === null ? 0 : profile.average_vote}
-                    disabled={profile.average_vote === null} precision={.5} size="large" className={classes.rating}/>
+            <Rating
+                readOnly
+                value={profile.average_vote === null ? 0 : profile.average_vote}
+                disabled={profile.average_vote === null}
+                precision={.5}
+                size="large"
+                className={classes.rating}
+            />
         </div>
     )
 };

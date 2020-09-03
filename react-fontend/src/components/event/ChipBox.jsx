@@ -7,6 +7,7 @@ import {white} from "color-name";
 
 const ChipBox = ({joinable, joined, owned, setJoinable, setJoined, setOwned}) => {
     const classes = useStyles()
+
     return (
         <div className={classes.root}>
             <Chip

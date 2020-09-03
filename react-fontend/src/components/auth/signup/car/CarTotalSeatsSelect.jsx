@@ -8,10 +8,16 @@ import React from "react";
 const CarTotalSeatsSelect = (props) => (
     <Grid item xs={12} sm={6}>
         <FormControl variant="outlined">
-            <InputLabel id="tot-seats-label">Seats</InputLabel>
-            <Select id="tot-seats" label="Seats" labelId="tot-seats-label" value={props.value}
-                    onChange={props.onChange}
-                    inputProps={props.inputProps}
+            <InputLabel id="tot-seats-label">
+                Seats
+            </InputLabel>
+            <Select
+                id="tot-seats"
+                label="Seats"
+                labelId="tot-seats-label"
+                value={props.value}
+                onChange={props.onChange}
+                inputProps={props.inputProps}
             >
                 <MenuItem value={2}>2</MenuItem>
                 <MenuItem value={3}>3</MenuItem>

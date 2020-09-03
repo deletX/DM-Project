@@ -115,8 +115,14 @@ const EventContainer = (props) => {
         if (participation.length > 0 && participation[0].pickup_index === 0)
             directionsURL = `https://www.google.com/maps/dir/?api=1&origin=${pridStringToLatLng(participation[0].starting_pos).join(",")}&destination=${pridStringToLatLng(event.destination).join(",")}&travelmode=driving&waypoints=${myCar.map(item => pridStringToLatLng(item.starting_pos).join(",")).join("%7C")}`
 
-        const feedbackMenuItems = myCar.length === 0 ? [] : myCar.map(item => (
-            <MenuItem value={item.profile.id}>{item.profile.first_name} {item.profile.last_name}</MenuItem>))
+        const feedbackMenuItems =
+            myCar.length === 0 ? [] :
+                myCar.map(item => (
+                    <MenuItem
+                        value={item.profile.id}>
+                        {item.profile.first_name}
+                        {item.profile.last_name}
+                    </MenuItem>))
 
         const sendFeedback = () => {
             postCreateFeedback(event.id, receiver, comment, vote, token,
@@ -126,7 +132,7 @@ const EventContainer = (props) => {
                     handleSuccess(enqueueSnackbar, "Feedback left with success")
                 },
                 (err) => {
-                    //console.log(error)
+                    console.log(err)
                     setFeedbackOpen(false)
                     handleError(enqueueSnackbar, "Something went wrong while posting your feedback [014]")
                 })
@@ -142,9 +148,7 @@ const EventContainer = (props) => {
         )
 
         const run = () => {
-            runEvent(
-                id,
-                token,
+            runEvent(id, token,
                 (res) => {
                     setEvent({...event, status: 1})
                     handleInfo(enqueueSnackbar, "Computation has started")
@@ -156,9 +160,7 @@ const EventContainer = (props) => {
         }
 
         const getEvent = () => {
-            getEventAxios(
-                id,
-                token,
+            getEventAxios(id, token,
                 (res) => {
                     setEvent(res.data)
                     setImageURL(res.data.picture)
@@ -185,16 +187,20 @@ const EventContainer = (props) => {
                 data.append("description", description)
                 data.append("address", address)
                 data.append("destination", destination)
-                data.append("date_time", `${day.getUTCFullYear()}-${day.getUTCMonth() < 10 ? '0' : ''}${day.getUTCMonth() + 1}-${day.getUTCDate()} ${time.getUTCHours()}:${time.getUTCMinutes()}`)
+                data.append("date_time",
+                    `${day.getUTCFullYear()}-${day.getUTCMonth() < 10 ? '0' :
+                        ''}${day.getUTCMonth() + 1}-${day.getUTCDate()} ${time.getUTCHours()}:${time.getUTCMinutes()}`)
             } else {
                 data = {
                     name: name,
                     description: description,
                     address: address,
                     destination: destination,
-                    date_time: `${day.getUTCFullYear()}-${day.getUTCMonth() < 10 ? '0' : ''}${day.getUTCMonth() + 1}-${day.getUTCDate()} ${time.getUTCHours()}:${time.getUTCMinutes()}`,
+                    date_time: `${day.getUTCFullYear()}-${day.getUTCMonth() < 10 ? '0' :
+                        ''}${day.getUTCMonth() + 1}-${day.getUTCDate()} ${time.getUTCHours()}:${time.getUTCMinutes()}`,
                 }
             }
+
             updateEvent(id, data, token,
                 image,
                 (res) => {
@@ -223,13 +229,13 @@ const EventContainer = (props) => {
                     <meta name="description" content={event.description}/>
                 </Helmet>
                 <div className={classes.root}>
-                    <div className={classes.header} style={{backgroundImage: `url(${imageURL})`}}>
+                    <div className={classes.header}
+                         style={{backgroundImage: `url(${imageURL})`}}>
                         <div className={classes.scrim}>
                             <ThemeProvider theme={white_text_theme}>
                                 <Grid container spacing={2} className={classes.headerGrid}>
                                     <Grid item xs={12} md={8}>
                                         {!edit ?
-
                                             <Typography variant="h2" component="h2" className={classes.mainTitle}>
                                                 {event.name}
                                             </Typography>
@@ -259,15 +265,18 @@ const EventContainer = (props) => {
 
                                         }
                                     </Grid>
+
                                     <Grid item xs={false} md={2}/>
                                     <Grid item xs={12} md={6}>
                                         {!edit ?
                                             <Typography variant="h5">
-                                                Date: {`${date.getDate()}/${date.getMonth() < 10 ? '0' : ''}${date.getMonth() + 1}/${date.getFullYear()} at ${date.getHours()}:${date.getMinutes()}`}
+                                                Date: {`${date.getDate()}/${date.getMonth() < 10 ? '0' :
+                                                ''}${date.getMonth() + 1}/${date.getFullYear()} at ${date.getHours()}:${date.getMinutes()}`}
                                             </Typography>
-                                            :
-                                            <>
 
+                                            :
+
+                                            <>
                                                 <KeyboardDatePicker
                                                     color="secondary"
                                                     label="Date"
@@ -294,6 +303,7 @@ const EventContainer = (props) => {
                                             </>
                                         }
                                     </Grid>
+
                                     <Grid item xs={12} md={6}>
                                         {!edit &&
                                         <Typography variant="h5">
@@ -303,16 +313,18 @@ const EventContainer = (props) => {
                                     </Grid>
                                 </Grid>
                             </ThemeProvider>
+
                             <div className={classes.buttons}>
                                 {isOwner &&
                                 <Button
                                     variant="contained"
-
                                     className={classes.runButton}
                                     color="primary"
                                     disabled={(isRunning || isCompleted) || edit}
                                     onClick={() => {
-                                        let availableSeats = drivers.map(item => item.car.tot_avail_seats).reduce((prev, curr) => (prev + curr), 0);
+                                        let availableSeats = drivers.map(
+                                            item => item.car.tot_avail_seats
+                                        ).reduce((prev, curr) => (prev + curr), 0);
                                         console.log(availableSeats)
                                         console.log(event.participant_set.length)
                                         if (availableSeats < event.participant_set.length || event.participant_set.length === 0) {
@@ -327,36 +339,46 @@ const EventContainer = (props) => {
                                     Run
                                 </Button>
                                 }
-                                <ButtonGroup variant="contained"
-                                             color={isOwner ? (participation.length !== 0 ? "secondary" : "primary") : "primary"}>
+
+                                <ButtonGroup
+                                    variant="contained"
+                                    color={isOwner ? (participation.length !== 0 ? "secondary" : "primary") : "primary"}>
                                     {participation.length !== 0 ?
-                                        <Button color="secondary" disabled={(isRunning || isCompleted) || edit}
-                                                onClick={() => {
-                                                    setLeaveOpen(true)
-                                                }}
+                                        <Button
+                                            color="secondary"
+                                            disabled={(isRunning || isCompleted) || edit}
+                                            onClick={() => {
+                                                setLeaveOpen(true)
+                                            }}
                                         >
                                             Leave
                                         </Button>
+
                                         :
-                                        <Button color="primary" disabled={isRunning || isCompleted || edit}
-                                                onClick={() => {
-                                                    setJoinOpen(true)
-                                                }}
+
+                                        <Button
+                                            color="primary"
+                                            disabled={isRunning || isCompleted || edit}
+                                            onClick={() => {
+                                                setJoinOpen(true)
+                                            }}
                                         >
                                             Join
                                         </Button>
                                     }
-                                    <Button color="secondary"
-                                            disabled={!edit ? !(isOwner && !(isRunning || isCompleted)) : !valid}
-                                            onClick={() => {
-                                                if (edit) {
-                                                    update()
-                                                } else
-                                                    setEdit(true)
-                                            }}
+                                    <Button
+                                        color="secondary"
+                                        disabled={!edit ? !(isOwner && !(isRunning || isCompleted)) : !valid}
+                                        onClick={() => {
+                                            if (edit) {
+                                                update()
+                                            } else
+                                                setEdit(true)
+                                        }}
                                     >
                                         {edit ? "Save" : "Edit"}
                                     </Button>
+
                                     <Button className={classes.deleteButton}
                                             disabled={!(isOwner && !(isRunning))}
                                             onClick={() => {
@@ -370,22 +392,28 @@ const EventContainer = (props) => {
                                         {edit ? "Cancel" : "Delete"}
                                     </Button>
                                 </ButtonGroup>
+
                                 {edit &&
                                 <>
-                                    <input accept="image/*" className={classes.input} id="icon-button-file" type="file"
-                                           hidden
-                                           onChange={(input) => {
-                                               let fileReader = new FileReader();
-                                               let file = input.target.files[0];
-                                               fileReader.onloadend = () => {
-                                                   setImageURL(fileReader.result)
-                                               }
-                                               setImage(file)
-                                               fileReader.readAsDataURL(file)
-                                           }}/>
+                                    <input
+                                        accept="image/*"
+                                        className={classes.input}
+                                        id="icon-button-file" type="file"
+                                        hidden
+                                        onChange={(input) => {
+                                            let fileReader = new FileReader();
+                                            let file = input.target.files[0];
+                                            fileReader.onloadend = () => {
+                                                setImageURL(fileReader.result)
+                                            }
+                                            setImage(file)
+                                            fileReader.readAsDataURL(file)
+                                        }}/>
                                     <label htmlFor="icon-button-file">
-                                        <Fab color="secondary" aria-label="upload picture" size="small"
-                                             className={classes.changePictureButton}>
+                                        <Fab
+                                            color="secondary"
+                                            aria-label="upload picture" size="small"
+                                            className={classes.changePictureButton}>
                                             <PhotoCamera/>
                                         </Fab>
                                     </label>
@@ -394,6 +422,7 @@ const EventContainer = (props) => {
                             </div>
                         </div>
                     </div>
+
                     {(isRunning || isLoading) &&
                     <LinearProgress color="secondary" className={classes.loadingBar}/>
                     }
@@ -412,6 +441,7 @@ const EventContainer = (props) => {
                         Oh no! It seems there aren't enough cars to bring all these people!
                     </Alert>
                     }
+
                     <div className={classes.body}>
                         <div className={classes.element}>
                             <Typography variant="h4">
@@ -419,9 +449,14 @@ const EventContainer = (props) => {
                             </Typography>
                             {!edit ?
                                 <Typography component="div">
-                                    {event.description.split("\n").map((i, key) => {
-                                        return <p key={key}>{i}</p>;
-                                    })}
+                                    {event.description.split("\n").map(
+                                        (i, key) => {
+                                            return (
+                                                <p key={key}>
+                                                    {i}
+                                                </p>
+                                            )
+                                        })}
                                 </Typography>
                                 :
                                 <TextField
@@ -438,6 +473,7 @@ const EventContainer = (props) => {
                                     helperText={description.length <= 0 ? "Required" : ""}/>
                             }
                         </div>
+
                         <Divider className={classes.divider}/>
                         <div className={classes.element}>
                             <Typography variant="h4">
@@ -454,7 +490,6 @@ const EventContainer = (props) => {
                                             attribution='&copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                                         />
-
                                         <Marker
                                             position={{lat: latitude, lng: longitude}}
                                         >
@@ -465,11 +500,14 @@ const EventContainer = (props) => {
                                     </Map>
                                 </Box>
                                 :
-                                <MapContainer className={classes.mapContainer} addr={address} pos={destination}
-                                              setAddr={setAddress}
-                                              setPos={setDestination}/>
+                                <MapContainer
+                                    className={classes.mapContainer}
+                                    addr={address} pos={destination}
+                                    setAddr={setAddress}
+                                    setPos={setDestination}/>
                             }
                         </div>
+
                         {!edit &&
                         <>
                             <Divider className={classes.divider}/>
@@ -479,21 +517,21 @@ const EventContainer = (props) => {
                                     Participants
                                 </Typography>
                                 <div className={classes.participantsContainer}>
-                                    {event.participant_set.length === 0 ?
 
+                                    {event.participant_set.length === 0 ?
                                         <Typography>
                                             Seems there's no one here... yet ;)
                                         </Typography>
                                         :
                                         <ParticipantsContainer
                                             participantSet={event.participant_set} profileId={profileId}/>
-
                                     }
                                 </div>
                             </div>
                             }
                         </>
                         }
+
                         {isCompleted &&
                         <>
                             {participation.length !== 0 &&
@@ -505,24 +543,30 @@ const EventContainer = (props) => {
                                     Expenses: {expense}€
                                 </Typography>
                                 {participation[0].pickup_index === 0 &&
-                                <Button color="primary" variant="outlined" target="_blank" href={directionsURL}>
+                                <Button color="primary"
+                                        variant="outlined"
+                                        target="_blank"
+                                        href={directionsURL}>
                                     Directions
                                 </Button>
                                 }
                                 <div className={classes.participantsContainer}>
                                     <ParticipantsContainer
                                         participantSet={myCar}
-                                        profileId={profileId} onlyDriverIcon={true}/>
-                                    <Button color="primary" disabled={(new Date()) < date} onClick={() => {
-                                        setReceiver(myCar[0].profile.id)
-                                        setFeedbackOpen(true)
-                                    }}>
+                                        profileId={profileId}
+                                        onlyDriverIcon={true}/>
+                                    <Button color="primary"
+                                            disabled={(new Date()) < date}
+                                            onClick={() => {
+                                                setReceiver(myCar[0].profile.id)
+                                                setFeedbackOpen(true)
+                                            }}>
                                         Submit Feedback
                                     </Button>
                                 </div>
-
                             </div>
                             }
+
                             {isOwner &&
                             <>
                                 {participation.length !== 0 &&
@@ -533,13 +577,15 @@ const EventContainer = (props) => {
                                         Other Cars
                                     </Typography>
                                     <div className={classes.participantsContainer}>
-                                        <OtherCarsParticipation participantSet={event.participant_set}
-                                                                profileId={profileId}/>
+                                        <OtherCarsParticipation
+                                            participantSet={event.participant_set}
+                                            profileId={profileId}/>
                                     </div>
                                 </div>
                             </>
                             }
                         </>
+
                         }
                         {isRunning &&
                         <div className={classes.element}>
@@ -548,17 +594,25 @@ const EventContainer = (props) => {
                         }
                     </div>
 
-                    <Dialog open={feedbackOpen} onClose={() => {
-                        setFeedbackOpen(false)
-                    }} aria-labelledby="form-dialog-title">
-                        <DialogTitle id="form-dialog-title">Submit Feedback</DialogTitle>
+                    <Dialog
+                        open={feedbackOpen}
+                        onClose={() => {
+                            setFeedbackOpen(false)
+                        }} aria-labelledby="form-dialog-title">
+                        <DialogTitle
+                            id="form-dialog-title">
+                            Submit Feedback
+                        </DialogTitle>
                         <DialogContent>
                             <DialogContentText>
                                 We would love to know how your experience was!
                             </DialogContentText>
                             <div className={classes.feedbackForm}>
                                 <FormControl className={classes.formControl}>
-                                    <InputLabel id="select-receiver-label">Receiver</InputLabel>
+                                    <InputLabel
+                                        id="select-receiver-label">
+                                        Receiver
+                                    </InputLabel>
                                     <Select
                                         labelId="select-receiver-label"
                                         id="select-receiver"
@@ -591,15 +645,19 @@ const EventContainer = (props) => {
                             </div>
                         </DialogContent>
                         <DialogActions>
-                            <Button onClick={() => {
-                                setFeedbackOpen(false)
-                            }} color="primary">
+                            <Button
+                                onClick={() => {
+                                    setFeedbackOpen(false)
+                                }}
+                                color="primary">
                                 Cancel
                             </Button>
-                            <Button onClick={() => {
-                                setFeedbackOpen(true)
-                                sendFeedback()
-                            }} color="primary">
+                            <Button
+                                onClick={() => {
+                                    setFeedbackOpen(true)
+                                    sendFeedback()
+                                }}
+                                color="primary">
                                 Submit
                             </Button>
                         </DialogActions>
@@ -616,9 +674,7 @@ const EventContainer = (props) => {
                         noText="No"
                         onYes={() => {
                             let participation = event.participant_set.filter(item => (item.profile.id === profileId))[0];
-                            leaveEvent(event.id,
-                                participation.id,
-                                token,
+                            leaveEvent(event.id, participation.id, token,
                                 (res) => {
                                     setLeaveOpen(false)
                                     if (!isOwner) {
@@ -628,9 +684,7 @@ const EventContainer = (props) => {
                                 },
                                 (err) => {
                                     setLeaveOpen(false)
-                                    handleError(enqueueSnackbar, "Something went wrong while leaving [002]")
-                                }
-                            )
+                                    handleError(enqueueSnackbar, "Something went wrong while leaving [002]")})
                         }}
                         onNo={() => {
                             setLeaveOpen(false)
@@ -651,9 +705,7 @@ const EventContainer = (props) => {
                                 (res) => {
                                     setDeleteOpen(false)
                                     history.push(home)
-                                    handleSuccess(enqueueSnackbar, "Successfully deleted the event")
-
-                                },
+                                    handleSuccess(enqueueSnackbar, "Successfully deleted the event")},
                                 (err) => {
                                     setDeleteOpen(false)
                                     handleError(enqueueSnackbar, "Something went wrong while deleting your event [015]")
@@ -663,11 +715,16 @@ const EventContainer = (props) => {
                             setDeleteOpen(false)
                         }}
                     />
-                    <JoinContainer open={joinOpen} close={() => {
-                        setJoinOpen(false)
-                    }} event={event} refreshEvents={() => {
-                        getEvent()
-                    }}/>
+
+                    <JoinContainer
+                        open={joinOpen}
+                        close={() => {
+                            setJoinOpen(false)
+                        }}
+                        event={event}
+                        refreshEvents={() => {
+                            getEvent()
+                        }}/>
                 </div>
             </>
         );

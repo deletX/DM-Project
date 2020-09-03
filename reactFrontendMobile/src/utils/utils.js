@@ -210,21 +210,6 @@ export const URLtoScreenWithProps = async (url, token = "") => {
             (err) => {
 
             })
-        // await axios
-        //     .get(
-        //         eventDetailURL(id),
-        //         headers('application/json', token)
-        //     )
-        //     .then(res => {
-        //         screenWithProps["props"] = {
-        //             id: id,
-        //             event: res.data,
-        //         }
-        //     })
-        //     .catch(err => {
-        //         handleError("Something went wrong while retrieving event [003]", err)
-        //     })
-
     }
     return screenWithProps;
 }
@@ -237,7 +222,6 @@ export const URLtoScreenWithProps = async (url, token = "") => {
  * @return {function(): *}
  */
 export const alertAreYouSure = (onPressYes, cancelable = true) => () => {
-    console.log("im inside edit alert")
     Alert.alert(
         "Are you sure?",
         "There is no coming back",

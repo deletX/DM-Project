@@ -31,15 +31,19 @@ const FeedbackItem = ({token, feedback, edit = false}) => {
     return (
         <ListItem>
             <ListItemAvatar>
-                <AvatarCustom firstName={!edit ? feedback.giver.first_name : feedback.receiver.first_name}
-                              lastName={!edit ? feedback.giver.last_name : feedback.receiver.last_name}
-                              src={!edit ? feedback.giver.picture : feedback.receiver.picture}/>
+                <AvatarCustom
+                    firstName={!edit ? feedback.giver.first_name : feedback.receiver.first_name}
+                    lastName={!edit ? feedback.giver.last_name : feedback.receiver.last_name}
+                    src={!edit ? feedback.giver.picture : feedback.receiver.picture}
+                />
             </ListItemAvatar>
+
             <ListItemText
                 primary={
                     <div className={classes.textContainer}>
                         <Typography className={classes.name}>
-                            {!edit ? `${feedback.giver.first_name} ${feedback.giver.last_name}` : `${feedback.receiver.first_name} ${feedback.receiver.last_name}`}
+                            {!edit ? `${feedback.giver.first_name} ${feedback.giver.last_name}` :
+                                `${feedback.receiver.first_name} ${feedback.receiver.last_name}`}
                         </Typography>
                     </div>
                 }
@@ -50,24 +54,36 @@ const FeedbackItem = ({token, feedback, edit = false}) => {
                 }
             />
             <div className={classes.rating}>
-                <Rating name={`${feedback.giver.id}-rating-${feedback.event.id}`} precision={.5}
-                        value={feedbackState.vote}
-                        readOnly size="small"
+                <Rating
+                    name={`${feedback.giver.id}-rating-${feedback.event.id}`}
+                    precision={.5}
+                    value={feedbackState.vote}
+                    readOnly size="small"
                 />
+
                 {edit &&
-                <Button size="small" color="primary"
-                        onClick={() => {
-                            setFeedbackOpen(true)
-                        }}>
+                <Button
+                    size="small"
+                    color="primary"
+                    onClick={() => {
+                        setFeedbackOpen(true)
+                    }}>
                     edit
                 </Button>
                 }
             </div>
 
-            <Dialog open={feedbackOpen} onClose={() => {
-                setFeedbackOpen(false)
-            }} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Submit Feedback</DialogTitle>
+            <Dialog
+                open={feedbackOpen}
+                onClose={() => {
+                    setFeedbackOpen(false)
+                }}
+                aria-labelledby="form-dialog-title"
+            >
+                <DialogTitle
+                    id="form-dialog-title">
+                    Submit Feedback
+                </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
                         You can change your comment and vote here.
@@ -93,25 +109,30 @@ const FeedbackItem = ({token, feedback, edit = false}) => {
                         />
                     </div>
                 </DialogContent>
+
                 <DialogActions>
-                    <Button onClick={() => {
-                        setFeedbackOpen(false)
-                    }} color="primary">
+                    <Button
+                        onClick={() => {
+                            setFeedbackOpen(false)
+                        }}
+                        color="primary">
                         Cancel
                     </Button>
-                    <Button onClick={() => {
-                        putEditFeedback(feedback.event.id, feedback.receiver.id,
-                            feedback.id, comment, vote, token,
-                            (res) => {
-                                setFeedbackOpen(false)
-                                setFeedback(res.data)
-                                handleSuccess(enqueueSnackbar, "Successfully edited your feedback")
-                            },
-                            (err) => {
-                                setFeedbackOpen(false)
-                                handleError(enqueueSnackbar, "Something went wrong while editing your feedback", err)
-                            })
-                    }} color="primary">
+                    <Button
+                        onClick={() => {
+                            putEditFeedback(feedback.event.id, feedback.receiver.id,
+                                feedback.id, comment, vote, token,
+                                (res) => {
+                                    setFeedbackOpen(false)
+                                    setFeedback(res.data)
+                                    handleSuccess(enqueueSnackbar, "Successfully edited your feedback")
+                                },
+                                (err) => {
+                                    setFeedbackOpen(false)
+                                    handleError(enqueueSnackbar, "Something went wrong while editing your feedback", err)
+                                })
+                        }}
+                        color="primary">
                         Submit
                     </Button>
                 </DialogActions>

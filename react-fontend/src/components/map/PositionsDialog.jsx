@@ -13,17 +13,20 @@ const PositionsDialog = ({open, close, positions, selectItem}) => {
 
     let options = positions.map(item => {
         let {primary, secondary} = nominatimToPrimarySecondary(item)
-        return (<ListItem
-            key={item.place_id}
-            button
-            onClick={() => {
-                selectItem(item)
-                close()
-            }}
-        >
-            <ListItemText primary={primary}
-                          secondary={secondary}/>
-        </ListItem>)
+
+        return (
+            <ListItem
+                key={item.place_id}
+                button
+                onClick={() => {
+                    selectItem(item)
+                    close()
+                }}
+            >
+                <ListItemText
+                    primary={primary}
+                    secondary={secondary}/>
+            </ListItem>)
     })
 
     return (
@@ -33,7 +36,10 @@ const PositionsDialog = ({open, close, positions, selectItem}) => {
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
         >
-            <DialogTitle id="alert-dialog-title">{"Which one is it?"}</DialogTitle>
+            <DialogTitle id="alert-dialog-title">
+                {"Which one is it?"}
+            </DialogTitle>
+
             <DialogContent>
                 <List>
                     {options}

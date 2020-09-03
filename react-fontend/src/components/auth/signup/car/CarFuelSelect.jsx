@@ -9,9 +9,14 @@ const CarFuelSelect = (props) => (
     <Grid item xs={12} sm={6}>
         <FormControl variant="outlined">
             <InputLabel id="fuel-label">Fuel</InputLabel>
-            <Select id="fuel" labelId="fuel-label" label="Fuel" value={props.value} fullWidth
-                    onChange={props.onChange}
-                    inputProps={props.inputProps}>
+            <Select
+                id="fuel"
+                labelId="fuel-label"
+                label="Fuel"
+                value={props.value}
+                fullWidth
+                onChange={props.onChange}
+                inputProps={props.inputProps}>
                 <MenuItem value={1}>Petrol</MenuItem>
                 <MenuItem value={2}>Diesel</MenuItem>
                 <MenuItem value={3}>Gas</MenuItem>

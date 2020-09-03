@@ -11,22 +11,41 @@ const JoinComponent = ({cars, addr, setAddr, pos, setPos, car, setCar}) => {
     const classes = useStyles();
 
     let carMenuItems = cars.map(car => (
-        <MenuItem key={car.id} value={car.id}>{car.name}, {car.tot_avail_seats} seats</MenuItem>
+        <MenuItem
+            key={car.id}
+            value={car.id}>
+            {car.name}, {car.tot_avail_seats} seats
+        </MenuItem>
     ))
-    carMenuItems.push(<MenuItem key={-1} value={-1}>No car</MenuItem>)
+    carMenuItems.push(
+        <MenuItem
+            key={-1}
+            value={-1}>
+            No car
+        </MenuItem>)
 
     return (
         <div className={classes.root}>
             <FormControl variant={"outlined"} className={classes.form}>
-                <InputLabel id="car-label">Car</InputLabel>
-                <Select id="car" label="Car" labelId="car-label" value={car}
-                        onChange={(input) => {
-                            setCar(input.target.value)
-                        }}>
+                <InputLabel id="car-label">
+                    Car
+                </InputLabel>
+                <Select
+                    id="car"
+                    label="Car"
+                    labelId="car-label"
+                    value={car}
+                    onChange={(input) => {
+                        setCar(input.target.value)
+                    }}>
                     {carMenuItems}
                 </Select>
             </FormControl>
-            <MapContainer addr={addr} pos={pos} setAddr={setAddr} setPos={setPos}/>
+            <MapContainer
+                addr={addr}
+                pos={pos}
+                setAddr={setAddr}
+                setPos={setPos}/>
         </div>
 
     );

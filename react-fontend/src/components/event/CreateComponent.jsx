@@ -39,25 +39,36 @@ const CreateComponent = ({isAuthenticatedOrLoading}) => {
             case 0:
                 return (
                     <NewEventFormComponent
-                        name={name} setName={setName} date={date} setDate={setDate}
-                        description={description}
-                        setDescription={setDescription}
+                        name={name} setName={setName}
+                        date={date} setDate={setDate}
+                        description={description} setDescription={setDescription}
                         image={image} setImage={setImage}
                         imageURL={imageURL} setImageURL={setImageURL}
                     />)
             case 1:
-                return <MapContainer addr={destination} setAddr={setDestination} pos={destinationPos}
-                                     setPos={setDestinationPos} loadUserPosition={false}/>
+                return (
+                    <MapContainer
+                        addr={destination} setAddr={setDestination}
+                        pos={destinationPos} setPos={setDestinationPos}
+                        loadUserPosition={false}
+                    />)
 
             case 2:
-                return <JoinComponent car={car} setCar={setCar} pos={pos} setPos={setPos} addr={address}
-                                      setAddr={setAddress}/>
-
+                return (
+                    <JoinComponent
+                        car={car} setCar={setCar}
+                        pos={pos} setPos={setPos}
+                        addr={address} setAddr={setAddress}
+                    />)
 
             case 3:
-                return <ReviewCreateComponent name={name} date={date} description={description}
-                                              destination={destination} car={car} address={address}
-                                              imageURL={imageURL} isStepSkipped={isStepSkipped}/>
+                return (
+                    <ReviewCreateComponent
+                        name={name} date={date}
+                        description={description} destination={destination}
+                        car={car} address={address}
+                        imageURL={imageURL}
+                        isStepSkipped={isStepSkipped}/>)
             default:
                 return "Unknown step";
         }

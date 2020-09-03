@@ -35,7 +35,6 @@ const NewEventFormComponent = ({name, setName, date, setDate, description, setDe
 
             <form className={classes.form} autoComplete="off">
                 <Grid container spacing={2}>
-
                     <Grid item xs={12}>
                         <TextField
                             required
@@ -62,6 +61,7 @@ const NewEventFormComponent = ({name, setName, date, setDate, description, setDe
                             helperText={nameError ? "Required" : ""}
                         />
                     </Grid>
+
                     {date < oneHourAhead &&
                     <Grid item xs={12}>
                         <Alert severity="warning">
@@ -69,6 +69,7 @@ const NewEventFormComponent = ({name, setName, date, setDate, description, setDe
                         </Alert>
                     </Grid>
                     }
+
                     <Grid item xs={12} sm={6}>
                         <KeyboardDatePicker
                             fullWidth
@@ -84,6 +85,7 @@ const NewEventFormComponent = ({name, setName, date, setDate, description, setDe
                             format="dd/MM/yyyy"
                         />
                     </Grid>
+
                     <Grid item xs={12} sm={6}>
                         <KeyboardTimePicker
                             fullWidth
@@ -99,6 +101,7 @@ const NewEventFormComponent = ({name, setName, date, setDate, description, setDe
                             mask="__:__"
                         />
                     </Grid>
+
                     <Grid item xs={12}>
                         <TextField
                             required
@@ -124,7 +127,6 @@ const NewEventFormComponent = ({name, setName, date, setDate, description, setDe
                                     setDescriptionError(false)
                             }}
                             helperText={descriptionError ? "Required" : ""}
-
                             placeholder="..."
                         />
                     </Grid>
@@ -143,8 +145,6 @@ const NewEventFormComponent = ({name, setName, date, setDate, description, setDe
                         }}
                         loading={image === "loading"}
                     />
-
-
                 </Grid>
             </form>
         </div>

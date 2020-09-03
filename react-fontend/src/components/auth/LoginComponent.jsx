@@ -40,55 +40,60 @@ function SignupComponent({authLogin, googleLogin, location}) {
                 <form className={classes.form}>
                     <Grid container spacing={5}>
                         <GoogleLoginButton
-                            onSuccess={(input) => {
-                                googleLogin(input.accessToken, enqueueSnackbar).catch(err => {
-                                    if (!err instanceof Error) {
-                                        history.push(location.query.next ? decodeURI(location.query.next) : home)
-                                    }
-                                })
-                            }}
+                            onSuccess={
+                                (input) => {
+                                    googleLogin(input.accessToken, enqueueSnackbar).catch(err => {
+                                        if (!err instanceof Error) {
+                                            history.push(location.query.next ? decodeURI(location.query.next) : home)
+                                        }
+                                    })
+                                }}
                         />
 
                         <Grid item xs={12}>
-                            <TextField variant="outlined"
-                                       fullWidth
-                                       required id="username"
-                                       label="Username"
-                                       value={username}
-                                       placeholder="jamesbond007"
-                                       helperText="Required"
-                                       onChange={(input) => {
-                                           setUsername(input.target.value);
-                                           setUsernameError(input.target.value.length === 0);
-                                       }}
-                                       onBlur={(input) => {
-                                           setUsername(input.target.value);
-                                           setUsernameError(input.target.value.length === 0);
-                                       }}
-                                       error={usernameError}
-                                       autoComplete="username"
+                            <TextField
+                                variant="outlined"
+                                fullWidth
+                                required id="username"
+                                label="Username"
+                                value={username}
+                                placeholder="jamesbond007"
+                                helperText="Required"
+                                onChange={(input) => {
+                                    setUsername(input.target.value);
+                                    setUsernameError(input.target.value.length === 0);
+                                }}
+                                onBlur={(input) => {
+                                    setUsername(input.target.value);
+                                    setUsernameError(input.target.value.length === 0);
+                                }}
+                                error={usernameError}
+                                autoComplete="username"
                             />
                         </Grid>
+
                         <Grid item xs={12}>
-                            <TextField variant="outlined"
-                                       fullWidth
-                                       required id="password"
-                                       label="Password"
-                                       error={passwordError}
-                                       value={password}
-                                       type="password"
-                                       helperText="Required"
-                                       onChange={(input) => {
-                                           setPassword(input.target.value);
-                                           setPasswordError(input.target.value.length === 0);
-                                       }}
-                                       onBlur={(input) => {
-                                           setPassword(input.target.value);
-                                           setPasswordError(input.target.value.length === 0);
-                                       }}
-                                       autoComplete="new-password"
+                            <TextField
+                                variant="outlined"
+                                fullWidth
+                                required id="password"
+                                label="Password"
+                                error={passwordError}
+                                value={password}
+                                type="password"
+                                helperText="Required"
+                                onChange={(input) => {
+                                    setPassword(input.target.value);
+                                    setPasswordError(input.target.value.length === 0);
+                                }}
+                                onBlur={(input) => {
+                                    setPassword(input.target.value);
+                                    setPasswordError(input.target.value.length === 0);
+                                }}
+                                autoComplete="new-password"
                             />
                         </Grid>
+
                         <Grid item xs={12}>
                             <Button
                                 fullWidth
@@ -111,7 +116,6 @@ function SignupComponent({authLogin, googleLogin, location}) {
                     </Grid>
                 </form>
             </div>
-
         </CardContainer>
     )
 }

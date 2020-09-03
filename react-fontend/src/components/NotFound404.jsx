@@ -14,13 +14,15 @@ const NotFound404 = () => {
             <Helmet>
                 <title>DM Project - Not Found :(</title>
             </Helmet>
-            <img src={vectorpaint} alt="404"
-                 style={{width: "80%", height: "80%", maxWidth: "300px", maxHeight: "300px", margin: 30}}/>
+            <img
+                src={vectorpaint}
+                alt="404"
+                style={{width: "80%", height: "80%", maxWidth: "300px", maxHeight: "300px", margin: 30}}/>
             <Typography variant="h2" color="primary" fontWeight="fontWeightBold" align="center">
                 404
             </Typography>
-            <div style={{width: "100%", maxWidth: "400px", margin: 20}}>
 
+            <div style={{width: "100%", maxWidth: "400px", margin: 20}}>
                 <Typography variant="h3" fontWeight="fontWeightBold">
                     NOT FOUND
                 </Typography>

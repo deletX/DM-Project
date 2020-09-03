@@ -16,14 +16,19 @@ const NotificationItem = ({notification, readNotification}) => {
 
     return (
         <>
-            <ListItem alignItems="flex-start" button disabled={notification.read}
-                      onClick={() => {
-                          readNotification(notification.id, enqueueSnackbar);
-                          history.push(notification.url)
-                      }}>
+            <ListItem
+                alignItems="flex-start"
+                button
+                disabled={notification.read}
+                onClick={() => {
+                    readNotification(notification.id, enqueueSnackbar);
+                    history.push(notification.url)
+                }}>
+
                 <ListItemAvatar>
                     <ArrowForwardIosIcon/>
                 </ListItemAvatar>
+
                 <ListItemText
                     primary={notification.title}
                     secondary={
@@ -40,7 +45,9 @@ const NotificationItem = ({notification, readNotification}) => {
 
 function mapDispatchToProps(dispatch) {
     return {
-        readNotification: (id, enqueueSnackbar) => dispatch(readNotification(id, enqueueSnackbar))
+        readNotification:
+            (id, enqueueSnackbar) =>
+                dispatch(readNotification(id, enqueueSnackbar))
     };
 }
 

@@ -73,7 +73,7 @@ const MapContainer = ({addr, setAddr, pos, setPos, loadUserPosition = true}) => 
         if (now - lastRequest > 1000) {
             getMapData()
         } else {
-            console.log("will")
+            //console.log("will")
             setTimeout(getMapData, now - lastRequest);
         }
     }

@@ -12,6 +12,7 @@ import StepperContainer from "../../containers/StepperContainer";
 import {Helmet} from "react-helmet";
 import {useSnackbar} from 'notistack';
 
+
 function SignupComponent({authSignup, googleLogin, setPicture, postCar}) {
     let history = useHistory()
     const {enqueueSnackbar,} = useSnackbar();
@@ -40,24 +41,59 @@ function SignupComponent({authSignup, googleLogin, setPicture, postCar}) {
     const getStepContent = (step, handleNext) => {
         switch (step) {
             case 0:
-                return <PersonalInfoForm firstName={firstName} setFirstName={setFirstName} lastName={lastName}
-                                         setLastName={setLastName} username={username} setUsername={setUsername}
-                                         usernameError={usernameError} setUsernameError={setUsernameError} email={email}
-                                         setEmail={setEmail} emailError={emailError} setEmailError={setEmailError}
-                                         password={password} setPassword={setPassword} passwordError={passwordError}
-                                         setPasswordError={setPasswordError} image={image} setImage={setImage}
-                                         imageURL={imageURL} setImageURL={setImageURL} isGoogleLogin={isGoogleLogin}
-                                         setGoogleLogin={setGoogleLogin}
-                                         setGoogleAccessToken={setGoogleAccessToken} handleNext={handleNext}
-                />;
+                return (
+                    <PersonalInfoForm
+                        firstName={firstName}
+                        setFirstName={setFirstName}
+                        lastName={lastName}
+                        setLastName={setLastName}
+                        username={username}
+                        setUsername={setUsername}
+                        usernameError={usernameError}
+                        setUsernameError={setUsernameError}
+                        email={email}
+                        setEmail={setEmail}
+                        emailError={emailError}
+                        setEmailError={setEmailError}
+                        password={password}
+                        setPassword={setPassword} passwordError={passwordError}
+                        setPasswordError={setPasswordError}
+                        image={image}
+                        setImage={setImage}
+                        imageURL={imageURL}
+                        setImageURL={setImageURL}
+                        isGoogleLogin={isGoogleLogin}
+                        setGoogleLogin={setGoogleLogin}
+                        setGoogleAccessToken={setGoogleAccessToken}
+                        handleNext={handleNext}
+                    />);
             case 1:
-                return <CarForm name={carName} setName={setCarName} totSeats={totSeats} setTotSeats={setTotSeats}
-                                consumption={consumption} setConsumption={setConsumption} fuel={fuel}
-                                setFuel={setFuel}/>
+                return (
+                    <CarForm
+                        name={carName}
+                        setName={setCarName}
+                        totSeats={totSeats}
+                        setTotSeats={setTotSeats}
+                        consumption={consumption}
+                        setConsumption={setConsumption}
+                        fuel={fuel}
+                        setFuel={setFuel}
+                    />)
             case 2:
-                return <SummaryData firstName={firstName} lastName={lastName} username={username} email={email}
-                                    password={password} imageURL={imageURL} carName={carName} totSeats={totSeats}
-                                    consumption={consumption} fuel={fuel} isGoogleLogin={isGoogleLogin}/>
+                return (
+                    <SummaryData
+                        firstName={firstName}
+                        lastName={lastName}
+                        username={username}
+                        email={email}
+                        password={password}
+                        imageURL={imageURL}
+                        carName={carName}
+                        totSeats={totSeats}
+                        consumption={consumption}
+                        fuel={fuel}
+                        isGoogleLogin={isGoogleLogin}
+                    />)
             default:
                 return "Unknown step";
         }
@@ -136,10 +172,18 @@ function SignupComponent({authSignup, googleLogin, setPicture, postCar}) {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        authSignup: (username, firstName, lastName, email, password, enqueueSnackbar) => dispatch(authSignup(username, firstName, lastName, email, password, enqueueSnackbar)),
-        googleLogin: (googleToken, enqueueSnackbar) => dispatch(googleOAuthLogin(googleToken, enqueueSnackbar)),
-        setPicture: (image, enqueueSnackbar) => dispatch(changePicture(image, enqueueSnackbar)),
-        postCar: (carName, totSeats, fuel, consumption, enqueueSnackbar) => dispatch(createCar(carName, totSeats, fuel, consumption, enqueueSnackbar)),
+        authSignup:
+            (username, firstName, lastName, email, password, enqueueSnackbar) =>
+                dispatch(authSignup(username, firstName, lastName, email, password, enqueueSnackbar)),
+        googleLogin:
+            (googleToken, enqueueSnackbar) =>
+                dispatch(googleOAuthLogin(googleToken, enqueueSnackbar)),
+        setPicture:
+            (image, enqueueSnackbar) =>
+                dispatch(changePicture(image, enqueueSnackbar)),
+        postCar:
+            (carName, totSeats, fuel, consumption, enqueueSnackbar) =>
+                dispatch(createCar(carName, totSeats, fuel, consumption, enqueueSnackbar)),
     };
 };
 

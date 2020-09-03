@@ -10,15 +10,21 @@ const AvatarCustom = ({children, src, alt, className, firstName, lastName}) => {
         charName = (firstName !== "" ? firstName.toUpperCase().charAt(0) : "") + (lastName !== "" ? lastName.toUpperCase().charAt(0) : "");
     } else {
         if (children !== undefined) {
-            return (<Avatar src={src} className={`${classes.root} ${className}`}>
-                {children}
-            </Avatar>)
+            return (
+                <Avatar
+                    src={src}
+                    className={`${classes.root} ${className}`}>
+                    {children}
+                </Avatar>
+            )
         } else
             charName = alt.split(" ").map(item => (item.toUpperCase().charAt(0))).join("")
     }
 
     return (
-        <Avatar src={src} className={`${classes.root} ${className}`}>
+        <Avatar
+            src={src}
+            className={`${classes.root} ${className}`}>
             {charName !== "" ? charName : null}
         </Avatar>
     );

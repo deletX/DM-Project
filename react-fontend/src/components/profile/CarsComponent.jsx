@@ -21,23 +21,58 @@ import {withWidth} from "@material-ui/core";
 import {withSnackbar} from "notistack";
 
 const tableIcons = {
-    Add: forwardRef((props, ref) => <AddBox {...props} ref={ref}/>),
-    Check: forwardRef((props, ref) => <Check {...props} ref={ref}/>),
-    Clear: forwardRef((props, ref) => <Clear {...props} ref={ref}/>),
-    Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref}/>),
-    DetailPanel: forwardRef((props, ref) => <ChevronRight {...props} ref={ref}/>),
-    Edit: forwardRef((props, ref) => <Edit {...props} ref={ref}/>),
-    Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref}/>),
-    Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref}/>),
-    FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref}/>),
-    LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref}/>),
-    NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref}/>),
-    PreviousPage: forwardRef((props, ref) => <ChevronLeft {...props} ref={ref}/>),
-    ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref}/>),
-    Search: forwardRef((props, ref) => <Search {...props} ref={ref}/>),
-    SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref}/>),
-    ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref}/>),
-    ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref}/>)
+    Add:
+        forwardRef((props, ref) =>
+            <AddBox {...props} ref={ref}/>
+        ),
+    Check:
+        forwardRef((props, ref) =>
+            <Check {...props} ref={ref}/>),
+    Clear:
+        forwardRef((props, ref) =>
+            <Clear {...props} ref={ref}/>),
+    Delete:
+        forwardRef((props, ref) =>
+            <DeleteOutline {...props} ref={ref}/>),
+    DetailPanel:
+        forwardRef((props, ref) =>
+            <ChevronRight {...props} ref={ref}/>),
+    Edit:
+        forwardRef((props, ref) =>
+            <Edit {...props} ref={ref}/>),
+    Export:
+        forwardRef((props, ref) =>
+            <SaveAlt {...props} ref={ref}/>),
+    Filter:
+        forwardRef((props, ref) =>
+            <FilterList {...props} ref={ref}/>),
+    FirstPage:
+        forwardRef((props, ref) =>
+            <FirstPage {...props} ref={ref}/>),
+    LastPage:
+        forwardRef((props, ref) =>
+            <LastPage {...props} ref={ref}/>),
+    NextPage:
+        forwardRef((props, ref) =>
+            <ChevronRight {...props} ref={ref}/>),
+    PreviousPage:
+        forwardRef((props, ref) =>
+            <ChevronLeft {...props} ref={ref}/>),
+    ResetSearch:
+        forwardRef((props, ref) =>
+            <Clear {...props} ref={ref}/>),
+    Search:
+        forwardRef((props, ref) =>
+            <Search {...props} ref={ref}/>),
+    SortArrow:
+        forwardRef((props, ref) =>
+            <ArrowDownward {...props} ref={ref}/>),
+    ThirdStateCheck:
+        forwardRef((props, ref) =>
+            <Remove {...props} ref={ref}/>),
+    ViewColumn:
+        forwardRef((props, ref) =>
+            <ViewColumn {...props} ref={ref}/>)
 };
 
 class CarsComponent extends Component {
@@ -67,12 +102,17 @@ class CarsComponent extends Component {
                     columns={[
                         {
                             title: "Name", field: 'name', sorting: true,
-                            render: (rowData) => (<div title={rowData.name} style={{
-                                maxWidth: "10ch",
-                                whiteSpace: "nowrap",
-                                overflow: "hidden",
-                                textOverflow: "ellipsis",
-                            }}>{rowData.name}</div>)
+                            render: (rowData) => (
+                                <div
+                                    title={rowData.name}
+                                    style={{
+                                        maxWidth: "10ch",
+                                        whiteSpace: "nowrap",
+                                        overflow: "hidden",
+                                        textOverflow: "ellipsis",
+                                    }}>
+                                    {rowData.name}
+                                </div>)
                         },
                         {
                             title: "Seats",
@@ -121,39 +161,39 @@ class CarsComponent extends Component {
                     }}
                     data={this.state.cars}
                     editable={{
-                        onRowAdd: newData =>
-                            new Promise((resolve, reject) => {
-                                const {name, tot_avail_seats, consumption, fuel} = newData
-
-                                if (name === undefined || tot_avail_seats < 2 || tot_avail_seats > 9 || consumption <= 0)
-                                    reject()
-                                else {
-                                    this.props.createCar(name, tot_avail_seats, consumption, fuel, this.props.enqueueSnackbar)
+                        onRowAdd:
+                            newData =>
+                                new Promise((resolve, reject) => {
+                                    const {name, tot_avail_seats, consumption, fuel} = newData
+                                    if (name === undefined || tot_avail_seats < 2 || tot_avail_seats > 9 || consumption <= 0)
+                                        reject()
+                                    else {
+                                        this.props.createCar(name, tot_avail_seats, consumption, fuel, this.props.enqueueSnackbar)
+                                        resolve();
+                                    }
+                                }),
+                        onRowUpdate:
+                            (newData, oldData) =>
+                                new Promise((resolve, reject) => {
+                                    const {name, tot_avail_seats, consumption, fuel} = newData
+                                    if (name === "" || tot_avail_seats < 2 || tot_avail_seats > 9 || consumption <= 0)
+                                        reject()
+                                    else {
+                                        this.props.updateCar(oldData.id, name, tot_avail_seats, consumption, fuel, this.props.enqueueSnackbar)
+                                        resolve();
+                                    }
+                                }),
+                        onRowDelete:
+                            oldData =>
+                                new Promise((resolve, reject) => {
+                                    this.props.deleteCar(oldData.id, this.props.enqueueSnackbar)
                                     resolve();
-                                }
-                            }),
-                        onRowUpdate: (newData, oldData) =>
-                            new Promise((resolve, reject) => {
-                                const {name, tot_avail_seats, consumption, fuel} = newData
-                                if (name === "" || tot_avail_seats < 2 || tot_avail_seats > 9 || consumption <= 0)
-                                    reject()
-                                else {
-                                    this.props.updateCar(oldData.id, name, tot_avail_seats, consumption, fuel, this.props.enqueueSnackbar)
-                                    resolve();
-                                }
-                            }),
-                        onRowDelete: oldData =>
-                            new Promise((resolve, reject) => {
-                                this.props.deleteCar(oldData.id, this.props.enqueueSnackbar)
-                                resolve();
-                            })
+                                })
                     }}
-
                 />
             </div>
         )
     }
-
     ;
 }
 

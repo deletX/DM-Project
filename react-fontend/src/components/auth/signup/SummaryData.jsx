@@ -36,44 +36,71 @@ const SummaryData = ({
                     </>
                     }
                     <Grid item xs={12} sm={6}>
-                        <TextField fullWidth id="name" label="First Name" value={firstName}
-                                   InputProps={{
-                                       readOnly: true,
-                                   }}/>
+                        <TextField
+                            fullWidth
+                            id="name"
+                            label="First Name"
+                            value={firstName}
+                            InputProps={{
+                                readOnly: true,
+                            }}/>
                     </Grid>
+
                     <Grid item xs={12} sm={6}>
-                        <TextField fullWidth id="surname" label="Last Name" value={lastName}
-                                   InputProps={{
-                                       readOnly: true,
-                                   }}/>
+                        <TextField
+                            fullWidth
+                            id="surname"
+                            label="Last Name"
+                            value={lastName}
+                            InputProps={{
+                                readOnly: true,
+                            }}/>
                     </Grid>
+
                     <Grid item xs={12}>
-                        <TextField fullWidth id="username" label="Username" value={username}
-                                   InputProps={{
-                                       readOnly: true,
-                                   }}
+                        <TextField
+                            fullWidth
+                            id="username"
+                            label="Username"
+                            value={username}
+                            InputProps={{
+                                readOnly: true,
+                            }}
                         />
                     </Grid>
+
                     <Grid item xs={12}>
-                        <TextField fullWidth id="email" label="E-mail" type="email" value={email}
-                                   InputProps={{
-                                       readOnly: true,
-                                   }}
+                        <TextField
+                            fullWidth
+                            id="email"
+                            label="E-mail"
+                            type="email"
+                            value={email}
+                            InputProps={{
+                                readOnly: true,
+                            }}
                         />
                     </Grid>
+
                     {!isGoogleLogin &&
                     <>
                         <Grid item xs={12}>
-                            <TextField fullWidth id="password" label="Password" value={password} type="password"
-                                       InputProps={{
-                                           readOnly: true,
-                                       }}
+                            <TextField
+                                fullWidth
+                                id="password"
+                                label="Password"
+                                value={password}
+                                type="password"
+                                InputProps={{
+                                    readOnly: true,
+                                }}
                             />
                         </Grid>
                     </>
                     }
                 </Grid>
             </FormControl>
+
             {carName !== "" &&
             <>
                 <Divider className={classes.carDivider}/>
@@ -86,7 +113,6 @@ const SummaryData = ({
                         <CarFuelSelect value={fuel} inputProps={{readOnly: true}}/>
 
                         <CarConsumptionTextInput value={consumption} InputProps={{readOnly: true}}/>
-
                     </Grid>
                 </FormControl>
             </>

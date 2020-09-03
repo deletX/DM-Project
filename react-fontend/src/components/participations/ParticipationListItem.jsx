@@ -20,9 +20,10 @@ const ParticipationListItem = ({participation, onlyDriverIcon = false, profileId
         <>
             <ListItem>
                 <ListItemAvatar>
-                    <AvatarCustom firstName={participation.profile.first_name}
-                                  lastName={participation.profile.last_name}
-                                  src={participation.profile.picture}/>
+                    <AvatarCustom
+                        firstName={participation.profile.first_name}
+                        lastName={participation.profile.last_name}
+                        src={participation.profile.picture}/>
                 </ListItemAvatar>
                 <ListItemText
                     onClick={(e) => {
@@ -30,32 +31,44 @@ const ParticipationListItem = ({participation, onlyDriverIcon = false, profileId
                     }}
                     primary={
                         <div className={classes.textContainer}>
-                            <Typography className={classes.name}
-                                        color={profileId && profileId === participation.profile.id && onlyDriverIcon ? "primary" : "textPrimary"}>
-                                {participation.profile.first_name} {participation.profile.last_name}
+                            <Typography
+                                className={classes.name}
+                                color={profileId && profileId === participation.profile.id && onlyDriverIcon ? "primary" : "textPrimary"}>
+                                {participation.profile.first_name}
+                                {participation.profile.last_name}
                             </Typography>
+
                             {participation.car !== null ?
                                 <>
                                     {(!onlyDriverIcon || participation.pickup_index === 0) &&
-                                    <DirectionsCarIcon color="primary" className={classes.car}/>
-                                    }
-                                </>
-                                :
-                                <>
-                                    {!onlyDriverIcon &&
-                                    <EmojiPeopleIcon color="secondary" className={classes.feet}/>
+                                    <DirectionsCarIcon
+                                        color="primary"
+                                        className={classes.car}
+                                    />
                                     }
                                 </>
 
+                                :
+
+                                <>
+                                    {!onlyDriverIcon &&
+                                    <EmojiPeopleIcon
+                                        color="secondary"
+                                        className={classes.feet}/>
+                                    }
+                                </>
                             }
                         </div>
                     }
-                    secondary={<Rating name={`${participation.profile.id}-rating`}
-                                       value={participation.profile.average_vote}
-                                       readOnly disabled={participation.profile.average_vote === null} size="small"
-                                       className={classes.rating}/>}
+                    secondary={
+                        <Rating
+                            name={`${participation.profile.id}-rating`}
+                            value={participation.profile.average_vote}
+                            readOnly disabled={participation.profile.average_vote === null} size="small"
+                            className={classes.rating}/>}
                 />
             </ListItem>
+
             {onlyDriverIcon && participation.pickup_index === 0 &&
             <Divider
                 component="li"/>

@@ -14,15 +14,19 @@ const ParticipantsContainer = ({participantSet, profileId = -1, onlyDriverIcon =
             participantSet = participantSet.filter((item) => (item.profile.id !== profileId))
 
         let participations = participantSet.map(item => (
-            <ParticipationListItem key={item.id} participation={item} onlyDriverIcon={onlyDriverIcon}
-                                   profileId={profileId}/>
+            <ParticipationListItem
+                key={item.id}
+                participation={item}
+                onlyDriverIcon={onlyDriverIcon}
+                profileId={profileId}/>
         ))
 
         if (participation && !onlyDriverIcon)
             participations.unshift(
                 <>
-                    <ParticipationListItem key={participation.id}
-                                           participation={participation}/>
+                    <ParticipationListItem
+                        key={participation.id}
+                        participation={participation}/>
                     <Divider
                         component="li" key={-1}/>
                 </>)

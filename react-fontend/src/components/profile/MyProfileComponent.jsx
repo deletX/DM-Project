@@ -66,9 +66,12 @@ const MyProfileComponent = ({profile, changeUserData, changePicture}) => {
             </Helmet>
             <ProfileComponent profile={{...profile, picture: imageURL}}/>
             <Grid container spacing={3}>
+
                 <Grid item xs={12} sm={6}>
                     <TextField
-                        id="name" label="First Name" required={edit}
+                        id="name"
+                        label="First Name"
+                        required={edit}
                         variant="outlined"
                         value={name}
                         InputProps={{
@@ -77,11 +80,15 @@ const MyProfileComponent = ({profile, changeUserData, changePicture}) => {
                         onChange={(input) => {
                             setName(input.target.value)
                         }}
-                        fullWidth/>
+                        fullWidth
+                    />
                 </Grid>
+
                 <Grid item xs={12} sm={6}>
                     <TextField
-                        id="surname" label="Last Name" required={edit}
+                        id="surname"
+                        label="Last Name"
+                        required={edit}
                         InputProps={{
                             readOnly: !edit,
                         }}
@@ -92,110 +99,139 @@ const MyProfileComponent = ({profile, changeUserData, changePicture}) => {
                         }}
                         fullWidth/>
                 </Grid>
-                <Grid item xs={12}>
-                    <TextField variant="outlined"
-                               fullWidth
-                               required={edit} id="email"
-                               label="E-mail"
-                               type="email"
-                               error={emailError}
-                               helperText={emailHelperText}
-                               onChange={validateEmail}
-                               onBlur={validateEmail}
-                               value={email}
-                               autoComplete="email"
-                               InputProps={{
-                                   readOnly: !edit,
-                               }}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <TextField variant="outlined"
-                               fullWidth
-                               id="new-password"
-                               label="New password"
-                               error={passwordError}
-                               value={newPassword}
-                               type="password"
-                               helperText={passwordHelperText}
-                               onChange={validatePassword}
-                               InputProps={{
-                                   readOnly: !edit,
-                               }}
-                    />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <input accept="image/*" className={classes.input} id="icon-button-file" type="file"
-                           hidden
-                           disabled={!edit}
-                           onChange={(input) => {
 
-                               let fileReader = new FileReader();
-                               let file = input.target.files[0];
-                               fileReader.onloadend = () => {
-                                   setImageURL(fileReader.result)
-                               }
-                               setImage(file)
-                               fileReader.readAsDataURL(file)
-                           }}/>
+                <Grid item xs={12}>
+                    <TextField
+                        variant="outlined"
+                        fullWidth
+                        required={edit}
+                        id="email"
+                        label="E-mail"
+                        type="email"
+                        error={emailError}
+                        helperText={emailHelperText}
+                        onChange={validateEmail}
+                        onBlur={validateEmail}
+                        value={email}
+                        autoComplete="email"
+                        InputProps={{
+                            readOnly: !edit,
+                        }}
+                    />
+                </Grid>
+
+                <Grid item xs={12} sm={6}>
+                    <TextField
+                        variant="outlined"
+                        fullWidth
+                        id="new-password"
+                        label="New password"
+                        error={passwordError}
+                        value={newPassword}
+                        type="password"
+                        helperText={passwordHelperText}
+                        onChange={validatePassword}
+                        InputProps={{
+                            readOnly: !edit,
+                        }}
+                    />
+                </Grid>
+
+                <Grid item xs={12} sm={6}>
+                    <input
+                        accept="image/*"
+                        className={classes.input}
+                        id="icon-button-file"
+                        type="file"
+                        hidden
+                        disabled={!edit}
+                        onChange={(input) => {
+                            let fileReader = new FileReader();
+                            let file = input.target.files[0];
+                            fileReader.onloadend = () => {
+                                setImageURL(fileReader.result)
+                            }
+                            setImage(file)
+                            fileReader.readAsDataURL(file)
+                        }}/>
                     <label htmlFor="icon-button-file">
-                        <Button disabled={!edit} color="secondary" aria-label="upload picture" variant="contained"
-                                component="span"
-                                className={classes.changePicButton}
-                                startIcon={<PhotoCamera/>}
+                        <Button
+                            disabled={!edit}
+                            color="secondary"
+                            aria-label="upload picture"
+                            variant="contained"
+                            component="span"
+                            className={classes.changePicButton}
+                            startIcon={<PhotoCamera/>}
                         >
                             Change Picture
                         </Button>
                     </label>
                 </Grid>
+
                 <Grid item xs={12}>
-                    <ButtonGroup variant="contained" className={classes.buttonGroup}>
-                        <Button color="secondary" onClick={() => {
-                            if (!edit)
-                                setEdit(true)
-                            else {
-                                setName(profile.user.first_name)
-                                setSurname(profile.user.last_name)
-                                setEmail(profile.user.email)
-                                setNewPassword("")
-                                setImage(null)
-                                setImageURL(profile.picture)
-                                setEdit(false)
-                            }
-                        }}>
+                    <ButtonGroup
+                        variant="contained"
+                        className={classes.buttonGroup}>
+                        <Button
+                            color="secondary"
+                            onClick={() => {
+                                if (!edit)
+                                    setEdit(true)
+                                else {
+                                    setName(profile.user.first_name)
+                                    setSurname(profile.user.last_name)
+                                    setEmail(profile.user.email)
+                                    setNewPassword("")
+                                    setImage(null)
+                                    setImageURL(profile.picture)
+                                    setEdit(false)
+                                }
+                            }}>
                             {edit ? "Cancel" : "Edit"}
                         </Button>
-                        <Button color="primary" disabled={!edit} onClick={() => {
-                            setEdit(false)
-                            changeUserData(name, surname, email, newPassword, enqueueSnackbar)
-                            if (image !== null)
-                                changePicture(image, enqueueSnackbar)
-                        }}>
+                        <Button
+                            color="primary"
+                            disabled={!edit}
+                            onClick={() => {
+                                setEdit(false)
+                                changeUserData(name, surname, email, newPassword, enqueueSnackbar)
+                                if (image !== null)
+                                    changePicture(image, enqueueSnackbar)
+                            }}>
                             Save
                         </Button>
                     </ButtonGroup>
                 </Grid>
             </Grid>
+
             <div className={classes.element}>
                 <Typography variant="h4">
                     Feedback you received
                 </Typography>
                 {profile.received_feedback.length > 0 ?
-                    <FeedbacksComponent feedbacks={profile.received_feedback} edit={false}/>
+                    <FeedbacksComponent
+                        feedbacks={profile.received_feedback}
+                        edit={false}
+                    />
                     :
                     <Typography className={classes.feedbacks}>
                         You haven't received any feedback, yet ;)
                     </Typography>
                 }
             </div>
+
             {profile.given_feedback.length > 0 &&
             <div className={classes.element}>
                 <Typography variant="h4">
                     Your given feedbacks
                 </Typography>
-                <FeedbacksComponent feedbacks={profile.given_feedback} edit={true}/>
+                <FeedbacksComponent
+                    feedbacks={profile.given_feedback}
+                    edit={true}/>
             </div>
             }
+
             <div className={classes.element}>
                 <CarContainer/>
             </div>

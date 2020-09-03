@@ -18,8 +18,15 @@ const ImageButton = (props) => {
                 justify="flex-end"
                 className={classes.button}
                 startIcon={<PhotoCamera/>}
-            >Picture
-                <Input className={classes.imageInput} type="file" controlled="true" onChange={props.onClick}/>
+            >
+                Picture
+                <Input
+                    className={classes.imageInput}
+                    type="file"
+                    controlled="true"
+                    onChange={props.onClick}
+                />
+
                 {props.loading &&
                 <CircularProgress size="2ch" className={classes.imageProgress}/>
                 }

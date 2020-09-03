@@ -19,7 +19,6 @@ const CarForm = ({
         <div className={classes.root}>
             <FormControl variant="outlined" className={classes.form}>
                 <Grid container spacing={2}>
-
                     <CarNameTextField
                         value={name}
                         onChange={(input) => {
@@ -40,32 +39,33 @@ const CarForm = ({
                         helperText={nameError ? "Required" : ""}
                     />
 
-                    <CarTotalSeatsSelect value={totSeats}
-                                         onChange={(input) => {
-                                             setTotSeats(input.target.value)
-                                         }}/>
+                    <CarTotalSeatsSelect
+                        value={totSeats}
+                        onChange={(input) => {
+                            setTotSeats(input.target.value)
+                        }}/>
 
-                    <CarFuelSelect value={fuel}
-                                   onChange={(input) => {
-                                       setFuel(input.target.value)
-                                   }}
+                    <CarFuelSelect
+                        value={fuel}
+                        onChange={(input) => {
+                            setFuel(input.target.value)
+                        }}
                     />
 
-                    <CarConsumptionTextInput value={consumption}
-                                             onChange={(input) => {
-                                                 setConsumption(input.target.value)
-                                             }}
-                                             onBlur={(input) => {
-                                                 let val = input.target.value
-                                                 if (val < 1)
-                                                     input.target.value = 1;
-                                                 if (val > 20)
-                                                     input.target.value = 20;
-                                                 setConsumption(input.target.value)
-                                             }}
-
+                    <CarConsumptionTextInput
+                        value={consumption}
+                        onChange={(input) => {
+                            setConsumption(input.target.value)
+                        }}
+                        onBlur={(input) => {
+                            let val = input.target.value
+                            if (val < 1)
+                                input.target.value = 1;
+                            if (val > 20)
+                                input.target.value = 20;
+                            setConsumption(input.target.value)
+                        }}
                     />
-
                 </Grid>
             </FormControl>
         </div>

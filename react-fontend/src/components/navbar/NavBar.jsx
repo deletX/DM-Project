@@ -53,14 +53,22 @@ function NavBar({isAuthenticated, notifications, authLogout, setSearch, search, 
     };
 
     let notificationListItem = notifications.map((notification) => (
-        <NotificationItem key={notification.id} notification={notification}/>
+        <NotificationItem
+            key={notification.id}
+            notification={notification}
+        />
     ));
 
     const logoutButton = (
-        <Button color={"inherit"} className={classes.logout} onClick={() => {
-            handleMobileMenuClose()
-            authLogout()
-        }}> Logout</Button>
+        <Button
+            color={"inherit"}
+            className={classes.logout}
+            onClick={() => {
+                handleMobileMenuClose()
+                authLogout()
+            }}>
+            Logout
+        </Button>
     );
 
     const renderMobileMenu = (
@@ -78,16 +86,22 @@ function NavBar({isAuthenticated, notifications, authLogout, setSearch, search, 
                     toggleDrawer(true)(event);
                     handleMobileMenuClose()
                 }}>
-                <IconButton aria-label={`show ${unReadCount} new notifications`} color="inherit">
-                    <Badge badgeContent={unReadCount} color="secondary">
+                <IconButton
+                    aria-label={`show ${unReadCount} new notifications`}
+                    color="inherit">
+                    <Badge
+                        badgeContent={unReadCount}
+                        color="secondary">
                         <NotificationsIcon/>
                     </Badge>
                 </IconButton>
                 <p>Notifications</p>
             </MenuItem>
-            <MenuItem onClick={() => {
-                history.push(myProfile)
-            }}>
+
+            <MenuItem
+                onClick={() => {
+                    history.push(myProfile)
+                }}>
                 <IconButton
                     aria-label="account of current user"
                     aria-controls="primary-search-account-menu"
@@ -101,16 +115,21 @@ function NavBar({isAuthenticated, notifications, authLogout, setSearch, search, 
             <MenuItem>
                 {logoutButton}
             </MenuItem>
+
         </Menu>
     );
 
 
     const notificationDrawer = (
-        <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer(false)}>
-            <div className={classes.list}
-                 role="presentation"
-                 onClick={toggleDrawer(false)}
-                 onKeyDown={toggleDrawer(false)}>
+        <Drawer
+            anchor="right"
+            open={drawerOpen}
+            onClose={toggleDrawer(false)}>
+            <div
+                className={classes.list}
+                role="presentation"
+                onClick={toggleDrawer(false)}
+                onKeyDown={toggleDrawer(false)}>
                 <Divider/>
                 <Typography className={classes.drawerTitle} variant="h6">
                     Notifications:
@@ -128,18 +147,23 @@ function NavBar({isAuthenticated, notifications, authLogout, setSearch, search, 
         <div className={classes.grow}>
             <AppBar position="static">
                 <Toolbar>
-                    <button className={classes.logo} onClick={() => {
-                        isAuthenticated ? history.push(pagesURL.home) : history.push(pagesURL.landingPage)
-                    }}>
-
+                    <button
+                        className={classes.logo}
+                        onClick={() => {
+                            isAuthenticated ? history.push(pagesURL.home) :
+                                history.push(pagesURL.landingPage)
+                        }}>
                         <img src={logo} alt="logo" className={classes.logo}/>
                     </button>
+
                     <Typography className={classes.title} variant="h6" noWrap component="button"
                                 onClick={() => {
-                                    isAuthenticated ? history.push(pagesURL.home) : history.push(pagesURL.landingPage)
+                                    isAuthenticated ? history.push(pagesURL.home) :
+                                        history.push(pagesURL.landingPage)
                                 }}>
                         DM Project
                     </Typography>
+
                     {isAuthenticated ? (
                         <>
                             <div className={classes.search}>
@@ -158,12 +182,17 @@ function NavBar({isAuthenticated, notifications, authLogout, setSearch, search, 
                                     }}
                                 />
                             </div>
-
                             <div className={classes.grow}/>
                             <div className={classes.sectionDesktop}>
-                                <IconButton aria-label={`show ${unReadCount} new notifications`} color="inherit"
-                                            onClick={toggleDrawer(true)}>
-                                    <Badge badgeContent={unReadCount} color="secondary">
+                                <IconButton
+                                    aria-label={`show ${unReadCount} new notifications`}
+                                    color="inherit"
+                                    onClick={toggleDrawer(true)}
+                                >
+                                    <Badge
+                                        badgeContent={unReadCount}
+                                        color="secondary"
+                                    >
                                         <NotificationsIcon/>
                                     </Badge>
                                 </IconButton>
@@ -181,6 +210,7 @@ function NavBar({isAuthenticated, notifications, authLogout, setSearch, search, 
                                 </IconButton>
                                 {logoutButton}
                             </div>
+
                             <div className={classes.sectionMobile}>
                                 <IconButton
                                     aria-label="show more"
@@ -196,22 +226,32 @@ function NavBar({isAuthenticated, notifications, authLogout, setSearch, search, 
                     ) : (
                         <>
                             <div className={classes.grow}/>
-                            <Button variant="contained" color="secondary" disableElevation onClick={() => {
-                                history.push(signup)
-                            }}>
+                            <Button
+                                variant="contained"
+                                color="secondary"
+                                disableElevation
+                                onClick={() => {
+                                    history.push(signup)
+                                }}>
                                 Signup
                             </Button>
-                            <Button color="inherit" disableElevation onClick={() => {
-                                history.push(login)
-                            }}>
+
+                            <Button
+                                color="inherit"
+                                disableElevation
+                                onClick={() => {
+                                    history.push(login)
+                                }}>
                                 Login
                             </Button>
                         </>
                     )}
                 </Toolbar>
             </AppBar>
+
             {renderMobileMenu}
             {notificationDrawer}
+
         </div>
     )
 }

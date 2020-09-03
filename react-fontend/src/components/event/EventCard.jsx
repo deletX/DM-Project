@@ -63,32 +63,38 @@ const EventCard = ({token, event, profileId, refreshEvents}) => {
                 <CardActions>
 
                     {!isInEvent ?
-                        <Button className={classes.primaryButton} disabled={event.status !== 0}
-                                onClick={() => {
-                                    setJoinOpen(true)
-                                }}>Join</Button>
+                        <Button
+                            className={classes.primaryButton}
+                            disabled={event.status !== 0}
+                            onClick={() => {
+                                setJoinOpen(true)
+                            }}>Join</Button>
                         :
                         <>
-                            <Button color="default" className={classes.secondaryButton} disabled={event.status !== 0}
-                                    onClick={() => {
-                                        setLeaveOpen(true)
-                                    }}
+                            <Button
+                                color="default"
+                                className={classes.secondaryButton}
+                                disabled={event.status !== 0}
+                                onClick={() => {
+                                    setLeaveOpen(true)
+                                }}
                             >Leave</Button>
                         </>
                     }
+
                     {isOwner &&
                     <>
-
-                        <Button className={classes.delete} disabled={event.status === 1}
-                                onClick={() => {
-                                    setDeleteOpen(true)
-                                }}>Delete</Button>
+                        <Button
+                            className={classes.delete}
+                            disabled={event.status === 1}
+                            onClick={() => {
+                                setDeleteOpen(true)
+                            }}>Delete</Button>
                     </>
                     }
-
-
                 </CardActions>
             </Card>
+
             <AlertDialog
                 open={leaveOpen}
                 handleClose={() => {
@@ -143,9 +149,14 @@ const EventCard = ({token, event, profileId, refreshEvents}) => {
                     setDeleteOpen(false)
                 }}
             />
-            <JoinContainer open={joinOpen} close={() => {
-                setJoinOpen(false)
-            }} event={event} refreshEvents={refreshEvents}/>
+
+            <JoinContainer
+                open={joinOpen}
+                close={() => {
+                    setJoinOpen(false)
+                }}
+                event={event}
+                refreshEvents={refreshEvents}/>
         </>
     )
 }

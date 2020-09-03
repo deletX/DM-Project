@@ -4,7 +4,11 @@ import FeedbackItem from "./FeedbackItem";
 
 const FeedbacksComponent = ({feedbacks, edit}) => {
     const feedbackItems = feedbacks.map((feedback) => (
-        <FeedbackItem key={feedback.id} feedback={feedback} edit={edit}/>
+        <FeedbackItem
+            key={feedback.id}
+            feedback={feedback}
+            edit={edit}
+        />
     ))
 
     return (

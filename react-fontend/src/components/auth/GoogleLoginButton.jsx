@@ -17,15 +17,21 @@ const GoogleLoginButton = (props) => {
                 onSuccess={props.onSuccess}
                 onFailure={() => {
                 }}
-                clientId={CLIENT_ID} render={renderProps => (
-                <Button variant="contained"
-                        className={classes.googleLogin}
-                        onClick={renderProps.onClick}
-                        startIcon={<SvgIcon component={GoogleIcon} viewBox="0 0 533.5 544.3"/>}
-                >
-                    Signup with Google
-                </Button>
-            )}/>
+                clientId={CLIENT_ID}
+                render={
+                    renderProps => (
+                        <Button variant="contained"
+                                className={classes.googleLogin}
+                                onClick={renderProps.onClick}
+                                startIcon={
+                                    <SvgIcon
+                                        component={GoogleIcon}
+                                        viewBox="0 0 533.5 544.3"/>
+                                }
+                        >
+                            Signup with Google
+                        </Button>
+                    )}/>
         </Grid>
     )
 }

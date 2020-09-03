@@ -68,7 +68,11 @@ const PersonalInfoForm = ({
 
     return (
         <div className={classes.root}>
-            <AvatarCustom src={imageURL} className={classes.imgPreview} firstName={firstName} lastName={lastName}/>
+            <AvatarCustom
+                src={imageURL}
+                className={classes.imgPreview}
+                firstName={firstName}
+                lastName={lastName}/>
 
             <form className={classes.form}>
                 <Grid container spacing={2}>
@@ -99,72 +103,91 @@ const PersonalInfoForm = ({
 
                     {isGoogleLogin &&
                     <Grid item xs={12}>
-                        <Alert className={classes.editAlert} severity="warning">Editing these info will undo your
+                        <Alert
+                            className={classes.editAlert}
+                            severity="warning">
+                            Editing these info will undo your
                             Google
                             Signup</Alert>
                     </Grid>
                     }
+
                     <Grid item xs={12} sm={6}>
-                        <TextField variant="outlined" fullWidth id="name" label="First Name" placeholder="James"
-                                   value={firstName}
-                                   onChange={(input) => {
-                                       undoGoogleLogin();
-                                       setFirstName(input.target.value)
-                                   }}
-                                   autoComplete="name"/>
+                        <TextField
+                            variant="outlined"
+                            fullWidth
+                            id="name"
+                            label="First Name"
+                            placeholder="James"
+                            value={firstName}
+                            onChange={(input) => {
+                                undoGoogleLogin();
+                                setFirstName(input.target.value)
+                            }}
+                            autoComplete="name"/>
                     </Grid>
+
                     <Grid item xs={12} sm={6}>
-                        <TextField variant="outlined" fullWidth id="surname" label="Last Name" placeholder="Bond"
-                                   value={lastName}
-                                   onChange={(input) => {
-                                       undoGoogleLogin();
-                                       setLastName(input.target.value)
-                                   }}
-                                   autoComplete="family-name"/>
+                        <TextField
+                            variant="outlined"
+                            fullWidth
+                            id="surname"
+                            label="Last Name"
+                            placeholder="Bond"
+                            value={lastName}
+                            onChange={(input) => {
+                                undoGoogleLogin();
+                                setLastName(input.target.value)
+                            }}
+                            autoComplete="family-name"/>
                     </Grid>
+
                     <Grid item xs={12}>
-                        <TextField variant="outlined"
-                                   fullWidth
-                                   required id="username"
-                                   label="Username"
-                                   value={username}
-                                   placeholder="jamesbond007"
-                                   helperText={usernameHelperText}
-                                   onChange={validateUsername}
-                                   onBlur={validateUsername}
-                                   error={usernameError}
-                                   autoComplete="username"
+                        <TextField
+                            variant="outlined"
+                            fullWidth
+                            required id="username"
+                            label="Username"
+                            value={username}
+                            placeholder="jamesbond007"
+                            helperText={usernameHelperText}
+                            onChange={validateUsername}
+                            onBlur={validateUsername}
+                            error={usernameError}
+                            autoComplete="username"
                         />
                     </Grid>
+
                     <Grid item xs={12}>
-                        <TextField variant="outlined"
-                                   fullWidth
-                                   required id="email"
-                                   label="E-mail"
-                                   placeholder="jamesbond@mi6.co.uk"
-                                   type="email"
-                                   error={emailError}
-                                   helperText={emailHelperText}
-                                   onChange={validateEmail}
-                                   onBlur={validateEmail}
-                                   value={email}
-                                   autoComplete="email"
+                        <TextField
+                            variant="outlined"
+                            fullWidth
+                            required id="email"
+                            label="E-mail"
+                            placeholder="jamesbond@mi6.co.uk"
+                            type="email"
+                            error={emailError}
+                            helperText={emailHelperText}
+                            onChange={validateEmail}
+                            onBlur={validateEmail}
+                            value={email}
+                            autoComplete="email"
                         />
                     </Grid>
+
                     <Grid item xs={12}>
-                        <TextField variant="outlined"
-                                   fullWidth
-                                   required id="password"
-                                   label="Password"
-                                   error={passwordError}
-                                   value={password}
-                                   type="password"
-                                   helperText={"Password should contain at least a lower case, an upper case, " +
-                                   "a number and a special character [! @ # $ % ^ & *] and be at least 8 characters " +
-                                   "long and shouldn't contain whitespaces"}
-                                   onChange={validatePassword}
-                                   onBlur={validatePassword}
-                                   autoComplete="new-password"
+                        <TextField
+                            variant="outlined"
+                            fullWidth
+                            required id="password"
+                            label="Password"
+                            error={passwordError}
+                            value={password}
+                            type="password"
+                            helperText={"Password should contain at least a lower case, an upper case, " + "a number and a special character [! @ # $ % ^ & *] and be at least 8 characters " + "long and shouldn't contain whitespaces"}
+                            onChange={validatePassword}
+                            onBlur={validatePassword}
+                            autoComplete="new-password"
                         />
                     </Grid>
 

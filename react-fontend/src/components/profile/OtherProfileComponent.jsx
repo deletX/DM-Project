@@ -19,14 +19,19 @@ const OtherProfileComponent = ({profile}) => {
                         {profile.user.first_name}
                     </Typography>
                 </Grid>
+
                 <Grid item xs={6}>
                     <Typography variant="h4">
                         {profile.user.last_name}
                     </Typography>
                 </Grid>
             </Grid>
+
             {profile.received_feedback.length > 0 ?
-                <FeedbacksComponent feedbacks={profile.received_feedback} edit={false}/>
+                <FeedbacksComponent
+                    feedbacks={profile.received_feedback}
+                    edit={false}
+                />
                 :
                 <Typography className={classes.feedbacks}>
                     This user hasn't received any feedback, yet ;)

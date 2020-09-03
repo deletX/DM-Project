@@ -38,17 +38,19 @@ const EventCardActions = (props) => {
     const navigation = useNavigation();
     let participation = props.event.participant_set.filter(item => (item.profile.id === props.profileID))[0];
 
-    return (<Card.Actions>
-        <Button mode={props.event.status === JOINABLE ? "contained" : "text"} color="#00675b"
-                onPress={() => navigation.navigate((JOIN_SCREEN), {event: props.event, id: props.event.id})}
-                disabled={props.event.status === JOINABLE && participation === undefined ? null : "true"}
-        >Join event</Button>
+    return (
+        <Card.Actions>
+            <Button mode={props.event.status === JOINABLE ? "contained" : "text"} color="#00675b"
+                    onPress={() => navigation.navigate((JOIN_SCREEN), {event: props.event, id: props.event.id})}
+                    disabled={props.event.status === JOINABLE && participation === undefined ? null : "true"}
+            >Join event</Button>
 
-        <Button mode="text" color="#c56200"
-                onPress={alertAreYouSure(leaveEvent)} style={styles.buttonRight}
-                disabled={(props.event.status === JOINABLE && (participation !== undefined)) ? null : "true"}>Leave
-            event</Button>
-    </Card.Actions>)
+            <Button mode="text" color="#c56200"
+                    onPress={alertAreYouSure(leaveEvent)} style={styles.buttonRight}
+                    disabled={(props.event.status === JOINABLE && (participation !== undefined)) ? null : "true"}>Leave
+                event</Button>
+        </Card.Actions>
+    )
 }
 
 /**
