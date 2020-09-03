@@ -62,9 +62,11 @@ const emptyEvent = {
  * questo fa
  */
 const EventContainer = (props) => {
+        const {location, token, profileId, isAuthenticated, isAuthLoading} = props;
         let history = useHistory();
         const classes = useStyles();
         const {enqueueSnackbar,} = useSnackbar();
+        let {id} = useParams();
 
         const [deleteOpen, setDeleteOpen] = useState(false)
         const [joinOpen, setJoinOpen] = useState(false)
@@ -73,9 +75,7 @@ const EventContainer = (props) => {
         const [edit, setEdit] = useState(false)
         const [isLoading, setIsLoading] = useState(false)
 
-        // eslint-disable-next-line
-        const {location, addAlert, token, profileId, isAuthenticated, isAuthLoading} = props;
-        let {id} = useParams();
+
         const [event, setEvent] = useState(location.state ? location.state : emptyEvent)
         const date = new Date(event.date_time)
         const [image, setImage] = useState(null)
@@ -132,9 +132,8 @@ const EventContainer = (props) => {
                     handleSuccess(enqueueSnackbar, "Feedback left with success")
                 },
                 (err) => {
-                    console.log(err)
                     setFeedbackOpen(false)
-                    handleError(enqueueSnackbar, "Something went wrong while posting your feedback [014]")
+                    handleError(enqueueSnackbar, "Something went wrong while posting your feedback [014]", err)
                 })
         };
 
@@ -154,7 +153,7 @@ const EventContainer = (props) => {
                     handleInfo(enqueueSnackbar, "Computation has started")
                 },
                 (err) => {
-                    handleError(enqueueSnackbar, "Something went wrong while launching the computation [016]")
+                    handleError(enqueueSnackbar, "Something went wrong while launching the computation [016]", err)
                 }
             )
         }
@@ -172,7 +171,7 @@ const EventContainer = (props) => {
                     setTime(new Date(res.data.date_time))
                 },
                 (err) => {
-                    handleError(enqueueSnackbar, "An error occurred while retrieving event data [003]")
+                    handleError(enqueueSnackbar, "An error occurred while retrieving event data [003]", err)
                 }
             )
         }
@@ -217,7 +216,7 @@ const EventContainer = (props) => {
                     handleSuccess(enqueueSnackbar, "Event successfully updated")
                 },
                 (err) => {
-                    handleError(enqueueSnackbar, "An error occurred while updating event")
+                    handleError(enqueueSnackbar, "An error occurred while updating event", err)
                 }
             )
         }
@@ -684,7 +683,8 @@ const EventContainer = (props) => {
                                 },
                                 (err) => {
                                     setLeaveOpen(false)
-                                    handleError(enqueueSnackbar, "Something went wrong while leaving [002]")})
+                                    handleError(enqueueSnackbar, "Something went wrong while leaving [002]", err)
+                                })
                         }}
                         onNo={() => {
                             setLeaveOpen(false)
@@ -705,10 +705,11 @@ const EventContainer = (props) => {
                                 (res) => {
                                     setDeleteOpen(false)
                                     history.push(home)
-                                    handleSuccess(enqueueSnackbar, "Successfully deleted the event")},
+                                    handleSuccess(enqueueSnackbar, "Successfully deleted the event")
+                                },
                                 (err) => {
                                     setDeleteOpen(false)
-                                    handleError(enqueueSnackbar, "Something went wrong while deleting your event [015]")
+                                    handleError(enqueueSnackbar, "Something went wrong while deleting your event [015]", err)
                                 })
                         }}
                         onNo={() => {
@@ -751,7 +752,6 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.up('lg')]: {
             height: "440px",
         },
-        // minHeight: "250px",
         [theme.breakpoints.down('sm')]: {
             minHeight: "91vh",
         },
