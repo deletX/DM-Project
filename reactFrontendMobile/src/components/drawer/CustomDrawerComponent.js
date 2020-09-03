@@ -104,10 +104,18 @@ const SignOutButton = (props) => (
  */
 const CustomDrawerContentComponent = (props) => {
 
-    const notificationListItems = props.notifications.filter((notification) => !notification.read).map((notification) => (
-        <NotificationDrawerItem key={notification.id} notification={notification} token={props.token}
-                                navigation={props.navigation}
-        readNotification={props.readNotification}/>
+    let notificationsByDescDate = props.notifications.sort(
+        function (a, b) {
+            return new Date(b.date_time) - new Date(a.date_time)
+        })
+
+    const notificationListItems = notificationsByDescDate.filter((notification) => !notification.read).map((notification) => (
+        <NotificationDrawerItem
+            key={notification.id}
+            notification={notification}
+            token={props.token}
+            navigation={props.navigation}
+            readNotification={props.readNotification}/>
     ));
 
     return (
