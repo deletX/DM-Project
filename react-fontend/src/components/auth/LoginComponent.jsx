@@ -14,10 +14,15 @@ import {Helmet} from "react-helmet";
 import {useSnackbar} from 'notistack';
 import GoogleLoginButton from "./GoogleLoginButton";
 
-function SignupComponent({authLogin, googleLogin, location}) {
+/**
+ * Login page with {@link GoogleLoginButton} to enable google login, and username and password textfield for non-google
+ * authentication
+ */
+function LoginComponent(props) {
     let history = useHistory()
     const classes = useStyles();
     const {enqueueSnackbar,} = useSnackbar();
+    const {authLogin, googleLogin, location} = props;
 
     const [username, setUsername] = useState("");
     const [usernameError, setUsernameError] = useState(false);
@@ -106,6 +111,8 @@ function SignupComponent({authLogin, googleLogin, location}) {
                                 onClick={() => {
                                     authLogin(username, password, enqueueSnackbar).catch(err => {
                                         if (!err instanceof Error) {
+                                            //if everything went fine proceed to the next page if present in the query
+                                            // otherwise go to the home page
                                             history.push(location.query.next ? decodeURI(location.query.next) : home)
                                         }
                                     })
@@ -186,4 +193,4 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 
-export default connect(null, mapDispatchToProps)(SignupComponent)
+export default connect(null, mapDispatchToProps)(LoginComponent)

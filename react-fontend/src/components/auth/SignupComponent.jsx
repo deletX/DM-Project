@@ -12,20 +12,26 @@ import StepperContainer from "../../containers/StepperContainer";
 import {Helmet} from "react-helmet";
 import {useSnackbar} from 'notistack';
 
-
-function SignupComponent({authSignup, googleLogin, setPicture, postCar}) {
+/**
+ * Stepper Container that handles the various signup phases:
+ *
+ * - the Personal data {@link PersonalInfoForm}
+ * - the _(optional)_ car {@link CarForm}
+ * - the final review {@link SummaryData}
+ */
+function SignupComponent(props) {
     let history = useHistory()
     const {enqueueSnackbar,} = useSnackbar();
+    const {authSignup, googleLogin, setPicture, postCar} = props;
 
-    const [email, setEmail] = useState("");
-    const [emailError, setEmailError] = useState(false);
+    // required data
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [username, setUsername] = useState("");
-    const [usernameError, setUsernameError] = useState(false);
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [passwordError, setPasswordError] = useState(false);
     const [image, setImage] = useState(null);
+
     const [imageURL, setImageURL] = useState("");
 
     const [carName, setCarName] = useState("");
@@ -36,8 +42,22 @@ function SignupComponent({authSignup, googleLogin, setPicture, postCar}) {
     const [isGoogleLogin, setGoogleLogin] = useState(false);
     const [googleAccessToken, setGoogleAccessToken] = useState("");
 
+    // errors
+    const [emailError, setEmailError] = useState(false);
+    const [usernameError, setUsernameError] = useState(false);
+    const [passwordError, setPasswordError] = useState(false);
+
+    // backdrop
     const [open, setOpen] = useState(false);
 
+    /**
+     * Given the current step number gives the relative content
+     *
+     * @param {number} step
+     * @param {function} handleNext
+     *
+     * @return {JSX.Element|string}
+     */
     const getStepContent = (step, handleNext) => {
         switch (step) {
             case 0:
@@ -99,6 +119,28 @@ function SignupComponent({authSignup, googleLogin, setPicture, postCar}) {
         }
     };
 
+    /**
+     * Check if the step is valid
+     *
+     * @param {number} step
+     * @return {boolean}
+     */
+    const isStepValid = (step) => {
+        switch (step) {
+            case 0:
+                return (!emailError && email.length > 0 && !usernameError && username.length > 0 && !passwordError && password.length > 0) || isGoogleLogin;
+            case 1:
+                return carName.length > 0;
+            default:
+                return true;
+        }
+    }
+
+    /**
+     * Used after the signup (both google and usr-psw) to upload eventual car and image
+     *
+     * @param {function()} restart callback to restart the process
+     */
     const uploadCarAndPicture = (restart) => (value) => {
         if (value instanceof Error) {
             setOpen(false);
@@ -122,6 +164,11 @@ function SignupComponent({authSignup, googleLogin, setPicture, postCar}) {
         }
     }
 
+    /**
+     * login function with Google or with usr:psw
+     *
+     * @param {function()} restart callback to restart the process
+     */
     const login = (restart) => {
         if (!open)
             setOpen(true);
@@ -142,17 +189,9 @@ function SignupComponent({authSignup, googleLogin, setPicture, postCar}) {
                     ["Personal Info", "Add your Car", "Submit!"]
                 )}
                 getStepContent={getStepContent}
-                isStepValid={(step) => {
-                    switch (step) {
-                        case 0:
-                            return (!emailError && email.length > 0 && !usernameError && username.length > 0 && !passwordError && password.length > 0) || isGoogleLogin;
-                        case 1:
-                            return carName.length > 0;
-                        default:
-                            return true;
-                    }
-                }}
+                isStepValid={isStepValid}
                 isStepOptional={(step) => {
+                    // only car step is optional
                     return step === 1;
                 }}
                 clear={(step) => {

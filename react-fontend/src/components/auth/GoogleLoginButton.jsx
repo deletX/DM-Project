@@ -7,6 +7,10 @@ import {ReactComponent as GoogleIcon} from "../../icons/GoogleLogo.svg";
 import React from "react";
 import {makeStyles} from "@material-ui/core/styles";
 
+/**
+ * Encloses the GoogleLogin (see {@link https://github.com/anthonyjgrove/react-google-login}) component to remove
+ * redundant code and wraps it in a {@link Grid} item (`xs=12`)
+ */
 const GoogleLoginButton = (props) => {
     const classes = useStyles();
 
