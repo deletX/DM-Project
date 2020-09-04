@@ -61,7 +61,7 @@ class Car(models.Model):
 
     name = models.CharField(max_length=50)
     tot_avail_seats = models.IntegerField(validators=[MinValueValidator(2), MaxValueValidator(9)])
-    consumption = models.FloatField(default=10.0, validators=[MinValueValidator(0)])  # l/100km
+    consumption = models.FloatField(default=10.0, validators=[MinValueValidator(0), MaxValueValidator(30)])  # l/100km
     fuel = models.SmallIntegerField(choices=FuelChoices.choices, default=1)
     owner = models.ForeignKey(Profile, on_delete=models.CASCADE)
 
