@@ -201,20 +201,6 @@ export const putEditFeedback = (eventId, receiverId, feedbackId, comment, vote, 
         })
 }
 
-
-export const getProfileImage = (imageUrl, onSuccess, onError) => {
-    axios
-        .get(
-            imageUrl,
-            {responseType: 'blob'})
-        .then((res) => {
-            onSuccess(res)
-        })
-        .catch(err => {
-            onError(err)
-        })
-}
-
 export const getProfileData = (profileId, token, onSuccess, onError) => {
     axios
         .get(profilesURL(profileId),
@@ -478,3 +464,16 @@ export const getNominatimAddress = (address, onSuccess, onError) => {
         })
 }
 
+
+export const getGoogleProfileImage = (imageUrl, onSuccess, onError) => {
+    axios
+        .get(
+            imageUrl,
+            {responseType: 'blob'})
+        .then((res) => {
+            onSuccess(res)
+        })
+        .catch(err => {
+            onError(err)
+        })
+}
