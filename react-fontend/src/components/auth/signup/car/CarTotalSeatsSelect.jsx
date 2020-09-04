@@ -5,6 +5,10 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import React from "react";
 
+/**
+ * A Grid item (`xs=12`, `sm=6`) that wraps a Select to choose the number of seats of a car,
+ * so to avoid extra checks on the given number
+ */
 const CarTotalSeatsSelect = (props) => (
     <Grid item xs={12} sm={6}>
         <FormControl variant="outlined">

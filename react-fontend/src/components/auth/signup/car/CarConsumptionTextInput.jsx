@@ -3,6 +3,11 @@ import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import React from "react";
 
+/**
+ * A Grid item (`xs=12`, `sm=6`) wrapping a TextField that is created to handle the consumption of a car.
+ *
+ * It accepts only numbers (between 1 and 25) with a step of `0.01`.
+ */
 const CarConsumptionTextInput = (props) => (
     <Grid item xs={12} sm={6}>
         <TextField

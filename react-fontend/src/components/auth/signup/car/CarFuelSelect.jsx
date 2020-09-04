@@ -5,6 +5,11 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import React from "react";
 
+/**
+ * A Grid item (`xs=12`, `sm=6`) that wraps a form control with a Select that handles the fuel selection.
+ *
+ * The `value` has already been converted to the numeric representation.
+ */
 const CarFuelSelect = (props) => (
     <Grid item xs={12} sm={6}>
         <FormControl variant="outlined">
