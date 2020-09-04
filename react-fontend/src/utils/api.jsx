@@ -1,24 +1,24 @@
 import axios from "axios";
 import {
-    eventDetailURL,
-    eventRunURL,
-    participationEditURL,
+    carsDetailURL,
+    carsListURL,
+    convertTokenURL,
     createFeedbackURL,
+    currentProfileURL,
+    editFeedbackURL,
     eventCreateURL,
+    eventDetailURL,
     eventJoinURL,
     eventListURL,
-    editFeedbackURL,
-    profilesURL,
-    currentProfileURL,
-    signupURL,
-    tokenURL,
-    convertTokenURL,
-    notificationListURL,
-    notificationEditURL,
-    carsListURL,
-    carsDetailURL,
+    eventRunURL,
     nominatimCoordinatesToAddressURL,
-    nominatimSearchAddressURL
+    nominatimSearchAddressURL,
+    notificationEditURL,
+    notificationListURL,
+    participationEditURL,
+    profilesURL,
+    signupURL,
+    tokenURL
 } from "../constants/apiurls";
 import {headers} from "./utils";
 import {APP_CLIENTID, APP_SECRET} from "../constants/constants";

@@ -1,6 +1,8 @@
 import {updateObject} from "../utils/utils";
 import {
-    CAR_CREATE, CAR_DELETE, CAR_UPDATE,
+    CAR_CREATE,
+    CAR_DELETE,
+    CAR_UPDATE,
     CLEAR_PROFILE_DATA,
     GET_PROFILE_SUCCESS,
     PROFILE_OP_ERROR,
