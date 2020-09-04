@@ -275,23 +275,24 @@ Se non già fatto eseguire nell'interfaccia di postgresql (vedi su)
 
 
 **Web errors**
-- `000`
-- `000`
-- `000`
-- `000`
-- `000`
-- `000`
-- `000`
-- `000`
-- `000`
-- `000`
-- `000`
-- `000`
-- `000`
-- `000`
-- `000`
-- `000`
-- `000`
-- `000`
-- `000`
-- `000` 
+- `019` Error while using the refresh token 
+- `020` Error while logging in with google Oauth
+- `021` Error while logging in with username and password
+- `022` Error during signup
+- `023` Error while retrieving notifications
+- `024` Error while reading the notification (setting `read` value)
+- `025` Error while retrieving profile
+- `026` Error while changing the profile picture
+- `027` Error while updating user data
+- `028` Error while deleting user **[not used yet]**
+- `029` Error while creating a car
+- `030` Error while editing a car
+- `031` Error while deleting a car
+- `032`
+- `033`
+- `034`
+- `035`
+- `036`
+- `037`
+- `038`
+- `039`

@@ -18,7 +18,7 @@ export const USER_DATA_UPDATE = "USER_DATA_UPDATE";
 export const CLEAR_PROFILE_DATA = "CLEAR_PROFILE_DATA";
 
 /*
-    Profile - Car
+    Car
  */
 export const CAR_CREATE = "CAR_CREATE";
 export const CAR_UPDATE = "CAR_UPDATE";

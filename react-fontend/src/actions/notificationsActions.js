@@ -8,18 +8,35 @@ import {
 import {getNotifications, putReadNotifications} from "../utils/api";
 import {handleError} from "../utils/utils";
 
+/**
+ * Start action
+ *
+ * @return {{type: string}}
+ */
 const start = () => (
     {
         type: NOTIFICATIONS_START
     }
 );
 
+/**
+ * Fail action
+ *
+ * @return {{type: string}}
+ */
 const fail = () => (
     {
         type: NOTIFICATIONS_ERROR
     }
 );
 
+/**
+ * Notification retrieval action
+ *
+ * @param {[]} notifications
+ *
+ * @return {{type: string, notifications: []}}
+ */
 const getSuccess = (notifications) => (
     {
         type: GET_NOTIFICATIONS_SUCCESS,
@@ -28,9 +45,12 @@ const getSuccess = (notifications) => (
 );
 
 /**
+ * Notification update action
  *
- * @param id
+ * @param {number} id
  * @param {boolean} read
+ *
+ * @return {{type:string,id:number,read:boolean}}
  */
 const readSuccess = (id, read) => (
     {
@@ -40,13 +60,24 @@ const readSuccess = (id, read) => (
     }
 );
 
-
+/**
+ * Dispatches the clear notifications action
+ *
+ * @return {function(*): Promise<void>}
+ */
 export const clearNotifications = () => {
     return async (dispatch) => {
         dispatch({type: CLEAR_NOTIFICATIONS})
     };
 }
 
+/**
+ * Execute the api call and dispatches either the retrieve notification action or the fail action
+ *
+ * @param {enqueueSnackbar} enqueueSnackbar
+ *
+ * @return {function(*): Promise<void>}
+ */
 export const retrieveNotifications = (enqueueSnackbar) => {
     return async (dispatch) => {
         dispatch(start());
@@ -59,13 +90,23 @@ export const retrieveNotifications = (enqueueSnackbar) => {
                 }, 60)
             },
             (err) => {
-                handleError(enqueueSnackbar, "Something went wrong while retrieving your notifications", err)
+                handleError(enqueueSnackbar, "Something went wrong while retrieving your notifications [023]", err)
                 dispatch(fail());
                 return err;
             })
     };
 }
 
+/**
+ * Execute the api call to update notification read status and dispatches either the read notification action or
+ * the fail action
+ *
+ * @param {number} notificationId
+ * @param {boolean} read
+ * @param {enqueueSnackbar} enqueueSnackbar
+ *
+ * @return {function(*): Promise<void>}
+ */
 export const readNotification = (notificationId, read = true, enqueueSnackbar) => {
     return async (dispatch) => {
         dispatch(start());
@@ -75,7 +116,7 @@ export const readNotification = (notificationId, read = true, enqueueSnackbar) =
                 dispatch(readSuccess(notificationId, read))
             },
             (err) => {
-                handleError(enqueueSnackbar, "Something went wrong while reading the notifications", err)
+                handleError(enqueueSnackbar, "Something went wrong while reading the notifications [024]", err)
                 dispatch(fail());
                 return err;
             })
