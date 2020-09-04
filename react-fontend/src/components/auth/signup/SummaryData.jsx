@@ -12,17 +12,22 @@ import CarTotalSeatsSelect from "./car/CarTotalSeatsSelect";
 import CarFuelSelect from "./car/CarFuelSelect";
 import CarConsumptionTextInput from "./car/CarConsumptionTextInput";
 
-const SummaryData = ({
-                         firstName, lastName, username, password, email,
-                         imageURL, carName, totSeats, consumption, fuel,
-                         isGoogleLogin
-                     }) => {
+/**
+ * This is a read only form used only for confirmation of the previously entered data for review before submitting
+ * (see {@link PersonalInfoForm} and {@link CarForm})
+ */
+const SummaryData = (props) => {
     const classes = useStyles();
+    const {
+        firstName, lastName, username, password, email,
+        imageURL, carName, totSeats, consumption, fuel,
+        isGoogleLogin
+    } = props;
 
     return (
         <div className={classes.root}>
             <Typography className={classes.instruction}>
-                Review you're data before submitting!
+                Review your data before submitting!
             </Typography>
             <Avatar src={imageURL} className={classes.imgPreview}/>
 

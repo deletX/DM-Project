@@ -7,12 +7,21 @@ import CarFuelSelect from "./car/CarFuelSelect";
 import CarConsumptionTextInput from "./car/CarConsumptionTextInput";
 import CarNameTextField from "./car/CarNameTextField";
 
-const CarForm = ({
-                     name, setName, totSeats, setTotSeats,
-                     consumption, setConsumption,
-                     fuel, setFuel,
-                 }) => {
+/**
+ * Form component to insert car data:
+ *  - name {@link CarNameTextField}
+ *  - total seats {@link CarTotalSeatsSelect}
+ *  - fuel {@link CarFuelSelect}
+ *  - consumption {@link CarConsumptionTextInput}
+ */
+const CarForm = (props) => {
     const classes = useStyles();
+    const {
+        name, setName, totSeats, setTotSeats,
+        consumption, setConsumption,
+        fuel, setFuel,
+    } = props;
+
     let [nameError, setNameError] = useState(false)
 
     return (
@@ -59,10 +68,12 @@ const CarForm = ({
                         }}
                         onBlur={(input) => {
                             let val = input.target.value
+
+                            // value has to be between 1 and 25
                             if (val < 1)
                                 input.target.value = 1;
-                            if (val > 20)
-                                input.target.value = 20;
+                            if (val > 25)
+                                input.target.value = 25;
                             setConsumption(input.target.value)
                         }}
                     />

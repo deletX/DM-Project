@@ -4,26 +4,38 @@ import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 import Alert from "@material-ui/lab/Alert";
 import AvatarCustom from "../../AvatarCustom";
-import {getProfileImage} from "../../../utils/api";
-import {handleError, handleSuccess} from "../../../utils/utils";
+import {getGoogleProfileImage} from "../../../utils/api";
+import {handleError} from "../../../utils/utils";
 import {useSnackbar} from 'notistack';
 import GoogleLoginButton from "../GoogleLoginButton";
 import ImageButton from "../../ImageButton";
 
-const PersonalInfoForm = ({
-                              firstName, setFirstName, lastName, setLastName, username, setUsername,
-                              usernameError, setUsernameError, password, setPassword, passwordError,
-                              setPasswordError, email, setEmail, emailError, setEmailError,
-                              image, setImage, imageURL, setImageURL, isGoogleLogin, setGoogleLogin,
-                              setGoogleAccessToken, handleNext
-                          }) => {
+/**
+ * Form that handle the user personal data:
+ * - full name,
+ * - username,
+ * - email,
+ * - image
+ */
+const PersonalInfoForm = (props) => {
     const classes = useStyles();
     const {enqueueSnackbar,} = useSnackbar();
+    const {
+        firstName, setFirstName, lastName, setLastName, username, setUsername,
+        usernameError, setUsernameError, password, setPassword, passwordError,
+        setPasswordError, email, setEmail, emailError, setEmailError,
+        image, setImage, imageURL, setImageURL, isGoogleLogin, setGoogleLogin,
+        setGoogleAccessToken, handleNext
+    } = props;
 
     const [emailHelperText, setEmailHelperText] = useState("");
     const [usernameHelperText, setUsernameHelperText] = useState("");
 
-
+    /**
+     * Validates the email through a regular expression. Sets the relative TextField error and helper text accordingly
+     *
+     * @param input from the TextField.
+     */
     const validateEmail = (input) => {
         undoGoogleLogin();
         if (input.target.value === null || input.target.value === "") {
@@ -39,6 +51,10 @@ const PersonalInfoForm = ({
         setEmail(input.target.value)
     };
 
+    /**
+     * Validates the username (it must not be empty). Sets the relative TextField error and helper text accordingly
+     * @param input
+     */
     const validateUsername = (input) => {
         undoGoogleLogin()
         if (input.target.value === null || "" === input.target.value) {
@@ -51,6 +67,16 @@ const PersonalInfoForm = ({
         setUsername(input.target.value)
     };
 
+    /**
+     * Validates the password and sets the relative TextField error. The helper text is always shown.
+     * The password must contain:
+     *  - at least a special character between !@#$%^&*
+     *  - at least an uppercase
+     *  - at least a lowercase
+     *  - at least a number
+     *
+     * @param input
+     */
     const validatePassword = (input) => {
         undoGoogleLogin()
         if (!/^(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])(?=.*[\d])[\w!@#$%^&*]{8,}$/.test(input.target.value)) {
@@ -61,6 +87,9 @@ const PersonalInfoForm = ({
         setPassword(input.target.value)
     };
 
+    /**
+     * If an user overrides the data gathered from Google the user will no longer considered logged through google
+     */
     const undoGoogleLogin = () => {
         setGoogleAccessToken("");
         setGoogleLogin(false);
@@ -78,24 +107,27 @@ const PersonalInfoForm = ({
                 <Grid container spacing={2}>
                     <GoogleLoginButton
                         onSuccess={(input) => {
-                            let username = input.profileObj.email.split("@")[0].replace(' ', '_').replace('.', '_')
                             setGoogleAccessToken(input.accessToken)
                             setGoogleLogin(true)
+
+                            //Set user data as per the google response
+                            let username = input.profileObj.email.split("@")[0].replace(' ', '_').replace('.', '_')
                             setFirstName(input.profileObj.givenName)
                             setLastName(input.profileObj.familyName)
                             setEmail(input.profileObj.email)
                             setUsername(username)
                             setImageURL(input.profileObj.imageUrl)
-                            getProfileImage(input.profileObj.imageUrl,
+
+                            //Retrieve the profile image from Google
+                            getGoogleProfileImage(input.profileObj.imageUrl,
                                 (res) => {
                                     let blob = res.data
                                     let type = res.data.type.split('/').pop()
                                     blob.name = `${username}.${type}`
                                     setImage(blob)
-                                    handleSuccess(enqueueSnackbar, "Successfully retrieved profile image")
                                 },
                                 (err) => {
-                                    handleError(enqueueSnackbar, "Could not retrieve profile image", err)
+                                    handleError(enqueueSnackbar, "Could not retrieve profile image from Google [032]", err)
                                 })
                             handleNext()
                         }}

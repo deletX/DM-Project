@@ -288,7 +288,7 @@ Se non già fatto eseguire nell'interfaccia di postgresql (vedi su)
 - `029` Error while creating a car
 - `030` Error while editing a car
 - `031` Error while deleting a car
-- `032`
+- `032` Error while retrieving the picture from google
 - `033`
 - `034`
 - `035`
