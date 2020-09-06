@@ -7,13 +7,15 @@ import ListItemText from "@material-ui/core/ListItemText";
 import List from "@material-ui/core/List";
 import {nominatimToPrimarySecondary} from "../../utils/utils";
 
-
-const PositionsDialog = ({open, close, positions, selectItem}) => {
-
+/**
+ * Autocomplete replacement. A dialog that shows the first three possible places given a query. (using nominatim see
+ * {@link https://nominatim.org/release-docs/develop/api/Reverse/})
+ */
+const PositionsDialog = (props) => {
+    const {open, close, positions, selectItem} = props;
 
     let options = positions.map(item => {
         let {primary, secondary} = nominatimToPrimarySecondary(item)
-
         return (
             <ListItem
                 key={item.place_id}
