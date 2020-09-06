@@ -24,9 +24,8 @@ import {useSnackbar} from 'notistack';
 const CreateComponent = (props) => {
 
     let history = useHistory()
-    const {enqueueSnackbar, token} = useSnackbar();
+    const {enqueueSnackbar,} = useSnackbar();
 
-    // event data
     const [name, setName] = useState("");
     const [date, setDate] = useState(new Date((new Date()).getTime() + 5400 * 1000));
     const [description, setDescription] = useState("");
@@ -118,13 +117,13 @@ const CreateComponent = (props) => {
             }
         }
 
-        postCreateEvent(token, data, image,
+        postCreateEvent(props.token, data, image,
             (res) => {
                 history.goBack()
                 let event = res.data
                 handleSuccess(enqueueSnackbar, "Event created successfully")
                 if (!isStepSkipped(2))
-                    postJoinEvent(event.id, address, pos, car, token,
+                    postJoinEvent(event.id, address, pos, car, props.token,
                         (res) => {
                             handleSuccess(enqueueSnackbar, "Joined successfully")
                             if (open)
