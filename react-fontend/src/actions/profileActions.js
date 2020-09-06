@@ -308,7 +308,6 @@ export const createCar = (name, totSeats, fuel, consumption, enqueueSnackbar) =>
         dispatch(start());
         let access_token = localStorage.getItem("access_token");
         let profileId = localStorage.getItem("profile_id");
-        console.log("my token ", access_token, " profileId ", profileId)
         return postCreateCar(profileId, name, totSeats, fuel, consumption, access_token,
             (res) => {
                 let {id, name, tot_avail_seats, fuel, consumption} = res.data;
