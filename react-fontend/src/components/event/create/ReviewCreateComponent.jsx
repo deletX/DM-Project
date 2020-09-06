@@ -12,8 +12,12 @@ import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import FormControl from "@material-ui/core/FormControl";
 
-const ReviewCreateComponent = ({cars, name, date, description, imageURL, car, address, destination, isStepSkipped}) => {
+/**
+ * Contains a read only form to review inputted data before submitting.
+ */
+const ReviewCreateComponent = (props) => {
     const classes = useStyles();
+    const {cars, name, date, description, imageURL, car, address, destination, isStepSkipped} = props;
 
     let carMenuItems = cars.map(car => (
         <MenuItem
@@ -42,7 +46,6 @@ const ReviewCreateComponent = ({cars, name, date, description, imageURL, car, ad
                             fullWidth
                             id="name"
                             label="Name"
-                            placeholder="Awesome Gig"
                             value={name}
                             InputProps={{
                                 readOnly: true,
@@ -56,7 +59,6 @@ const ReviewCreateComponent = ({cars, name, date, description, imageURL, car, ad
                             fullWidth
                             label="Date"
                             value={date}
-                            minDate={new Date()}
                             format="dd/MM/yyyy"
                             InputProps={{
                                 readOnly: true,

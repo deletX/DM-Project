@@ -14,11 +14,19 @@ import {handleError, handleSuccess} from "../../utils/utils";
 import {postCreateEvent, postJoinEvent} from "../../utils/api";
 import {useSnackbar} from 'notistack';
 
-const CreateComponent = ({isAuthenticatedOrLoading}) => {
+/**
+ * Stepper used to create an event:
+ * - event data ({@link NewEventFormComponent})
+ * - event place ({@link MapContainer})
+ * - join the event _[optional]_ ({@link JoinComponent})
+ * - review ({@link ReviewCreateComponent})
+ */
+const CreateComponent = (props) => {
 
     let history = useHistory()
-    const {enqueueSnackbar,} = useSnackbar();
+    const {enqueueSnackbar, token} = useSnackbar();
 
+    // event data
     const [name, setName] = useState("");
     const [date, setDate] = useState(new Date((new Date()).getTime() + 5400 * 1000));
     const [description, setDescription] = useState("");
@@ -32,8 +40,16 @@ const CreateComponent = ({isAuthenticatedOrLoading}) => {
     const [pos, setPos] = useState("");
     const [car, setCar] = useState(-1);
 
+    // backdrop
     const [open, setOpen] = useState(false);
 
+    /**
+     * Return the step content given the step number
+     * @param {number} step
+     * @param {function()} handleNext
+     * @param {function()} isStepSkipped
+     * @return {JSX.Element|string}
+     */
     const getStepContent = (step, handleNext, isStepSkipped) => {
         switch (step) {
             case 0:
@@ -74,10 +90,14 @@ const CreateComponent = ({isAuthenticatedOrLoading}) => {
         }
     };
 
+    /**
+     * Upload given data to server with API (see {@link postCreateEvent} and {@link postJoinEvent})
+     * @param {function()} reset
+     * @param {function()} isStepSkipped
+     */
     const uploadData = (reset, isStepSkipped) => {
         if (open) return;
 
-        let token = localStorage.getItem("access_token");
         let data;
         setOpen(true)
         if (image !== null) {
@@ -100,7 +120,6 @@ const CreateComponent = ({isAuthenticatedOrLoading}) => {
 
         postCreateEvent(token, data, image,
             (res) => {
-                //addAlert("Event created successfully", "success")
                 history.goBack()
                 let event = res.data
                 handleSuccess(enqueueSnackbar, "Event created successfully")
@@ -112,19 +131,24 @@ const CreateComponent = ({isAuthenticatedOrLoading}) => {
                                 setOpen(false)
                         },
                         (err) => {
-                            handleError(enqueueSnackbar, "An error occurred while joining", err)
+                            handleError(enqueueSnackbar, "Something went wrong while joining [034]", err)
                             if (open)
                                 setOpen(false)
                         })
             },
             (err) => {
-                handleError(enqueueSnackbar, "An error occurred while creating the event", err)
+                handleError(enqueueSnackbar, "Something went wrong while creating the event [033]", err)
                 reset(true)
                 if (open)
                     setOpen(false)
             })
     }
 
+    /**
+     * Validates a step
+     * @param {number} step
+     * @return {boolean}
+     */
     const isStepValid = (step) => {
         let now = new Date()
         now = new Date(now.getTime() + 3600 * 1000)
@@ -140,6 +164,10 @@ const CreateComponent = ({isAuthenticatedOrLoading}) => {
         }
     }
 
+    /**
+     * Clears a single step data
+     * @param {number} step
+     */
     const clear = (step) => {
         switch (step) {
             case 0:
@@ -160,11 +188,11 @@ const CreateComponent = ({isAuthenticatedOrLoading}) => {
                 break;
         }
     }
-    
+
     return (
         <FormContainer
             effect={() => {
-                if (!isAuthenticatedOrLoading) {
+                if (!props.isAuthenticatedOrLoading) {
                     history.push(`${login}?next=${encodeURI(addEvent)}`);
                 }
             }}>
@@ -190,7 +218,7 @@ const CreateComponent = ({isAuthenticatedOrLoading}) => {
 function mapStateToProps(state) {
     return {
         isAuthenticatedOrLoading: state.auth.token !== undefined || state.auth.loading,
-        loading: state.auth.loading,
+        token: state.auth.token,
     };
 }
 
