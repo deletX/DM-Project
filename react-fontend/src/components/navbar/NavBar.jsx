@@ -26,9 +26,20 @@ import logo from "../../icons/logo.svg"
 import {setSearch} from "../../actions/searchActions";
 import {useHistory} from "react-router-dom";
 
-function NavBar({isAuthenticated, notifications, authLogout, setSearch, search, unReadCount}) {
+/**
+ * NavBar with:
+ * - DMProject logo and text on top right
+ * - event search bar in middle
+ * - notification icon (opens drawer with notifications)
+ * - profile button
+ * - logout button
+ *
+ * If the screen is too small the last three will be merged into a three vertical dots button that opens a selection
+ */
+function NavBar(props) {
     let history = useHistory();
     const classes = useStyles();
+    const {isAuthenticated, notifications, authLogout, setSearch, search, unReadCount} = props;
 
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
     const [drawerOpen, setDrawerOpen] = React.useState(false);
@@ -37,6 +48,23 @@ function NavBar({isAuthenticated, notifications, authLogout, setSearch, search, 
     const mobileMenuId = 'primary-search-account-menu-mobile';
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
+    let notificationsByDescDate = notifications.sort(
+        function (a, b) {
+            return new Date(b.date_time) - new Date(a.date_time)
+        })
+    let notificationListItem = notificationsByDescDate.map((notification) => (
+        <NotificationItem
+            key={notification.id}
+            notification={notification}
+        />
+    ));
+
+    /**
+     * Toggle the drawer, ignoring tab and shift keys
+     *
+     * @param open
+     * @return {function(*)}
+     */
     const toggleDrawer = (open) => (event) => {
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
             return;
@@ -44,26 +72,19 @@ function NavBar({isAuthenticated, notifications, authLogout, setSearch, search, 
         setDrawerOpen(open);
     };
 
+    /**
+     * Close the mobile menu
+     */
     const handleMobileMenuClose = () => {
         setMobileMoreAnchorEl(null);
     };
 
+    /**
+     * Open the mobile menu
+     */
     const handleMobileMenuOpen = (event) => {
         setMobileMoreAnchorEl(event.currentTarget);
     };
-
-    //console.log(notifications);
-    let notificationsByDescDate = notifications.sort(
-        function (a, b) {
-            return new Date(b.date_time) - new Date(a.date_time)
-        })
-    //console.log("ordered ",notificationsByDescDate);
-    let notificationListItem = notificationsByDescDate.map((notification) => (
-        <NotificationItem
-            key={notification.id}
-            notification={notification}
-        />
-    ));
 
     const logoutButton = (
         <Button
@@ -76,7 +97,7 @@ function NavBar({isAuthenticated, notifications, authLogout, setSearch, search, 
             Logout
         </Button>
     );
-
+    
     const renderMobileMenu = (
         <Menu
             anchorEl={mobileMoreAnchorEl}
@@ -124,7 +145,6 @@ function NavBar({isAuthenticated, notifications, authLogout, setSearch, search, 
 
         </Menu>
     );
-
 
     const notificationDrawer = (
         <Drawer

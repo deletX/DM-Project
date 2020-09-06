@@ -9,10 +9,13 @@ import {connect} from 'react-redux';
 import {readNotification} from "../../actions/notificationsActions";
 import {useSnackbar} from "notistack";
 
-
-const NotificationItem = ({notification, readNotification}) => {
+/**
+ * Notification item ({@link ListItem} and {@link Divider}) with an arrow Left, title and content.
+ */
+const NotificationItem = (props) => {
     const {enqueueSnackbar,} = useSnackbar()
     let history = useHistory()
+    const {notification, readNotification} = props;
 
     return (
         <>
