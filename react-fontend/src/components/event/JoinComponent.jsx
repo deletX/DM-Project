@@ -7,8 +7,14 @@ import {makeStyles} from "@material-ui/core/styles";
 import MenuItem from "@material-ui/core/MenuItem";
 import {connect} from "react-redux";
 
-const JoinComponent = ({cars, addr, setAddr, pos, setPos, car, setCar}) => {
+/**
+ * Component that contains the form to insert data required to join an event:
+ * - Car (Select)
+ * - Position with {@link MapContainer}
+ */
+const JoinComponent = (props) => {
     const classes = useStyles();
+    const {cars, addr, setAddr, pos, setPos, car, setCar} = props;
 
     let carMenuItems = cars.map(car => (
         <MenuItem

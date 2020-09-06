@@ -4,9 +4,12 @@ import DoneIcon from '@material-ui/icons/Done';
 import {makeStyles} from "@material-ui/core/styles";
 import {white} from "color-name";
 
-
-const ChipBox = ({joinable, joined, owned, setJoinable, setJoined, setOwned}) => {
+/**
+ * Container of Chips used to toggle joinable, joined or owned filters
+ */
+const ChipBox = (props) => {
     const classes = useStyles()
+    const {joinable, joined, owned, setJoinable, setJoined, setOwned} = props;
 
     return (
         <div className={classes.root}>

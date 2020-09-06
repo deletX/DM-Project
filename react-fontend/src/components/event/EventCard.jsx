@@ -17,10 +17,15 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 import {deleteEvent, leaveEvent} from "../../utils/api";
 import {useSnackbar} from 'notistack';
 
-const EventCard = ({token, event, profileId, refreshEvents}) => {
+/**
+ * Event card to display an event. As a card has the event picture, the event name, date and location and several buttons:
+ * to join/leave and to delete the event (if owner)
+ */
+const EventCard = (props) => {
     let history = useHistory()
     const classes = useStyles()
     const {enqueueSnackbar,} = useSnackbar();
+    const {token, event, profileId, refreshEvents} = props;
 
     const [joinOpen, setJoinOpen] = useState(false);
     const [leaveOpen, setLeaveOpen] = useState(false);
@@ -28,6 +33,7 @@ const EventCard = ({token, event, profileId, refreshEvents}) => {
 
     let date = new Date(event.date_time)
 
+    // user has joined the event
     let isInEvent = event.participant_set.filter(item => (item.profile.id === profileId)).length > 0;
 
     let isOwner = event.owner.id === profileId;
@@ -57,11 +63,9 @@ const EventCard = ({token, event, profileId, refreshEvents}) => {
                         <Typography variant="body2" color="textSecondary" component="p" noWrap>
                             Location: {event.address}
                         </Typography>
-
                     </CardContent>
                 </CardActionArea>
                 <CardActions>
-
                     {!isInEvent ?
                         <Button
                             className={classes.primaryButton}
@@ -95,6 +99,7 @@ const EventCard = ({token, event, profileId, refreshEvents}) => {
                 </CardActions>
             </Card>
 
+            {/* Leave Alert Dialog */}
             <AlertDialog
                 open={leaveOpen}
                 handleClose={() => {
@@ -122,6 +127,7 @@ const EventCard = ({token, event, profileId, refreshEvents}) => {
                 }}
             />
 
+            {/* Delete Alert Dialog */}
             <AlertDialog
                 open={deleteOpen}
                 handleClose={() => {
@@ -142,7 +148,7 @@ const EventCard = ({token, event, profileId, refreshEvents}) => {
                         (err) => {
 
                             setDeleteOpen(false)
-                            handleError(enqueueSnackbar, "Something went wrong while deleting event", err)
+                            handleError(enqueueSnackbar, "Something went wrong while deleting event [035]", err)
                         })
                 }}
                 onNo={() => {

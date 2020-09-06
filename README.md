@@ -289,9 +289,9 @@ Se non già fatto eseguire nell'interfaccia di postgresql (vedi su)
 - `030` Error while editing a car
 - `031` Error while deleting a car
 - `032` Error while retrieving the picture from google
-- `033`
-- `034`
-- `035`
+- `033` Error while creating an event
+- `034` Error while joining an event (after creation)
+- `035` Error while deleting the event
 - `036`
 - `037`
 - `038`

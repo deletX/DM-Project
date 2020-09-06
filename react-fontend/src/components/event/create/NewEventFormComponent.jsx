@@ -7,18 +7,31 @@ import {makeStyles} from "@material-ui/core/styles";
 import Alert from "@material-ui/lab/Alert";
 import ImageButton from "../../ImageButton";
 
-const NewEventFormComponent = ({name, setName, date, setDate, description, setDescription, image, setImage, imageURL, setImageURL}) => {
+/**
+ * Contains the form for a new event:
+ * - name
+ * - date and time (see {@link https://material-ui-pickers.dev/})
+ * - description
+ * - image (see {@link ImageButton})
+ */
+const NewEventFormComponent = (props) => {
     const classes = useStyles();
+    const {name, setName, date, setDate, description, setDescription, image, setImage, imageURL, setImageURL} = props;
 
     const [day, setDay] = useState(new Date(date))
     const [time, setTime] = useState(new Date(date))
 
-    const [nameError, setNameError] = useState(false);
-    const [descriptionError, setDescriptionError] = useState(false);
+    const [nameError, setNameError] = useState(false)
+    const [descriptionError, setDescriptionError] = useState(false)
 
     let oneHourAhead = new Date()
     oneHourAhead = new Date(oneHourAhead.getTime() + 3600 * 1000)
 
+    /**
+     * From day and time value to a single date variable
+     * @param {Date} day
+     * @param {Date} time
+     */
     const updateDate = (day, time) => {
         if (day === null || time === null) {
             setDate(null)
