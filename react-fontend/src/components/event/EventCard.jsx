@@ -118,7 +118,7 @@ const EventCard = (props) => {
                             setLeaveOpen(false)
                         },
                         (err) => {
-                            handleError(enqueueSnackbar, "Something went wrong while leaving", err)
+                            handleError(enqueueSnackbar, "Something went wrong while leaving [037]", err)
                             setLeaveOpen(false)
                         })
                 }}

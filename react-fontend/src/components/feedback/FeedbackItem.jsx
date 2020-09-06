@@ -18,7 +18,13 @@ import {connect} from "react-redux"
 import {putEditFeedback} from "../../utils/api";
 import {useSnackbar} from 'notistack';
 
-const FeedbackItem = ({token, feedback, edit = false}) => {
+/**
+ * Feedback component (is a ListItem {@link ListItem}) shows giver's avatar, full name, feedback comment and rating.
+ *
+ * If `edit` prop is true then the edit button is shown that opens an edit Dialog
+ */
+const FeedbackItem = (props) => {
+    const {token, feedback, edit = false} = props
     const classes = useStyles();
     const {enqueueSnackbar,} = useSnackbar();
 
@@ -73,6 +79,7 @@ const FeedbackItem = ({token, feedback, edit = false}) => {
                 }
             </div>
 
+            {/* Edit Dialog */}
             <Dialog
                 open={feedbackOpen}
                 onClose={() => {
@@ -109,7 +116,6 @@ const FeedbackItem = ({token, feedback, edit = false}) => {
                         />
                     </div>
                 </DialogContent>
-
                 <DialogActions>
                     <Button
                         onClick={() => {
@@ -129,7 +135,7 @@ const FeedbackItem = ({token, feedback, edit = false}) => {
                                 },
                                 (err) => {
                                     setFeedbackOpen(false)
-                                    handleError(enqueueSnackbar, "Something went wrong while editing your feedback", err)
+                                    handleError(enqueueSnackbar, "Something went wrong while editing your feedback [036]", err)
                                 })
                         }}
                         color="primary">

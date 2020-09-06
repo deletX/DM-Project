@@ -292,7 +292,7 @@ Se non già fatto eseguire nell'interfaccia di postgresql (vedi su)
 - `033` Error while creating an event
 - `034` Error while joining an event (after creation)
 - `035` Error while deleting the event
-- `036`
-- `037`
+- `036` Error while editing feedback
+- `037` Error in deleting the participation for an event
 - `038`
 - `039`
