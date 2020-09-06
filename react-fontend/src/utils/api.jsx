@@ -31,7 +31,7 @@ import * as qs from "qs";
  * @param {function()} onSuccess
  * @param {function()} onError
  */
-export const runEvent = (eventId, token, onSuccess, onError) => {
+export const runEvent = (eventId, token, onSuccess, onError) => (
     axios
         .get(
             eventRunURL(eventId),
@@ -43,9 +43,9 @@ export const runEvent = (eventId, token, onSuccess, onError) => {
         .catch(err => {
             onError(err);
         })
-}
+)
 
-export const getEventAxios = (eventId, token, onSuccess, onError) => {
+export const getEventAxios = (eventId, token, onSuccess, onError) => (
     axios
         .get(
             eventDetailURL(eventId),
@@ -58,9 +58,9 @@ export const getEventAxios = (eventId, token, onSuccess, onError) => {
             onError(err);
             //addAlert("An error occurred while retrieving event data",)
         })
-}
+)
 
-export const getEventsList = (joinable, joined, owned, token, onSuccess, onError) => {
+export const getEventsList = (joinable, joined, owned, token, onSuccess, onError) => (
     axios
         .get(
             eventListURL(joinable, joined, owned),
@@ -73,9 +73,9 @@ export const getEventsList = (joinable, joined, owned, token, onSuccess, onError
             onError(err);
             //addAlert("An error occurred while retrieving event data",)
         })
-}
+)
 
-export const postCreateEvent = (token, data, image, onSuccess, onError) => {
+export const postCreateEvent = (token, data, image, onSuccess, onError) => (
     axios
         .post(
             eventCreateURL(),
@@ -90,9 +90,9 @@ export const postCreateEvent = (token, data, image, onSuccess, onError) => {
         .catch((err) => {
             onError(err)
         })
-}
+)
 
-export const postJoinEvent = (eventId, starting_address, starting_pos, car, token, onSuccess, onError) => {
+export const postJoinEvent = (eventId, starting_address, starting_pos, car, token, onSuccess, onError) => (
     axios
         .post(
             eventJoinURL(eventId),
@@ -111,9 +111,9 @@ export const postJoinEvent = (eventId, starting_address, starting_pos, car, toke
                 onError(err)
             }
         )
-}
+)
 
-export const updateEvent = (eventId, data, token, image, onSuccess, onError) => {
+export const updateEvent = (eventId, data, token, image, onSuccess, onError) => (
     axios
         .put(
             eventDetailURL(eventId),
@@ -127,9 +127,9 @@ export const updateEvent = (eventId, data, token, image, onSuccess, onError) => 
             onError(err)
             //addAlert(err, "error")
         })
-}
+)
 
-export const leaveEvent = (eventId, partecipationId, token, onSuccess, onError) => {
+export const leaveEvent = (eventId, partecipationId, token, onSuccess, onError) => (
     axios
         .delete(
             participationEditURL(eventId, partecipationId),
@@ -143,9 +143,9 @@ export const leaveEvent = (eventId, partecipationId, token, onSuccess, onError) 
             onError(err)
             //addAlert("Something went wrong while leaving", "error")
         })
-}
+)
 
-export const deleteEvent = (eventId, token, onSuccess, onError) => {
+export const deleteEvent = (eventId, token, onSuccess, onError) => (
     axios
         .delete(
             eventDetailURL(eventId),
@@ -157,10 +157,10 @@ export const deleteEvent = (eventId, token, onSuccess, onError) => {
         .catch(err => {
             onError(err)
         })
-}
+)
 
 
-export const postCreateFeedback = (eventId, receiver, comment, vote, token, onSuccess, onError) => {
+export const postCreateFeedback = (eventId, receiver, comment, vote, token, onSuccess, onError) => (
     axios
         .post(
             createFeedbackURL(eventId, receiver),
@@ -179,9 +179,9 @@ export const postCreateFeedback = (eventId, receiver, comment, vote, token, onSu
             onError(err)
             //handleError("Something went wrong while posting your feedback [014]", error)
         })
-}
+)
 
-export const putEditFeedback = (eventId, receiverId, feedbackId, comment, vote, token, onSuccess, onError) => {
+export const putEditFeedback = (eventId, receiverId, feedbackId, comment, vote, token, onSuccess, onError) => (
     axios
         .put(
             editFeedbackURL(eventId, receiverId, feedbackId),
@@ -199,9 +199,9 @@ export const putEditFeedback = (eventId, receiverId, feedbackId, comment, vote, 
         .catch((err) => {
             onError(err)
         })
-}
+)
 
-export const getProfileData = (profileId, token, onSuccess, onError) => {
+export const getProfileData = (profileId, token, onSuccess, onError) => (
     axios
         .get(profilesURL(profileId),
             headers('application/json', token))
@@ -211,10 +211,10 @@ export const getProfileData = (profileId, token, onSuccess, onError) => {
         .catch(err => {
             onError(err)
         })
-}
+)
 
 
-export const getFetchProfile = (token, onSuccess, onError) => {
+export const getFetchProfile = (token, onSuccess, onError) => (
     axios
         .get(
             currentProfileURL(),
@@ -226,9 +226,9 @@ export const getFetchProfile = (token, onSuccess, onError) => {
         .catch(err => {
             onError(err)
         })
-}
+)
 
-export const deleteProfile = (token, onSuccess, onError) => {
+export const deleteProfile = (token, onSuccess, onError) => (
     axios
         .delete(
             signupURL(),
@@ -240,9 +240,9 @@ export const deleteProfile = (token, onSuccess, onError) => {
         .catch(err => {
             onError(err)
         })
-}
+)
 
-export const putChangeProfilePicture = (formData, token, onSuccess, onError) => {
+export const putChangeProfilePicture = (formData, token, onSuccess, onError) => (
     axios
         .put(
             currentProfileURL(),
@@ -255,9 +255,9 @@ export const putChangeProfilePicture = (formData, token, onSuccess, onError) => 
         .catch(err => {
             onError(err)
         })
-}
+)
 
-export const putChangeUserData = (data, token, onSuccess, onError) => {
+export const putChangeUserData = (data, token, onSuccess, onError) => (
     axios
         .put(
             signupURL(),
@@ -269,10 +269,10 @@ export const putChangeUserData = (data, token, onSuccess, onError) => {
         })
         .catch(err => {
             onError(err)
-        });
-}
+        })
+)
 
-export const postCreateCar = (profileId, name, totSeats, fuel, consumption, token, onSuccess, onError) => {
+export const postCreateCar = (profileId, name, totSeats, fuel, consumption, token, onSuccess, onError) => (
     axios
         .post(
             carsListURL(profileId),
@@ -289,10 +289,10 @@ export const postCreateCar = (profileId, name, totSeats, fuel, consumption, toke
         })
         .catch(err => {
             onError(err)
-        });
-}
+        })
+)
 
-export const putUpdateCar = (profileId, id, name, totSeats, fuel, consumption, token, onSuccess, onError) => {
+export const putUpdateCar = (profileId, id, name, totSeats, fuel, consumption, token, onSuccess, onError) => (
     axios
         .put(
             carsDetailURL(profileId, id),
@@ -309,10 +309,10 @@ export const putUpdateCar = (profileId, id, name, totSeats, fuel, consumption, t
         })
         .catch(err => {
             onError(err)
-        });
-}
+        })
+)
 
-export const deleteDeleteCar = (profileId, id, token, onSuccess, onError) => {
+export const deleteDeleteCar = (profileId, id, token, onSuccess, onError) => (
     axios
         .delete(
             carsDetailURL(profileId, id),
@@ -323,11 +323,11 @@ export const deleteDeleteCar = (profileId, id, token, onSuccess, onError) => {
         })
         .catch(err => {
             onError(err)
-        });
-}
+        })
+)
 
 
-export const postRefreshAuth = (refreshToken, onSuccess, onError) => {
+export const postRefreshAuth = (refreshToken, onSuccess, onError) => (
     axios
         .post(
             tokenURL(),
@@ -344,10 +344,10 @@ export const postRefreshAuth = (refreshToken, onSuccess, onError) => {
         })
         .catch(err => {
             onError(err)
-        });
-}
+        })
+)
 
-export const postGoogleOAuthLogin = (googleToken, onSuccess, onError) => {
+export const postGoogleOAuthLogin = (googleToken, onSuccess, onError) => (
     axios
         .post(
             convertTokenURL(),
@@ -365,10 +365,10 @@ export const postGoogleOAuthLogin = (googleToken, onSuccess, onError) => {
         })
         .catch(err => {
             onError(err)
-        });
-}
+        })
+)
 
-export const postAuthLogin = (username, password, onSuccess, onError) => {
+export const postAuthLogin = (username, password, onSuccess, onError) => (
     axios
         .post(
             tokenURL(),
@@ -382,14 +382,14 @@ export const postAuthLogin = (username, password, onSuccess, onError) => {
             headers("application/x-www-form-urlencoded")
         )
         .then(res => {
-            onSuccess(res)
+            return onSuccess(res)
         })
         .catch(err => {
             onError(err)
-        });
-}
+        })
+)
 
-export const postAuthSignup = (username, firstName, lastName, email, password, onSuccess, onError) => {
+export const postAuthSignup = (username, firstName, lastName, email, password, onSuccess, onError) => (
     axios
         .post(
             signupURL(),
@@ -403,15 +403,15 @@ export const postAuthSignup = (username, firstName, lastName, email, password, o
             headers('application/json')
         )
         .then(res => {
-            onSuccess(res)
+            return onSuccess(res)
         })
         .catch(err => {
             onError(err)
-        });
-}
+        })
+)
 
 
-export const getNotifications = (token, onSuccess, onError) => {
+export const getNotifications = (token, onSuccess, onError) => (
     axios
         .get(
             notificationListURL(),
@@ -422,10 +422,10 @@ export const getNotifications = (token, onSuccess, onError) => {
         })
         .catch(err => {
             onError(err)
-        });
-}
+        })
+)
 
-export const putReadNotifications = (token, notificationId, read, onSuccess, onError) => {
+export const putReadNotifications = (token, notificationId, read, onSuccess, onError) => (
     axios
         .put(
             notificationEditURL(notificationId),
@@ -438,8 +438,8 @@ export const putReadNotifications = (token, notificationId, read, onSuccess, onE
     })
         .catch(err => {
             onError(err)
-        });
-}
+        })
+)
 
 export const getNominatimInfo = (latitude, longitude, onSuccess, onError) => {
     axios.get(nominatimCoordinatesToAddressURL(latitude, longitude))
