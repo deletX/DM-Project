@@ -39,7 +39,7 @@ import {useHistory} from "react-router-dom";
 function NavBar(props) {
     let history = useHistory();
     const classes = useStyles();
-    const {isAuthenticated, notifications, authLogout, setSearch, search, unReadCount} = props;
+    const {isAuthenticated, notifications, authLogout, setSearch, unReadCount} = props;
 
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
     const [drawerOpen, setDrawerOpen] = React.useState(false);
@@ -97,7 +97,7 @@ function NavBar(props) {
             Logout
         </Button>
     );
-    
+
     const renderMobileMenu = (
         <Menu
             anchorEl={mobileMoreAnchorEl}
@@ -382,7 +382,6 @@ const mapStateToProps = state => {
         isAuthenticated: state.auth.token !== undefined,
         notifications: state.notifications.notifications,
         unReadCount: state.notifications.unReadCount,
-        search: state.search,
     };
 };
 
