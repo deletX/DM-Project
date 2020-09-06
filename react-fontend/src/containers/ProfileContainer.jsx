@@ -74,7 +74,7 @@ const ProfileContainer = ({location, addAlert, token, isAuthenticated, isLoading
             }
             if (profileId === id && !("givenFeedback" in profile)) {
                 setProfile(profileRedux)
-            }
+            } //eslint-disable-next-line
         }, [isAuthenticated, isLoading, profile, profileId, profileRedux, id]
     )
 

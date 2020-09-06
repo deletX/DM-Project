@@ -62,7 +62,7 @@ const HomeContainer = ({addError, isAuthenticated, isLoading, search, token}) =>
         if (!(isAuthenticated || isLoading))
             history.push(`${login}?next=${encodeURI(home)}`)
         else if (isAuthenticated)
-            refreshEvents(joinable, joined, owned);
+            refreshEvents(joinable, joined, owned); //eslint-disable-next-line
     }, [joinable, joined, owned, isAuthenticated, isLoading]);
 
     if (eventsFiltered !== null)
