@@ -3,13 +3,21 @@ import _ from "lodash";
 import ParticipantsContainer from "../../containers/ParticipantsContainer";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 
-const OtherCarsParticipation = ({participantSet, profileId}) => {
+/**
+ * Other cars that are not the one the user is in.
+ */
+const OtherCarsParticipation = (props) => {
     const classes = useStyles();
+    const {participantSet, profileId} = props;
 
     let participation = participantSet.find((item) => (
         item.profile.id === profileId))
+
+    // participations in other cars
     let cars = participantSet.filter((item) => (
         item.car.id !== participation.car.id))
+
+    // group those participations by car id
     cars = Object.values((_.groupBy(cars, (item) => (item.car.id))))
 
     const carsItems = cars.map((item) => {

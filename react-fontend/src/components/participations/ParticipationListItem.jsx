@@ -12,9 +12,15 @@ import {useHistory} from "react-router-dom";
 import {profile} from "../../constants/pagesurls";
 import AvatarCustom from "../AvatarCustom";
 
-const ParticipationListItem = ({participation, onlyDriverIcon = false, profileId = undefined}) => {
+/**
+ * Participation element with participant Avatar, fullname, rating and an icon that shows if has a car or not.
+ *
+ * It is possible to only show the Icon if it is driving (i.e. `pickup_index = 0`)
+ */
+const ParticipationListItem = (props) => {
     const classes = useStyles();
     let history = useHistory()
+    const {participation, onlyDriverIcon = false, profileId = undefined} = props;
 
     return (
         <>
@@ -47,9 +53,7 @@ const ParticipationListItem = ({participation, onlyDriverIcon = false, profileId
                                     />
                                     }
                                 </>
-
                                 :
-
                                 <>
                                     {!onlyDriverIcon &&
                                     <EmojiPeopleIcon
