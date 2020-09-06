@@ -109,7 +109,7 @@ export const googleOAuthLogin = (google_token, enqueueSnackbar) => {
             (res) => {
                 let access_token = res.data.access_token;
                 let refresh_token = res.data.refresh_token;
-                let expirationDate = new Date(new Date().getTime() + 3600 * 1000); //1h from nowa
+                let expirationDate = new Date(new Date().getTime() + 3600 * 1000); //1h from now
 
                 localStorage.setItem("access_token", access_token);
                 localStorage.setItem("refresh_token", refresh_token);
