@@ -66,6 +66,9 @@ finally http://YOUR_IP:8000/admin/
 - `Save`
 
 
+###Add postgres DB to settings.py
+
+
 
 ### Back Ground Tasks
 Sono necessari __celery__, il motore che esegue in background i tasks e __redis__ che si occupa di gestire le comunicazioni tra django e celery.

@@ -41,7 +41,6 @@ const CreateComponent = (props) => {
 
     // backdrop
     const [open, setOpen] = useState(false);
-
     /**
      * Return the step content given the step number
      * @param {number} step
@@ -96,7 +95,6 @@ const CreateComponent = (props) => {
      */
     const uploadData = (reset, isStepSkipped) => {
         if (open) return;
-
         let data;
         setOpen(true)
         if (image !== null) {

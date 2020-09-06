@@ -114,18 +114,20 @@ export const postJoinEvent = (eventId, starting_address, starting_pos, car, toke
 )
 
 export const updateEvent = (eventId, data, token, image, onSuccess, onError) => (
+    console.log("updateEvent ", image, data),
     axios
         .put(
             eventDetailURL(eventId),
             data,
-            headers(image !== null ? 'multipart/form-data' : 'application/json', token)
+            image !== null ?
+                headers('multipart/form-data', token) :
+                headers('application/json', token)
         )
         .then(res => {
             onSuccess(res)
         })
         .catch(err => {
             onError(err)
-            //addAlert(err, "error")
         })
 )
 

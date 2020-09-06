@@ -179,9 +179,18 @@ const EventContainer = (props) => {
         const update = () => {
             let data;
             setIsLoading(true)
+            console.log("image is ", image)
             if (image !== null) {
+                // data = {
+                //     picture: image,
+                //     name: name,
+                //     description: description,
+                //     address: address,
+                //     destination: destination,
+                //     date_time: `${day.getUTCFullYear()}-${day.getUTCMonth() < 10 ? '0' : ''}${day.getUTCMonth() + 1}-${day.getUTCDate()} ${time.getUTCHours()}:${time.getUTCMinutes()}`
+                // }
                 data = new FormData();
-                data.append("picture", image, image.name);
+                data.append("picture", image, image.name);//, image.name
                 data.append("name", name);
                 data.append("description", description)
                 data.append("address", address)
@@ -189,20 +198,23 @@ const EventContainer = (props) => {
                 data.append("date_time",
                     `${day.getUTCFullYear()}-${day.getUTCMonth() < 10 ? '0' :
                         ''}${day.getUTCMonth() + 1}-${day.getUTCDate()} ${time.getUTCHours()}:${time.getUTCMinutes()}`)
+                for (let pair of data.entries()) {
+                    console.log(pair[0] + ', ' + pair[1]);
+                }
             } else {
                 data = {
                     name: name,
                     description: description,
                     address: address,
                     destination: destination,
-                    date_time: `${day.getUTCFullYear()}-${day.getUTCMonth() < 10 ? '0' :
-                        ''}${day.getUTCMonth() + 1}-${day.getUTCDate()} ${time.getUTCHours()}:${time.getUTCMinutes()}`,
+                    date_time: `${day.getUTCFullYear()}-${day.getUTCMonth() < 10 ? '0' : ''}${day.getUTCMonth() + 1}-${day.getUTCDate()} ${time.getUTCHours()}:${time.getUTCMinutes()}`,
                 }
             }
 
             updateEvent(id, data, token,
                 image,
                 (res) => {
+                    console.log("res ", res)
                     setEvent(res.data)
                     setImageURL(res.data.picture)
                     setName(res.data.name)
@@ -369,10 +381,12 @@ const EventContainer = (props) => {
                                         color="secondary"
                                         disabled={!edit ? !(isOwner && !(isRunning || isCompleted)) : !valid}
                                         onClick={() => {
+                                            console.log("onClick ", image)
                                             if (edit) {
                                                 update()
                                             } else
                                                 setEdit(true)
+
                                         }}
                                     >
                                         {edit ? "Save" : "Edit"}
@@ -397,8 +411,10 @@ const EventContainer = (props) => {
                                     <input
                                         accept="image/*"
                                         className={classes.input}
-                                        id="icon-button-file" type="file"
-                                        hidden
+                                        style={{display: 'none'}}
+                                        id="raised-button-file"
+                                        multiple
+                                        type="file"
                                         onChange={(input) => {
                                             let fileReader = new FileReader();
                                             let file = input.target.files[0];
@@ -407,15 +423,38 @@ const EventContainer = (props) => {
                                             }
                                             setImage(file)
                                             fileReader.readAsDataURL(file)
-                                        }}/>
-                                    <label htmlFor="icon-button-file">
-                                        <Fab
-                                            color="secondary"
-                                            aria-label="upload picture" size="small"
-                                            className={classes.changePictureButton}>
-                                            <PhotoCamera/>
-                                        </Fab>
+                                            console.log("onChange ", image)
+                                        }}
+                                    />
+                                    <label htmlFor="raised-button-file">
+                                        <Button variant="raised" component="span" className={classes.uploadButton}>
+                                            Upload
+                                        </Button>
                                     </label>
+                                    {/*<input*/}
+                                    {/*    accept="image/*"*/}
+                                    {/*    className={classes.input}*/}
+                                    {/*    id="icon-button-file"*/}
+                                    {/*    type="file"*/}
+                                    {/*    hidden*/}
+                                    {/*    onChange={(input) => {*/}
+                                    {/*        let fileReader = new FileReader();*/}
+                                    {/*        let file = input.target.files[0];*/}
+                                    {/*        fileReader.onloadend = () => {*/}
+                                    {/*            setImageURL(fileReader.result)*/}
+                                    {/*        }*/}
+                                    {/*        setImage(file)*/}
+                                    {/*        fileReader.readAsDataURL(file)*/}
+                                    {/*    }}/>*/}
+                                    {/*<label htmlFor="icon-button-file">*/}
+                                    {/*    <Fab*/}
+                                    {/*        color="secondary"*/}
+                                    {/*        aria-label="upload picture"*/}
+                                    {/*        size="small"*/}
+                                    {/*        className={classes.changePictureButton}>*/}
+                                    {/*        <PhotoCamera/>*/}
+                                    {/*    </Fab>*/}
+                                    {/*</label>*/}
                                 </>
                                 }
                             </div>
@@ -800,6 +839,13 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: 100,
     },
     deleteButton: {
+        color: "white",
+        backgroundColor: red[500],
+        "&:hover": {
+            backgroundColor: red[500],
+        },
+    },
+    uploadButton: {
         color: "white",
         backgroundColor: red[500],
         "&:hover": {

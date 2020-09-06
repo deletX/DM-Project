@@ -369,6 +369,7 @@ export const deleteCar = (id, enqueueSnackbar) => {
         return deleteDeleteCar(profileId, id, access_token,
             () => {
                 dispatch(deleteCarSuccess(id));
+                handleSuccess(enqueueSnackbar, "Successfully deleted car")
             },
             (err) => {
                 dispatch(fail());
