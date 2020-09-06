@@ -20,6 +20,11 @@ import {createCar, deleteCar, updateCar} from "../../actions/profileActions";
 import {withWidth} from "@material-ui/core";
 import {withSnackbar} from "notistack";
 
+/**
+ * Icons for the table (wasn't working by default).
+ *
+ * See {@link https://github.com/mbrn/material-table/issues/51#issuecomment-508384214}
+ */
 const tableIcons = {
     Add:
         forwardRef((props, ref) =>
@@ -75,6 +80,10 @@ const tableIcons = {
             <ViewColumn {...props} ref={ref}/>)
 };
 
+/**
+ * A table (see {@link https://material-table.com/}) that contains all user's cars and enable creation, editing and
+ * deletion of a car.
+ */
 class CarsComponent extends Component {
 
     constructor(props) {
@@ -92,8 +101,8 @@ class CarsComponent extends Component {
 
     render() {
         const widthStyle = this.props.width === "xs" ? "95vw" : "100%"
-        return (
 
+        return (
             <div style={{width: widthStyle}}>
                 <MaterialTable
                     style={{backgroundColor: "white", width: "100%", maxWidth: "560px"}}

@@ -10,29 +10,46 @@ import ButtonGroup from "@material-ui/core/ButtonGroup";
 import {changePicture, changeUserData} from "../../actions/profileActions";
 import {connect} from "react-redux";
 import ProfileComponent from "./ProfileComponent";
-import CarContainer from "../../containers/CarContainer";
 import {Helmet} from "react-helmet";
 import {useSnackbar} from 'notistack';
+import CarsComponent from "./CarsComponent";
 
-const MyProfileComponent = ({profile, changeUserData, changePicture}) => {
+/**
+ * Component that contains and let change the user profile info:
+ * - full name
+ * - email
+ * - psw (a new one can be set)
+ * - image
+ *
+ * - cars (see {@link CarsComponent}
+ */
+const MyProfileComponent = (props) => {
     const classes = useStyles();
     const {enqueueSnackbar,} = useSnackbar();
+    const {profile, changeUserData, changePicture} = props;
 
+    // to enable edit in the same page
     const [edit, setEdit] = useState(false)
+
+    // data
     const [name, setName] = useState(profile.user.first_name)
     const [surname, setSurname] = useState(profile.user.last_name)
     const [email, setEmail] = useState(profile.user.email)
     const [newPassword, setNewPassword] = useState("")
-
-    const [emailHelperText, setEmailHelperText] = useState("");
-    const [emailError, setEmailError] = useState(false);
-    const [passwordError, setPasswordError] = useState(false);
-    const [passwordHelperText, setPasswordHelperText] = useState("");
-
     const [image, setImage] = useState(null)
     const [imageURL, setImageURL] = useState(profile.picture)
 
+    // errors and helper texts
+    const [emailError, setEmailError] = useState(false);
+    const [emailHelperText, setEmailHelperText] = useState("");
+    const [passwordError, setPasswordError] = useState(false);
+    const [passwordHelperText, setPasswordHelperText] = useState("");
 
+    /**
+     * Validates the email through a regular expression
+     *
+     * @param input from the TextField.
+     */
     const validateEmail = (input) => {
         if (input.target.value === null || input.target.value === "") {
             setEmailError(true);
@@ -46,6 +63,17 @@ const MyProfileComponent = ({profile, changeUserData, changePicture}) => {
         }
         setEmail(input.target.value)
     };
+
+    /**
+     * Validates the password and sets the relative TextField error
+     * The password must contain:
+     *  - at least a special character between !@#$%^&*
+     *  - at least an uppercase
+     *  - at least a lowercase
+     *  - at least a number
+     *
+     * @param input
+     */
     const validatePassword = (input) => {
         if (input.target.value === null || input.target.value === "") {
             setPasswordError(false);
@@ -233,7 +261,9 @@ const MyProfileComponent = ({profile, changeUserData, changePicture}) => {
             }
 
             <div className={classes.element}>
-                <CarContainer/>
+                <div>
+                    <CarsComponent/>
+                </div>
             </div>
         </div>
     );
@@ -242,9 +272,9 @@ const MyProfileComponent = ({profile, changeUserData, changePicture}) => {
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        margin: `${theme.spacing(4)}px ${theme.spacing(3)}px ${theme.spacing(5)}px`,
+        margin: `${theme.spacing(4)}px ${theme.spacing(3)}px ${theme.spacing(4)}px`,
         [theme.breakpoints.down('sm')]: {
-            margin: `${theme.spacing(4)}px ${theme.spacing(1)}px ${theme.spacing(5)}px`,
+            margin: `${theme.spacing(4)}px ${theme.spacing(1)}px ${theme.spacing(4)}px`,
         },
     },
     feedbacks: {

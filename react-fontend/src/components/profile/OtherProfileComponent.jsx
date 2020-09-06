@@ -5,31 +5,35 @@ import FeedbacksComponent from "../feedback/FeedbacksComponent";
 import {makeStyles} from "@material-ui/core/styles";
 import {Helmet} from "react-helmet";
 
-const OtherProfileComponent = ({profile}) => {
+/**
+ * Component for other profiles (not the user one). It hasn't the car section and the given feedback as well.
+ */
+const OtherProfileComponent = (props) => {
     const classes = useStyles();
+
     return (
         <div>
             <Helmet>
-                <title>DM Project - {profile.username ? profile.username : ""} profile</title>
+                <title>DM Project - {props.profile.username ? props.profile.username : ""} profile</title>
                 <meta name="description" content="Profile page"/>
             </Helmet>
             <Grid container spacing={5} className={classes.grid}>
                 <Grid item xs={6}>
                     <Typography variant="h4">
-                        {profile.user.first_name}
+                        {props.profile.user.first_name}
                     </Typography>
                 </Grid>
 
                 <Grid item xs={6}>
                     <Typography variant="h4">
-                        {profile.user.last_name}
+                        {props.profile.user.last_name}
                     </Typography>
                 </Grid>
             </Grid>
 
-            {profile.received_feedback.length > 0 ?
+            {props.profile.received_feedback.length > 0 ?
                 <FeedbacksComponent
-                    feedbacks={profile.received_feedback}
+                    feedbacks={props.profile.received_feedback}
                     edit={false}
                 />
                 :
