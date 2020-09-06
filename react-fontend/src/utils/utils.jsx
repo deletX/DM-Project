@@ -135,13 +135,13 @@ export const handleError = (enqueueSnackbar, message, error) => {
 }
 
 export const handleSuccess = (enqueueSnackbar, message) => {
-    enqueueSnackbar(message, {variant: 'success'});
+    enqueueSnackbar(message, {variant: 'success', autoHideDuration: 5000});
 }
 
 export const handleInfo = (enqueueSnackbar, message) => {
-    enqueueSnackbar(message, {variant: 'info'});
+    enqueueSnackbar(message, {variant: 'info', autoHideDuration: 5000});
 }
 
 export const handleWarning = (enqueueSnackbar, message) => {
-    enqueueSnackbar(message, {variant: 'warning'});
+    enqueueSnackbar(message, {variant: 'warning', autoHideDuration: 5000});
 }

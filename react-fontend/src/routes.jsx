@@ -14,24 +14,29 @@ import {useQuery} from "./utils/utils";
 
 
 const Login = (props) => {
-    let history=useHistory()
+    let history = useHistory()
     const query = useQuery()
-    return (<FormContainer effect={() => {
-        if (props.isAuthenticated)
-            history.push(query.get("next") != null ? decodeURI(query.get("next")) : home)
-    }}>
-        <LoginComponent/>
-    </FormContainer>)
+    return (
+        <FormContainer
+            effect={() => {
+                if (props.isAuthenticated)
+                    history.push(query.get("next") != null ?
+                        decodeURI(query.get("next")) : home)
+            }}>
+            <LoginComponent/>
+        </FormContainer>
+    )
 }
 
 const Signup = props => {
-    let history=useHistory()
+    let history = useHistory()
     const query = useQuery()
     return (
-        <FormContainer effect={() => {
-            if (props.isAuthenticated)
-                history.push(query.get("next") != null ? decodeURI(query.get("next")) : home)
-        }}>
+        <FormContainer
+            effect={() => {
+                if (props.isAuthenticated)
+                    history.push(query.get("next") != null ? decodeURI(query.get("next")) : home)
+            }}>
             <SignupComponent/>
         </FormContainer>
     )
@@ -53,7 +58,9 @@ const BaseRouter = props => (
             <Route exact path={home} component={HomeContainer}/>
             <Route exact path={addEvent} component={CreateComponent}/>
             <Route exact path={profile_id} component={ProfileContainer}/>
-            <Route exact path="/my-profile" render={() => (<Redirect to={profile(props.profileId)}/>)}/>
+            <Route exact path="/my-profile"
+                   render={() => (
+                       <Redirect to={profile(props.profileId)}/>)}/>
             <Route exact path="/events/:id" component={EventContainer}/>
             <Route exact path={"*"} component={NotFound404}/>
         </Switch>
