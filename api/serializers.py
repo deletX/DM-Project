@@ -449,5 +449,6 @@ class EventSerializer(serializers.ModelSerializer):
         instance.destination = validated_data.get("destination", instance.destination)
         instance.date_time = validated_data.get("date_time", instance.date_time)
         instance.status = validated_data.get("status", instance.status)
+        instance.picture = validated_data.get("picture", instance.picture)
         instance.save()
         return instance

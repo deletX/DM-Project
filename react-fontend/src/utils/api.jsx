@@ -114,7 +114,6 @@ export const postJoinEvent = (eventId, starting_address, starting_pos, car, toke
 )
 
 export const updateEvent = (eventId, data, token, image, onSuccess, onError) => (
-    console.log("updateEvent ", image, data),
     axios
         .put(
             eventDetailURL(eventId),

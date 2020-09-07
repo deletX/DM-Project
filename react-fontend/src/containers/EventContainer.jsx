@@ -71,7 +71,6 @@ const EventContainer = (props) => {
         const [deleteOpen, setDeleteOpen] = useState(false)
         const [joinOpen, setJoinOpen] = useState(false)
         const [leaveOpen, setLeaveOpen] = useState(false)
-        const [notEnoughDrivers, setNotEnoughDrivers] = useState(false)
         const [edit, setEdit] = useState(false)
         const [isLoading, setIsLoading] = useState(false)
 
@@ -179,16 +178,15 @@ const EventContainer = (props) => {
         const update = () => {
             let data;
             setIsLoading(true)
-            console.log("image is ", image)
-            if (image !== null) {
-                // data = {
-                //     picture: image,
-                //     name: name,
-                //     description: description,
-                //     address: address,
-                //     destination: destination,
-                //     date_time: `${day.getUTCFullYear()}-${day.getUTCMonth() < 10 ? '0' : ''}${day.getUTCMonth() + 1}-${day.getUTCDate()} ${time.getUTCHours()}:${time.getUTCMinutes()}`
-                // }
+            if (image === null) {
+                data = {
+                    name: name,
+                    description: description,
+                    address: address,
+                    destination: destination,
+                    date_time: `${day.getUTCFullYear()}-${day.getUTCMonth() < 10 ? '0' : ''}${day.getUTCMonth() + 1}-${day.getUTCDate()} ${time.getUTCHours()}:${time.getUTCMinutes()}`,
+                }
+            } else {
                 data = new FormData();
                 data.append("picture", image, image.name);//, image.name
                 data.append("name", name);
@@ -198,23 +196,11 @@ const EventContainer = (props) => {
                 data.append("date_time",
                     `${day.getUTCFullYear()}-${day.getUTCMonth() < 10 ? '0' :
                         ''}${day.getUTCMonth() + 1}-${day.getUTCDate()} ${time.getUTCHours()}:${time.getUTCMinutes()}`)
-                for (let pair of data.entries()) {
-                    console.log(pair[0] + ', ' + pair[1]);
-                }
-            } else {
-                data = {
-                    name: name,
-                    description: description,
-                    address: address,
-                    destination: destination,
-                    date_time: `${day.getUTCFullYear()}-${day.getUTCMonth() < 10 ? '0' : ''}${day.getUTCMonth() + 1}-${day.getUTCDate()} ${time.getUTCHours()}:${time.getUTCMinutes()}`,
-                }
             }
 
             updateEvent(id, data, token,
                 image,
                 (res) => {
-                    console.log("res ", res)
                     setEvent(res.data)
                     setImageURL(res.data.picture)
                     setName(res.data.name)
@@ -336,13 +322,9 @@ const EventContainer = (props) => {
                                         let availableSeats = drivers.map(
                                             item => item.car.tot_avail_seats
                                         ).reduce((prev, curr) => (prev + curr), 0);
-                                        console.log(availableSeats)
-                                        console.log(event.participant_set.length)
                                         if (availableSeats < event.participant_set.length || event.participant_set.length === 0) {
-                                            //setNotEnoughDrivers(true)
                                             handleWarning(enqueueSnackbar, "Oh no! It seems there aren't enough cars to bring all these people!")
                                         } else {
-                                            setNotEnoughDrivers(false)
                                             run()
                                         }
                                     }}
@@ -381,7 +363,6 @@ const EventContainer = (props) => {
                                         color="secondary"
                                         disabled={!edit ? !(isOwner && !(isRunning || isCompleted)) : !valid}
                                         onClick={() => {
-                                            console.log("onClick ", image)
                                             if (edit) {
                                                 update()
                                             } else
@@ -423,38 +404,18 @@ const EventContainer = (props) => {
                                             }
                                             setImage(file)
                                             fileReader.readAsDataURL(file)
-                                            console.log("onChange ", image)
                                         }}
                                     />
                                     <label htmlFor="raised-button-file">
-                                        <Button variant="raised" component="span" className={classes.uploadButton}>
-                                            Upload
-                                        </Button>
+                                        <Fab
+                                            color="secondary"
+                                            aria-label="upload picture"
+                                            size="small"
+                                            component="span"
+                                            className={classes.changePictureButton}>
+                                            <PhotoCamera/>
+                                        </Fab>
                                     </label>
-                                    {/*<input*/}
-                                    {/*    accept="image/*"*/}
-                                    {/*    className={classes.input}*/}
-                                    {/*    id="icon-button-file"*/}
-                                    {/*    type="file"*/}
-                                    {/*    hidden*/}
-                                    {/*    onChange={(input) => {*/}
-                                    {/*        let fileReader = new FileReader();*/}
-                                    {/*        let file = input.target.files[0];*/}
-                                    {/*        fileReader.onloadend = () => {*/}
-                                    {/*            setImageURL(fileReader.result)*/}
-                                    {/*        }*/}
-                                    {/*        setImage(file)*/}
-                                    {/*        fileReader.readAsDataURL(file)*/}
-                                    {/*    }}/>*/}
-                                    {/*<label htmlFor="icon-button-file">*/}
-                                    {/*    <Fab*/}
-                                    {/*        color="secondary"*/}
-                                    {/*        aria-label="upload picture"*/}
-                                    {/*        size="small"*/}
-                                    {/*        className={classes.changePictureButton}>*/}
-                                    {/*        <PhotoCamera/>*/}
-                                    {/*    </Fab>*/}
-                                    {/*</label>*/}
                                 </>
                                 }
                             </div>
@@ -472,11 +433,6 @@ const EventContainer = (props) => {
                     {isCompleted &&
                     <Alert severity="success" className={classes.warning}>
                         Beep beep boop, computation completed!
-                    </Alert>
-                    }
-                    {notEnoughDrivers &&
-                    <Alert severity="error" className={classes.warning}>
-                        Oh no! It seems there aren't enough cars to bring all these people!
                     </Alert>
                     }
 
