@@ -20,7 +20,7 @@ const HomeContainer = (props) => {
     let history = useHistory()
     const classes = useStyles();
     const {enqueueSnackbar,} = useSnackbar();
-    const {addError, isAuthenticated, isLoading, search, token} = props;
+    const {isAuthenticated, isLoading, search, token} = props;
 
     const [events, setEvents] = useState(null);
 
@@ -75,7 +75,7 @@ const HomeContainer = (props) => {
             })
     }
 
-        // filtered by the search term
+    // filtered by the search term
     let eventsFiltered = events;
     if (events !== null)
         eventsFiltered = eventsFiltered.filter((item) => (item.name.includes(search)))
