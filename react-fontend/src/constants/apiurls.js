@@ -160,8 +160,8 @@ export const notificationEditURL = (notificationPk) => (`${notificationListURL()
 /**
  * Nominatim API URL for the reverse lookup (from coordinate pair to address)
  *
- * @param {number} latitude
- * @param {number} longitude
+ * @param {number|string} latitude
+ * @param {number|string} longitude
  *
  * @return {string} url
  */

@@ -25,9 +25,10 @@ import {APP_CLIENTID, APP_SECRET} from "../constants/constants";
 import * as qs from "qs";
 
 /**
+ * Execute event API call
  *
- * @param eventId
- * @param token
+ * @param {number} eventId
+ * @param {number} token
  * @param {function()} onSuccess
  * @param {function()} onError
  */
@@ -45,6 +46,14 @@ export const runEvent = (eventId, token, onSuccess, onError) => (
         })
 )
 
+/**
+ * Event details API call
+ *
+ * @param {number} eventId
+ * @param {number} token
+ * @param {function()} onSuccess
+ * @param {function()} onError
+ */
 export const getEventAxios = (eventId, token, onSuccess, onError) => (
     axios
         .get(
@@ -56,10 +65,19 @@ export const getEventAxios = (eventId, token, onSuccess, onError) => (
         })
         .catch(err => {
             onError(err);
-            //addAlert("An error occurred while retrieving event data",)
         })
 )
 
+/**
+ * Event list API call with filters
+ *
+ * @param {number} joinable joinable filter
+ * @param {number} joined joined filter
+ * @param {number} owned owned filter
+ * @param {number} token
+ * @param {function()} onSuccess
+ * @param {function()} onError
+ */
 export const getEventsList = (joinable, joined, owned, token, onSuccess, onError) => (
     axios
         .get(
@@ -71,10 +89,18 @@ export const getEventsList = (joinable, joined, owned, token, onSuccess, onError
         })
         .catch(err => {
             onError(err);
-            //addAlert("An error occurred while retrieving event data",)
         })
 )
 
+/**
+ * Create event API call
+ *
+ * @param {number} token
+ * @param {FormData|{}} data
+ * @param {Blob} image
+ * @param {function()} onSuccess
+ * @param {function()} onError
+ */
 export const postCreateEvent = (token, data, image, onSuccess, onError) => (
     axios
         .post(
@@ -92,6 +118,16 @@ export const postCreateEvent = (token, data, image, onSuccess, onError) => (
         })
 )
 
+/**
+ * Join event API call
+ * @param {number} eventId
+ * @param {string} starting_address
+ * @param {string} starting_pos
+ * @param {number} car
+ * @param {number} token
+ * @param {function()} onSuccess
+ * @param {function()} onError
+ */
 export const postJoinEvent = (eventId, starting_address, starting_pos, car, token, onSuccess, onError) => (
     axios
         .post(
@@ -113,6 +149,16 @@ export const postJoinEvent = (eventId, starting_address, starting_pos, car, toke
         )
 )
 
+/**
+ * Update event API call
+ *
+ * @param {number} eventId
+ * @param {FormData|{}}data
+ * @param {number} token
+ * @param {Blob} image
+ * @param {function()} onSuccess
+ * @param {function()} onError
+ */
 export const updateEvent = (eventId, data, token, image, onSuccess, onError) => (
     axios
         .put(
@@ -130,6 +176,15 @@ export const updateEvent = (eventId, data, token, image, onSuccess, onError) => 
         })
 )
 
+/**
+ * Delete participation API call
+ *
+ * @param {number} eventId
+ * @param {number} partecipationId
+ * @param {number} token
+ * @param {function()} onSuccess
+ * @param {function()} onError
+ */
 export const leaveEvent = (eventId, partecipationId, token, onSuccess, onError) => (
     axios
         .delete(
@@ -140,12 +195,18 @@ export const leaveEvent = (eventId, partecipationId, token, onSuccess, onError) 
             onSuccess(res)
         })
         .catch(err => {
-            //console.log(err)
             onError(err)
-            //addAlert("Something went wrong while leaving", "error")
         })
 )
 
+/**
+ * Delete event API call
+ *
+ * @param {number} eventId
+ * @param {number} token
+ * @param {function()} onSuccess
+ * @param {function()} onError
+ */
 export const deleteEvent = (eventId, token, onSuccess, onError) => (
     axios
         .delete(
@@ -160,7 +221,17 @@ export const deleteEvent = (eventId, token, onSuccess, onError) => (
         })
 )
 
-
+/**
+ * Leave a feedback API call
+ *
+ * @param {number} eventId
+ * @param {number} receiver
+ * @param {string} comment
+ * @param {number} vote
+ * @param {number} token
+ * @param {function()} onSuccess
+ * @param {function()} onError
+ */
 export const postCreateFeedback = (eventId, receiver, comment, vote, token, onSuccess, onError) => (
     axios
         .post(
@@ -178,10 +249,21 @@ export const postCreateFeedback = (eventId, receiver, comment, vote, token, onSu
         })
         .catch((err) => {
             onError(err)
-            //handleError("Something went wrong while posting your feedback [014]", error)
         })
 )
 
+/**
+ * Amend feedback API call
+ *
+ * @param {number} eventId
+ * @param {number} receiverId
+ * @param {number} feedbackId
+ * @param {string} comment
+ * @param {number} vote
+ * @param {number} token
+ * @param {function()} onSuccess
+ * @param {function()} onError
+ */
 export const putEditFeedback = (eventId, receiverId, feedbackId, comment, vote, token, onSuccess, onError) => (
     axios
         .put(
@@ -202,6 +284,14 @@ export const putEditFeedback = (eventId, receiverId, feedbackId, comment, vote, 
         })
 )
 
+/**
+ * Retrieve profile API call
+ *
+ * @param {number} profileId
+ * @param {number} token
+ * @param {function()} onSuccess
+ * @param {function()} onError
+ */
 export const getProfileData = (profileId, token, onSuccess, onError) => (
     axios
         .get(profilesURL(profileId),
@@ -214,7 +304,13 @@ export const getProfileData = (profileId, token, onSuccess, onError) => (
         })
 )
 
-
+/**
+ * Retrieve user profile API call
+ *
+ * @param {number} token
+ * @param {function()} onSuccess
+ * @param {function()} onError
+ */
 export const getFetchProfile = (token, onSuccess, onError) => (
     axios
         .get(
@@ -229,6 +325,13 @@ export const getFetchProfile = (token, onSuccess, onError) => (
         })
 )
 
+/**
+ * Delete user API call
+ *
+ * @param {number} token
+ * @param {function()} onSuccess
+ * @param {function()} onError
+ */
 export const deleteProfile = (token, onSuccess, onError) => (
     axios
         .delete(
@@ -243,6 +346,14 @@ export const deleteProfile = (token, onSuccess, onError) => (
         })
 )
 
+/**
+ * Change profile picture API call
+ *
+ * @param {FormData} formData
+ * @param {number} token
+ * @param {function()} onSuccess
+ * @param {function()} onError
+ */
 export const putChangeProfilePicture = (formData, token, onSuccess, onError) => (
     axios
         .put(
@@ -258,6 +369,13 @@ export const putChangeProfilePicture = (formData, token, onSuccess, onError) => 
         })
 )
 
+/**
+ * Change user data API call
+ * @param {{}} data
+ * @param {number} token
+ * @param {function()} onSuccess
+ * @param {function()} onError
+ */
 export const putChangeUserData = (data, token, onSuccess, onError) => (
     axios
         .put(
@@ -273,6 +391,18 @@ export const putChangeUserData = (data, token, onSuccess, onError) => (
         })
 )
 
+/**
+ * Create car API call
+ *
+ * @param {number} profileId
+ * @param {string} name
+ * @param {number} totSeats
+ * @param {number} fuel
+ * @param {number} consumption
+ * @param {number} token
+ * @param {function()} onSuccess
+ * @param {function()} onError
+ */
 export const postCreateCar = (profileId, name, totSeats, fuel, consumption, token, onSuccess, onError) => (
     axios
         .post(
@@ -293,6 +423,19 @@ export const postCreateCar = (profileId, name, totSeats, fuel, consumption, toke
         })
 )
 
+/**
+ * Amend car API call
+ *
+ * @param {number} profileId
+ * @param {number} id
+ * @param {string} name
+ * @param {number} totSeats
+ * @param {number} fuel
+ * @param {number} consumption
+ * @param {number} token
+ * @param {function()} onSuccess
+ * @param {function()} onError
+ */
 export const putUpdateCar = (profileId, id, name, totSeats, fuel, consumption, token, onSuccess, onError) => (
     axios
         .put(
@@ -313,6 +456,15 @@ export const putUpdateCar = (profileId, id, name, totSeats, fuel, consumption, t
         })
 )
 
+/**
+ * Remove a car API call
+ *
+ * @param {number} profileId
+ * @param {number} id
+ * @param {number} token
+ * @param {function()} onSuccess
+ * @param {function()} onError
+ */
 export const deleteDeleteCar = (profileId, id, token, onSuccess, onError) => (
     axios
         .delete(
@@ -327,7 +479,13 @@ export const deleteDeleteCar = (profileId, id, token, onSuccess, onError) => (
         })
 )
 
-
+/**
+ * Refresh auth with refresh token API call
+ *
+ * @param {string} refreshToken
+ * @param {function()} onSuccess
+ * @param {function()} onError
+ */
 export const postRefreshAuth = (refreshToken, onSuccess, onError) => (
     axios
         .post(
@@ -348,6 +506,13 @@ export const postRefreshAuth = (refreshToken, onSuccess, onError) => (
         })
 )
 
+/**
+ * Login with Google API call
+ *
+ * @param {string} googleToken
+ * @param {function()} onSuccess
+ * @param {function()} onError
+ */
 export const postGoogleOAuthLogin = (googleToken, onSuccess, onError) => (
     axios
         .post(
@@ -369,6 +534,14 @@ export const postGoogleOAuthLogin = (googleToken, onSuccess, onError) => (
         })
 )
 
+/**
+ * Login with usr:psw API call
+ *
+ * @param {string} username
+ * @param {string} password
+ * @param {function()} onSuccess
+ * @param {function()} onError
+ */
 export const postAuthLogin = (username, password, onSuccess, onError) => (
     axios
         .post(
@@ -390,6 +563,17 @@ export const postAuthLogin = (username, password, onSuccess, onError) => (
         })
 )
 
+/**
+ * Signup API call
+ *
+ * @param {string} username
+ * @param {string} firstName
+ * @param {string} lastName
+ * @param {string} email
+ * @param {string} password
+ * @param {function()} onSuccess
+ * @param {function()} onError
+ */
 export const postAuthSignup = (username, firstName, lastName, email, password, onSuccess, onError) => (
     axios
         .post(
@@ -411,7 +595,13 @@ export const postAuthSignup = (username, firstName, lastName, email, password, o
         })
 )
 
-
+/**
+ * Retrieve notifications API call
+ *
+ * @param {string} token
+ * @param {function()} onSuccess
+ * @param {function()} onError
+ */
 export const getNotifications = (token, onSuccess, onError) => (
     axios
         .get(
@@ -426,6 +616,15 @@ export const getNotifications = (token, onSuccess, onError) => (
         })
 )
 
+/**
+ * Read a notification API call
+ *
+ * @param {string} token
+ * @param {number} notificationId
+ * @param {boolean} read
+ * @param {function()} onSuccess
+ * @param {function()} onError
+ */
 export const putReadNotifications = (token, notificationId, read, onSuccess, onError) => (
     axios
         .put(
@@ -442,6 +641,16 @@ export const putReadNotifications = (token, notificationId, read, onSuccess, onE
         })
 )
 
+/**
+ * Get nominatim address information for a coordinate couple.
+ *
+ * See {@link https://nominatim.org/release-docs/develop/api/Reverse/}
+ *
+ * @param {number|string} latitude
+ * @param {number|string} longitude
+ * @param {function()} onSuccess
+ * @param {function()} onError
+ */
 export const getNominatimInfo = (latitude, longitude, onSuccess, onError) => {
     axios.get(nominatimCoordinatesToAddressURL(latitude, longitude))
         .then((res) => {
@@ -453,6 +662,15 @@ export const getNominatimInfo = (latitude, longitude, onSuccess, onError) => {
         })
 }
 
+/**
+ * Look for addresses given a query.
+ *
+ * See {@link https://nominatim.org/release-docs/develop/api/Search/}
+ *
+ * @param {string} address
+ * @param {function()} onSuccess
+ * @param {function()} onError
+ */
 export const getNominatimAddress = (address, onSuccess, onError) => {
     axios
         .get(nominatimSearchAddressURL(address))
@@ -465,7 +683,13 @@ export const getNominatimAddress = (address, onSuccess, onError) => {
         })
 }
 
-
+/**
+ * Retrieve a profile image of a Google Account
+ *
+ * @param {string} imageUrl
+ * @param {function()} onSuccess
+ * @param {function()} onError
+ */
 export const getGoogleProfileImage = (imageUrl, onSuccess, onError) => {
     axios
         .get(
