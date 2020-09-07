@@ -24,7 +24,7 @@ const NotificationItem = (props) => {
                 button
                 disabled={notification.read}
                 onClick={() => {
-                    readNotification(notification.id, enqueueSnackbar);
+                    readNotification(notification.id, true, enqueueSnackbar);
                     history.push(notification.url)
                 }}>
 
@@ -49,8 +49,8 @@ const NotificationItem = (props) => {
 function mapDispatchToProps(dispatch) {
     return {
         readNotification:
-            (id, enqueueSnackbar) =>
-                dispatch(readNotification(id, enqueueSnackbar))
+            (id, read, enqueueSnackbar) =>
+                dispatch(readNotification(id, read, enqueueSnackbar))
     };
 }
 

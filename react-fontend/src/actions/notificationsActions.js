@@ -6,7 +6,7 @@ import {
     NOTIFICATIONS_START
 } from "./types";
 import {getNotifications, putReadNotifications} from "../utils/api";
-import {handleError} from "../utils/utils";
+import {handleError, handleInfo} from "../utils/utils";
 
 /**
  * Start action
@@ -107,13 +107,14 @@ export const retrieveNotifications = (enqueueSnackbar) => {
  *
  * @return {function(*): Promise<void>}
  */
-export const readNotification = (notificationId, read = true, enqueueSnackbar) => {
+export const readNotification = (notificationId, read, enqueueSnackbar) => {
     return async (dispatch) => {
         dispatch(start());
         let access_token = localStorage.getItem("access_token");
         return putReadNotifications(access_token, notificationId, read,
             (res) => {
                 dispatch(readSuccess(notificationId, read))
+                handleInfo(enqueueSnackbar, "Notification read")
             },
             (err) => {
                 handleError(enqueueSnackbar, "Something went wrong while reading the notifications [024]", err)

@@ -52,6 +52,7 @@ function NavBar(props) {
         function (a, b) {
             return new Date(b.date_time) - new Date(a.date_time)
         })
+    console.log(notificationsByDescDate);
     let notificationListItem = notificationsByDescDate.map((notification) => (
         <NotificationItem
             key={notification.id}
