@@ -1,15 +1,20 @@
 import axios from "axios";
 import {
+    carsDetailURL,
+    carsListURL,
+    convertTokenURL,
     createFeedbackURL,
+    currentProfileURL,
     eventDetailURL,
-    eventJoinURL, eventListURL,
+    eventJoinURL,
+    eventListURL,
     eventRunURL,
     nominatimCoordinatesToAddressURL,
-    participationEditURL,
-    profilesURL,
     notificationEditURL,
     notificationListURL,
-    tokenURL, convertTokenURL, currentProfileURL, carsListURL, carsDetailURL
+    participationEditURL,
+    profilesURL,
+    tokenURL
 } from "../constants/apiurls";
 import {handleError, handleSuccess, headers, selectItem} from "./utils";
 import {APP_CLIENTID, APP_SECRET} from "../constants/constants";

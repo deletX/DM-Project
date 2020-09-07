@@ -4,7 +4,6 @@ import {Button, Caption, Colors, HelperText, RadioButton, TextInput} from "react
 import {FUEL} from "../constants/constants";
 import {connect} from 'react-redux';
 import {createCar, deleteCar, updateCar} from "../actions/profileActions";
-import {alertAreYouSure} from "../utils/utils";
 
 /**
  * Text input for car name and helper text

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {LogBox, PermissionsAndroid, ScrollView, StyleSheet, View} from "react-native";
-import {Caption, Button, Colors, Dialog, Headline, Portal, RadioButton, TextInput} from 'react-native-paper';
+import {Button, Caption, Colors, Dialog, Headline, Portal, RadioButton, TextInput} from 'react-native-paper';
 import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import {useNavigation} from "@react-navigation/native";
@@ -130,7 +130,7 @@ const JoinScreen = (props) => {
         await postJoinedEvent(props.route.params.id, props.token,
             payload[0], payload[1], carsID[car],
             (res) => (navigation.navigate(HOME_SCREEN, {refresh: true})),
-            (err)=>{
+            (err) => {
 
             });
     }
@@ -143,7 +143,7 @@ const JoinScreen = (props) => {
         await postJoinedEvent(props.route.params.id, props.token,
             payload[0], payload[1], carsID[car],
             (res) => (navigation.navigate(HOME_SCREEN, {refresh: true})),
-            (err)=>{
+            (err) => {
 
             });
     }

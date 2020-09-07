@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {ScrollView, Text, View, StyleSheet} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {Button, Colors, DataTable, Title} from "react-native-paper"
 import Icon from "react-native-vector-icons/MaterialIcons"
 import {connect} from 'react-redux';
@@ -46,29 +46,29 @@ const PersonalProfileScreen = (props) => {
 
     return (
         <View style={{flex: 1}}>
-        <ScrollView contentContainerStyle={styles.scrollViewContentContainerStyle}>
-            <ProfileHeader profile={props.profile}/>
-            <View style={styles.feedbackAndCarsContainer}>
-                <ProfileFeedbackReceived profile={props.profile}/>
+            <ScrollView contentContainerStyle={styles.scrollViewContentContainerStyle}>
+                <ProfileHeader profile={props.profile}/>
+                <View style={styles.feedbackAndCarsContainer}>
+                    <ProfileFeedbackReceived profile={props.profile}/>
 
-                <View style={styles.carContainer}>
-                    <Title>
-                        Cars
-                    </Title>
-                    <Button icon={() => <Icon name={"add-circle"} size={23} color={Colors.orange800}/>}
-                            onPress={() => {
-                                props.navigation.navigate(ADD_CAR_SCREEN, {edit: false})
-                            }}
-                            color={Colors.orange800}
-                            style={styles.addCarButton}
-                    >
-                        add car
-                    </Button>
+                    <View style={styles.carContainer}>
+                        <Title>
+                            Cars
+                        </Title>
+                        <Button icon={() => <Icon name={"add-circle"} size={23} color={Colors.orange800}/>}
+                                onPress={() => {
+                                    props.navigation.navigate(ADD_CAR_SCREEN, {edit: false})
+                                }}
+                                color={Colors.orange800}
+                                style={styles.addCarButton}
+                        >
+                            add car
+                        </Button>
+                    </View>
+
+                    <CarTable>{cars}</CarTable>
                 </View>
-
-                <CarTable>{cars}</CarTable>
-            </View>
-        </ScrollView>
+            </ScrollView>
         </View>
     );
 };

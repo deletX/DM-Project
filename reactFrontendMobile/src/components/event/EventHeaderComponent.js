@@ -3,10 +3,9 @@ import {ImageBackground, StyleSheet, useWindowDimensions, View} from "react-nati
 import {Button, Colors, IconButton, Subheading, Title} from "react-native-paper";
 import moment from "moment";
 import {useNavigation} from "@react-navigation/native";
-import {alertAreYouSure, handleError, handleInfo, handleSuccess} from "../../utils/utils";
+import {alertAreYouSure, handleInfo} from "../../utils/utils";
 import {HOME_SCREEN} from "../../constants/screens";
 import {JOINABLE} from "../../constants/constants";
-import Toast from "react-native-simple-toast"
 import {connect} from 'react-redux';
 import {deleteEvent, runEvent} from "../../utils/api";
 
@@ -41,8 +40,8 @@ const EventHeaderOwnerButtons = (props) => (
                 alertAreYouSure(() => {
                     deleteEvent(props.event.id, props.token,
                         (res) => {
-                        props.navigation.navigate(HOME_SCREEN, {refresh: true})
-                    })
+                            props.navigation.navigate(HOME_SCREEN, {refresh: true})
+                        })
                 })
             }}
         >

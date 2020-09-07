@@ -74,7 +74,7 @@ const getNotificationSuccess = (state, action) => (
 const notificationUpdate = (state, action) => {
     let {id, read} = action;
     let tmpState = {...state};
-    if (read){
+    if (read) {
         tmpState.unReadCount -= 1;
     } else {
         tmpState.unReadCount += 1;

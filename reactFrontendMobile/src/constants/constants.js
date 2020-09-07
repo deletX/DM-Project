@@ -1,4 +1,4 @@
-import {COMPUTER, ALBERTO_IP} from './virtual-box';
+import {ALBERTO_IP, COMPUTER} from './virtual-box';
 
 /**
  * Google Client ID
