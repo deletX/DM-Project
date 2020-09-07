@@ -66,7 +66,7 @@ finally http://YOUR_IP:8000/admin/
 - `Save`
 
 
-###Add postgres DB to settings.py
+### Add postgres DB to settings.py
 ```bash
 DATABASES = {
     'default': {
@@ -80,7 +80,7 @@ DATABASES = {
 }
 ```
 
-###Connect to postgres DB with pgAdmin III
+### Connect to postgres DB with pgAdmin III
 - https://www.pgadmin.org/download/
 - On start page: File/Add Server then fill Properties with these values:
 ```bash
