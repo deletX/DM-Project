@@ -8,7 +8,6 @@ import {home, login} from "../constants/pagesurls";
 import MyProfileComponent from "../components/profile/MyProfileComponent";
 import OtherProfileComponent from "../components/profile/OtherProfileComponent";
 import FormContainer from "./FormContainer";
-import {Helmet} from "react-helmet";
 import {getProfileData} from "../utils/api";
 import {useSnackbar} from 'notistack';
 

@@ -14,7 +14,7 @@ const JoinContainer = (props) => {
     const classes = useStyles();
     const {enqueueSnackbar,} = useSnackbar();
     const {token, open, close, event, refreshEvents} = props;
-    
+
     const [addr, setAddr] = useState("");
     const [pos, setPos] = useState("");
     const [car, setCar] = useState(-1);
