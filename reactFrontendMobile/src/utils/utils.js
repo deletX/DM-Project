@@ -226,7 +226,9 @@ export const alertAreYouSure = (onPressYes, cancelable = true) => () => {
         "Are you sure?",
         "There is no coming back",
         [
-            {text: "No", style: 'cancel'},
+            {
+                text: "No", style: 'cancel'
+            },
             {
                 text: "Yes", onPress: onPressYes
             }
@@ -259,7 +261,7 @@ export const createDirectionLink = (participation, event, myCar) => {
  */
 export const handleError = (msg, error) => {
     Toast.show(msg, Toast.LONG)
-    console.log("handleError: ",error)
+    console.log("handleError: ", error)
 }
 
 export const handleSuccess = (msg) => {

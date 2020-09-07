@@ -9,8 +9,10 @@ import * as React from "react";
  */
 export const ProfileHeader = (props) => (
     <>
-        <CustomAvatar picture={props.profile.picture} firstName={props.profile.user.first_name}
-                      lastName={props.profile.user.last_name} size={100} labelStyle={{fontSize: 50}}
+        <CustomAvatar picture={props.profile.picture}
+                      firstName={props.profile.user.first_name}
+                      lastName={props.profile.user.last_name}
+                      size={100} labelStyle={{fontSize: 50}}
                       style={{marginTop: 20}}/>
         <Caption style={{marginTop: 5}}>{props.profile.user.username}</Caption>
         <StarRating

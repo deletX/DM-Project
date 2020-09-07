@@ -43,7 +43,6 @@ const EventsListScreen = (props) => {
     }
     React.useEffect(() => {
         reload();
-
         if (props.route.params?.refresh) {
             reload();
         }
@@ -70,7 +69,9 @@ const EventsListScreen = (props) => {
                               style={{backgroundColor: joinable ? Colors.orange500 : Colors.grey300}}
                               selectedColor="blue"
                               icon={joinable ? "check" : null}
-                              onPress={() => setJoinable(!joinable)}> Joinable </Chip>
+                              onPress={() => setJoinable(!joinable)}>
+                            Joinable
+                        </Chip>
                     </View>
 
                     <View style={styles.chip}>
@@ -78,7 +79,9 @@ const EventsListScreen = (props) => {
                               style={{backgroundColor: joined ? Colors.orange500 : Colors.grey300}}
                               selectedColor="blue"
                               icon={joined ? "check" : null}
-                              onPress={() => setJoined(!joined)}> Joined </Chip>
+                              onPress={() => setJoined(!joined)}>
+                            Joined
+                        </Chip>
                     </View>
 
                     <View style={styles.chip}>
@@ -86,7 +89,9 @@ const EventsListScreen = (props) => {
                               style={{backgroundColor: owned ? Colors.orange500 : Colors.grey300}}
                               selectedColor="blue"
                               icon={owned ? "check" : null}
-                              onPress={() => setOwned(!owned)}> Owned </Chip>
+                              onPress={() => setOwned(!owned)}>
+                            Owned
+                        </Chip>
                     </View>
                 </View>
 

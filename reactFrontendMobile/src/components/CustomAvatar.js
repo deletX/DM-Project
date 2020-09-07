@@ -9,20 +9,20 @@ import {StyleSheet} from "react-native"
  */
 const CustomAvatar = (props) => {
     return (
-        (props.picture === null || props.picture === "") ? (
-            <Avatar.Text
-                label={`${props.firstName ? props.firstName[0] : ""}${props.lastName ? props.lastName[0] : ""}`.toUpperCase()}
-                size={props.size ? props.size : 50}
-                labelStyle={[styles.labelStyle, props.labelStyle]}
-                style={props.style}
-            />
-        ) : (
-            <Avatar.Image source={{uri: props.picture === '' ? null : props.picture}}
-                          size={props.size ? props.size : 50}
-                          style={props.style}
-            />
-
-        )
+        (props.picture === null || props.picture === "") ?
+            (
+                <Avatar.Text
+                    label={`${props.firstName ? props.firstName[0] : ""}${props.lastName ? props.lastName[0] : ""}`.toUpperCase()}
+                    size={props.size ? props.size : 50}
+                    labelStyle={[styles.labelStyle, props.labelStyle]}
+                    style={props.style}
+                />
+            ) : (
+                <Avatar.Image source={{uri: props.picture === '' ? null : props.picture}}
+                              size={props.size ? props.size : 50}
+                              style={props.style}
+                />
+            )
     );
 };
 

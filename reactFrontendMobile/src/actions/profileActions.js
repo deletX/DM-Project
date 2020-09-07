@@ -7,7 +7,7 @@ import {
     PROFILE_OP_ERROR,
     PROFILE_OP_START
 } from "./types";
-import {handleError} from "../utils/utils";
+import {handleError, handleSuccess} from "../utils/utils";
 import AsyncStorage from '@react-native-community/async-storage'
 import {deleteDeleteCar, getFetchProfile, postCreateCar, putUpdateCar} from "../utils/api";
 
@@ -162,23 +162,6 @@ export const fetchProfile = () => {
                 handleError("Something went wrong while retrieving your profile [008]", err)
                 return err;
             })
-        // return axios
-        //     .get(
-        //         currentProfileURL(),
-        //         headers('application/json', access_token)
-        //     )
-        //     .then(res => {
-        //         let {id, user, picture, score, car_set, average_vote, received_feedback, given_feedback} = res.data;
-        //
-        //         AsyncStorage.setItem("profile_id", id.toString());
-        //
-        //         dispatch(getSuccess(id, user, picture, score, car_set, average_vote, received_feedback, given_feedback));
-        //     })
-        //     .catch(error => {
-        //         dispatch(fail());
-        //         handleError("Something went wrong while retrieving your profile [008]", error)
-        //         return error;
-        //     })
     }
 };
 
@@ -202,33 +185,13 @@ export const createCar = (name, totSeats, fuel, consumption) => {
             (res) => {
                 let {id, name, tot_avail_seats, fuel, consumption} = res.data;
                 dispatch(createCarSuccess(id, name, tot_avail_seats, fuel, consumption))
+                handleSuccess("Successfully added your car")
             },
             (err) => {
                 dispatch(fail());
                 handleError("Something went wrong while creating the car [009]", err)
                 return err;
             })
-        // return axios
-        //     .post(
-        //         carsListURL(profileId),
-        //         {
-        //             name: name,
-        //             tot_avail_seats: totSeats,
-        //             fuel: fuel,
-        //             consumption: consumption,
-        //         },
-        //         headers('application/json', access_token)
-        //     )
-        //     .then(res => {
-        //         let {id, name, tot_avail_seats, fuel, consumption} = res.data;
-        //
-        //         dispatch(createCarSuccess(id, name, tot_avail_seats, fuel, consumption))
-        //     })
-        //     .catch(error => {
-        //         dispatch(fail());
-        //         handleError("Something went wrong while creating the car [009]", error)
-        //         return error;
-        //     })
     };
 }
 
@@ -252,33 +215,13 @@ export const updateCar = (id, name, totSeats, fuel, consumption) => {
             (res) => {
                 let {id, name, tot_avail_seats, fuel, consumption} = res.data;
                 dispatch(changeCarSuccess(id, name, tot_avail_seats, fuel, consumption))
+                handleSuccess("Successfully edited your car")
             },
             (err) => {
                 dispatch(fail());
                 handleError("Something went wrong while editing the car [010]", err)
                 return err;
             })
-        // return axios
-        //     .put(
-        //         carsDetailURL(profileId, id),
-        //         {
-        //             name: name,
-        //             tot_avail_seats: totSeats,
-        //             fuel: fuel,
-        //             consumption: consumption,
-        //         },
-        //         headers('application/json', access_token)
-        //     )
-        //     .then(res => {
-        //         let {id, name, tot_avail_seats, fuel, consumption} = res.data;
-        //
-        //         dispatch(changeCarSuccess(id, name, tot_avail_seats, fuel, consumption))
-        //     })
-        //     .catch(error => {
-        //         dispatch(fail());
-        //         handleError("Something went wrong while editing the car [010]", error)
-        //         return error;
-        //     })
     };
 }
 
@@ -297,24 +240,12 @@ export const deleteCar = (id) => {
         return deleteDeleteCar(profileId, id, access_token,
             (res) => {
                 dispatch(deleteCarSuccess(id));
+                handleSuccess("Successfully deleted your car")
             },
             (err) => {
                 dispatch(fail());
                 handleError("Something went wrong while deleting the car [011]", err)
                 return err;
             })
-        // return axios
-        //     .delete(
-        //         carsDetailURL(profileId, id),
-        //         headers('application/json', access_token)
-        //     )
-        //     .then(res => {
-        //         dispatch(deleteCarSuccess(id));
-        //     })
-        //     .catch(error => {
-        //         dispatch(fail());
-        //         handleError("Something went wrong while deleting the car [011]", error)
-        //         return error;
-        //     })
     };
 }

@@ -65,21 +65,30 @@ export const drawerIcon = (navigation) => () => (
 const Events = (props) => {
     return (
         <EventStack.Navigator>
-            <EventStack.Screen name={HOME_SCREEN} component={EventsListScreen}
-                               options={{headerRight: drawerIcon(props.navigation),}}/>
-            <EventStack.Screen name={EVENT_SCREEN} component={EventScreen}
-                               options={({route}) => ({
-                                   title: `${route.params.event.name}`,
+            <EventStack.Screen name={HOME_SCREEN}
+                               component={EventsListScreen}
+                               options={{
                                    headerRight: drawerIcon(props.navigation),
-                               })}/>
-            <EventStack.Screen name={JOIN_SCREEN} component={JoinScreen} options={{
-                headerRight: drawerIcon(props.navigation),
-            }}/>
-            <EventStack.Screen name={OTHER_PROFILE_SCREEN} component={ProfileScreen}
-                               options={({route}) => ({
-                                   title: `Profile - ${route.params.profile.user.username}`,
-                                   headerRight: drawerIcon(props.navigation)
-                               })}/>
+                               }}/>
+            <EventStack.Screen name={EVENT_SCREEN}
+                               component={EventScreen}
+                               options={
+                                   ({route}) => ({
+                                       title: `${route.params.event.name}`,
+                                       headerRight: drawerIcon(props.navigation),
+                                   })}/>
+            <EventStack.Screen name={JOIN_SCREEN}
+                               component={JoinScreen}
+                               options={{
+                                   headerRight: drawerIcon(props.navigation),
+                               }}/>
+            <EventStack.Screen name={OTHER_PROFILE_SCREEN}
+                               component={ProfileScreen}
+                               options={
+                                   ({route}) => ({
+                                       title: `Profile - ${route.params.profile.user.username}`,
+                                       headerRight: drawerIcon(props.navigation)
+                                   })}/>
         </EventStack.Navigator>
     );
 };
@@ -93,18 +102,25 @@ const Events = (props) => {
 const Profile = (props) => {
     return (
         <ProfileStack.Navigator>
-            <ProfileStack.Screen name={PROFILE_SCREEN} component={PersonalProfileScreen}
-                                 options={{headerRight: drawerIcon(props.navigation),}}/>
-            <ProfileStack.Screen name={ADD_CAR_SCREEN} component={AddCarScreen}
-                                 options={({route}) => ({
-                                     title: `${route.params.edit ? "Edit car" : "Add car"}`,
-                                     headerRight: drawerIcon(props.navigation)
-                                 })}/>
-            <ProfileStack.Screen name={OTHER_PROFILE_SCREEN} component={ProfileScreen}
-                                 options={({route}) => ({
-                                     title: `Profile - ${route.params.profile.user.username}`,
-                                     headerRight: drawerIcon(props.navigation)
-                                 })}/>
+            <ProfileStack.Screen name={PROFILE_SCREEN}
+                                 component={PersonalProfileScreen}
+                                 options={{
+                                     headerRight: drawerIcon(props.navigation),
+                                 }}/>
+            <ProfileStack.Screen name={ADD_CAR_SCREEN}
+                                 component={AddCarScreen}
+                                 options={
+                                     ({route}) => ({
+                                         title: `${route.params.edit ? "Edit car" : "Add car"}`,
+                                         headerRight: drawerIcon(props.navigation)
+                                     })}/>
+            <ProfileStack.Screen name={OTHER_PROFILE_SCREEN}
+                                 component={ProfileScreen}
+                                 options={
+                                     ({route}) => ({
+                                         title: `Profile - ${route.params.profile.user.username}`,
+                                         headerRight: drawerIcon(props.navigation)
+                                     })}/>
         </ProfileStack.Navigator>
     );
 };
@@ -126,16 +142,19 @@ const Navigation = (props) => {
         <>
             {props.isAuthenticated ? (
                 <Drawer.Navigator
-                    drawerContent={(props) => <CustomDrawerComponent {...props} />}>
-                    <Drawer.Screen
-                        name={HOME_STACK}
-                        component={Events}
+                    drawerContent={(props) => (
+                        <CustomDrawerComponent {...props} />
+                    )}>
+                    <Drawer.Screen name={HOME_STACK}
+                                   component={Events}
                     />
-                    <Drawer.Screen name={PROFILE_STACK} component={Profile}/>
+                    <Drawer.Screen name={PROFILE_STACK}
+                                   component={Profile}/>
                 </Drawer.Navigator>
             ) : (
                 <AuthStack.Navigator>
-                    <AuthStack.Screen name={LOGIN_SCREEN} component={LoginScreen}/>
+                    <AuthStack.Screen name={LOGIN_SCREEN}
+                                      component={LoginScreen}/>
                 </AuthStack.Navigator>
             )}
         </>

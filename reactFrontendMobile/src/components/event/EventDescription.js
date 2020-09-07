@@ -36,8 +36,7 @@ const EventMap = (props) => (
             heading: 0,
             zoom: 15,
             altitude: 15,
-        }}
-    >
+        }}>
         <Marker
             coordinate={{latitude: props.lat, longitude: props.lng}}
             title={props.event.address}

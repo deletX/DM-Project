@@ -24,15 +24,20 @@ const ParticipantListItem = (props) => {
 
     return (
         <List.Item
-            onPress={async () => {
-                if (participant.profile.id === profileId) {
-                    navigation.navigate(PROFILE_STACK)
-                } else {
-                    await getProfile(participant.profile.id, token, (res) => {
-                        navigation.navigate(OTHER_PROFILE_SCREEN, {id: participant.profileId, profile: res.data})
-                    })
-                }
-            }}
+            onPress={
+                async () => {
+                    if (participant.profile.id === profileId) {
+                        navigation.navigate(PROFILE_STACK)
+                    } else {
+                        await getProfile(participant.profile.id, token,
+                            (res) => {
+                                navigation.navigate(OTHER_PROFILE_SCREEN, {
+                                    id: participant.profileId,
+                                    profile: res.data
+                                })
+                            })
+                    }
+                }}
             key={participant.id}
             title={`${participant.profile.first_name} ${participant.profile.last_name}`}
             titleStyle={{maxWidth: windowWidth - 230}}

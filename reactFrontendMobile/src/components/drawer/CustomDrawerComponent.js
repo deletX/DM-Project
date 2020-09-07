@@ -39,7 +39,8 @@ const NotificationDrawerItem = (props) => (
  */
 const UserInfoDrawerComponent = (props) => (
     <View style={styles.userInfoDrawerComponent}>
-        <CustomAvatar picture={props.picture} firstName={props.firstName}
+        <CustomAvatar picture={props.picture}
+                      firstName={props.firstName}
                       lastName={props.lastName}/>
         <View style={styles.userInfoDrawerComponentText}>
             <Title style={styles.title}>
@@ -56,11 +57,14 @@ const UserInfoDrawerComponent = (props) => (
  * - Profile: to navigate to the *PersonalProfileScreen*
  */
 const DrawerNavigationSection = (props) => (
-    <Drawer.Section style={styles.drawerSection} title={'Pages:'}>
+    <Drawer.Section style={styles.drawerSection}
+                    title={'Pages:'}>
         <DrawerItem
             label="Home"
             icon={({color, size}) => (
-                <Icon name="home-outline" color={color} size={size}/>
+                <Icon name="home-outline"
+                      color={color}
+                      size={size}/>
             )}
             onPress={() => {
                 props.navigation.navigate(HOME_SCREEN);
@@ -70,7 +74,9 @@ const DrawerNavigationSection = (props) => (
         <DrawerItem
             label="Profile"
             icon={({color, size}) => (
-                <Icon name="account" color={color} size={size}/>
+                <Icon name="account"
+                      color={color}
+                      size={size}/>
             )}
             onPress={() => {
                 props.navigation.navigate(PROFILE_STACK);
@@ -87,7 +93,9 @@ const SignOutButton = (props) => (
     <DrawerItem
         label="Sign Out"
         icon={({color, size}) => (
-            <Icon name="exit-to-app" color={color} size={size}/>
+            <Icon name="exit-to-app"
+                  color={color}
+                  size={size}/>
         )}
         onPress={() => {
             props.logout();

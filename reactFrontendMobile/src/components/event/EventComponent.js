@@ -40,15 +40,21 @@ const EventCardActions = (props) => {
 
     return (
         <Card.Actions>
-            <Button mode={props.event.status === JOINABLE ? "contained" : "text"} color="#00675b"
-                    onPress={() => navigation.navigate((JOIN_SCREEN), {event: props.event, id: props.event.id})}
+            <Button mode={props.event.status === JOINABLE ? "contained" : "text"}
+                    color="#00675b"
+                    onPress={() => {
+                        navigation.navigate((JOIN_SCREEN), {event: props.event, id: props.event.id})
+                    }}
                     disabled={props.event.status === JOINABLE && participation === undefined ? null : "true"}
-            >Join event</Button>
+            >Join event
+            </Button>
 
-            <Button mode="text" color="#c56200"
-                    onPress={alertAreYouSure(leaveEvent)} style={styles.buttonRight}
-                    disabled={(props.event.status === JOINABLE && (participation !== undefined)) ? null : "true"}>Leave
-                event</Button>
+            <Button mode="text"
+                    color="#c56200"
+                    onPress={alertAreYouSure(leaveEvent)}
+                    style={styles.buttonRight}
+                    disabled={(props.event.status === JOINABLE && (participation !== undefined)) ? null : "true"}>Leave event
+            </Button>
         </Card.Actions>
     )
 }
@@ -67,8 +73,7 @@ const EventComponent = (props) => {
     return (
         <View
             key={props.id}
-            pointerEvents={(props.event.status === JOINABLE || props.event.status === COMPUTED) ? "auto" : "none"}
-        >
+            pointerEvents={(props.event.status === JOINABLE || props.event.status === COMPUTED) ? "auto" : "none"}>
             <Card style={styles.card}
                   key={props.event.id}
                   onPress={() => {
@@ -78,7 +83,9 @@ const EventComponent = (props) => {
                 <Card.Cover source={{uri: props.event.picture}}/>
 
                 {props.event.status === COMPUTING &&
-                <ProgressBar indeterminate={true} animating color={Colors.orangeA400}
+                <ProgressBar indeterminate={true}
+                             animating
+                             color={Colors.orangeA400}
                              style={styles.spinner}/>
                 }
 

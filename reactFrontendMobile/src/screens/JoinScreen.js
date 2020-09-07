@@ -45,14 +45,11 @@ const PickupMap = (props) => (
         showsMyLocationButton={true}
         zoomTapEnabled={true}
         rotateEnabled={true}
-        scrollEnabled={true}
-
-    >
+        scrollEnabled={true}>
         <Marker
             coordinate={props.markerCoordinate}
             draggable
-            onDragEnd={props.markerOnDragEnd}
-        >
+            onDragEnd={props.markerOnDragEnd}>
         </Marker>
     </MapView>
 )
@@ -78,9 +75,16 @@ const JoinScreen = (props) => {
 
     const [car, setCar] = React.useState("no car"); //name of the selected car, default no car
     const carsRadioItem = props.cars.map((car, key) => (
-        <RadioButton.Item label={car.name} value={car.name} key={key}/>)
+            <RadioButton.Item label={car.name}
+                              value={car.name}
+                              key={key}/>
+        )
     );
-    carsRadioItem.unshift(<RadioButton.Item label={"no car"} value={"no car"} key={"-1"}/>);
+    carsRadioItem.unshift(
+        <RadioButton.Item label={"no car"}
+                          value={"no car"}
+                          key={"-1"}/>
+    );
     let carsID = Object.assign({}, ...props.cars.map((x) => ({[x.name]: x.id}))); //id of a car given the name
     carsID["no car"] = null;
 
@@ -104,22 +108,23 @@ const JoinScreen = (props) => {
      * Get current location and set it for the map
      */
     const locateCurrentLocation = () => {
-        Geolocation.getCurrentPosition(position => {
-            let region = {
-                latitude: position.coords.latitude,
-                longitude: position.coords.longitude,
-                latitudeDelta: 0.015,
-                longitudeDelta: 0.0121,
-            }
-            setGPSPositionLatitude(region.latitude);
-            setGPSPositionLongitude(region.longitude);
+        Geolocation.getCurrentPosition(
+            position => {
+                let region = {
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                    latitudeDelta: 0.015,
+                    longitudeDelta: 0.0121,
+                }
+                setGPSPositionLatitude(region.latitude);
+                setGPSPositionLongitude(region.longitude);
 
-            setMarkerPositionLatitude(region.latitude);
-            setMarkerPositionLongitude(region.longitude);
+                setMarkerPositionLatitude(region.latitude);
+                setMarkerPositionLongitude(region.longitude);
 
-        }, (error) => {
-            handleError("Something went wrong with your location [018]", error)
-        })
+            }, (error) => {
+                handleError("Something went wrong with your location [018]", error)
+            })
     }
 
     /**
@@ -129,9 +134,10 @@ const JoinScreen = (props) => {
         let payload = await getNominatimInfo(GPSPositionLatitude, GPSPositionLongitude);
         await postJoinedEvent(props.route.params.id, props.token,
             payload[0], payload[1], carsID[car],
-            (res) => (navigation.navigate(HOME_SCREEN, {refresh: true})),
+            (res) => {
+                navigation.navigate(HOME_SCREEN, {refresh: true})
+            },
             (err) => {
-
             });
     }
 
@@ -142,29 +148,32 @@ const JoinScreen = (props) => {
         let payload = await getNominatimInfo(MarkerPositionLatitude, MarkerPositionLongitude);
         await postJoinedEvent(props.route.params.id, props.token,
             payload[0], payload[1], carsID[car],
-            (res) => (navigation.navigate(HOME_SCREEN, {refresh: true})),
+            (res) => {
+                navigation.navigate(HOME_SCREEN, {refresh: true})
+            },
             (err) => {
-
             });
     }
 
     return (
         <ScrollView keyboardShouldPersistTaps={"always"}>
-            <View style={[{
-                paddingTop: paddingTop
-            }, styles.view]}>
+            <View style={[{paddingTop: paddingTop}, styles.view]}>
 
                 <Headline style={styles.headline}>
                     Car
                 </Headline>
-                <ChooseCarDialog visible={visible} onDismiss={hideDialog} onValueChange={car => setCar(car)} value={car}
+                <ChooseCarDialog visible={visible}
+                                 onDismiss={hideDialog}
+                                 onValueChange={car => setCar(car)} value={car}
                                  onPress={hideDialog}>
                     {carsRadioItem}
                 </ChooseCarDialog>
                 <TextInput style={styles.textInput} flat disabled={true}
                            label={"Selected car"} value={car}
                            mode={"flat"}/>
-                <Button mode="outlined" icon={"car-hatchback"} onPress={showDialog} style={{marginBottom: 15}}>
+                <Button mode="outlined" icon={"car-hatchback"}
+                        onPress={showDialog}
+                        style={{marginBottom: 15}}>
                     Pick car
                 </Button>
 
@@ -192,14 +201,22 @@ const JoinScreen = (props) => {
                 />
 
                 <View style={styles.buttonsContainer}>
-                    <Button style={styles.button} mode={"text"} color={Colors.deepOrange900} icon="crosshairs-gps"
-                            onPress={joinWithGPS}> Join </Button>
-                    <Button style={styles.button} mode={"text"} color={Colors.deepOrange900} icon="map-marker"
-                            onPress={joinWithMarker}> Join </Button>
-
+                    <Button style={styles.button}
+                            mode={"text"}
+                            color={Colors.deepOrange900}
+                            icon="crosshairs-gps"
+                            onPress={joinWithGPS}>
+                        Join
+                    </Button>
+                    <Button style={styles.button}
+                            mode={"text"}
+                            color={Colors.deepOrange900}
+                            icon="map-marker"
+                            onPress={joinWithMarker}>
+                        Join
+                    </Button>
                 </View>
             </View>
-
         </ScrollView>
     );
 }

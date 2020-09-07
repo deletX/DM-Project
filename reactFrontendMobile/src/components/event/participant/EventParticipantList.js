@@ -12,7 +12,8 @@ const EventParticipantList = (props) => {
     const windowHeight = useWindowDimensions().height;
     const {styles, event} = props
     const participantsListItems = event.participant_set.map((participant) => (
-        <ParticipantListItem key={participant.id} participant={participant}/>
+        <ParticipantListItem key={participant.id}
+                             participant={participant}/>
     ))
     return (
         <>

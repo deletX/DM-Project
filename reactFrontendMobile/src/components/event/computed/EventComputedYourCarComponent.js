@@ -37,11 +37,13 @@ const EventComputedYourCarComponent = (props) => {
                 {participant.pickup_index === 0 &&
                 <Divider/>
                 }
-            </View>)
+            </View>
+        )
     })
 
     const feedbackMenuItems = myCar.length === 0 ? [] : myCar.filter((participant) => (participant.profile.id !== profileId)).map(item => (
-        <RadioButton.Item key={item.id} label={`${item.profile.first_name} ${item.profile.last_name}`}
+        <RadioButton.Item key={item.id}
+                          label={`${item.profile.first_name} ${item.profile.last_name}`}
                           value={item.profile.id} style={{height: 40}}/>
     ))
 
@@ -56,16 +58,20 @@ const EventComputedYourCarComponent = (props) => {
             </Subheading>
 
             {isDriver &&
-            <Button style={{marginBottom: 10}} mode="outlined" target="_blank" onPress={() => {
-                Linking.openURL(directionsURL)
-            }}>
+            <Button style={{marginBottom: 10}}
+                    mode="outlined"
+                    target="_blank"
+                    onPress={() => {
+                        Linking.openURL(directionsURL)
+                    }}>
                 Directions
             </Button>
             }
             <ScrollView style={{maxHeight: windowHeight * 0.3, marginBottom: 15}}>
                 {participantsListItems}
             </ScrollView>
-            <Button style={{marginBottom: 10}} mode="outlined"
+            <Button style={{marginBottom: 10}}
+                    mode="outlined"
                     disabled={feedbackMenuItems.length === 0 || (new Date()) < date}
                     onPress={() => {
                         setVisible(true)
@@ -74,7 +80,10 @@ const EventComputedYourCarComponent = (props) => {
             </Button>
             <Divider/>
             <Portal>
-                <FeedbackDialog car={myCar} event={event} visible={visible} onDismiss={() => setVisible(false)}
+                <FeedbackDialog car={myCar}
+                                event={event}
+                                visible={visible}
+                                onDismiss={() => setVisible(false)}
                                 feedbackMenuItems={feedbackMenuItems}/>
             </Portal>
         </View>

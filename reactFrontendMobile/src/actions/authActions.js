@@ -1,5 +1,5 @@
 import {AUTH_ERROR, AUTH_LOGOUT, AUTH_START, AUTH_SUCCESS} from './types';
-import {handleError} from '../utils/utils';
+import {handleError, handleSuccess} from '../utils/utils';
 import {clearProfileData, fetchProfile} from './profileActions';
 import {clearNotifications, retrieveNotifications} from './notificationsActions';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -98,6 +98,7 @@ export const googleOAuthLogin = (google_token) => {
                 dispatch(success(access_token));
                 dispatch(retrieveNotifications());
                 dispatch(fetchProfile());
+                handleSuccess("Successfully logged in with Google")
             },
             (err) => {
                 dispatch(fail(err));
@@ -128,6 +129,7 @@ export const authLogin = (username, password) => {
 
                 dispatch(success(access_token));
                 dispatch(retrieveNotifications());
+                handleSuccess("Successfully logged in")
                 return dispatch(fetchProfile());
             },
             (err) => {

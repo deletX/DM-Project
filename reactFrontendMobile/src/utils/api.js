@@ -30,6 +30,7 @@ import * as qs from "qs";
  * @param {number} eventId
  * @param {string} token
  * @param {function()} onSuccess
+ * @param {function()} onError
  */
 export const runEvent = (eventId, token, onSuccess, onError) => {
     axios
@@ -74,7 +75,9 @@ export const getEventDetail = async (eventId, token, onSuccess, onError) => {
  */
 export const getListEvent = (joinable, joined, owned, token, onSuccess, onError) => {
     axios
-        .get(eventListURL(joinable, joined, owned), headers('application/json', token))
+        .get(
+            eventListURL(joinable, joined, owned),
+            headers('application/json', token))
         .then((res) => {
             onSuccess(res)
         })
@@ -211,7 +214,8 @@ export const postCreateFeedback = (eventId, receiver, comment, vote, token, onSu
  */
 export const getProfile = async (id, token, onSuccess) => {
     axios
-        .get(profilesURL(id),
+        .get(
+            profilesURL(id),
             headers('application/json', token))
         .then(res => {
             onSuccess(res);
@@ -367,7 +371,10 @@ export const postAuthLogin = (username, password, onSuccess, onError) => {
  */
 export const getNominatimInfo = async (latitude, longitude) => {
 
-    return axios.get(nominatimCoordinatesToAddressURL(latitude, longitude))
+    return axios
+        .get(
+            nominatimCoordinatesToAddressURL(latitude, longitude)
+        )
         .then((res) => {
                 return selectItem(res.data);
             }
@@ -375,8 +382,6 @@ export const getNominatimInfo = async (latitude, longitude) => {
         .catch((error) => {
             handleError("Something went wrong while getting address of your position [012]", error)
         })
-
-
 }
 
 

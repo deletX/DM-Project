@@ -156,10 +156,8 @@ const profileReducer = (state = initialState, action) => {
             return profileStart(state, action);
         case GET_PROFILE_SUCCESS:
             return getProfileSuccess(state, action);
-
         case PROFILE_OP_ERROR:
             return profileError(state, action);
-
         case CLEAR_PROFILE_DATA:
             return clearProfileData(state, action);
         case CAR_CREATE:

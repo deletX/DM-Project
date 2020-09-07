@@ -19,17 +19,26 @@ const lengthyFeedbackAlert = (feedback, token, navigation) => {
         "Comment",
         feedback.comment,
         [
-            {text: "Cancel", style: "cancel"},
             {
-                text: "See Profile", onPress: async () => {
-                    await getProfile(feedback.giver.id, token, (res) => (navigation.navigate(OTHER_PROFILE_SCREEN, {
-                        id: feedback.giver.id,
-                        profile: res.data
-                    })))
-
+                text: "Cancel",
+                style: "cancel"
+            },
+            {
+                text: "See Profile",
+                onPress: async () => {
+                    await getProfile(feedback.giver.id, token,
+                        (res) => {
+                            navigation.navigate(OTHER_PROFILE_SCREEN, {
+                                id: feedback.giver.id,
+                                profile: res.data
+                            })
+                        })
                 }
             },
-            {text: "ok", style: "ok"}
+            {
+                text: "ok",
+                style: "ok"
+            }
         ]
     )
 }
@@ -46,41 +55,42 @@ const FeedbackListComponent = (props) => {
     const {feedback, token} = props;
 
     return (
-        <List.Item
-            onPress={async () => {
+        <List.Item onPress={
+            async () => {
                 if (feedback.comment.length > 80) {
                     lengthyFeedbackAlert(feedback, token, navigation)
                 } else {
-                    await getProfile(feedback.giver.id, token, (res) => (navigation.navigate(OTHER_PROFILE_SCREEN, {
-                        id: feedback.giver.id,
-                        profile: res.data
-                    })));
+                    await getProfile(feedback.giver.id, token,
+                        (res) => {
+                            navigation.navigate(OTHER_PROFILE_SCREEN, {
+                                id: feedback.giver.id,
+                                profile: res.data
+                            })
+                        });
                 }
-
             }}
-            key={feedback.id}
-            title={`${feedback.giver.first_name} ${feedback.giver.last_name}`}
-            titleStyle={styles.titleStyle}
-            left={(props) => (
-                <CustomAvatar
-                    picture={feedback.giver.picture}
-                    firstName={feedback.giver.first_name}
-                    lastName={feedback.giver.last_name}
-                    size={40}
-                    // style={{marginTop: 5}}
-                />)}
-            description={feedback.comment}
-            right={(props) => (
-                <StarRating
-                    halfStarEnabled
-                    rating={feedback.vote}
-                    starSize={20}
-                    disabled={true}
-                    fullStarColor={"#d6a000"}
-                    containerStyle={styles.containerStyle}
-                    emptyStarColor={"#808080"}
-                />)}
-
+                   key={feedback.id}
+                   title={`${feedback.giver.first_name} ${feedback.giver.last_name}`}
+                   titleStyle={styles.titleStyle}
+                   left={(props) => (
+                       <CustomAvatar
+                           picture={feedback.giver.picture}
+                           firstName={feedback.giver.first_name}
+                           lastName={feedback.giver.last_name}
+                           size={40}
+                           // style={{marginTop: 5}}
+                       />)}
+                   description={feedback.comment}
+                   right={(props) => (
+                       <StarRating
+                           halfStarEnabled
+                           rating={feedback.vote}
+                           starSize={20}
+                           disabled={true}
+                           fullStarColor={"#d6a000"}
+                           containerStyle={styles.containerStyle}
+                           emptyStarColor={"#808080"}
+                       />)}
         />
     );
 };

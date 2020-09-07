@@ -36,8 +36,15 @@ const CarTable = (props) => (
 const PersonalProfileScreen = (props) => {
 
     const cars = props.profile.carSet.map((car) => (
-        <DataTable.Row key={car.id} onPress={() => props.navigation.navigate(ADD_CAR_SCREEN, {edit: true, car: car})}>
-            <DataTable.Cell><Text style={styles.text}> {car.name}</Text></DataTable.Cell>
+        <DataTable.Row key={car.id}
+                       onPress={() => {
+                           props.navigation.navigate(ADD_CAR_SCREEN, {edit: true, car: car})
+                       }}>
+            <DataTable.Cell>
+                <Text style={styles.text}>
+                    {car.name}
+                </Text>
+            </DataTable.Cell>
             <DataTable.Cell>{FUEL[car.fuel]}</DataTable.Cell>
             <DataTable.Cell numeric>{car.tot_avail_seats}</DataTable.Cell>
             <DataTable.Cell numeric>{car.consumption}</DataTable.Cell>
@@ -55,13 +62,16 @@ const PersonalProfileScreen = (props) => {
                         <Title>
                             Cars
                         </Title>
-                        <Button icon={() => <Icon name={"add-circle"} size={23} color={Colors.orange800}/>}
+                        <Button icon={() => (
+                            <Icon name={"add-circle"}
+                                  size={23}
+                                  color={Colors.orange800}/>
+                        )}
                                 onPress={() => {
                                     props.navigation.navigate(ADD_CAR_SCREEN, {edit: false})
                                 }}
                                 color={Colors.orange800}
-                                style={styles.addCarButton}
-                        >
+                                style={styles.addCarButton}>
                             add car
                         </Button>
                     </View>

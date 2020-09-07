@@ -53,9 +53,11 @@ const FeedbackDialogActions = (props) => (
     <Dialog.Actions>
         <Button onPress={props.onDismiss}>Close</Button>
         <Button onPress={() => {
-            postCreateFeedback(props.event.id, props.receiver, props.comment, props.vote, props.token, (res) => {
-                props.onDismiss()
-            })
+            postCreateFeedback(props.event.id, props.receiver,
+                props.comment, props.vote, props.token,
+                (res) => {
+                    props.onDismiss()
+                })
         }}>SUBMIT</Button>
     </Dialog.Actions>
 )

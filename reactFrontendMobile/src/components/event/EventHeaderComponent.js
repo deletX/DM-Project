@@ -14,11 +14,13 @@ import {deleteEvent, runEvent} from "../../utils/api";
  */
 const EventHeaderTitle = (props) => (
     <View style={{marginLeft: props.windowWidth * 0.05}}>
-        <Title numberOfLines={3} style={[{maxWidth: props.windowWidth * .90}, headerStyles.title]}>
+        <Title numberOfLines={3}
+               style={[{maxWidth: props.windowWidth * .90}, headerStyles.title]}>
             {props.event.name}
         </Title>
         <Subheading style={{color: Colors.white, marginTop: props.windowHeight * 0.3}}>
-            Date: {moment(props.event.date_time).format("dddd D MMMM YYYY, HH:mm")}</Subheading>
+            Date: {moment(props.event.date_time).format("dddd D MMMM YYYY, HH:mm")}
+        </Subheading>
         <Subheading style={{color: Colors.white, marginTop: 20}}>
             Destination: {props.event.address}
         </Subheading>
@@ -37,14 +39,14 @@ const EventHeaderOwnerButtons = (props) => (
             disabled={props.event.status !== JOINABLE}
             style={headerStyles.deleteButton}
             onPress={() => {
-                alertAreYouSure(() => {
-                    deleteEvent(props.event.id, props.token,
-                        (res) => {
-                            props.navigation.navigate(HOME_SCREEN, {refresh: true})
-                        })
-                })
-            }}
-        >
+                alertAreYouSure(
+                    () => {
+                        deleteEvent(props.event.id, props.token,
+                            (res) => {
+                                props.navigation.navigate(HOME_SCREEN, {refresh: true})
+                            })
+                    })
+            }}>
             delete
         </Button>
         <Button
@@ -62,8 +64,7 @@ const EventHeaderOwnerButtons = (props) => (
                         (err) => {
                         })
                 }
-            }}
-        >
+            }}>
             run
         </Button>
     </>
@@ -96,25 +97,29 @@ const EventHeaderComponent = (props) => {
             <ImageBackground source={{uri: event.picture}}
                              style={[styles.image, {height: windowHeight - 80}]}>
                 <View style={styles.overlay}>
-                    <EventHeaderTitle {...props} windowWidth={windowWidth} windowHeight={windowHeight}/>
-                    <View
-                        style={[{left: windowWidth / 2 - 30}, headerStyles.arrowDown]}>
-                        <IconButton
-                            icon="arrow-down-drop-circle-outline"
-                            color={Colors.grey200}
-                            size={30}
-                            onPress={() => {
-                                props.scrollViewRef.current.scrollTo({x: 0, y: windowHeight - 80, animated: true})
-                            }}
+                    <EventHeaderTitle {...props}
+                                      windowWidth={windowWidth}
+                                      windowHeight={windowHeight}/>
+                    <View style={[{left: windowWidth / 2 - 30}, headerStyles.arrowDown]}>
+                        <IconButton icon="arrow-down-drop-circle-outline"
+                                    color={Colors.grey200}
+                                    size={30}
+                                    onPress={() => {
+                                        props.scrollViewRef.current.scrollTo({
+                                            x: 0,
+                                            y: windowHeight - 80,
+                                            animated: true
+                                        })
+                                    }}
                         />
                         {isOwner &&
-                        <EventHeaderOwnerButtons {...props} navigation={navigation}
+                        <EventHeaderOwnerButtons {...props}
+                                                 navigation={navigation}
                                                  minimumCarSeatsCovered={minimumCarSeatsCovered}/>
                         }
                     </View>
                 </View>
             </ImageBackground>
-
             <View/>
         </View>
     );

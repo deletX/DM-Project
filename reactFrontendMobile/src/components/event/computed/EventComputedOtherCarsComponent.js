@@ -26,13 +26,17 @@ const EventComputedOtherCarsComponent = (props) => {
         const participants = _.sortBy(item, ['pickup_index'])
 
         const participantsList = participants.map((participant) => (
-            <ParticipantListItem participant={participant} key={participant.id}
+            <ParticipantListItem participant={participant}
+                                 key={participant.id}
                                  rightIcon={participant.pickup_index === 0}/>
         ))
 
-        return (<View key={item.id} style={{marginTop: 10}}>
-            {participantsList}
-        </View>)
+        return (
+            <View key={item.id}
+                  style={{marginTop: 10}}>
+                {participantsList}
+            </View>
+        )
     })
 
     return (

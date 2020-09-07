@@ -140,9 +140,12 @@ const AddCarScreen = (props) => {
                                 "Are you sure?",
                                 "There is no coming back",
                                 [
-                                    {text: "No", style: 'cancel'},
                                     {
-                                        text: "Yes", onPress: () => {
+                                        text: "No", style: 'cancel'
+                                    },
+                                    {
+                                        text: "Yes",
+                                        onPress: () => {
                                             props.deleteCar(props.route.params.car.id)
                                             props.navigation.goBack()
                                         }
@@ -162,9 +165,12 @@ const AddCarScreen = (props) => {
                                     "Are you sure?",
                                     "There is no coming back",
                                     [
-                                        {text: "No", style: 'cancel'},
                                         {
-                                            text: "Yes", onPress: () => {
+                                            text: "No", style: 'cancel'
+                                        },
+                                        {
+                                            text: "Yes",
+                                            onPress: () => {
                                                 props.editCar(props.route.params.car.id, name, fuel, seats, consumption)
                                                 props.navigation.goBack()
                                             }

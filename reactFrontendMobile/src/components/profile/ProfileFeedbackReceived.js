@@ -18,14 +18,17 @@ export const ProfileFeedbackReceived = (props) => {
             key={feedback.id}
         />
     ))
-    return (<>
-        <Title style={style.title}>
-            Feedback received
-        </Title>
-        <ScrollView style={style.scrollView}>
-            {feedbackReceived.length > 0 ? feedbackReceived : <Text style={style.text}>No feedback here</Text>}
-        </ScrollView>
-    </>)
+    return (
+        <>
+            <Title style={style.title}>
+                Feedback received
+            </Title>
+            <ScrollView style={style.scrollView}>
+                {feedbackReceived.length > 0 ? feedbackReceived :
+                    <Text style={style.text}>No feedback here</Text>}
+            </ScrollView>
+        </>
+    )
 }
 
 const style = StyleSheet.create({

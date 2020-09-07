@@ -62,16 +62,14 @@ const LoginScreen = (props) => {
                             onPress={googleSignIn}
                             size={GoogleSigninButton.Size.Standard}
                             style={[styles.login, styles.loginText]}
-                            color={GoogleSigninButton.Color.Auto}
-                        />
+                            color={GoogleSigninButton.Color.Auto}/>
                         <TextInput
                             value={username}
                             label={'Username'}
                             onChangeText={(username) => setUsername(username)}
                             placeholder={'Username'}
                             style={styles.input}
-                            mode="flat"
-                        />
+                            mode="flat"/>
                         <TextInput
                             value={password}
                             label={'Password'}
@@ -79,8 +77,7 @@ const LoginScreen = (props) => {
                             placeholder={'Password'}
                             secureTextEntry={true}
                             style={styles.input}
-                            mode="flat"
-                        />
+                            mode="flat"/>
                     </View>
                     <Button
                         contentStyle={styles.loginText}
