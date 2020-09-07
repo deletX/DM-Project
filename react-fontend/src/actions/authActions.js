@@ -210,12 +210,12 @@ export const authCheckState = (enqueueSnackbar) => {
             } else {
                 dispatch(success(token));
                 dispatch(retrieveNotifications(enqueueSnackbar)).catch((error) => {
-                    console.log(error)
+                    console.log("retrieveNotifications error: ",error)
                     return dispatch(authLogout())
                 });
                 dispatch(checkAuthTimeout((expirationDate.getTime() - new Date().getTime()) / 1000, enqueueSnackbar));
                 return dispatch(fetchProfile(enqueueSnackbar)).catch((error) => {
-                    console.log(error)
+                    console.log("fetchProfile error: ",error)
                     return dispatch(authLogout())
                 });
             }

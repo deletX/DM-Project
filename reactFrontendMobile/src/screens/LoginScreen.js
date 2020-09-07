@@ -47,7 +47,7 @@ const LoginScreen = (props) => {
                     googleLogin(res.accessToken);
                 })
                 .catch((err) => {
-                    console.log(err)
+                    console.log("googleSignIn error: ", err)
                 });
         });
     };

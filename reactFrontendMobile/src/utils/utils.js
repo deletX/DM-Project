@@ -259,7 +259,7 @@ export const createDirectionLink = (participation, event, myCar) => {
  */
 export const handleError = (msg, error) => {
     Toast.show(msg, Toast.LONG)
-    console.log(error)
+    console.log("handleError: ",error)
 }
 
 export const handleSuccess = (msg) => {

@@ -736,10 +736,7 @@ class Algorithm:
 
             self.clear(passengers, drivers)
 
-        logging.log(
-            "Solution selected at iteration: {}. The solution has been changed {} times".format(selected_iteration,
-                                                                                                solution_changes))
-
+        logging.log(level=logging.INFO, msg="Solution selected at iteration: {}. The solution has been changed {} times".format(selected_iteration, solution_changes))
         # evaluate costs for passengers and drivers and update scores
 
         for driver in selected_drivers_solution:

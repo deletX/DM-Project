@@ -67,7 +67,32 @@ finally http://YOUR_IP:8000/admin/
 
 
 ###Add postgres DB to settings.py
+```bash
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'dmproject',
+        'USER': 'django',
+        'PASSWORD': 'django_tete_c',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
+```
 
+###Connect to postgres DB with pgAdmin III
+- https://www.pgadmin.org/download/
+- On start page: File/Add Server then fill Properties with these values:
+```bash
+Name: dmproject
+Host: localhost
+Port: 5432
+Service:
+Maintenance DB: postgres
+Username: django
+Password: django_tete_c
+Group: Servers
+```
 
 
 ### Back Ground Tasks

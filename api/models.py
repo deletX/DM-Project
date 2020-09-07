@@ -119,10 +119,12 @@ class Event(models.Model):
             self.status = self.EventStatusChoices.COMPUTING
             self.save()
             for participant in self.participant_set.all():
-                Notification.objects.create(profile=participant.profile, title=self.name + " started computing",
-                                            content="The computation for the event has started",
-                                            url="/events/" + str(self.id),
-                                            related_event=self)
+                Notification.objects.create(
+                    profile=participant.profile,
+                    title=self.name + " started computing",
+                    content="The computation for the event has started",
+                    url="/events/" + str(self.id),
+                    related_event=self)
             if settings.DEBUG:
                 mock_algorithm_task.delay(self.id)
             else:

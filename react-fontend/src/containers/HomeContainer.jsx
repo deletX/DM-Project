@@ -79,7 +79,6 @@ const HomeContainer = (props) => {
     let eventsFiltered = events;
     if (events !== null)
         eventsFiltered = eventsFiltered.filter((item) => (item.name.includes(search)))
-
     let eventCards = []
     if (eventsFiltered !== null)
         eventCards = eventsFiltered.map((item) => (

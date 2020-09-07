@@ -173,7 +173,7 @@ export const useQuery = () => {
  */
 export const handleError = (enqueueSnackbar, message, error) => {
     enqueueSnackbar(message, {variant: 'error'});
-    console.log(error);
+    console.log("handleError: ",error);
 }
 
 /**
