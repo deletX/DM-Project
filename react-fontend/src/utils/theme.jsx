@@ -1,5 +1,9 @@
 import {createMuiTheme, responsiveFontSizes} from "@material-ui/core";
 
+/**
+ * App theme with app primary and secondary colors.
+ * @type {Theme}
+ */
 let theme = createMuiTheme({
     palette: {
         primary: {
@@ -20,7 +24,10 @@ let theme = createMuiTheme({
     },
 });
 
-
+/**
+ * Same as main app color, but with white text and colorings for textfields
+ * @type {Theme}
+ */
 export const white_text_theme = responsiveFontSizes(createMuiTheme({
     palette: {
         primary: {

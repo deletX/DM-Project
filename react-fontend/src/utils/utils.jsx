@@ -1,6 +1,10 @@
 import {useLocation} from "react-router";
 
-
+/**
+ * True if the there is a not expired token false otherwise
+ *
+ * @return {boolean}
+ */
 export const isAuthenticated = () => {
     const token = localStorage.getItem("token");
     if (token === undefined) {
@@ -11,6 +15,12 @@ export const isAuthenticated = () => {
     }
 };
 
+/**
+ * Returns a new object with the `updateproperties` changed
+ *
+ * @param {{}} oldObject
+ * @param {{}} updatedProperties
+ */
 export const updateObject = (oldObject, updatedProperties) => {
     return {
         ...oldObject,
@@ -19,12 +29,16 @@ export const updateObject = (oldObject, updatedProperties) => {
 };
 
 /**
+ * return headers and other options for axios calls
  *
- * @param {string}content_type
- * @param {string}access_token
- * @param {{}}otherHeaders
- * @param otherOptions
+ * @param {string} content_type
+ * @param {string} access_token
+ * @param {{}} otherHeaders
+ * @param {{}} otherOptions
+ *
+ * @return {{headers: {"Content-type": *}}}
  */
+
 export const headers = (content_type, access_token = null, otherHeaders = {}, otherOptions = {}) => {
     let headers = {
         headers: {
@@ -39,6 +53,13 @@ export const headers = (content_type, access_token = null, otherHeaders = {}, ot
     return headers
 };
 
+/**
+ * Converts a nominatim position object into a position and address string
+ *
+ * @param {{}} position
+ *
+ * @return {{secondary: string, primary: string}}
+ */
 export const nominatimToPrimarySecondary = (position) => {
     let primary = "";
     let secondary = "";
@@ -120,28 +141,67 @@ export const nominatimToPrimarySecondary = (position) => {
     return {primary, secondary}
 }
 
+/**
+ * From PRID string (i.e. stored Points) to lat lng couple
+ *
+ * @param position
+ *
+ * @return {[string, string]}
+ */
 export const pridStringToLatLng = (position) => {
     let latlng = position.split(' ')
     return [latlng[1].slice(1), latlng[2].slice(0, -1)]
 }
 
+/**
+ * Custom hook to retrieve query parameters
+ *
+ * @return {URLSearchParams}
+ */
 export const useQuery = () => {
     return new URLSearchParams(useLocation().search);
 }
 
+/**
+ * Custom error handling function.
+ *
+ * Error snackbar is shown and error logged.
+ *
+ * @param {enqueueSnackbar} enqueueSnackbar
+ * @param {string} message
+ * @param {Error} error
+ */
 export const handleError = (enqueueSnackbar, message, error) => {
     enqueueSnackbar(message, {variant: 'error'});
     console.log(error);
 }
 
+/**
+ * Custom success handling function.
+ *
+ * @param {enqueueSnackbar} enqueueSnackbar
+ * @param {string} message
+ */
 export const handleSuccess = (enqueueSnackbar, message) => {
     enqueueSnackbar(message, {variant: 'success', autoHideDuration: 5000});
 }
 
+/**
+ * Custom info handling function
+ *
+ * @param {enqueueSnackbar} enqueueSnackbar
+ * @param {string} message
+ */
 export const handleInfo = (enqueueSnackbar, message) => {
     enqueueSnackbar(message, {variant: 'info', autoHideDuration: 5000});
 }
 
+/**
+ * Custom warning handling function.
+ *
+ * @param {enqueueSnackbar} enqueueSnackbar
+ * @param {string} message
+ */
 export const handleWarning = (enqueueSnackbar, message) => {
     enqueueSnackbar(message, {variant: 'warning', autoHideDuration: 5000});
 }
