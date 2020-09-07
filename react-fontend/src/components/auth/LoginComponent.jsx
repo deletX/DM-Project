@@ -9,7 +9,7 @@ import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import LockIcon from '@material-ui/icons/Lock';
 import CardContainer from "../../containers/CardContainer";
-import AvatarCustom from "../AvatarCustom";
+import AvatarCustom from "../misc/AvatarCustom";
 import {Helmet} from "react-helmet";
 import {useSnackbar} from 'notistack';
 import GoogleLoginButton from "./GoogleLoginButton";

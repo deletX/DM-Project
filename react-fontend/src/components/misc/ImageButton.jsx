@@ -6,6 +6,9 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import React from "react";
 import {makeStyles} from "@material-ui/core/styles";
 
+/**
+ * Change Image button with circular progress when loading
+ */
 const ImageButton = (props) => {
     const classes = useStyles();
     return (

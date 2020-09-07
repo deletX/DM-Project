@@ -7,9 +7,13 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import {makeStyles} from "@material-ui/core/styles";
 
-
-const AlertDialog = ({open, handleClose, title, contentText, yesText, noText, onYes, onNo}) => {
+/**
+ * Dialog with no and yes buttons and relative actions.
+ */
+const AlertDialog = (props) => {
     const classes = useStyles();
+    const {open, handleClose, title, contentText, yesText, noText, onYes, onNo} = props;
+
     return (
         <Dialog
             open={open}

@@ -9,7 +9,7 @@ import {addEvent, home, login, profile, profile_id, signup} from "./constants/pa
 import EventContainer from "./containers/EventContainer";
 import ProfileContainer from "./containers/ProfileContainer";
 import LandingPageContainer from "./containers/LandingPageContainer";
-import NotFound404 from "./components/NotFound404";
+import NotFound404 from "./components/misc/NotFound404";
 import {useQuery} from "./utils/utils";
 
 

@@ -12,7 +12,7 @@ import {ThemeProvider} from "@material-ui/core/styles";
 import {MuiPickersUtilsProvider} from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import {SnackbarProvider} from 'notistack';
-import TryAutoSignup from "./components/TryAutoSignup";
+import TryAutoSignup from "./components/misc/TryAutoSignup";
 
 export const history = createBrowserHistory();
 

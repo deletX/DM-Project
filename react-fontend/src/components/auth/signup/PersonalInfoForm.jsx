@@ -3,12 +3,12 @@ import {makeStyles} from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 import Alert from "@material-ui/lab/Alert";
-import AvatarCustom from "../../AvatarCustom";
+import AvatarCustom from "../../misc/AvatarCustom";
 import {getGoogleProfileImage} from "../../../utils/api";
 import {handleError} from "../../../utils/utils";
 import {useSnackbar} from 'notistack';
 import GoogleLoginButton from "../GoogleLoginButton";
-import ImageButton from "../../ImageButton";
+import ImageButton from "../../misc/ImageButton";
 
 /**
  * Form that handle the user personal data:

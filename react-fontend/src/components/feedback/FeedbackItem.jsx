@@ -5,7 +5,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Typography from "@material-ui/core/Typography";
 import Rating from "@material-ui/lab/Rating";
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import AvatarCustom from "../AvatarCustom";
+import AvatarCustom from "../misc/AvatarCustom";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";

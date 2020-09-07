@@ -10,7 +10,7 @@ import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
 import Divider from "@material-ui/core/Divider";
 import {useHistory} from "react-router-dom";
 import {profile} from "../../constants/pagesurls";
-import AvatarCustom from "../AvatarCustom";
+import AvatarCustom from "../misc/AvatarCustom";
 
 /**
  * Participation element with participant Avatar, fullname, rating and an icon that shows if has a car or not.

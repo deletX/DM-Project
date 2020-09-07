@@ -9,7 +9,7 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import JoinContainer from "../../containers/JoinContainer";
-import AlertDialog from "../AlertDialog";
+import AlertDialog from "../misc/AlertDialog";
 import {handleError, handleSuccess} from "../../utils/utils";
 import {useHistory} from "react-router-dom";
 import {eventPage} from "../../constants/pagesurls";

@@ -2,7 +2,7 @@ import React from 'react';
 import {makeStyles} from "@material-ui/core/styles";
 import Rating from "@material-ui/lab/Rating";
 import {white} from "color-name";
-import AvatarCustom from "../AvatarCustom";
+import AvatarCustom from "../misc/AvatarCustom";
 
 /**
  * Profile avatar and rating component (since is the same for every profile)

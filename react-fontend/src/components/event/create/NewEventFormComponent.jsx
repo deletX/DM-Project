@@ -5,7 +5,7 @@ import TextField from "@material-ui/core/TextField";
 import {KeyboardDatePicker, KeyboardTimePicker} from "@material-ui/pickers";
 import {makeStyles} from "@material-ui/core/styles";
 import Alert from "@material-ui/lab/Alert";
-import ImageButton from "../../ImageButton";
+import ImageButton from "../../misc/ImageButton";
 
 /**
  * Contains the form for a new event:

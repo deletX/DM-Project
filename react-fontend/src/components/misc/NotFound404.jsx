@@ -1,8 +1,11 @@
 import React from 'react';
-import vectorpaint from "../icons/vectorpaint.svg"
+import vectorpaint from "../../icons/vectorpaint.svg"
 import Typography from "@material-ui/core/Typography";
 import {Helmet} from "react-helmet";
 
+/**
+ * Custom not found page with some graphic
+ */
 const NotFound404 = () => {
     return (
         <div style={{

@@ -14,7 +14,7 @@ import Alert from "@material-ui/lab/Alert";
 import {useParams} from "react-router";
 import {useHistory} from "react-router-dom";
 import {eventPage, home, login} from "../constants/pagesurls";
-import AlertDialog from "../components/AlertDialog";
+import AlertDialog from "../components/misc/AlertDialog";
 import {handleError, handleInfo, handleSuccess, handleWarning, pridStringToLatLng} from "../utils/utils";
 import JoinContainer from "./JoinContainer";
 import {connect} from "react-redux";
