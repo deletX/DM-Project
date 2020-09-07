@@ -84,8 +84,8 @@ const EventContainer = (props) => {
         const [edit, setEdit] = useState(false)
 
         // Event data
-        const date = new Date(event.date_time)
         const [event, setEvent] = useState(location.state ? location.state : emptyEvent)
+        const date = new Date(event.date_time)
         const [day, setDay] = useState(date)
         const [time, setTime] = useState(date)
         const [image, setImage] = useState(null)
@@ -701,9 +701,7 @@ const EventContainer = (props) => {
                             leaveEvent(event.id, participation.id, token,
                                 (res) => {
                                     setLeaveOpen(false)
-                                    if (!isOwner) {
-                                        history.push(home)
-                                    }
+                                    history.push(home)
                                     handleSuccess(enqueueSnackbar, "Successfully left the event")
                                 },
                                 (err) => {
@@ -826,13 +824,6 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: 100,
     },
     deleteButton: {
-        color: "white",
-        backgroundColor: red[500],
-        "&:hover": {
-            backgroundColor: red[500],
-        },
-    },
-    uploadButton: {
         color: "white",
         backgroundColor: red[500],
         "&:hover": {

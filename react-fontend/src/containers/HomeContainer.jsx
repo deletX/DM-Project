@@ -20,7 +20,7 @@ const HomeContainer = (props) => {
     let history = useHistory()
     const classes = useStyles();
     const {enqueueSnackbar,} = useSnackbar();
-    const {isAuthenticated, isLoading, search, token} = props;
+    const {addError, isAuthenticated, isLoading, search, token} = props;
 
     const [events, setEvents] = useState(null);
 
@@ -28,19 +28,6 @@ const HomeContainer = (props) => {
     let joinable = query.get("joinable") === null ? true : query.get("joinable") === "true"
     let joined = query.get("joined") === null ? true : query.get("joined") === "true"
     let owned = query.get("owned") === null ? false : query.get("owned") === "true"
-
-    // filtered by the search term
-    let eventsFiltered = events;
-    if (events !== null)
-        eventsFiltered = eventsFiltered.filter((item) => (item.name.includes(search)))
-
-    let eventCards = []
-    if (eventsFiltered !== null)
-        eventCards = eventsFiltered.map((item) => (
-            <Grid key={item.id} item className={classes.cardGridItem}>
-                <EventCard event={item} refreshEvents={refreshEvents}/>
-            </Grid>
-        ))
 
     /**
      * Set the joinable filter
@@ -87,6 +74,19 @@ const HomeContainer = (props) => {
                 handleError(enqueueSnackbar, "Something went wrong while retrieving events [042]", err)
             })
     }
+
+        // filtered by the search term
+    let eventsFiltered = events;
+    if (events !== null)
+        eventsFiltered = eventsFiltered.filter((item) => (item.name.includes(search)))
+
+    let eventCards = []
+    if (eventsFiltered !== null)
+        eventCards = eventsFiltered.map((item) => (
+            <Grid key={item.id} item className={classes.cardGridItem}>
+                <EventCard event={item} refreshEvents={refreshEvents}/>
+            </Grid>
+        ))
 
     useEffect(() => {
         if (!(isAuthenticated || isLoading))

@@ -6,7 +6,7 @@ import {
     NOTIFICATIONS_START
 } from "./types";
 import {getNotifications, putReadNotifications} from "../utils/api";
-import {handleError, handleInfo} from "../utils/utils";
+import {handleError} from "../utils/utils";
 
 /**
  * Start action
