@@ -156,8 +156,6 @@ export const nominatimToPrimarySecondary = (position) => {
  * From a nominatim data to [address, position] couple
  *
  * @param item Nominatim response data got at {@link nominatimCoordinatesToAddressURL}
- * @param {number} latitude
- * @param {number} longitude
  *
  * @return {[string, string]} address, position
  */

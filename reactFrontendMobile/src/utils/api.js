@@ -96,7 +96,7 @@ export const getListEvent = (joinable, joined, owned, token, onSuccess, onError)
  * @param {string} startingPos
  * @param {number} carId
  * @param {function()} onSuccess
- *
+ * @param {function()} onError
  * @return {Promise<void>}
  */
 export const postJoinedEvent = async (eventId, token, startingAddress, startingPos, carId, onSuccess, onError) => {
