@@ -13,10 +13,16 @@ import {Map, Marker, TileLayer} from "react-leaflet";
 import {useSnackbar} from "notistack";
 import {getNominatimAddress, getNominatimInfo} from "../utils/api";
 
-
-const MapContainer = ({addr, setAddr, pos, setPos, loadUserPosition = true}) => {
+/**
+ * Map Container has a search field to search for an address
+ * (using nominatim see {@link https://nominatim.org/release-docs/develop/api/Search/}) and an interactive map
+ * where the marker can be dragged around.
+ *
+ */
+const MapContainer = (props) => {
     const classes = useStyles();
     const {enqueueSnackbar,} = useSnackbar();
+    const {addr, setAddr, pos, setPos, loadUserPosition = true} = props
 
     const [latitude, setLatitude] = useState(pos !== "" ? parseFloat(pos.split(' ')[1].slice(1)) : 44.629430);
     const [longitude, setLongitude] = useState(pos !== "" ? parseFloat(pos.split(' ')[2].slice(0, -1)) : 10.948296);
@@ -31,8 +37,9 @@ const MapContainer = ({addr, setAddr, pos, setPos, loadUserPosition = true}) => 
     const [zoom, setZoom] = useState(13)
 
     /**
+     * Given a nominatim address convert it to latitude/longitude; address and position
      *
-     * @param item
+     * @param {object} item nominatim address
      * @param {number} lat
      * @param {number} lon
      */
@@ -53,6 +60,9 @@ const MapContainer = ({addr, setAddr, pos, setPos, loadUserPosition = true}) => 
         }
     }
 
+    /**
+     * Search for the inputted address with nominatim
+     */
     const getMapData = () => {
         getNominatimAddress(addr,
             (res) => {
@@ -64,10 +74,15 @@ const MapContainer = ({addr, setAddr, pos, setPos, loadUserPosition = true}) => 
                 setOpen(true);
             },
             (err) => {
-                handleError(enqueueSnackbar, "Something went wrong while retrieving positions", err)
+                handleError(enqueueSnackbar, "Something went wrong while retrieving positions [044]", err)
             })
     }
 
+    /**
+     * To ensure nominatim requirements of not more than 1 request per second.
+     *
+     * see {@link https://operations.osmfoundation.org/policies/nominatim/}
+     */
     const click = () => {
         let now = new Date()
         if (now - lastRequest > 1000) {
@@ -85,7 +100,7 @@ const MapContainer = ({addr, setAddr, pos, setPos, loadUserPosition = true}) => 
                         selectItem(res.data, position.coords.latitude, position.coords.longitude);
                     },
                     (err) => {
-                        handleError(enqueueSnackbar, "Something went wrong while retrieving your position", err)
+                        handleInfo(enqueueSnackbar, "Something went wrong while retrieving your position [045]", err)
                     })
             })
         }
@@ -158,13 +173,12 @@ const MapContainer = ({addr, setAddr, pos, setPos, loadUserPosition = true}) => 
                             onDragend={(ev) => {
                                 getNominatimInfo(ev.target._latlng.lat, ev.target._latlng.lng,
                                     (res) => {
-                                        //console.log(res.data)
                                         selectItem(res.data, ev.target._latlng.lat, ev.target._latlng.lng);
                                         setAddrError(false);
                                     },
                                     (err) => {
                                         handleError(enqueueSnackbar, "Something went wrong while retrieving " +
-                                            "your selected location", err)
+                                            "your selected location [046]", err)
                                     })
                             }}
                             position={{lat: latitude, lng: longitude}}

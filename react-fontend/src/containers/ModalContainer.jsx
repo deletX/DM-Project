@@ -4,7 +4,9 @@ import Divider from "@material-ui/core/Divider";
 import Modal from "@material-ui/core/Modal";
 import Paper from "@material-ui/core/Paper";
 
-
+/**
+ * Simple modal container with paper background, header and divider before children
+ */
 const ModalContainer = (props) => {
     const classes = useStyles();
 

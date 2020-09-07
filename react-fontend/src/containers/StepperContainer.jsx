@@ -9,11 +9,15 @@ import StepContent from "@material-ui/core/StepContent";
 import {handleError} from "../utils/utils";
 import {useSnackbar} from "notistack";
 
-
-function StepperContainer({getSteps, getStepContent, isStepValid, isStepOptional, clear, uploadData, finalButtonText, next}) {
+/**
+ * Handle a stepper (see {@link Stepper})
+ *
+ * Enable stepper usage with less boilerplate.
+ */
+function StepperContainer(props) {
     const classes = useStyles();
     const {enqueueSnackbar,} = useSnackbar()
-
+    const {getSteps, getStepContent, isStepValid, isStepOptional, clear, uploadData, finalButtonText} = props;
     const steps = getSteps();
 
     const [activeStep, setActiveStep] = useState(0);
@@ -21,10 +25,20 @@ function StepperContainer({getSteps, getStepContent, isStepValid, isStepOptional
 
     const disabled = !isStepValid(activeStep);
 
+    /**
+     * Tells weather `step` step has been skipped
+     *
+     * @param {number} step
+     *
+     * @return {boolean}
+     */
     const isStepSkipped = (step) => {
         return skipped.has(step);
     };
 
+    /**
+     * Handles the next action
+     */
     const handleNext = () => {
         let newSkipped = skipped;
         if (isStepSkipped(activeStep)) {
@@ -36,10 +50,16 @@ function StepperContainer({getSteps, getStepContent, isStepValid, isStepOptional
         setSkipped(newSkipped);
     };
 
+    /**
+     * Handles the back action
+     */
     const handleBack = () => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
 
+    /**
+     * Handles the skip action
+     */
     const handleSkip = () => {
         if (!isStepOptional(activeStep)) {
             handleError(enqueueSnackbar, "You can't skip a step that isn't optional.");
@@ -54,8 +74,9 @@ function StepperContainer({getSteps, getStepContent, isStepValid, isStepOptional
     };
 
     /**
+     * Reset the stepper cleaning each step and resetting the active step
      *
-     * @param {boolean} keepData
+     * @param {boolean} keepData if only to go back to the first step keeping inputted data
      */
     const reset = (keepData) => {
         if (!keepData) {

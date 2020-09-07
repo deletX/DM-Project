@@ -15,7 +15,11 @@ import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
 import CardMedia from "@material-ui/core/CardMedia";
 
-
+/**
+ * Mock profile card
+ *
+ * Shows image, full name and rating
+ */
 const ProfileCard = (props) => {
     const {profile} = props
     return (
@@ -35,6 +39,11 @@ const ProfileCard = (props) => {
     )
 }
 
+/**
+ * Mock event card.
+ *
+ * Like the real one, without the action buttons
+ */
 const EventCard = (props) => {
     const {event} = props;
 
@@ -63,6 +72,10 @@ const EventCard = (props) => {
     )
 }
 
+/**
+ * Mock profiles
+ * @type {({firstName: string, lastName: string, id: number, vote: number, picture: string})[]}
+ */
 const profiles = [
     {
         id: 1,
@@ -108,52 +121,64 @@ const profiles = [
     }
 ]
 
+/**
+ * Mock Events
+ *
+ * @type {({date: string, address: string, name: string, id: number, picture: string})[]}
+ */
 const events = [
     {
         id: 1,
         picture: landingpageEvent(1),
         name: "Venice Trip",
-        date: "28/02/2020",
+        date: "28/02/2021",
         address: "Rio Terà Sant'Andrea, 460, 30135 Venezia VE",
     },
     {
         id: 2,
         picture: landingpageEvent(2),
         name: "Stairway 66 Bar Night",
-        date: "29/12/2019",
+        date: "29/12/2020",
         address: "Via IV Novembre, N 6, 42010 Rio Saliceto RE",
     },
     {
         id: 3,
         picture: landingpageEvent(3),
         name: "New Year in Venice",
-        date: "31/12/2019",
+        date: "31/12/2020",
         address: "Rio Terà Sant'Andrea, 460, 30135 Venezia VE",
     },
     {
         id: 4,
         picture: landingpageEvent(4),
         name: "Live Radio",
-        date: "07/03/2020",
+        date: "07/03/2021",
         address: "Via E. De Amicis, 59, 41012 Carpi MO",
     },
     {
         id: 5,
         picture: landingpageEvent(5),
         name: "Hospitality on the beach",
-        date: "13/05/2019",
+        date: "13/05/2021",
         address: "Ul. Petrića Glava 34, 22240, Tisno, Croatia",
     },
     {
         id: 6,
         picture: landingpageEvent(6),
         name: "Aperitif party",
-        date: "19/12/2019",
+        date: "19/12/2020",
         address: "Corso Sempione, 1, 20145 Milano MI",
     },
 
 ]
 
+/**
+ * Landing page container.
+ *
+ * Has an header that prompts the visitor to action (signup).
+ *
+ * To encourage the action several mock profiles and events are shown as examples
+ */
 const LandingPageContainer = () => {
     const classes = useStyles()
 

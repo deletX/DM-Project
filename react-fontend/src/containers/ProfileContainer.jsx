@@ -12,7 +12,6 @@ import {Helmet} from "react-helmet";
 import {getProfileData} from "../utils/api";
 import {useSnackbar} from 'notistack';
 
-
 const emptyProfile = {
     average_vote: null,
     car_set: [],
@@ -30,16 +29,23 @@ const emptyProfile = {
 
 }
 
-const ProfileContainer = ({location, addAlert, token, isAuthenticated, isLoading, profileId, profileRedux}) => {
+/**
+ * Handle both user profile and non-user profiles as well.
+ */
+const ProfileContainer = (props) => {
     let history = useHistory()
     const {enqueueSnackbar,} = useSnackbar();
-
     let {id} = useParams()
+    const {location, token, isAuthenticated, isLoading, profileId, profileRedux} = props;
+
     id = parseInt(id)
 
     const [profile, setProfile] = useState(profileId === id ? profileRedux : emptyProfile)
     const [loading, setLoading] = useState(false)
 
+    /**
+     * API call to get profile
+     */
     const getProfile = () => {
         if (!loading) {
             setLoading(true)
@@ -52,7 +58,7 @@ const ProfileContainer = ({location, addAlert, token, isAuthenticated, isLoading
                     (err) => {
                         history.push(home)
                         setLoading(false)
-                        handleError(enqueueSnackbar, "An error occurred while retrieving user profile", err)
+                        handleError(enqueueSnackbar, "Something went wrong while retrieving user profile [047]", err)
                     })
             else {
                 setProfile(profileRedux)
@@ -62,7 +68,6 @@ const ProfileContainer = ({location, addAlert, token, isAuthenticated, isLoading
     };
 
     useEffect(() => {
-
             if (!(isAuthenticated || isLoading))
                 history.push(`${login}?next=${encodeURI(location.pathname)}`)
             else if (profile.id === -1 && isAuthenticated) {
@@ -81,9 +86,6 @@ const ProfileContainer = ({location, addAlert, token, isAuthenticated, isLoading
     return (
         <FormContainer effect={() => {
         }}>
-            <Helmet>
-                <title>DM Project - Profile Page</title>
-            </Helmet>
             {("given_feedback" in profile) ?
                 <MyProfileComponent profile={profile}/>
                 :

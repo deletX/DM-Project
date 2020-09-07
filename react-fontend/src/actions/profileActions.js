@@ -196,7 +196,7 @@ export const fetchProfile = (enqueueSnackbar) => {
             },
             (err) => {
                 dispatch(fail());
-                handleError(enqueueSnackbar, "Something went wrong while retrieving the profile [025]", err)
+                handleError(enqueueSnackbar, "Something went wrong while retrieving your profile [025]", err)
                 return err;
             })
     }

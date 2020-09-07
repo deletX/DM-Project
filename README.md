@@ -303,10 +303,10 @@ Se non già fatto eseguire nell'interfaccia di postgresql (vedi su)
 - `041` Error while updating event
 - `042` Error while retrieving events list
 - `043` Error while joining an event
-- `044`
-- `045`
-- `046`
-- `047`
+- `044` Error while retrieving positions (MapContainer)
+- `045` Error while retrieving user position from browser
+- `046` Error while retrieving selected position (with marker)
+- `047` Error while retrieving non-user profile
 - `048`
 - `049`
 - `050`

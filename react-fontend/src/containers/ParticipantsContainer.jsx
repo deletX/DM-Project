@@ -4,9 +4,12 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
 
-
-const ParticipantsContainer = ({participantSet, profileId = -1, onlyDriverIcon = false}) => {
+/**
+ * Container to handle any participant list
+ */
+const ParticipantsContainer = (props) => {
         const classes = useStyles();
+        let {participantSet, profileId = -1, onlyDriverIcon = false} = props;
 
         const participation = participantSet.find((part) => (part.profile.id === profileId))
 
