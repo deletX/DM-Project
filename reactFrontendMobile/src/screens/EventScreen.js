@@ -47,7 +47,6 @@ const EventScreen = (props) => {
                     <EventComputedOtherCarsComponent event={event} styles={styles}/>
                     }
                 </View>
-
             </ScrollView>
         </Portal.Host>
     );

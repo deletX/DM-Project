@@ -45,15 +45,21 @@ const EventCardActions = (props) => {
                     onPress={() => {
                         navigation.navigate((JOIN_SCREEN), {event: props.event, id: props.event.id})
                     }}
-                    disabled={props.event.status === JOINABLE && participation === undefined ? null : "true"}
-            >Join event
+                    disabled={
+                        (props.event.status === JOINABLE && participation === undefined) ?
+                            null : "true"}>
+                Join event
             </Button>
 
             <Button mode="text"
                     color="#c56200"
                     onPress={alertAreYouSure(leaveEvent)}
                     style={styles.buttonRight}
-                    disabled={(props.event.status === JOINABLE && (participation !== undefined)) ? null : "true"}>Leave event
+                    disabled={
+                        (props.event.status === JOINABLE && (participation !== undefined)) ?
+                            null : "true"
+                    }>
+                Leave event
             </Button>
         </Card.Actions>
     )
@@ -71,9 +77,11 @@ const EventComponent = (props) => {
     const navigation = useNavigation();
 
     return (
-        <View
-            key={props.id}
-            pointerEvents={(props.event.status === JOINABLE || props.event.status === COMPUTED) ? "auto" : "none"}>
+        <View key={props.id}
+              pointerEvents={
+                  (props.event.status === JOINABLE || props.event.status === COMPUTED) ?
+                      "auto" : "none"
+              }>
             <Card style={styles.card}
                   key={props.event.id}
                   onPress={() => {
