@@ -10,13 +10,13 @@ let theme = createMuiTheme({
             light: '#52c7b8',
             main: '#009688',
             dark: '#00675b',
-            contrastText: '#000',
+            contrastText: '#1a1a1a',
         },
         secondary: {
             light: '#ffc246',
             main: '#ff9100',
             dark: '#c56200',
-            contrastText: '#000',
+            contrastText: '#1a1a1a',
         },
         background: {
             paper: '#f0f0f0',
