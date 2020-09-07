@@ -10,10 +10,11 @@ import {postJoinEvent} from "../utils/api";
 import {useSnackbar} from 'notistack';
 
 
-const JoinContainer = ({addAlert, cars, token, open, close, event, refreshEvents}) => {
+const JoinContainer = (props) => {
     const classes = useStyles();
     const {enqueueSnackbar,} = useSnackbar();
-
+    const {token, open, close, event, refreshEvents} = props;
+    
     const [addr, setAddr] = useState("");
     const [pos, setPos] = useState("");
     const [car, setCar] = useState(-1);
@@ -38,7 +39,7 @@ const JoinContainer = ({addAlert, cars, token, open, close, event, refreshEvents
                                         close()
                                 },
                                 (err) => {
-                                    handleError(enqueueSnackbar, "An error occurred while joining", err)
+                                    handleError(enqueueSnackbar, "Something went wrong while joining [043]", err)
                                     if (close)
                                         close()
                                 })
@@ -61,7 +62,6 @@ const useStyles = makeStyles((theme) => ({
 
 function mapStateToProps(state) {
     return {
-        cars: state.profile.carSet,
         token: state.auth.token,
     };
 }

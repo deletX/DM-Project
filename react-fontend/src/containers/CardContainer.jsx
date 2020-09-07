@@ -6,9 +6,14 @@ import Box from "@material-ui/core/Box";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import {makeStyles} from "@material-ui/core/styles";
 
-
-const CardContainer = ({children, title, loading = true, open = false}) => {
+/**
+ * Card Container with available backdrop with *"Loading your data!"* and circular progress.
+ *
+ * Title in top middle and Divider before children
+ */
+const CardContainer = (props) => {
     const classes = useStyles();
+    const {children, title, loading = true, open = false} = props;
 
     return (
         <div className={classes.root}>

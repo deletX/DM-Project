@@ -16,36 +16,66 @@ import {getEventsList} from "../utils/api";
 import {useSnackbar} from 'notistack';
 
 
-const HomeContainer = ({addError, isAuthenticated, isLoading, search, token}) => {
+const HomeContainer = (props) => {
     let history = useHistory()
     const classes = useStyles();
     const {enqueueSnackbar,} = useSnackbar();
+    const {isAuthenticated, isLoading, search, token} = props;
+
+    const [events, setEvents] = useState(null);
 
     let query = useQuery();
     let joinable = query.get("joinable") === null ? true : query.get("joinable") === "true"
     let joined = query.get("joined") === null ? true : query.get("joined") === "true"
     let owned = query.get("owned") === null ? false : query.get("owned") === "true"
 
-    const [events, setEvents] = useState(null);
+    // filtered by the search term
     let eventsFiltered = events;
-
     if (events !== null)
         eventsFiltered = eventsFiltered.filter((item) => (item.name.includes(search)))
 
     let eventCards = []
+    if (eventsFiltered !== null)
+        eventCards = eventsFiltered.map((item) => (
+            <Grid key={item.id} item className={classes.cardGridItem}>
+                <EventCard event={item} refreshEvents={refreshEvents}/>
+            </Grid>
+        ))
 
+    /**
+     * Set the joinable filter
+     *
+     * @param {boolean} joinable
+     */
     const setJoinable = (joinable) => {
         history.push(homeJoinableJoinedOwned(joinable, joined, owned))
     }
 
+    /**
+     * Set the joined filter
+     *
+     * @param {boolean} joined
+     */
     const setJoined = (joined) => {
         history.push(homeJoinableJoinedOwned(joinable, joined, owned))
     }
 
+    /**
+     * Set the owned filter
+     *
+     * @param {boolean} owned
+     */
     const setOwned = (owned) => {
         history.push(homeJoinableJoinedOwned(joinable, joined, owned))
     }
 
+    /**
+     * Retrieve the event list calling the respective API
+     *
+     * @param {boolean} joinable joinable filter
+     * @param {boolean} joined joined filter
+     * @param {boolean} owned owned filter
+     */
     const refreshEvents = (joinable = query.get("joinable") === null ? true : query.get("joinable") === "true",
                            joined = query.get("joined") === null ? true : query.get("joined") === "true",
                            owned = query.get("owned") === null ? false : query.get("owned") === "true") => {
@@ -54,7 +84,7 @@ const HomeContainer = ({addError, isAuthenticated, isLoading, search, token}) =>
                 setEvents(res.data)
             },
             (err) => {
-                handleError(enqueueSnackbar, "An Error occurred while retrieving events", err)
+                handleError(enqueueSnackbar, "Something went wrong while retrieving events [042]", err)
             })
     }
 
@@ -65,17 +95,11 @@ const HomeContainer = ({addError, isAuthenticated, isLoading, search, token}) =>
             refreshEvents(joinable, joined, owned); //eslint-disable-next-line
     }, [joinable, joined, owned, isAuthenticated, isLoading]);
 
-    if (eventsFiltered !== null)
-        eventCards = eventsFiltered.map((item) => (
-            <Grid key={item.id} item className={classes.cardGridItem}>
-                <EventCard event={item} refreshEvents={refreshEvents}/>
-            </Grid>
-        ))
 
     return (
         <div className={classes.root}>
             <Helmet>
-                <title>DM Project - Event Page</title>
+                <title>DM Project - Events Page</title>
                 <meta name="description" content="Main Home page"/>
             </Helmet>
             <div className={classes.firstLine}>
@@ -88,11 +112,11 @@ const HomeContainer = ({addError, isAuthenticated, isLoading, search, token}) =>
                     </IconButton>
                 </Typography>
 
-
                 <ChipBox joined={joined} joinable={joinable} owned={owned} setJoined={setJoined}
                          setJoinable={setJoinable}
                          setOwned={setOwned}/>
             </div>
+
             <Grid container spacing={3} className={classes.gridContainer}>
                 {eventCards}
             </Grid>

@@ -4,8 +4,12 @@ import {Paper} from "@material-ui/core";
 import {white} from "color-name";
 
 
-const FormContainer = ({children, effect}) => {
+/**
+ * Simple container with a {@link Paper} background
+ */
+const FormContainer = (props) => {
     const classes = useStyles();
+    const {children, effect} = props;
 
     useEffect(() => {
         effect()

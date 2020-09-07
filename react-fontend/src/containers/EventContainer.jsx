@@ -42,7 +42,10 @@ import {deleteEvent, getEventAxios, leaveEvent, postCreateFeedback, runEvent, up
 import {useSnackbar} from 'notistack';
 import _ from "lodash";
 
-
+/**
+ * Empty Event
+ * @type {{date: string, owner: {profile: {id: number}}, address: string, name: string, destination: string, description: string, participant_set: [], picture: string}}
+ */
 const emptyEvent = {
     name: "",
     description: "",
@@ -59,35 +62,40 @@ const emptyEvent = {
 }
 
 /**
- * questo fa
+ * Event Container that contains element to show an event (in every status) and also enable the owner to change any data
  */
 const EventContainer = (props) => {
-        const {location, token, profileId, isAuthenticated, isAuthLoading} = props;
         let history = useHistory();
         const classes = useStyles();
         const {enqueueSnackbar,} = useSnackbar();
         let {id} = useParams();
+        const {location, token, profileId, isAuthenticated, isAuthLoading} = props;
 
+        // Dialogs
         const [deleteOpen, setDeleteOpen] = useState(false)
         const [joinOpen, setJoinOpen] = useState(false)
         const [leaveOpen, setLeaveOpen] = useState(false)
-        const [edit, setEdit] = useState(false)
+        const [feedbackOpen, setFeedbackOpen] = useState(false)
+
+        // Loading
         const [isLoading, setIsLoading] = useState(false)
 
+        // Enable edit flag
+        const [edit, setEdit] = useState(false)
 
-        const [event, setEvent] = useState(location.state ? location.state : emptyEvent)
+        // Event data
         const date = new Date(event.date_time)
+        const [event, setEvent] = useState(location.state ? location.state : emptyEvent)
+        const [day, setDay] = useState(date)
+        const [time, setTime] = useState(date)
         const [image, setImage] = useState(null)
         const [imageURL, setImageURL] = useState(event.picture)
         const [name, setName] = useState(event.name)
         const [description, setDescription] = useState(event.description)
         const [address, setAddress] = useState(event.address)
         const [destination, setDestination] = useState(event.destination)
-        const [day, setDay] = useState(date)
-        const [time, setTime] = useState(date)
 
-
-        const [feedbackOpen, setFeedbackOpen] = useState(false)
+        // Feedback content
         const [comment, setComment] = useState("")
         const [vote, setVote] = useState(3)
         const [receiver, setReceiver] = useState(-1)
@@ -96,18 +104,23 @@ const EventContainer = (props) => {
         const longitude = parseFloat(event.destination.split(' ')[2].slice(0, -1));
 
         const isOwner = profileId === event.owner.id;
+
         const isRunning = event.status === 1;
         const isCompleted = event.status === 2;
+
+        // participation variables
         const participation = event.participant_set.filter(participation => (participation.profile.id === profileId))
         const expense = participation.length > 0 ? participation[0].expense : 0
         const drivers = event.participant_set.filter(part => (part.car !== null))
 
+        // now is one hour ahead actually
         let now = new Date()
         now = new Date(now.getTime() + 3600 * 1000)
 
         let date_tmp = day !== null && time !== null ? new Date(day.getFullYear(), day.getMonth(), day.getDate(), time.getHours(), time.getMinutes()) : new Date()
         const valid = name.length > 0 && date_tmp > now && description.length > 0 && address !== "" && destination !== "";
 
+        // user's car if any
         const myCar = (participation.length > 0 && participation[0].car !== null) ? _.sortBy(event.participant_set.filter((item) => (item.car !== null && item.car.id === participation[0].car.id)), ['pickup_index']) : []
 
         let directionsURL = ""
@@ -123,19 +136,7 @@ const EventContainer = (props) => {
                         {item.profile.last_name}
                     </MenuItem>))
 
-        const sendFeedback = () => {
-            postCreateFeedback(event.id, receiver, comment, vote, token,
-                (res) => {
-                    setFeedbackOpen(false)
-                    getEvent()
-                    handleSuccess(enqueueSnackbar, "Feedback left with success")
-                },
-                (err) => {
-                    setFeedbackOpen(false)
-                    handleError(enqueueSnackbar, "Something went wrong while posting your feedback [014]", err)
-                })
-        };
-
+        // if not authenticated go to login and then here. Otherwise if event is empty get it from API
         useEffect(() => {
                 if (!(isAuthenticated || isAuthLoading))
                     history.push(`${login}?next=${encodeURI(eventPage(id))}`)
@@ -145,6 +146,25 @@ const EventContainer = (props) => {
             }, [event, isAuthenticated, isAuthLoading]
         )
 
+        /**
+         * API call to send feedback
+         */
+        const sendFeedback = () => {
+            postCreateFeedback(event.id, receiver, comment, vote, token,
+                (res) => {
+                    setFeedbackOpen(false)
+                    getEvent()
+                    handleSuccess(enqueueSnackbar, "Feedback left with success!")
+                },
+                (err) => {
+                    setFeedbackOpen(false)
+                    handleError(enqueueSnackbar, "Something went wrong while posting your feedback [038]", err)
+                })
+        };
+
+        /**
+         * API call to start computation
+         */
         const run = () => {
             runEvent(id, token,
                 (res) => {
@@ -152,11 +172,14 @@ const EventContainer = (props) => {
                     handleInfo(enqueueSnackbar, "Computation has started")
                 },
                 (err) => {
-                    handleError(enqueueSnackbar, "Something went wrong while launching the computation [016]", err)
+                    handleError(enqueueSnackbar, "Something went wrong while launching the computation [039]", err)
                 }
             )
         }
 
+        /**
+         * API call to retrieve the event
+         */
         const getEvent = () => {
             getEventAxios(id, token,
                 (res) => {
@@ -170,11 +193,14 @@ const EventContainer = (props) => {
                     setTime(new Date(res.data.date_time))
                 },
                 (err) => {
-                    handleError(enqueueSnackbar, "An error occurred while retrieving event data [003]", err)
+                    handleError(enqueueSnackbar, "Something went wrong while retrieving event data [040]", err)
                 }
             )
         }
 
+        /**
+         * API call to update event data
+         */
         const update = () => {
             let data;
             setIsLoading(true)
@@ -211,10 +237,10 @@ const EventContainer = (props) => {
                     setTime(new Date(res.data.date_time))
                     setIsLoading(false)
                     setEdit(false)
-                    handleSuccess(enqueueSnackbar, "Event successfully updated")
+                    handleSuccess(enqueueSnackbar, "Event successfully updated!")
                 },
                 (err) => {
-                    handleError(enqueueSnackbar, "An error occurred while updating event", err)
+                    handleError(enqueueSnackbar, "Something went wrong while updating event [041]", err)
                 }
             )
         }
@@ -229,16 +255,18 @@ const EventContainer = (props) => {
                     <div className={classes.header}
                          style={{backgroundImage: `url(${imageURL})`}}>
                         <div className={classes.scrim}>
+
+                            {/* An additional theme provider to have white text */}
                             <ThemeProvider theme={white_text_theme}>
                                 <Grid container spacing={2} className={classes.headerGrid}>
                                     <Grid item xs={12} md={8}>
+
+                                        {/* Event name */}
                                         {!edit ?
                                             <Typography variant="h2" component="h2" className={classes.mainTitle}>
                                                 {event.name}
                                             </Typography>
-
                                             :
-
                                             <TextField
                                                 label="Name"
                                                 color="secondary"
@@ -259,20 +287,20 @@ const EventContainer = (props) => {
                                                 required
                                                 helperText={name.length <= 0 ? "Required" : ""}
                                             />
-
                                         }
+
                                     </Grid>
 
                                     <Grid item xs={false} md={2}/>
                                     <Grid item xs={12} md={6}>
+
+                                        {/* Event date */}
                                         {!edit ?
                                             <Typography variant="h5">
                                                 Date: {`${date.getDate()}/${date.getMonth() < 10 ? '0' :
                                                 ''}${date.getMonth() + 1}/${date.getFullYear()} at ${date.getHours()}:${date.getMinutes()}`}
                                             </Typography>
-
                                             :
-
                                             <>
                                                 <KeyboardDatePicker
                                                     color="secondary"
@@ -285,7 +313,6 @@ const EventContainer = (props) => {
                                                     minDate={new Date()}
                                                     format="dd/MM/yyyy"
                                                 />
-
                                                 <KeyboardTimePicker
                                                     color="secondary"
                                                     label="Time"
@@ -443,14 +470,15 @@ const EventContainer = (props) => {
                             </Typography>
                             {!edit ?
                                 <Typography component="div">
-                                    {event.description.split("\n").map(
-                                        (i, key) => {
-                                            return (
-                                                <p key={key}>
-                                                    {i}
-                                                </p>
-                                            )
-                                        })}
+                                    {   // This is done to improve visualization
+                                        event.description.split("\n").map(
+                                            (i, key) => {
+                                                return (
+                                                    <p key={key}>
+                                                        {i}
+                                                    </p>
+                                                )
+                                            })}
                                 </Typography>
                                 :
                                 <TextField
@@ -588,6 +616,7 @@ const EventContainer = (props) => {
                         }
                     </div>
 
+                    {/* Feedback Dialog*/}
                     <Dialog
                         open={feedbackOpen}
                         onClose={() => {
@@ -657,6 +686,7 @@ const EventContainer = (props) => {
                         </DialogActions>
                     </Dialog>
 
+                    {/* Leave Dialog */}
                     <AlertDialog
                         open={leaveOpen}
                         handleClose={() => {
@@ -678,7 +708,7 @@ const EventContainer = (props) => {
                                 },
                                 (err) => {
                                     setLeaveOpen(false)
-                                    handleError(enqueueSnackbar, "Something went wrong while leaving [002]", err)
+                                    handleError(enqueueSnackbar, "Something went wrong while leaving [037]", err)
                                 })
                         }}
                         onNo={() => {
@@ -686,6 +716,7 @@ const EventContainer = (props) => {
                         }}
                     />
 
+                    {/* Delete Dialog */}
                     <AlertDialog
                         open={deleteOpen}
                         handleClose={() => {
@@ -704,7 +735,7 @@ const EventContainer = (props) => {
                                 },
                                 (err) => {
                                     setDeleteOpen(false)
-                                    handleError(enqueueSnackbar, "Something went wrong while deleting your event [015]", err)
+                                    handleError(enqueueSnackbar, "Something went wrong while deleting your event [035]", err)
                                 })
                         }}
                         onNo={() => {
