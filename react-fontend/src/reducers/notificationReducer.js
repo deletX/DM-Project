@@ -7,6 +7,10 @@ import {
     NOTIFICATIONS_START
 } from "../actions/types";
 
+/**
+ * Notifications initial state
+ * @type {{loading: boolean, unReadCount: number, error: boolean, notifications: []}}
+ */
 const initialState = {
     loading: false,
     notifications: [],
@@ -14,12 +18,28 @@ const initialState = {
     error: false
 };
 
+/**
+ * Notifications tart action reducer
+ *
+ * @param {state} state
+ * @param {{type:string}} action
+ *
+ * @return {state}
+ */
 const notificationsStart = (state, action) => (
     updateObject(state, {
         loading: true
     })
 );
 
+/**
+ * Notifications error action reducer
+ *
+ * @param {state} state
+ * @param {{type:string}} action
+ *
+ * @return {state}
+ */
 const notificationsError = (state, action) => (
     updateObject(state, {
         loading: false,
@@ -27,6 +47,13 @@ const notificationsError = (state, action) => (
     })
 );
 
+/**
+ * Notifications retrieve action reducer
+ *
+ * @param {state} state
+ * @param {{type:string, notifications:[]}}action
+ * @return {*}
+ */
 const getNotificationSuccess = (state, action) => (
     updateObject(state, {
         notifications: action.notifications,
@@ -35,12 +62,12 @@ const getNotificationSuccess = (state, action) => (
 );
 
 /**
- * Notification edit handler
+ * Notification edit action reducer
  *
- * @param {{}} state
- * @param {{}} action
+ * @param {state} state
+ * @param {{type:string,read:boolean,id:number}} action
  *
- * @returns {{}}
+ * @returns {state}
  */
 const notificationUpdate = (state, action) => {
     let {id, read} = action;
@@ -55,6 +82,14 @@ const notificationUpdate = (state, action) => {
     return tmpState
 };
 
+/**
+ * Notifications root reducer
+ *
+ * @param {state} state
+ * @param {{}} action
+ *
+ * @return {*|{loading: boolean, unReadCount: number, error: boolean, notifications: *[]}|state}
+ */
 const notificationReducer = (state = initialState, action) => {
     switch (action.type) {
         case NOTIFICATIONS_START:

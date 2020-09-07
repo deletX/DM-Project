@@ -11,6 +11,10 @@ import {
     USER_DATA_UPDATE
 } from "../actions/types";
 
+/**
+ * Profile initila state
+ * @type {{score: number, givenFeedback: [], carSet: [], averageVote: number, id: string, loading: boolean, error: boolean, user: {}, picture: string, receivedFeedback: []}}
+ */
 const initialState = {
     id: "",
     picture: "",
@@ -24,10 +28,26 @@ const initialState = {
     error: false,
 };
 
+/**
+ * Profile start action reducer
+ *
+ * @param {state} state
+ * @param {{type:string}} action
+ *
+ * @return {state}
+ */
 const profileStart = (state, action) => {
     return updateObject(state, {loading: true})
 };
 
+/**
+ * Profile retrieve action reducer
+ *
+ * @param {state} state
+ * @param {{score: number, givenFeedback: [], carSet: [], averageVote: number, id: string, user: {}, picture: string, receivedFeedback: []}} action
+ *
+ * @return {state}
+ */
 const getProfileSuccess = (state, action) => {
     let {id, picture, score, carSet, averageVote, receivedFeedback, givenFeedback, user} = action;
     return updateObject(state, {
@@ -43,6 +63,14 @@ const getProfileSuccess = (state, action) => {
     })
 };
 
+/**
+ * Profile picture update action reducer
+ *
+ * @param {state} state
+ * @param {{type:string,picture:string}} action
+ *
+ * @return {state}
+ */
 const profilePictureUpdate = (state, action) => {
     return updateObject(state, {
         loading: false,
@@ -50,6 +78,13 @@ const profilePictureUpdate = (state, action) => {
     })
 };
 
+/**
+ * Profile fail action reducer
+ *
+ * @param {state} state
+ * @param {{type:string}} action
+ * @return {state}
+ */
 const profileError = (state, action) => {
     return updateObject(state, {
         loading: false,
@@ -57,6 +92,14 @@ const profileError = (state, action) => {
     })
 };
 
+/**
+ * User data update action reducer
+ *
+ * @param {state} state
+ * @param {{type:string, id:number, firstName:string,lastName:string,email:string}}action
+ *
+ * @return {state}
+ */
 const userDataUpdate = (state, action) => {
     let {id, firstName, lastName, email} = action;
     let user = state.user;
@@ -70,10 +113,26 @@ const userDataUpdate = (state, action) => {
     })
 };
 
+/**
+ * Clear profile action reducer
+ *
+ * @param {state} state
+ * @param {{type:string}} action
+ *
+ * @return {{score: number, givenFeedback: *[], carSet: *[], averageVote: number, id: string, loading: boolean, error: boolean, user: {}, picture: string, receivedFeedback: *[]}}
+ */
 const clearProfileData = (state, action) => {
     return initialState;
 };
 
+/**
+ * Car creation action reducer
+ *
+ * @param {state} state
+ * @param {{type:string, id:number, name:string, totSeats:number,fuel:number,consumption:number}} action
+ *
+ * @return {state}
+ */
 const carCreate = (state, action) => {
     let {id, name, totSeats, fuel, consumption} = action;
     console.log("create")
@@ -84,6 +143,14 @@ const carCreate = (state, action) => {
     return updateObject(state, {carSet: carSet, loading: false});
 };
 
+/**
+ * Car update action reducer
+ *
+ * @param {state} state
+ * @param {{type:string, id:number, name:string, totSeats:number,fuel:number,consumption:number}} action
+ *
+ * @return {state}
+ */
 const carUpdate = (state, action) => {
     let {id, name, totSeats, fuel, consumption} = action;
     let index = state.carSet.findIndex((car) => (car.id === id));
@@ -97,6 +164,14 @@ const carUpdate = (state, action) => {
     return updateObject(state, {carSet: carSet, loading: false});
 };
 
+/**
+ * Car delete action reducer
+ *
+ * @param {state} state
+ * @param {{type:string,id:number}} action
+ *
+ * @return {state}
+ */
 const carDelete = (state, action) => {
     let carSet = {...state}.carSet.filter((car) => (car.id !== action.id));
     return updateObject(state, {
@@ -105,6 +180,14 @@ const carDelete = (state, action) => {
     })
 };
 
+/**
+ * Profile root reducer
+ *
+ * @param {state} state
+ * @param {{}} action
+ *
+ * @return {{score: number, givenFeedback: *[], carSet: *[], averageVote: number, id: string, loading: boolean, error: boolean, user: {}, picture: string, receivedFeedback: *[]}|state}
+ */
 const profileReducer = (state = initialState, action) => {
     switch (action.type) {
         case PROFILE_OP_START:
