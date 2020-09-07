@@ -12,7 +12,9 @@ import LandingPageContainer from "./containers/LandingPageContainer";
 import NotFound404 from "./components/misc/NotFound404";
 import {useQuery} from "./utils/utils";
 
-
+/**
+ * Login Container
+ */
 const Login = (props) => {
     let history = useHistory()
     const query = useQuery()
@@ -28,6 +30,9 @@ const Login = (props) => {
     )
 }
 
+/**
+ * Signup Container
+ */
 const Signup = props => {
     let history = useHistory()
     const query = useQuery()
@@ -42,6 +47,11 @@ const Signup = props => {
     )
 }
 
+/**
+ * Application router used for navigation inside the web application.
+ *
+ * See {@link https://reactrouter.com/}
+ */
 const BaseRouter = props => (
     <div>
         <Switch>

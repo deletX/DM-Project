@@ -16,11 +16,16 @@ import TryAutoSignup from "./components/misc/TryAutoSignup";
 
 export const history = createBrowserHistory();
 
-
+/**
+ * Main Application.
+ *
+ * Material-ui (see {@link https://material-ui.com/}) is used for the majority of components and styling.
+ *
+ * Notistack (see {@link https://github.com/iamhosseindhv/notistack}) is used for toasts alerts.
+ */
 function App(props) {
 
     return (
-        /*<BrowserRouter history={history}>*/
         <BrowserRouter>
             <ThemeProvider theme={theme}>
                 <SnackbarProvider maxSnack={3}>
