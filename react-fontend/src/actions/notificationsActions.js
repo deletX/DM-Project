@@ -114,7 +114,6 @@ export const readNotification = (notificationId, read, enqueueSnackbar) => {
         return putReadNotifications(access_token, notificationId, read,
             (res) => {
                 dispatch(readSuccess(notificationId, read))
-                handleInfo(enqueueSnackbar, "Notification read")
             },
             (err) => {
                 handleError(enqueueSnackbar, "Something went wrong while reading the notifications [024]", err)
