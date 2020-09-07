@@ -228,11 +228,12 @@ def create_notification_for_feedback(sender, **kwargs):
     """
     feedback = kwargs["instance"]
     if kwargs["created"]:
-        notification = Notification.objects.create(profile=feedback.receiver, title="New feedback",
-                                                   content="User {} gave you a {} star rating".format(
-                                                       feedback.giver.user.username, feedback.vote),
-                                                   url="/profiles/" + str(feedback.receiver.id),
-                                                   related_event=feedback.event)
+        notification = Notification.objects.create(
+            profile=feedback.receiver,
+            title="New feedback",
+            content="User {} gave you a {} star rating".format(feedback.giver.user.username, feedback.vote),
+            url="/profiles/" + str(feedback.receiver.id),
+            related_event=feedback.event)
 
 
 post_save.connect(create_notification_for_feedback, sender=Feedback)

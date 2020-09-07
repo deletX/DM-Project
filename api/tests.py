@@ -51,25 +51,30 @@ class EventViewSetAPITestCase(APITestCase):
 
         data = {"name": self.name, "description": self.description, "address": "other_addr"}
         data = json.dumps(data)
-        response = self.client.post(url, data=data,
-                                    content_type='application/json')
+        response = self.client.post(url, data=data, content_type='application/json')
         self.assertEqual(response.status_code, 400)
 
     def test_post_event_with_same_date_and_destination(self):
         now = dateformat.format(timezone.now(), "Y-m-d H:i")
         url = reverse("api:events-list")
-        data = {"name": "other_name", "description": self.description, "address": self.address,
-                "destination": self.destination,
-                "date_time": now}
+        data = {
+            "name": "other_name",
+            "description": self.description,
+            "address": self.address,
+            "destination": self.destination,
+            "date_time": now
+        }
         data = json.dumps(data)
-        response = self.client.post(url, data=data,
-                                    content_type='application/json')
+        response = self.client.post(url, data=data, content_type='application/json')
         self.assertEqual(response.status_code, 201, msg=response.json())
-        data = {"name": "other_name_2", "description": self.description, "address": self.address,
-                "date_time": now}
+        data = {
+            "name": "other_name_2",
+            "description": self.description,
+            "address": self.address,
+            "date_time": now
+        }
         data = json.dumps(data)
-        response = self.client.post(url, data=data,
-                                    content_type='application/json')
+        response = self.client.post(url, data=data, content_type='application/json')
         self.assertEqual(response.status_code, 400)
 
     def test_get_event_detail(self):
@@ -92,8 +97,12 @@ class EventViewSetAPITestCase(APITestCase):
     def test_put_event(self):
         url = reverse("api:events-detail", kwargs={'pk': self.event.pk})
         name_edited = self.name + "_edited"
-        data = {'name': name_edited, 'description': self.description, 'address': self.address,
-                'destination': self.destination}
+        data = {
+            'name': name_edited,
+            'description': self.description,
+            'address': self.address,
+            'destination': self.destination
+        }
         response = self.client.put(url, json.dumps(data), content_type="application/json")
         self.assertEqual(response.status_code, 200, msg=response.json())
         event = Event.objects.get(id=self.event.id)
@@ -107,7 +116,11 @@ class EventViewSetAPITestCase(APITestCase):
                                          owner=other_prof)
         url = reverse("api:events-detail", kwargs={'pk': cur_event.pk})
         name_edited = self.name + "_edited"
-        data = {'name': name_edited, 'description': self.description, 'address': self.address}
+        data = {
+            'name': name_edited,
+            'description': self.description,
+            'address': self.address
+        }
 
         response = self.client.put(url, json.dumps(data), content_type="application/json")
 
@@ -216,15 +229,13 @@ class ParticipantViewSetAPITestCase(APITestCase):
         self.owner = Profile.objects.get(user=self.user)
         self.destionation = "SRID=4326;POINT (44.6291598 10.9744844)"
         self.event = Event.objects.create(name=self.name, description=self.description, address=self.address,
-                                          destination=self.destionation,
-                                          owner=self.owner)
+                                          destination=self.destionation, owner=self.owner)
 
         self.second_user = User.objects.create_user("second_username", password="second_pass")
 
         self.starting_pos = "SRID=4326;POINT (44.6291598 10.9744844)"
         self.participant = Participant.objects.create(profile=Profile.objects.get(user=self.second_user),
-                                                      event=self.event,
-                                                      starting_address=self.address,
+                                                      event=self.event, starting_address=self.address,
                                                       starting_pos=self.starting_pos)
 
     def test_get_participants(self):
@@ -262,11 +273,13 @@ class ParticipantViewSetAPITestCase(APITestCase):
 
     def test_put_participant(self):
         cur_participant = Participant.objects.create(profile=self.profile, event=self.event,
-                                                     starting_pos=self.starting_pos,
-                                                     starting_address=self.address)
+                                                     starting_pos=self.starting_pos, starting_address=self.address)
 
-        data = {'starting_address': self.address + "_edited", 'starting_pos': "SRID=4326;POINT (44.5786321 10.4569878)",
-                'car': None}
+        data = {
+            'starting_address': self.address + "_edited",
+            'starting_pos': "SRID=4326;POINT (44.5786321 10.4569878)",
+            'car': None
+        }
         url = reverse("api:participants-detail", kwargs={'event_pk': self.event.pk, 'pk': cur_participant.pk})
         response = self.client.put(url, json.dumps(data), content_type='application/json')
         self.assertEqual(response.status_code, 200, msg=response.json())
@@ -281,8 +294,7 @@ class ParticipantViewSetAPITestCase(APITestCase):
 
     def test_delete_participant(self):
         cur_participant = Participant.objects.create(profile=self.profile, event=self.event,
-                                                     starting_pos=self.starting_pos,
-                                                     starting_address=self.address)
+                                                     starting_pos=self.starting_pos, starting_address=self.address)
         url = reverse("api:participants-detail", kwargs={'event_pk': self.event.pk, 'pk': cur_participant.pk})
         response = self.client.delete(url)
         self.event.refresh_from_db()
@@ -548,7 +560,9 @@ class FeedbackViewSetAPITestCase(APITestCase):
         self.description = "description"
         self.destination = "SRID=4326;POINT (44.6291598 10.9744844)"
         self.address = "addresss"
-        self.event = Event.objects.create(name=self.name, description=self.description, address=self.address,
+        self.event = Event.objects.create(name=self.name,
+                                          description=self.description,
+                                          address=self.address,
                                           destination=self.destination,
                                           owner=self.profile)
 
@@ -568,31 +582,49 @@ class FeedbackViewSetAPITestCase(APITestCase):
 
     def test_post(self):
         url = reverse("api:feedback-list",
-                      kwargs={'event_pk': self.event.id, 'participant_pk': self.other_profile.id})
-        data = {'comment': "comment", 'vote': 4.1, 'receiver': self.other_profile.id, 'event': self.event.id}
+                      kwargs={
+                          'event_pk': self.event.id,
+                          'participant_pk': self.other_profile.id})
+        data = {
+            'comment': "comment",
+            'vote': 4.1,
+            'receiver': self.other_profile.id,
+            'event': self.event.id
+        }
         response = self.client.post(url, json.dumps(data), content_type='application/json')
         self.assertEqual(response.status_code, 201, msg=response.json())
         self.assertEqual(Feedback.objects.count(), 1)
         self.assertEqual(Notification.objects.count(), 1)
 
     def test_put(self):
-        feedback = Feedback.objects.create(giver=self.profile, receiver=self.other_profile, event=self.event,
-                                           comment="comment", vote=4.1)
+        feedback = Feedback.objects.create(giver=self.profile,
+                                           receiver=self.other_profile,
+                                           event=self.event,
+                                           comment="comment",
+                                           vote=4.1)
 
-        url = reverse("api:feedback-detail", kwargs={'event_pk': self.event.id, 'participant_pk': self.other_profile.id,
+        url = reverse("api:feedback-detail", kwargs={'event_pk': self.event.id,
+                                                     'participant_pk': self.other_profile.id,
                                                      'pk': feedback.id})
 
-        data = {'comment': "comment_edited", 'vote': 4.1, 'receiver': self.other_profile.id, 'event': self.event.id}
+        data = {'comment': "comment_edited",
+                'vote': 4.1,
+                'receiver': self.other_profile.id,
+                'event': self.event.id}
         response = self.client.put(url, json.dumps(data), content_type='application/json')
         self.assertEqual(response.status_code, 200, msg=response.json())
         feedback.refresh_from_db()
         self.assertEqual(feedback.comment, "comment_edited")
 
     def test_delete(self):
-        feedback = Feedback.objects.create(giver=self.profile, receiver=self.other_profile, event=self.event,
-                                           comment="comment", vote=4.1)
+        feedback = Feedback.objects.create(giver=self.profile,
+                                           receiver=self.other_profile,
+                                           event=self.event,
+                                           comment="comment",
+                                           vote=4.1)
 
-        url = reverse("api:feedback-detail", kwargs={'event_pk': self.event.pk, 'participant_pk': self.other_profile.pk,
+        url = reverse("api:feedback-detail", kwargs={'event_pk': self.event.pk,
+                                                     'participant_pk': self.other_profile.pk,
                                                      'pk': feedback.id})
 
         response = self.client.delete(url)
@@ -617,12 +649,16 @@ class NotificationViewSetAPITestCase(APITestCase):
         self.description = "description"
         self.destination = "SRID=4326;POINT (44.6291598 10.9744844)"
         self.address = "addresss"
-        self.event = Event.objects.create(name=self.name, description=self.description, address=self.address,
+        self.event = Event.objects.create(name=self.name,
+                                          description=self.description,
+                                          address=self.address,
                                           destination=self.destination,
                                           owner=self.profile)
 
-        self.notification = Notification.objects.create(profile=self.profile, title="test_notification",
-                                                        content="test_content", related_event=self.event)
+        self.notification = Notification.objects.create(profile=self.profile,
+                                                        title="test_notification",
+                                                        content="test_content",
+                                                        related_event=self.event)
 
     def test_get_list(self):
         url = reverse("api:notifications")

@@ -65,13 +65,10 @@ class Algorithm:
         self.groups_score = [0] * 3
 
         # debug
-        logging.info(
-            "Algorithm.__init__  event_id: {}  destination: {}  participant_groups: {}  groups_score: {}".format(
-                event_id, self.destination, self.participant_groups, self.groups_score))
+        logging.info("Algorithm.__init__  event_id: {}  destination: {}  participant_groups: {}  groups_score: {}".format(event_id, self.destination, self.participant_groups, self.groups_score))
 
     def __str__(self):
-        return "event_id: {}  destination: {}  participant_groups: {}  groups_score: {}".format(
-            self.event_id, self.destination, self.participant_groups, self.groups_score)
+        return "event_id: {}  destination: {}  participant_groups: {}  groups_score: {}".format(self.event_id, self.destination, self.participant_groups, self.groups_score)
 
     def get_drivers(self, data):
         drivers = []
@@ -357,8 +354,7 @@ class Algorithm:
             if passenger.probability > 0:
                 # probabilities_dict will contain each probability > 0
                 probabilities_dict[index] = passenger.probability
-        probabilities_dict[destination_index] = (
-                pow(ph_array[destination_index], alpha) * pow(att_array[destination_index], beta) / total_value)
+        probabilities_dict[destination_index] = (pow(ph_array[destination_index], alpha) * pow(att_array[destination_index], beta) / total_value)
         return probabilities_dict
 
     def get_driver_total_value(self, driver, passengers):
@@ -368,23 +364,30 @@ class Algorithm:
     def get_passenger_total_value(self, starting_passenger_index, passengers, pheromone_passengers_matrix,
                                   attractiveness_passengers_matrix):
         # the total value is the denominator for the probability of the next passenger
-        return self.get_total_value(passengers, pheromone_passengers_matrix[starting_passenger_index],
-                                    attractiveness_passengers_matrix[starting_passenger_index])
+        return self.get_total_value(
+            passengers,
+            pheromone_passengers_matrix[starting_passenger_index],
+            attractiveness_passengers_matrix[starting_passenger_index]
+        )
 
     def get_first_passenger_probability_dict(self, driver, passengers, destination_index):
         total_value = self.get_driver_total_value(driver, passengers)
-        return self.get_probability_dict_from_arrays(passengers, driver.pheromone_array, driver.attractiveness_array,
-                                                     total_value, destination_index)
+        return self.get_probability_dict_from_arrays(passengers, driver.pheromone_array, driver.attractiveness_array, total_value, destination_index)
 
-    def get_passenger_to_passenger_probability_dict(self, passengers, starting_passenger_index, destination_index,
-                                                    pheromone_passengers_matrix, attractiveness_passengers_matrix):
-        total_value = self.get_passenger_total_value(starting_passenger_index, passengers, pheromone_passengers_matrix,
-                                                     attractiveness_passengers_matrix)
+    def get_passenger_to_passenger_probability_dict(self, passengers, starting_passenger_index, destination_index, pheromone_passengers_matrix, attractiveness_passengers_matrix):
+        total_value = self.get_passenger_total_value(
+            starting_passenger_index,
+            passengers,
+            pheromone_passengers_matrix,
+            attractiveness_passengers_matrix)
         pheromone_passenger_array = pheromone_passengers_matrix[starting_passenger_index]
         attractiveness_passenger_array = attractiveness_passengers_matrix[starting_passenger_index]
-        return self.get_probability_dict_from_arrays(passengers, pheromone_passenger_array,
-                                                     attractiveness_passenger_array,
-                                                     total_value, destination_index)
+        return self.get_probability_dict_from_arrays(
+            passengers,
+            pheromone_passenger_array,
+            attractiveness_passenger_array,
+            total_value,
+            destination_index)
 
     def get_travel_cost(self, total_km, driver, participants_number):
         # evaluate cost from car's fuel type and fuel consumption
@@ -490,8 +493,7 @@ class Algorithm:
         total_available_seats = 0
         for driver in drivers:
             tot_avail_seats = Car.objects.get(id=driver.car).tot_avail_seats
-            seat_usage_rate = seat_usage_rate + (
-                    (tot_avail_seats - driver.remaining_seats) / tot_avail_seats)
+            seat_usage_rate = seat_usage_rate + ((tot_avail_seats - driver.remaining_seats) / tot_avail_seats)
             total_available_seats += tot_avail_seats
         seat_usage_rate_max_value = (len(drivers) + len(passengers)) / total_available_seats
 
@@ -528,8 +530,7 @@ class Algorithm:
         return matched_passengers + seat_usage_rate + norm_persons_per_kilometers
 
     # modified picked_passengers is now controlled, removed -1 checking, evaporation has to be reduced
-    def update_pheromone_values(self, objective_function_value, pheromone_passengers_matrix, drivers,
-                                destination_index):
+    def update_pheromone_values(self, objective_function_value, pheromone_passengers_matrix, drivers, destination_index):
         # depending on the value of the objective function, the updating trail delta is calculated
         # Q is the learning rate
         q = 1
@@ -560,8 +561,7 @@ class Algorithm:
                     continue
                 # if destination is reached
                 if index == len(driver.picked_passengers):
-                    pheromone_passengers_matrix[driver.picked_passengers[index - 1]][destination_index] += (
-                            rho * delta_tau)
+                    pheromone_passengers_matrix[driver.picked_passengers[index - 1]][destination_index] += (rho * delta_tau)
                     break
                 pheromone_passengers_matrix[driver.picked_passengers[index - 1]][driver.picked_passengers[index]] += (
                         rho * delta_tau)
@@ -586,14 +586,9 @@ class Algorithm:
                 else:
                     # attractiveness with dest
                     if c == cols - 1:
-                        attractiveness_passengers_matrix[r][c] = self.get_attractiveness(r, destination_index,
-                                                                                         destination_index,
-                                                                                         distance_passengers_matrix,
-                                                                                         False)
+                        attractiveness_passengers_matrix[r][c] = self.get_attractiveness(r, destination_index, destination_index, distance_passengers_matrix, False)
                     else:
-                        attractiveness_passengers_matrix[r][c] = self.get_attractiveness(r, c, destination_index,
-                                                                                         distance_passengers_matrix,
-                                                                                         False)
+                        attractiveness_passengers_matrix[r][c] = self.get_attractiveness(r, c, destination_index, distance_passengers_matrix, False)
         return attractiveness_passengers_matrix
 
     def set_time_passengers_matrix(self, passengers, rows, cols):
@@ -625,11 +620,9 @@ class Algorithm:
                         pass
                     else:
                         if c == cols - 1:
-                            distance_passengers_matrix[r][c] = distance(passengers[r].starting_pos,
-                                                                        destination).kilometers
+                            distance_passengers_matrix[r][c] = distance(passengers[r].starting_pos, destination).kilometers
                         else:
-                            distance_passengers_matrix[r][c] = distance(passengers[r].starting_pos,
-                                                                        passengers[c].starting_pos).kilometers
+                            distance_passengers_matrix[r][c] = distance(passengers[r].starting_pos, passengers[c].starting_pos).kilometers
                             distance_passengers_matrix[c][r] = distance_passengers_matrix[r][c]
         return distance_passengers_matrix
 
@@ -707,10 +700,7 @@ class Algorithm:
                     # the driver picked up the passenger in passengers that has index picked_index, so this will be
                     # the starting position for the next passengers
                     self.set_probability_passengers(passengers)
-                    probabilities_dict = self.get_passenger_to_passenger_probability_dict(passengers, picked_index,
-                                                                                          destination_index,
-                                                                                          pheromone_passengers_matrix,
-                                                                                          attractiveness_passengers_matrix)
+                    probabilities_dict = self.get_passenger_to_passenger_probability_dict(passengers, picked_index,destination_index,pheromone_passengers_matrix, attractiveness_passengers_matrix)
                     picked_index = self.roulette_wheel(probabilities_dict)
                     # now picked_index contains the index of the passenger in passengers that has to be picked
                     if picked_index == destination_index:
@@ -723,9 +713,7 @@ class Algorithm:
             # picked passengers and each passenger i assigned to a car we have to evaluate objective_function_value
             # objective function
             objective_function_value = self.evaluate_objective_function(passengers, drivers, distance_passengers_matrix)
-            pheromone_passengers_matrix = self.update_pheromone_values(objective_function_value,
-                                                                       pheromone_passengers_matrix,
-                                                                       drivers, destination_index)
+            pheromone_passengers_matrix = self.update_pheromone_values(objective_function_value, pheromone_passengers_matrix, drivers, destination_index)
             # if the new solution is better than the best we ever found, we change the selected solution
             if objective_function_value > selected_objective_function_value:
                 solution_changes += 1

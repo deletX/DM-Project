@@ -104,8 +104,15 @@ class ProfileRelatedField(serializers.RelatedField):
             url = profile.user.profile.picture.url
             if request is not None:
                 picture = request.build_absolute_uri(url)
-        return {'id': value.pk, 'first_name': first_name, 'last_name': last_name, 'username': username, 'email': email,
-                'picture': picture, 'average_vote': average_vote}
+        return {
+            'id': value.pk,
+            'first_name': first_name,
+            'last_name': last_name,
+            'username': username,
+            'email': email,
+            'picture': picture,
+            'average_vote': average_vote
+        }
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -409,8 +416,7 @@ class ParticipantSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Participant
-        fields = ['id', 'profile', 'starting_address', 'starting_pos', 'pickup_index', 'expense', 'car',
-                  'isDriver']
+        fields = ['id', 'profile', 'starting_address', 'starting_pos', 'pickup_index', 'expense', 'car', 'isDriver']
 
 
 class EventSerializer(serializers.ModelSerializer):
@@ -424,8 +430,7 @@ class EventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        fields = ['id', 'name', 'picture', 'description', 'address', 'destination', 'date_time', 'status', 'owner',
-                  'participant_set']
+        fields = ['id', 'name', 'picture', 'description', 'address', 'destination', 'date_time', 'status', 'owner', 'participant_set']
 
     def create(self, validated_data):
         """
