@@ -22,7 +22,7 @@ verify with
 - `sudo apt-get install binutils libproj-dev gdal-bin`
 
 
-### Crezione db ed utente:
+### Creazione DB ed utente:
 - `sudo -i -u postgres`
 - `createdb dmproject`
 - `psql dmproject`
@@ -52,14 +52,17 @@ Per installare le dipendenze necessarie, tramite la finestra del terminale (in b
 - `python manage.py createsuperuser` (just username and password, email blank)
 
 then:
-- python manage.py runserver YOUR_IP:8000
+- `ifconfig` to get your IP
+- `python manage.py runserver 192.168.1.12:8000`
+
 
 or in Pycharm AddConfiguration -> add new -> djangoServer -> save -> run
 
-finally http://YOUR_IP:8000/admin/
-- go in `Django OAuth Toolkit/Applications`
+finally http://192.168.1.12:8000/admin/
+- Log in with credential created previously
+- Go in `Django OAuth Toolkit/Applications`
 - Client id: `4mOLHPfJL0zueHOlawvJXsdnImpjOv3PmLdmm3NT`
-- User: `1`
+- User: `1` (could be different according to the numbers of superusers)
 - Client type: `Confidential`
 - Authorization grant type: `Resource owner password-based`
 - Client secret: `FW4dYuZsLmE6PQHk7qrPAc4shQhdx2hknqNOh58XO3JQ6PFI8um2z6wyJubxF6hKNOOOJfZUQ67jm5ApN5HJioq4XsNAGSbCLiQZqrqfo6jiy67ddpvMOl3Be8SATFSL`
@@ -272,16 +275,36 @@ cd ..
 
 ## Testing
 Se non già fatto eseguire nell'interfaccia di postgresql (vedi su)
+- `sudo -i -u postgres`
+- `psql dmproject`
 - `ALTER USER django CREATEDB;`
 - `ALTER USER django SUPERUSER;`
 
-è possibile eseguire i test con `python manage.py test` o tramite l'interfaccia di pycharm. E' importante affinché i test funzionino che cartelle media e static siano setuppate. Per fare ciò eseguire:
+Setup cartelle media e static
 - `npm run build` (dentro react-frontend)
 - spostare la cartella `react-frontend/build` dentro la cartella principale di progetto
 - `python manage.py collectstatic`
 
-# Error numbering
-**App errors**
+è possibile eseguire i test con 
+- `python manage.py test`
+
+Output:
+```bash
+Creating test database for alias 'default'...
+System check identified no issues (0 silenced).
+..................ssss....true true false
+.....................
+----------------------------------------------------------------------
+Ran 47 tests in 9.181s
+
+OK (skipped=4)
+Destroying test database for alias 'default'...
+
+```
+
+
+# Errors numbering
+**Mobile errors**
 - `001` Error in getting the refresh token
 - `002` Error in deleting the participation for an event
 - `003` Error in retrieving event details
