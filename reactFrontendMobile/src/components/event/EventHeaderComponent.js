@@ -1,9 +1,9 @@
 import React from 'react';
-import {ImageBackground, StyleSheet, useWindowDimensions, View} from "react-native";
+import {Alert, ImageBackground, StyleSheet, useWindowDimensions, View} from "react-native";
 import {Button, Colors, IconButton, Subheading, Title} from "react-native-paper";
 import moment from "moment";
 import {useNavigation} from "@react-navigation/native";
-import {alertAreYouSure, handleInfo} from "../../utils/utils";
+import {handleInfo} from "../../utils/utils";
 import {HOME_SCREEN} from "../../constants/screens";
 import {JOINABLE} from "../../constants/constants";
 import {connect} from 'react-redux';
@@ -38,14 +38,27 @@ const EventHeaderOwnerButtons = (props) => (
             color={Colors.redA700}
             disabled={props.event.status !== JOINABLE}
             style={headerStyles.deleteButton}
+            mode={"contained"}
+            icon="delete"
             onPress={() => {
-                alertAreYouSure(
-                    () => {
-                        deleteEvent(props.event.id, props.token,
-                            (res) => {
-                                props.navigation.navigate(HOME_SCREEN, {refresh: true})
-                            })
-                    })
+                Alert.alert(
+                    "Are you sure?",
+                    "There is no coming back",
+                    [
+                        {
+                            text: "No", style: 'cancel'
+                        },
+                        {
+                            text: "Yes",
+                            onPress: () => {
+                                deleteEvent(props.event.id, props.token,
+                                    (res) => {
+                                        props.navigation.navigate(HOME_SCREEN, {refresh: true})
+                                    })
+                            }
+                        }
+                    ]
+                )
             }}>
             delete
         </Button>
@@ -53,6 +66,8 @@ const EventHeaderOwnerButtons = (props) => (
             style={headerStyles.runButton}
             color={Colors.tealA700}
             disabled={props.event.status !== JOINABLE}
+            mode={"contained"}
+            icon="play"
             onPress={() => {
                 if (!props.minimumCarSeatsCovered) {
                     handleInfo("Not Enough Seats")
@@ -137,12 +152,12 @@ const headerStyles = StyleSheet.create({
     runButton: {
         position: "absolute",
         top: 10,
-        left: 80
+        left: 110,
     },
     deleteButton: {
         position: "absolute",
         top: 10,
-        left: -100
+        right: 90
     },
     title: {
         color: Colors.white,
