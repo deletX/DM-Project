@@ -11,7 +11,7 @@ import {pridStringToLatLng} from "../../utils/utils";
  * @param {string|number} lng
  */
 const openGps = (lat, lng) => {
-    const scheme = Platform.OS === 'ios' ? 'maps:' : `geo:`;
+    const scheme = Platform.OS === 'ios' ? 'maps:0,0?q=' : `geo:0,0?q=`;
     const url = scheme + `${lat},${lng}`;
     Linking.openURL(url);
 }
