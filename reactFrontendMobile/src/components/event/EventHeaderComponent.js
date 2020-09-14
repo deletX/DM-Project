@@ -3,7 +3,7 @@ import {Alert, ImageBackground, StyleSheet, useWindowDimensions, View} from "rea
 import {Button, Colors, IconButton, Subheading, Title} from "react-native-paper";
 import moment from "moment";
 import {useNavigation} from "@react-navigation/native";
-import {handleInfo} from "../../utils/utils";
+import {alertAreYouSure, handleInfo} from "../../utils/utils";
 import {HOME_SCREEN} from "../../constants/screens";
 import {JOINABLE} from "../../constants/constants";
 import {connect} from 'react-redux';
@@ -40,26 +40,13 @@ const EventHeaderOwnerButtons = (props) => (
             style={headerStyles.deleteButton}
             mode={"contained"}
             icon="delete"
-            onPress={() => {
-                Alert.alert(
-                    "Are you sure?",
-                    "There is no coming back",
-                    [
-                        {
-                            text: "No", style: 'cancel'
-                        },
-                        {
-                            text: "Yes",
-                            onPress: () => {
-                                deleteEvent(props.event.id, props.token,
-                                    (res) => {
-                                        props.navigation.navigate(HOME_SCREEN, {refresh: true})
-                                    })
-                            }
-                        }
-                    ]
-                )
-            }}>
+            onPress={alertAreYouSure(
+                () => {
+                    deleteEvent(props.event.id, props.token,
+                        (res) => {
+                            props.navigation.navigate(HOME_SCREEN, {refresh: true})
+                        })
+                })}>
             delete
         </Button>
         <Button

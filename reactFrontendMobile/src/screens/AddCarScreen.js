@@ -4,6 +4,7 @@ import {Button, Caption, Colors, HelperText, RadioButton, TextInput} from "react
 import {FUEL} from "../constants/constants";
 import {connect} from 'react-redux';
 import {createCar, deleteCar, updateCar} from "../actions/profileActions";
+import {alertAreYouSure} from "../utils/utils";
 
 /**
  * Text input for car name and helper text
@@ -135,25 +136,10 @@ const AddCarScreen = (props) => {
                     <Button
                         icon={"delete"}
                         color={Colors.red800}
-                        onPress={() => {
-                            Alert.alert(
-                                "Are you sure?",
-                                "There is no coming back",
-                                [
-                                    {
-                                        text: "No", style: 'cancel'
-                                    },
-                                    {
-                                        text: "Yes",
-                                        onPress: () => {
-                                            props.deleteCar(props.route.params.car.id)
-                                            props.navigation.goBack()
-                                        }
-                                    }
-                                ]
-                            )
-
-                        }}>
+                        onPress={alertAreYouSure(() => {
+                            props.deleteCar(props.route.params.car.id)
+                            props.navigation.goBack()
+                        })}>
                         Delete
                     </Button>
                     }
@@ -161,22 +147,10 @@ const AddCarScreen = (props) => {
                         icon={"content-save"}
                         onPress={() => {
                             if (props.route.params.edit) {
-                                Alert.alert(
-                                    "Are you sure?",
-                                    "There is no coming back",
-                                    [
-                                        {
-                                            text: "No", style: 'cancel'
-                                        },
-                                        {
-                                            text: "Yes",
-                                            onPress: () => {
-                                                props.editCar(props.route.params.car.id, name, fuel, seats, consumption)
-                                                props.navigation.goBack()
-                                            }
-                                        }
-                                    ]
-                                )
+                                alertAreYouSure(() => {
+                                    props.editCar(props.route.params.car.id, name, fuel, seats, consumption)
+                                    props.navigation.goBack()
+                                })()
                             } else {
                                 if (name.length === 0) {
                                     setNameError(true)
