@@ -297,8 +297,7 @@ const EventContainer = (props) => {
                                         {/* Event date */}
                                         {!edit ?
                                             <Typography variant="h5">
-                                                Date: {`${date.getDate()}/${date.getMonth() < 10 ? '0' :
-                                                ''}${date.getMonth() + 1}/${date.getFullYear()} at ${date.getHours()}:${date.getMinutes()}`}
+                                                Date: {`${(date.getDate()<10?'0':'') + date.getDate()}/${date.getMonth() < 10 ? '0' : ''}${date.getMonth() + 1}/${date.getFullYear()} at ${(date.getHours()<10?'0':'') + date.getHours()}:${(date.getMinutes()<10?'0':'') + date.getMinutes()}`}
                                             </Typography>
                                             :
                                             <>
