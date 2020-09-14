@@ -122,7 +122,7 @@ $ dpkg -l | grep postgres
 - then reinstall postgres, create superuser in django, make migrations in django and add application in `Django OAuth Toolkit/Applications`
 https://www.liquidweb.com/kb/how-to-remove-postgresql/
 
-#### Back Ground Tasks
+#### Background Tasks
 You need __celery__, the engine that performs the tasks in the background and __redis__ that takes care of managing the communications between django and celery.
 
 
@@ -195,7 +195,7 @@ Destroying test database for alias 'default'...
 - be sure not to use http://127.0.0.1:3000/ or http://0.0.0.0:3000/ or http://YOUR_IP:3000 because Google Sign In won't work!
 
 
-## React native
+## Mobile frontend
 - `cd reactFrontendMobile/ && npm install`
 
 #### How to run mobile frontend:
@@ -344,4 +344,4 @@ cd ..
 
 
 ## Disclaimer
-This work has only been tested with PyCharm 2020.2.1 (Professional Edition) as IDE and Ubuntu 18.04 LTS as OS.
+This work has only been tested with PyCharm 2020.2.1 (Professional Edition) as IDE, Ubuntu 18.04 LTS as OS and Android as mobile OS.
