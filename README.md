@@ -148,7 +148,7 @@ do a POST on `/api/v0.1/auth/convert-token` with data: `grant_type=convert_token
 This will return a `{"access_token":"<app-access-token>","expires_in":36000,"token_type":"Bearer","scope":"read write","refresh_token":"<app-refresh-token>"}`
 Access token can be used to provide authorization including `Authorization: Bearer <app-access-token>` header in the request.
 
-## Backend automated tests
+#### Backend automated tests
 If not previously done, execute in postegres:
 - `sudo -i -u postgres`
 - `psql dmproject`
