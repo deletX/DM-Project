@@ -10,7 +10,7 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import JoinContainer from "../../containers/JoinContainer";
 import AlertDialog from "../misc/AlertDialog";
-import {handleError, handleSuccess} from "../../utils/utils";
+import {dateFormatter, handleError, handleSuccess} from "../../utils/utils";
 import {useHistory} from "react-router-dom";
 import {eventPage} from "../../constants/pagesurls";
 import LinearProgress from "@material-ui/core/LinearProgress";
@@ -58,7 +58,7 @@ const EventCard = (props) => {
                         </Typography>
 
                         <Typography variant="body2" color="textSecondary" component="p" noWrap>
-                            Date: {`${(date.getDate()<10?'0':'') + date.getDate()}/${date.getMonth() < 10 ? '0' : ''}${date.getMonth() + 1}/${date.getFullYear()} ${(date.getHours()<10?'0':'') + date.getHours()}:${(date.getMinutes()<10?'0':'') + date.getMinutes()}`}
+                            Date: {dateFormatter(date)}
                         </Typography>
                         <Typography variant="body2" color="textSecondary" component="p" noWrap>
                             Location: {event.address}

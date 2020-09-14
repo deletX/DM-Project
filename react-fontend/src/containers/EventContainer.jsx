@@ -15,7 +15,7 @@ import {useParams} from "react-router";
 import {useHistory} from "react-router-dom";
 import {eventPage, home, login} from "../constants/pagesurls";
 import AlertDialog from "../components/misc/AlertDialog";
-import {handleError, handleInfo, handleSuccess, handleWarning, pridStringToLatLng} from "../utils/utils";
+import {dateFormatter, handleError, handleInfo, handleSuccess, handleWarning, pridStringToLatLng} from "../utils/utils";
 import JoinContainer from "./JoinContainer";
 import {connect} from "react-redux";
 import TextField from "@material-ui/core/TextField";
@@ -297,7 +297,7 @@ const EventContainer = (props) => {
                                         {/* Event date */}
                                         {!edit ?
                                             <Typography variant="h5">
-                                                Date: {`${(date.getDate()<10?'0':'') + date.getDate()}/${date.getMonth() < 10 ? '0' : ''}${date.getMonth() + 1}/${date.getFullYear()} at ${(date.getHours()<10?'0':'') + date.getHours()}:${(date.getMinutes()<10?'0':'') + date.getMinutes()}`}
+                                                Date: {dateFormatter(date)}
                                             </Typography>
                                             :
                                             <>

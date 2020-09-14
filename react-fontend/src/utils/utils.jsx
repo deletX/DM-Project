@@ -53,6 +53,20 @@ export const headers = (content_type, access_token = null, otherHeaders = {}, ot
     return headers
 };
 
+
+/**
+ * Converts a raw date string in more readable format, padding with '0' days, months, hours and minutes: dd/mm/yyyy hh:mm
+ *
+ * @param {{}} date
+ *
+ * @return formatted date
+ */
+export const dateFormatter = (date) => (
+    `${(date.getDate() < 10 ? '0' : '') + date.getDate()}/${date.getMonth() < 10 ? '0' : ''}${date.getMonth() + 1}/${date.getFullYear()} ${(date.getHours() < 10 ? '0' : '') + date.getHours()}:${(date.getMinutes() < 10 ? '0' : '') + date.getMinutes()}`
+)
+
+
+
 /**
  * Converts a nominatim position object into a position and address string
  *
@@ -173,7 +187,7 @@ export const useQuery = () => {
  */
 export const handleError = (enqueueSnackbar, message, error) => {
     enqueueSnackbar(message, {variant: 'error'});
-    console.log("handleError: ",error);
+    console.log("handleError: ", error);
 }
 
 /**
