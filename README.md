@@ -1,4 +1,14 @@
-### Prerequisites
+# DM Project
+This project was developed as part of the "Web and Mobile Applications" course as an exam in the Master's Degree in Computer Engineering in Unimore. It's a management platform that allows you to organize and create events as well as promote car sharing. Backend was developed with Django, web frontend with React and mobile frontend with React Native.
+
+## Contributors
+
+| Name                | Email                                                             |
+| ------------------- | ----------------------------------------------------------------- |
+| Stefano Gavioli        | [`211805@studenti.unimore.it`](mailto:214898@studenti.unimore.it) |
+| Alberto Vitto       | [`214372@studenti.unimore.it`](mailto:214372@studenti.unimore.it) |
+
+## Prerequisites
 - `sudo apt install git-all`
 - `sudo apt install gcc`
 - `sudo snap install node --classic --channel=12`
@@ -9,7 +19,20 @@ verify with
 - `sudo apt-get install python3-dev`
 
 
-### PostgreSQL
+## Backend
+- `virtualenv -p python3.6 venv`
+- `source venv/bin/activate`
+- `pip install -r requirements.txt`
+
+(if problems occurs be sure to have installed python3.6-dev)
+
+
+#### GEOS, PROJ, GDAL
+[Check this page for installation](https://docs.djangoproject.com/en/3.0/ref/contrib/gis/install/geolibs/) 
+- `sudo apt-get install binutils libproj-dev gdal-bin`
+
+
+#### PostgreSQL
 - `sudo apt-get install wget ca-certificates`
 - `wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -`
 - `sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt bionic-pgdg main" >> /etc/apt/sources.list.d/pgdg.list'`
@@ -17,12 +40,7 @@ verify with
 - `sudo apt-get install postgresql-11 postgresql-11-postgis-3 postgresql-server-dev-11 python-psycopg2`
 
 
-### GEOS, PROJ, GDAL
-[In questa pagina](https://docs.djangoproject.com/en/3.0/ref/contrib/gis/install/geolibs/) si possono trovare tutte le info per installare queste librerie. 
-- `sudo apt-get install binutils libproj-dev gdal-bin`
-
-
-### Creazione DB ed utente:
+#### DB and user creation:
 - `sudo -i -u postgres`
 - `createdb dmproject`
 - `psql dmproject`
@@ -32,21 +50,7 @@ verify with
 - `ALTER USER django SUPERUSER;`
 - `CREATE EXTENSION postgis;`
 
-
-### Creazione del venv
-- `virtualenv -p python3.6 venv`
-- `source venv/bin/activate`
-- `pip install -r requirements.txt`
-
-(Se ci sono problemi con il modulo assicurarsi di avere installato python3.6-dev)
-
-Oppure:
-
-In Pycharm entrare nel menu impostazioni (Ctrl+Alt+S), sotto Project > Project Interpreter, rotellina a fianco di Project Interpreter. Cliccare su Add e poi su OK
-Per installare le dipendenze necessarie, tramite la finestra del terminale (in basso) eseguire:`
-
-
-### Django
+#### Django
 - `python manage.py makemigrations`
 - `python manage.py migrate`
 - `python manage.py createsuperuser` (just username and password, email blank)
@@ -55,8 +59,6 @@ then:
 - `ifconfig` to get your IP
 - `python manage.py runserver 192.168.1.12:8000`
 
-
-or in Pycharm AddConfiguration -> add new -> djangoServer -> save -> run
 
 finally http://192.168.1.12:8000/admin/
 - Log in with credential created previously
@@ -68,8 +70,7 @@ finally http://192.168.1.12:8000/admin/
 - Client secret: `FW4dYuZsLmE6PQHk7qrPAc4shQhdx2hknqNOh58XO3JQ6PFI8um2z6wyJubxF6hKNOOOJfZUQ67jm5ApN5HJioq4XsNAGSbCLiQZqrqfo6jiy67ddpvMOl3Be8SATFSL`
 - `Save`
 
-
-### Add postgres DB to settings.py
+#### Add postgres DB to settings.py
 ```bash
 DATABASES = {
     'default': {
@@ -83,7 +84,7 @@ DATABASES = {
 }
 ```
 
-### Connect to postgres DB with pgAdmin III
+#### Connect to postgres DB with pgAdmin III
 - https://www.pgadmin.org/download/
 - On start page: File/Add Server then fill Properties with these values:
 ```bash
@@ -97,27 +98,39 @@ Password: django_tete_c
 Group: Servers
 ```
 
+#### Problems with postgres DB
+- Remove postgres:
+```bash 
+$ dpkg -l | grep postgres
+ii  pgdg-keyring                               2018.2                                           all          keyring for apt.postgresql.org
+ii  postgresql-11                              11.8-1.pgdg18.04+1                               amd64        object-relational SQL database, version 11 server
+ii  postgresql-11-postgis-3                    3.0.1+dfsg-2.pgdg18.04+1                         amd64        Geographic objects support for PostgreSQL 11
+ii  postgresql-11-postgis-3-scripts            3.0.1+dfsg-2.pgdg18.04+1                         all          Geographic objects support for PostgreSQL 11 -- SQL scripts
+ii  postgresql-client-11                       11.8-1.pgdg18.04+1                               amd64        front-end programs for PostgreSQL 11
+ii  postgresql-client-common                   215.pgdg18.04+1                                  all          manager for multiple PostgreSQL client versions
+ii  postgresql-common                          215.pgdg18.04+1                                  all          PostgreSQL database-cluster manager
+ii  postgresql-server-dev-11                   11.8-1.pgdg18.04+1                               amd64        development files for PostgreSQL 11 server-side programming
+```
+```bash 
+$ sudo apt-get --purge remove pgdg-keyring postgresql-11 postgresql-11-postgis-3 postgresql-11-postgis-3-scripts postgresql-client-11 postgresql-client-common postgresql-common postgresql-server-dev-11
+```
 
-### Back Ground Tasks
-Sono necessari __celery__, il motore che esegue in background i tasks e __redis__ che si occupa di gestire le comunicazioni tra django e celery.
-Package necessari li trovi in `requirements.txt`
+```bash
+$ dpkg -l | grep postgres
+```
+
+- then reinstall postgres, create superuser in django, make migrations in django and add application in `Django OAuth Toolkit/Applications`
+https://www.liquidweb.com/kb/how-to-remove-postgresql/
+
+#### Back Ground Tasks
+You need __celery__, the engine that performs the tasks in the background and __redis__ that takes care of managing the communications between django and celery.
 
 
-### Redis
-Importante: far partire redis e celery prima di ogni altra cosa
+#### Redis
+Important: start redis and celery before anything else
 - `sudo apt install redis-server`
-- `redis-server --port 6380`
 
-Per installare redis bisogna installare il server `sudo apt install redis-server`
-Bisogna lanciare redis-server prima di poter lanciare tasks tramite  `redis-server`
-Nel caso la porta di default `6379` fosse occupata si può selezionare un'altra porta con `--port 6380`
-
-
-### Celery
-- `celery worker -A dmproject --loglevel=info`
-Per installare celery sono sufficienti i packages e le impostazioni messe nei vari files.
-Per far partire celery, prima di lanciare tasks: `celery worker -A dmproject --loglevel=info`
-
+#### Celery
 When process start you should see something like:
 
 `[2020-07-15 14:48:46,275: INFO/ForkPoolWorker-3] Starting Driver Selection`
@@ -128,45 +141,89 @@ When process start you should see something like:
 
 `[2020-07-15 14:49:16,316: INFO/ForkPoolWorker-3] Task api.tasks.mock_algorithm_task[2b0733a7-5ec2-41ad-8cf1-8df8321dbc85] succeeded in 30.092565850000028s: None`
 
-### Social Auth
-Bisogna fare la migrazione dopo aver installato i pacchetti
 
-
-### Authentication REST
+#### Authentication REST
 First get the token through google oauth through the front-end (no-idea how yet, but tested with oauth2 playground).
 do a POST on `/api/v0.1/auth/convert-token` with data: `grant_type=convert_token&client_id=p4qU0b0ACHWcjajdkYrpihJykmQTW2TELTQupwXx&client_secret=zT15kpJMkkC5b6BtZhSc9VjmVPHVLuCedk3J2h0J29YtRWOkjTwbCQjfVwCP8OdZs26h9s4E6uidZJ9hf6d0AsJr2L2j1z8wQ1QWgihEEvlfDxXdBtPH2mXcZGhWsHPl&backend=google-oauth2&token=<token>`
 This will return a `{"access_token":"<app-access-token>","expires_in":36000,"token_type":"Bearer","scope":"read write","refresh_token":"<app-refresh-token>"}`
 Access token can be used to provide authorization including `Authorization: Bearer <app-access-token>` header in the request.
 
+## Backend automated tests
+If not previously done, execute in postegres:
+- `sudo -i -u postgres`
+- `psql dmproject`
+- `ALTER USER django CREATEDB;`
+- `ALTER USER django SUPERUSER;`
 
-### REACT
+Media and static folders setup
+- `npm run build` (inside react-frontend)
+- move the `react-frontend/build` directory into the main project directory
+- `python manage.py collectstatic`
+
+you can run tests with
+- `python manage.py test`
+
+Output:
+```bash
+Creating test database for alias 'default'...
+System check identified no issues (0 silenced).
+..................ssss....true true false
+.....................
+----------------------------------------------------------------------
+Ran 47 tests in 9.181s
+
+OK (skipped=4)
+Destroying test database for alias 'default'...
+
+```
+
+#### How to run backend:
+- Open 3 terminal:
+- `redis-server --port 6380`
+- `celery worker -A dmproject --loglevel=info`
+- `python manage.py runserver 192.168.1.9:8000`
+
+
+## Web frontend
 - `cd react-fontend/`
 - `npm install`
+
+#### How to run web frontend:
+- Open 1 terminal:
+- `cd react-fontend/`
 - `npm start` -> http://localhost:3000/
 - be sure not to use http://127.0.0.1:3000/ or http://0.0.0.0:3000/ or http://YOUR_IP:3000 because Google Sign In won't work!
 
 
-### Fake user (Alberto localhost)
-- username: `mario`
-- password: `marioRossi1*`
-
-
-### React native
-Split terminal vertically
-
-First:
+## React native
 - `cd reactFrontendMobile/ && npm install`
-- `cd reactFrontendMobile/ && npm start`
 
-Second:
+#### How to run mobile frontend:
+- Open 2 terminal:
+- `cd reactFrontendMobile/ && npm start`
 - `cd reactFrontendMobile/ && npx react-native run-android`
 
-### RN set app icon
+#### React Native: customize app icon
 - https://medium.com/@ansonmathew/app-icon-in-react-native-ios-and-android-6165757e3fdb
 - https://romannurik.github.io/AndroidAssetStudio/icons-launcher.html#foreground.type=image&foreground.space.trim=1&foreground.space.pad=0.25&foreColor=rgba(96%2C%20125%2C%20139%2C%200)&backColor=rgb(255%2C%20255%2C%20255)&crop=0&backgroundShape=square&effects=none&name=ic_launcher
 
+#### React native vector icons
+This method has the advantage of fonts being copied from this module at build time so that the fonts and JS are always in sync, making upgrades painless.
 
-### RN Google Sign in
+Edit `android/app/build.gradle` ( NOT `android/build.gradle` ) and add the following:
+
+`apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"`
+
+To customize the files being copied, add the following instead:
+```
+project.ext.vectoricons = [
+    iconFontNames: [ 'MaterialIcons.ttf', 'EvilIcons.ttf' ] // Name of the font files you want to copy
+]
+
+apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
+```
+
+#### React Native: Google Sign in
 - https://dev.to/anwargul0x/get-started-with-react-native-google-sign-in-18i5
 ```bash
 keytool -keystore /home/alberto/PycharmProjects/tete_c/reactFrontendMobile/android/app/debug.keystore -list -v
@@ -198,9 +255,8 @@ KeyIdentifier [
 Warning:
 The JKS keystore uses a proprietary format. It is recommended to migrate to PKCS12 which is an industry standard format using "keytool -importkeystore -srckeystore ./android/app/debug.keystore -destkeystore ./android/app/debug.keystore -deststoretype pkcs12".
 ```
-- ``
 
-### RN Problems
+#### React Native: Problems
 ```bash 
 PROBLEMS:
 If you are sure the module exists, try these steps:
@@ -211,99 +267,29 @@ If you are sure the module exists, try these steps:
 5. Rebuild: npx react-native run-android
 ```
 
-### Screen mirror with scrcpy
+#### Screen mirror with scrcpy
 - install `scrcpy` with `Ubuntu Software`
 - plug your phone with USB
 - `ADB="/home/alberto/Android/Sdk/platform-tools/adb" scrcpy`
 - `ADB="/home/stefano/Android/Sdk/platform-tools/adb" scrcpy`
 
-
-
-### Problems with DB
-- Remove postgres:
-```bash 
-$ dpkg -l | grep postgres
-ii  pgdg-keyring                               2018.2                                           all          keyring for apt.postgresql.org
-ii  postgresql-11                              11.8-1.pgdg18.04+1                               amd64        object-relational SQL database, version 11 server
-ii  postgresql-11-postgis-3                    3.0.1+dfsg-2.pgdg18.04+1                         amd64        Geographic objects support for PostgreSQL 11
-ii  postgresql-11-postgis-3-scripts            3.0.1+dfsg-2.pgdg18.04+1                         all          Geographic objects support for PostgreSQL 11 -- SQL scripts
-ii  postgresql-client-11                       11.8-1.pgdg18.04+1                               amd64        front-end programs for PostgreSQL 11
-ii  postgresql-client-common                   215.pgdg18.04+1                                  all          manager for multiple PostgreSQL client versions
-ii  postgresql-common                          215.pgdg18.04+1                                  all          PostgreSQL database-cluster manager
-ii  postgresql-server-dev-11                   11.8-1.pgdg18.04+1                               amd64        development files for PostgreSQL 11 server-side programming
-```
-```bash 
-$ sudo apt-get --purge remove pgdg-keyring postgresql-11 postgresql-11-postgis-3 postgresql-11-postgis-3-scripts postgresql-client-11 postgresql-client-common postgresql-common postgresql-server-dev-11
-```
-
-```bash
-$ dpkg -l | grep postgres
-```
-
-- then reinstall postgres, create superuser in django, make migrations in django and add application in `Django OAuth Toolkit/Applications`
-https://www.liquidweb.com/kb/how-to-remove-postgresql/
-
-### React native vector icons
-This method has the advantage of fonts being copied from this module at build time so that the fonts and JS are always in sync, making upgrades painless.
-
-Edit `android/app/build.gradle` ( NOT `android/build.gradle` ) and add the following:
-
-`apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"`
-
-To customize the files being copied, add the following instead:
-```
-project.ext.vectoricons = [
-    iconFontNames: [ 'MaterialIcons.ttf', 'EvilIcons.ttf' ] // Name of the font files you want to copy
-]
-
-apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
-```
-
-## Google API error
+#### React Native: Google API error
 Run these commands to clean caches
-
 ```
 # NPM
 watchman watch-del-all
 npm cache clean
 
-# Android, if you encounter `com.android.dex.DexException: Multiple dex files define Landroid/support/v7/appcompat/R$anim`, then clear build folder.
+# Android, 
+if you encounter `com.android.dex.DexException: Multiple dex files define Landroid/support/v7/appcompat/R$anim`,
+then clear build folder:
 cd android
 ./gradlew clean
 cd ..
 ```
 
-## Testing
-Se non già fatto eseguire nell'interfaccia di postgresql (vedi su)
-- `sudo -i -u postgres`
-- `psql dmproject`
-- `ALTER USER django CREATEDB;`
-- `ALTER USER django SUPERUSER;`
+## Errors numbering
 
-Setup cartelle media e static
-- `npm run build` (dentro react-frontend)
-- spostare la cartella `react-frontend/build` dentro la cartella principale di progetto
-- `python manage.py collectstatic`
-
-è possibile eseguire i test con 
-- `python manage.py test`
-
-Output:
-```bash
-Creating test database for alias 'default'...
-System check identified no issues (0 silenced).
-..................ssss....true true false
-.....................
-----------------------------------------------------------------------
-Ran 47 tests in 9.181s
-
-OK (skipped=4)
-Destroying test database for alias 'default'...
-
-```
-
-
-# Errors numbering
 **Mobile errors**
 - `001` Error in getting the refresh token
 - `002` Error in deleting the participation for an event
@@ -355,3 +341,7 @@ Destroying test database for alias 'default'...
 - `045` Error while retrieving user position from browser
 - `046` Error while retrieving selected position (with marker)
 - `047` Error while retrieving non-user profile
+
+
+## Disclaimer
+This work has only been tested with PyCharm 2020.2.1 (Professional Edition) as IDE and Ubuntu 18.04 LTS as OS.
