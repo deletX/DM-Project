@@ -125,7 +125,7 @@ const EventContainer = (props) => {
 
         let directionsURL = ""
         if (participation.length > 0 && participation[0].pickup_index === 0)
-            directionsURL = `https://www.google.com/maps/dir/?api=1&origin=${pridStringToLatLng(participation[0].starting_pos).join(",")}&destination=${pridStringToLatLng(event.destination).join(",")}&travelmode=driving&waypoints=${myCar.map(item => pridStringToLatLng(item.starting_pos).join(",")).join("%7C")}`
+            directionsURL = `https://www.google.com/maps/dir/?api=1&origin=${pridStringToLatLng(participation[0].starting_pos).join(",")}&destination=${pridStringToLatLng(event.destination).join(",")}&travelmode=driving&waypoints=${myCar.filter(item => (item.id !== participation[0].id)).map(item => pridStringToLatLng(item.starting_pos).join(",")).join("%7C")}`
 
         const feedbackMenuItems =
             myCar.length === 0 ? [] :
