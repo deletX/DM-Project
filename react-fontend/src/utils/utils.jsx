@@ -55,7 +55,7 @@ export const headers = (content_type, access_token = null, otherHeaders = {}, ot
 
 
 /**
- * Converts a raw date string in more readable format, padding with '0' days, months, hours and minutes: dd/mm/yyyy hh:mm
+ * Converts a raw string date in a more readable fashion, padding with '0' days, months, hours and minutes: dd/mm/yyyy hh:mm
  *
  * @param {{}} date
  *
