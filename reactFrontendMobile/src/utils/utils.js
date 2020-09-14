@@ -245,10 +245,9 @@ export const alertAreYouSure = (onPressYes, cancelable = true) => () => {
  * @return {string}
  */
 export const createDirectionLink = (participation, event, myCar) => {
-    let origin = pridStringToLatLng(participation.starting_pos, false).join(",")
     let destination = pridStringToLatLng(event.destination, false).join(",")
-    let waypoints = myCar.map(item => pridStringToLatLng(item.starting_pos, false).join(",")).join("%7C")
-    return `https://www.google.com/maps/dir/?api=1&origin=${origin}&destination=${destination}&travelmode=driving&waypoints=${waypoints}`
+    let waypoints = myCar.filter(item => (item.id !== participation.id)).map(item => pridStringToLatLng(item.starting_pos, false).join(",")).join("%7C")
+    return `https://www.google.com/maps/dir/?api=1&destination=${destination}&travelmode=driving&waypoints=${waypoints}`
 }
 
 /**
