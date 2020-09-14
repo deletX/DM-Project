@@ -78,7 +78,7 @@ const HomeContainer = (props) => {
     // filtered by the search term
     let eventsFiltered = events;
     if (events !== null)
-        eventsFiltered = eventsFiltered.filter((item) => (item.name.includes(search)))
+        eventsFiltered = eventsFiltered.filter((item) => (item.name.toUpperCase().includes(search.toUpperCase())))
     let eventCards = []
     if (eventsFiltered !== null)
         eventCards = eventsFiltered.map((item) => (
