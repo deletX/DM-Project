@@ -58,7 +58,7 @@ const EventCard = (props) => {
                         </Typography>
 
                         <Typography variant="body2" color="textSecondary" component="p" noWrap>
-                            Date: {`${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`}
+                            Date: {`${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${(date.getMinutes()<10?'0':'') + date.getMinutes()}`}
                         </Typography>
                         <Typography variant="body2" color="textSecondary" component="p" noWrap>
                             Location: {event.address}
