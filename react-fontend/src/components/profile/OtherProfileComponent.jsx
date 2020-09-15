@@ -16,7 +16,8 @@ const OtherProfileComponent = (props) => {
             <Helmet>
                 <title>
                     DM
-                    Project{props.profile.user.first_name && ` - ${props.profile.user.first_name.charAt(0).toUpperCase() + props.profile.user.first_name.slice(1)}'s  Profile`}
+                    Project
+                    {props.profile.user.first_name && ` - ${props.profile.user.first_name.charAt(0).toUpperCase() + props.profile.user.first_name.slice(1)}'s  Profile`}
                 </title>
                 <meta name="description" content="Profile page"/>
             </Helmet>
