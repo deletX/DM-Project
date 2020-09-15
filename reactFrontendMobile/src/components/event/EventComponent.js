@@ -57,7 +57,7 @@ const EventCardActions = (props) => {
                     onPress={alertAreYouSure(leaveEvent)}
                     style={styles.buttonRight}
                     disabled={
-                        (props.event.status === JOINABLE && (participation !== undefined)) ?
+                        (props.event.status === JOINABLE && (participation !== undefined)) && !isDateBefore(props.event.date_time, new Date())?
                             null : "true"
                     }>
                 Leave event
