@@ -4,10 +4,9 @@ import {StyleSheet, View} from "react-native";
 import {COMPUTED, COMPUTING, JOINABLE} from "../../constants/constants";
 import {EVENT_SCREEN, JOIN_SCREEN} from "../../constants/screens";
 import {useNavigation} from "@react-navigation/native"
-import moment from "moment";
 import {connect} from 'react-redux';
 import {deleteLeaveEvent} from "../../utils/api";
-import {alertAreYouSure} from "../../utils/utils";
+import {alertAreYouSure, dateFormatter} from "../../utils/utils";
 
 /**
  * Text card content:
@@ -19,7 +18,7 @@ import {alertAreYouSure} from "../../utils/utils";
 const EventCardContent = (props) => (
     <Card.Content>
         <Title>{props.event.name}</Title>
-        <Paragraph>{moment(props.event.date_time).format("dddd D MMMM YYYY, HH:mm")}</Paragraph>
+        <Paragraph>{dateFormatter(props.event.date_time)}</Paragraph>
         <Paragraph>{props.event.address}</Paragraph>
         <Paragraph>{props.event.description}</Paragraph>
     </Card.Content>

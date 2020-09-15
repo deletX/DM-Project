@@ -3,6 +3,7 @@ import {EVENT_SCREEN, PROFILE_STACK} from "../constants/screens";
 import {nominatimCoordinatesToAddressURL} from "../constants/apiurls";
 import Toast from 'react-native-simple-toast';
 import {Alert} from "react-native";
+import moment from "moment";
 import {getEventDetail} from "./api";
 
 /**
@@ -58,6 +59,17 @@ export const headers = (content_type, access_token = null, otherHeaders = {}, ot
     };
     return headers
 };
+
+/**
+ * Converts a raw string date in a more readable fashion, padding with '0' days, months, hours and minutes: dd/mm/yyyy hh:mm
+ *
+ * @param {{}} date
+ *
+ * @return formatted date
+ */
+export const dateFormatter = (date) => (
+    moment(date).format("dddd D MMMM YYYY, HH:mm")
+)
 
 /**
  * Utility function that translate the nominatim response address into two substrings composed of the address elements.

@@ -1,9 +1,8 @@
 import React from 'react';
-import {Alert, ImageBackground, StyleSheet, useWindowDimensions, View} from "react-native";
+import {ImageBackground, StyleSheet, useWindowDimensions, View} from "react-native";
 import {Button, Colors, IconButton, Subheading, Title} from "react-native-paper";
-import moment from "moment";
 import {useNavigation} from "@react-navigation/native";
-import {alertAreYouSure, handleInfo} from "../../utils/utils";
+import {alertAreYouSure, dateFormatter, handleInfo} from "../../utils/utils";
 import {HOME_SCREEN} from "../../constants/screens";
 import {JOINABLE} from "../../constants/constants";
 import {connect} from 'react-redux';
@@ -19,7 +18,7 @@ const EventHeaderTitle = (props) => (
             {props.event.name}
         </Title>
         <Subheading style={{color: Colors.white, marginTop: props.windowHeight * 0.3}}>
-            Date: {moment(props.event.date_time).format("dddd D MMMM YYYY, HH:mm")}
+            Date: {dateFormatter(props.event.date_time)}
         </Subheading>
         <Subheading style={{color: Colors.white, marginTop: 20}}>
             Destination: {props.event.address}
