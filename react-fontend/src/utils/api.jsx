@@ -527,7 +527,7 @@ export const postGoogleOAuthLogin = (googleToken, onSuccess, onError) => (
             headers("application/x-www-form-urlencoded")
         )
         .then(res => {
-            onSuccess(res)
+            return onSuccess(res)
         })
         .catch(err => {
             onError(err)

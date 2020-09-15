@@ -118,9 +118,8 @@ export const googleOAuthLogin = (google_token, enqueueSnackbar) => {
                 dispatch(success(access_token));
                 dispatch(retrieveNotifications(enqueueSnackbar));
                 dispatch(checkAuthTimeout(3600, enqueueSnackbar));
-                dispatch(fetchProfile(enqueueSnackbar));
-
                 handleSuccess(enqueueSnackbar, "Logged in with Google successfully!")
+                return dispatch(fetchProfile(enqueueSnackbar));
             },
             (err) => {
                 dispatch(fail(err));
@@ -210,12 +209,12 @@ export const authCheckState = (enqueueSnackbar) => {
             } else {
                 dispatch(success(token));
                 dispatch(retrieveNotifications(enqueueSnackbar)).catch((error) => {
-                    console.log("retrieveNotifications error: ",error)
+                    console.log("retrieveNotifications error: ", error)
                     return dispatch(authLogout())
                 });
                 dispatch(checkAuthTimeout((expirationDate.getTime() - new Date().getTime()) / 1000, enqueueSnackbar));
                 return dispatch(fetchProfile(enqueueSnackbar)).catch((error) => {
-                    console.log("fetchProfile error: ",error)
+                    console.log("fetchProfile error: ", error)
                     return dispatch(authLogout())
                 });
             }
