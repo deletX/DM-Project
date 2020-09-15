@@ -10,7 +10,7 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import JoinContainer from "../../containers/JoinContainer";
 import AlertDialog from "../misc/AlertDialog";
-import {dateFormatter, handleError, handleSuccess} from "../../utils/utils";
+import {dateFormatter, handleError, handleSuccess, isDateBefore} from "../../utils/utils";
 import {useHistory} from "react-router-dom";
 import {eventPage} from "../../constants/pagesurls";
 import LinearProgress from "@material-ui/core/LinearProgress";
@@ -37,6 +37,8 @@ const EventCard = (props) => {
     let isInEvent = event.participant_set.filter(item => (item.profile.id === profileId)).length > 0;
 
     let isOwner = event.owner.id === profileId;
+
+    let expired = isDateBefore(date, new Date())
 
     return (
         <>
@@ -69,7 +71,7 @@ const EventCard = (props) => {
                     {!isInEvent ?
                         <Button
                             className={classes.primaryButton}
-                            disabled={event.status !== 0}
+                            disabled={event.status !== 0 || expired}
                             onClick={() => {
                                 setJoinOpen(true)
                             }}>Join</Button>
@@ -78,7 +80,7 @@ const EventCard = (props) => {
                             <Button
                                 color="default"
                                 className={classes.secondaryButton}
-                                disabled={event.status !== 0}
+                                disabled={event.status !== 0 || expired}
                                 onClick={() => {
                                     setLeaveOpen(true)
                                 }}
@@ -90,7 +92,6 @@ const EventCard = (props) => {
                     <>
                         <Button
                             className={classes.delete}
-                            disabled={event.status === 1}
                             onClick={() => {
                                 setDeleteOpen(true)
                             }}>Delete</Button>

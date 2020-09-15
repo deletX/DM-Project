@@ -15,7 +15,15 @@ import {useParams} from "react-router";
 import {useHistory} from "react-router-dom";
 import {eventPage, home, login} from "../constants/pagesurls";
 import AlertDialog from "../components/misc/AlertDialog";
-import {dateFormatter, handleError, handleInfo, handleSuccess, handleWarning, pridStringToLatLng} from "../utils/utils";
+import {
+    dateFormatter,
+    handleError,
+    handleInfo,
+    handleSuccess,
+    handleWarning,
+    isDateBefore,
+    pridStringToLatLng
+} from "../utils/utils";
 import JoinContainer from "./JoinContainer";
 import {connect} from "react-redux";
 import TextField from "@material-ui/core/TextField";
@@ -85,7 +93,8 @@ const EventContainer = (props) => {
 
         // Event data
         const [event, setEvent] = useState(location.state ? location.state : emptyEvent)
-        const date = new Date(event.date_time)
+        let date = new Date(event.date_time)
+
         const [day, setDay] = useState(date)
         const [time, setTime] = useState(date)
         const [image, setImage] = useState(null)
@@ -136,6 +145,7 @@ const EventContainer = (props) => {
                         {item.profile.last_name}
                     </MenuItem>))
 
+        let expired = isDateBefore(date, new Date())
         // if not authenticated go to login and then here. Otherwise if event is empty get it from API
         useEffect(() => {
                 if (!(isAuthenticated || isAuthLoading))
@@ -343,7 +353,7 @@ const EventContainer = (props) => {
                                     variant="contained"
                                     className={classes.runButton}
                                     color="primary"
-                                    disabled={(isRunning || isCompleted) || edit}
+                                    disabled={(isRunning || isCompleted) || edit || expired}
                                     onClick={() => {
                                         let availableSeats = drivers.map(
                                             item => item.car.tot_avail_seats
@@ -365,7 +375,7 @@ const EventContainer = (props) => {
                                     {participation.length !== 0 ?
                                         <Button
                                             color="secondary"
-                                            disabled={(isRunning || isCompleted) || edit}
+                                            disabled={(isRunning || isCompleted) || edit || expired}
                                             onClick={() => {
                                                 setLeaveOpen(true)
                                             }}
@@ -377,7 +387,7 @@ const EventContainer = (props) => {
 
                                         <Button
                                             color="primary"
-                                            disabled={isRunning || isCompleted || edit}
+                                            disabled={isRunning || isCompleted || edit || expired}
                                             onClick={() => {
                                                 setJoinOpen(true)
                                             }}
@@ -459,6 +469,11 @@ const EventContainer = (props) => {
                     {isCompleted &&
                     <Alert severity="success" className={classes.warning}>
                         Beep beep boop, computation completed!
+                    </Alert>
+                    }
+                    {expired &&
+                    <Alert severity="warning" className={classes.warning}>
+                        Seems like this event has passed without computing :(
                     </Alert>
                     }
 

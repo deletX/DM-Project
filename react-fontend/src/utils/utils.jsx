@@ -65,6 +65,17 @@ export const dateFormatter = (date) => (
     `${(date.getDate() < 10 ? '0' : '') + date.getDate()}/${date.getMonth() < 10 ? '0' : ''}${date.getMonth() + 1}/${date.getFullYear()} ${(date.getHours() < 10 ? '0' : '') + date.getHours()}:${(date.getMinutes() < 10 ? '0' : '') + date.getMinutes()}`
 )
 
+/**
+ * Check if date1 comes before date2
+ *
+ * @param {Date} date1
+ * @param {Date} date2
+ *
+ * @return true if date1 is before date2
+ */
+export const isDateBefore = (date1, date2) => {
+    return date1 < date2
+}
 
 
 /**
