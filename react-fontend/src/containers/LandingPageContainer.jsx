@@ -248,7 +248,7 @@ const LandingPageContainer = () => {
                             New Events
                         </Typography>
                         <Typography>
-                            Here some of the extraordinary events we had here, join so you are not going to miss
+                            Here some of the extraordinary events we have here, join so you are not going to miss
                             anything like this
                         </Typography>
                         <List className={classes.horizontalList}>
