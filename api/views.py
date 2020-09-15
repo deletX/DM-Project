@@ -71,11 +71,12 @@ class EventRunAPI(viewsets.GenericViewSet, mixins.ListModelMixin):
         try:
             event.run()
         except ValidationError:
-            return Response(ValidationError, status=status.HTTP_412_PRECONDITION_FAILED)
+            return Response({'detail': "not enough seats"}, status=status.HTTP_412_PRECONDITION_FAILED)
         return Response({'detail': "started"}, status=status.HTTP_202_ACCEPTED)
 
 
-class ParticipantViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin, mixins.ListModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin):
+class ParticipantViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin, mixins.ListModelMixin,
+                         mixins.UpdateModelMixin, mixins.DestroyModelMixin):
     """
     Participant CRUD viewset
 
@@ -112,7 +113,8 @@ class CurrentProfileViewSet(viewsets.GenericViewSet, mixins.RetrieveModelMixin, 
         return Profile.objects.get(user=self.request.user)
 
 
-class CreateNewUserView(viewsets.GenericViewSet, mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin):
+class CreateNewUserView(viewsets.GenericViewSet, mixins.CreateModelMixin, mixins.UpdateModelMixin,
+                        mixins.DestroyModelMixin):
     """
     Signup Viewset: post, put and delete
     /signup
@@ -168,7 +170,8 @@ class CarViewSet(viewsets.ModelViewSet):
         return super(CarViewSet, self).destroy(request, *args, **kwargs)
 
 
-class FeedbackViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin, mixins.DestroyModelMixin,mixins.UpdateModelMixin):
+class FeedbackViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin, mixins.DestroyModelMixin,
+                      mixins.UpdateModelMixin):
     """
     Create, delete update feedback view set
 

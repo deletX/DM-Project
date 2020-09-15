@@ -165,12 +165,15 @@ class EventRunAPIAPITestCase(APITestCase):
         self.name = "evento_simpaitco"
         self.description = "description"
         self.address = "qui"
+        self.destination = "SRID=4326;POINT (44.6291598 10.9744844)"
+
         self.owner = Profile.objects.get(user=self.user)
 
         self.event = Event.objects.create(name=self.name, description=self.description, address=self.address,
+                                          destination=self.destination,
                                           owner=self.owner)
         self.participant = Participant.objects.create(profile=self.profile, event=self.event, car=self.car,
-                                                      starting_address=self.address)
+                                                      starting_address=self.address, starting_pos=self.destination)
 
     def test_successful_run(self):
         url = reverse('api:run-list', kwargs={'event_pk': self.event.pk})
@@ -197,7 +200,8 @@ class EventRunAPIAPITestCase(APITestCase):
         self.assertEqual(response.status_code, 403)
 
     def test_run_event_without_enough_cars(self):
-        url = reverse('api:run-list', kwargs={'event_pk': self.event.pk})
+        url = reverse('api:run-list', kwargs={'event_pk': self.event.pk, })
+        print(url)
         self.participant.car = None
         self.participant.save()
 
