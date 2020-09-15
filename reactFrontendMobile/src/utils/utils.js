@@ -74,7 +74,8 @@ export const dateFormatter = (date) => (
 /**
  * Check if date1 comes before date2
  *
- * @param date1, date2
+ * @param date1
+ * @param date2
  *
  * @return true if date1 is before date2
  */
