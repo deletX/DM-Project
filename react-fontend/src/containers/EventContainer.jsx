@@ -471,7 +471,7 @@ const EventContainer = (props) => {
                         Beep beep boop, computation completed!
                     </Alert>
                     }
-                    {expired &&
+                    {(!isCompleted && !isRunning && expired) &&
                     <Alert severity="warning" className={classes.warning}>
                         Seems like this event has passed without computing :(
                     </Alert>
