@@ -26,7 +26,7 @@ class EventViewSet(viewsets.ModelViewSet):
         joinable = self.request.query_params.get('joinable', 'true')
         joined = self.request.query_params.get('joined', 'true')
         owned = self.request.query_params.get('owned', 'false')
-        print(joinable, joined, owned)
+        # print(joinable, joined, owned)
         merged = Event.objects.none()
         joined_queryset = queryset.filter(participant__profile__user=self.request.user)
 
