@@ -14,6 +14,7 @@ import ListItem from "@material-ui/core/ListItem";
 import List from "@material-ui/core/List";
 import Divider from "@material-ui/core/Divider";
 import CardMedia from "@material-ui/core/CardMedia";
+import {Helmet} from "react-helmet";
 
 /**
  * Mock profile card
@@ -196,6 +197,14 @@ const LandingPageContainer = () => {
 
     return (
         <div>
+            <Helmet>
+                <title>
+                    DM
+                    Project
+                </title>
+                <meta name="description"
+                      content="Stop driving by yourself. Need to go to an event? Want to organize a travel with your buddies? Join and manage your events or join someone else's!"/>
+            </Helmet>
             <div className={classes.root}>
                 <div className={classes.header}>
                     <div className={classes.scrim}>
