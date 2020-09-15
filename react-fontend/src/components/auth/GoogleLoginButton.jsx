@@ -33,7 +33,7 @@ const GoogleLoginButton = (props) => {
                                         viewBox="0 0 533.5 544.3"/>
                                 }
                         >
-                            Signup with Google
+                            {props.children}
                         </Button>
                     )}/>
         </Grid>

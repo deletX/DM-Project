@@ -53,7 +53,9 @@ function LoginComponent(props) {
                                         }
                                     })
                                 }}
-                        />
+                        >
+                            Login with google
+                        </GoogleLoginButton>
 
                         <Grid item xs={12}>
                             <TextField

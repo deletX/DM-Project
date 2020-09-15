@@ -131,7 +131,9 @@ const PersonalInfoForm = (props) => {
                                 })
                             handleNext()
                         }}
-                    />
+                    >
+                        Signup with google
+                    </GoogleLoginButton>
 
                     {isGoogleLogin &&
                     <Grid item xs={12}>
