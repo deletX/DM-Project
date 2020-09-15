@@ -183,6 +183,8 @@ function SignupComponent(props) {
         <CardContainer title="Sign up!" open={open}>
             <Helmet>
                 <title>DM Project - Signup</title>
+                <meta name="description"
+                      content="Stop driving by yourself. Need to go to an event? Want to organize a travel with your buddies? Join and manage your events or join someone else's! Signup here!"/>
             </Helmet>
             <StepperContainer
                 getSteps={() => (
