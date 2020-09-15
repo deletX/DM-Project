@@ -1,6 +1,7 @@
 from django.db.utils import IntegrityError
 from django.utils import timezone
 from rest_framework import serializers
+
 from .models import User, Profile, Car, Event, Participant, Feedback, Notification
 
 
@@ -430,7 +431,8 @@ class EventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        fields = ['id', 'name', 'picture', 'description', 'address', 'destination', 'date_time', 'status', 'owner', 'participant_set']
+        fields = ['id', 'name', 'picture', 'description', 'address', 'destination', 'date_time', 'status', 'owner',
+                  'participant_set']
 
     def create(self, validated_data):
         """

@@ -1,9 +1,11 @@
 import json
 import os
 from unittest import skip
+
 from django.urls import reverse
-from django.utils import timezone, dateformat
+from django.utils import dateformat
 from rest_framework.test import APITestCase
+
 from .models import *
 
 

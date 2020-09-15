@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from .models import Profile, Event, Participant, Car, Feedback, Notification
 
 

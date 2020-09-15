@@ -6,6 +6,7 @@ from django.db.models import Avg, Sum
 from django.db.models.signals import post_save
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+
 from dmproject import settings
 
 
