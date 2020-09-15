@@ -184,13 +184,13 @@ const LandingPageContainer = () => {
     const classes = useStyles()
 
     const profileCards = profiles.map(item => (
-        <ListItem>
+        <ListItem key={item.id}>
             <ProfileCard profile={item} key={item.id} className={classes.profileCard}/>
         </ListItem>
     ))
 
     const eventCards = events.map(item => (
-        <ListItem>
+        <ListItem key={item.id}>
             <EventCard event={item} key={item.id} className={classes.eventCard}/>
         </ListItem>
     ))
