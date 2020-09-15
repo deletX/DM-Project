@@ -72,6 +72,17 @@ export const dateFormatter = (date) => (
 )
 
 /**
+ * Check if date1 comes before date2
+ *
+ * @param date1, date2
+ *
+ * @return true if date1 is before date2
+ */
+export const isDateBefore = (date1, date2) => {
+    return moment(dateFormatter(date1)).isBefore(dateFormatter(date2))
+}
+
+/**
  * Utility function that translate the nominatim response address into two substrings composed of the address elements.
  * In general:
  * - **Primary**: includes the road and house_number (if available)

@@ -48,6 +48,7 @@ const EventsListScreen = (props) => {
         }
     }, [joinable, joined, owned, props.route.params?.refresh]);
 
+
     const eventsList = events.map((event,) => (
         <EventComponent
             key={event.id}

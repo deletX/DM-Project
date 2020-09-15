@@ -29,7 +29,6 @@ class EventViewSet(viewsets.ModelViewSet):
         # print(joinable, joined, owned)
         merged = Event.objects.none()
         joined_queryset = queryset.filter(participant__profile__user=self.request.user)
-
         joinable_queryset = queryset.filter(status=Event.EventStatusChoices.JOINABLE)
         joinable_queryset = joinable_queryset.difference(joined_queryset)
 
