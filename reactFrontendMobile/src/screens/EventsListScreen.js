@@ -53,8 +53,7 @@ const EventsListScreen = (props) => {
         <EventComponent
             key={event.id}
             event={event}
-            reload={reload}
-        >
+            reload={reload}>
         </EventComponent>
     ));
 

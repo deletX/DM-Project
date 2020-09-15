@@ -2,7 +2,7 @@ import React from 'react';
 import {ImageBackground, StyleSheet, useWindowDimensions, View} from "react-native";
 import {Button, Colors, IconButton, Subheading, Title} from "react-native-paper";
 import {useNavigation} from "@react-navigation/native";
-import {alertAreYouSure, dateFormatter, handleInfo, isDateBefore} from "../../utils/utils";
+import {alertAreYouSure, dateFormatter, handleInfo} from "../../utils/utils";
 import {HOME_SCREEN} from "../../constants/screens";
 import {JOINABLE} from "../../constants/constants";
 import {connect} from 'react-redux';

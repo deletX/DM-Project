@@ -7,7 +7,6 @@ import {useNavigation} from "@react-navigation/native"
 import {connect} from 'react-redux';
 import {deleteLeaveEvent} from "../../utils/api";
 import {alertAreYouSure, dateFormatter, isDateBefore} from "../../utils/utils";
-import moment from "moment";
 
 /**
  * Text card content:
@@ -38,17 +37,17 @@ const EventCardActions = (props) => {
     const navigation = useNavigation();
     let participation = props.event.participant_set.filter(item => (item.profile.id === props.profileID))[0];
 
-    //console.log(props.event.name, props.event.date_time, new Date());
-    //console.log(props.event.name, " comes ", isDateBefore(props.event.date_time, new Date()));
+    let expired = isDateBefore(props.event.date_time, new Date());
+
 
     return (
         <Card.Actions>
-            <Button mode={props.event.status === JOINABLE && !isDateBefore(props.event.date_time, new Date()) ? "contained" : "text"}
+            <Button mode={props.event.status === JOINABLE && !expired ? "contained" : "text"}
                     color="#00675b"
                     onPress={() => {
                         navigation.navigate((JOIN_SCREEN), {event: props.event, id: props.event.id})
                     }}
-                    disabled={props.event.status === JOINABLE && participation === undefined && !isDateBefore(props.event.date_time, new Date()) ? null : "true"}>
+                    disabled={props.event.status === JOINABLE && participation === undefined && !expired ? null : "true"}>
                 Join event
             </Button>
 
@@ -57,8 +56,7 @@ const EventCardActions = (props) => {
                     onPress={alertAreYouSure(leaveEvent)}
                     style={styles.buttonRight}
                     disabled={
-                        (props.event.status === JOINABLE && (participation !== undefined)) && !isDateBefore(props.event.date_time, new Date())?
-                            null : "true"
+                        (props.event.status === JOINABLE && (participation !== undefined)) && !expired ? null : "true"
                     }>
                 Leave event
             </Button>
