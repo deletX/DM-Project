@@ -50,7 +50,7 @@ const EventHeaderOwnerButtons = (props) => (
         <Button
             style={headerStyles.runButton}
             color={Colors.tealA700}
-            disabled={props.event.status !== JOINABLE}
+            disabled={(props.event.status !== JOINABLE) || props.expired}
             mode={"contained"}
             icon="play"
             onPress={() => {

@@ -8,6 +8,7 @@ import {COMPUTED, COMPUTING, JOINABLE} from "../constants/constants";
 import EventParticipantList from "../components/event/participant/EventParticipantList";
 import EventComputedYourCarComponent from "../components/event/computed/EventComputedYourCarComponent";
 import EventComputedOtherCarsComponent from "../components/event/computed/EventComputedOtherCarsComponent";
+import {dateFormatter, isDateBefore} from "../utils/utils";
 
 /**
  * Main event Screen. It contains:
@@ -24,10 +25,12 @@ const EventScreen = (props) => {
     const isOwner = props.profileId === event.owner.id
     const participation = event.participant_set.filter(participation => (participation.profile.id === props.profileId))
     const isParticipating = participation.length > 0
+    let expired = isDateBefore(dateFormatter(event.date_time), new Date())
+
     return (
         <Portal.Host>
             <ScrollView ref={scrollViewRef}>
-                <EventHeaderComponent event={event} styles={styles} scrollViewRef={scrollViewRef}/>
+                <EventHeaderComponent event={event} expired={expired} styles={styles} scrollViewRef={scrollViewRef}/>
                 <View style={{marginLeft: 15, marginRight: 15, marginBottom: 20}}>
                     <EventDescription event={event} styles={styles}/>
                     {event.status === JOINABLE &&
