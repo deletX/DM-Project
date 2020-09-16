@@ -1,10 +1,6 @@
 # DM Project
 This project was developed as part of the "Web and Mobile Applications" course as an exam in the Master's Degree in Computer Engineering in Unimore. It's a management platform that allows you to organize and create events as well as promote car sharing. Backend was developed with Django, web frontend with React and mobile frontend with React Native.
 
-![alt text](https:/github.com/deletX/DM-Project/screenshots/Screenshot from 2020-09-16 23-24-55.png)
-![alt text](https:/github.com/deletX/DM-Project/screenshots/Screenshot from 2020-09-16 23-25-53.png)
-![alt text](https:/github.com/deletX/DM-Project/screenshots/Screenshot from 2020-09-16 23-26-42.png)
-![alt text](https:/github.com/deletX/DM-Project/screenshots/Screenshot from 2020-09-16 23-27-04.png)
 
 ## Contributors
 
