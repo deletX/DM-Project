@@ -397,13 +397,12 @@ const EventContainer = (props) => {
                                     }
                                     <Button
                                         color="secondary"
-                                        disabled={!edit ? !(isOwner && !(isRunning || isCompleted)) : !valid}
+                                        disabled={!edit ? !(isOwner && !(isRunning || isCompleted || expired)) : !valid}
                                         onClick={() => {
                                             if (edit) {
                                                 update()
                                             } else
                                                 setEdit(true)
-
                                         }}
                                     >
                                         {edit ? "Save" : "Edit"}
