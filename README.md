@@ -57,6 +57,7 @@ verify with
 
 then:
 - `ifconfig` to get your IP
+-  add your IP in `dmproject/settings.py -> ALLOWED_HOSTS`
 - `python manage.py runserver 192.168.1.12:8000`
 
 
@@ -197,6 +198,7 @@ Destroying test database for alias 'default'...
 
 ## Mobile frontend
 - `cd reactFrontendMobile/ && npm install`
+- add your IP in `reactFrontendMobile/android/app/src/main/res/xml/network_security_config.xml -> <domain includeSubdomains="false">192.168.1.9</domain>`
 
 #### How to run mobile frontend:
 - Open 2 terminal:
