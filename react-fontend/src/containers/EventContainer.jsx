@@ -472,7 +472,7 @@ const EventContainer = (props) => {
                     }
                     {(!isCompleted && !isRunning && expired) &&
                     <Alert severity="warning" className={classes.warning}>
-                        Seems like this event has passed without computing :(
+                        Seems like this event has passed without being computed :(
                     </Alert>
                     }
 
