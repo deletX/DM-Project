@@ -18,6 +18,7 @@ verify with
 - `npm -v`
 - `node -v`
 - `sudo apt-get install python3-dev`
+- then follow the guide `react-native install on Ubuntu 18.04.docx` to properly install `react-native`
 
 
 ## Backend
