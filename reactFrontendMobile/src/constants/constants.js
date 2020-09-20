@@ -1,33 +1,28 @@
 import {ALBERTO_IP, COMPUTER} from './virtual-box';
 
 /**
- * Google Client ID
- *
+ * Google API Client ID
  * @type {string}
  */
-export const CLIENT_ID =
-    '283420556311-30r26g3mtt5odkqmit6u7onam3qrul16.apps.googleusercontent.com';
+export const CLIENT_ID = "google_client_id";
 
 /**
- * Google Client Secret
- *
+ * Google API Client secret
  * @type {string}
  */
-export const CLIENT_SECRET = 'KsSTbOaPDbxEbEGqkcyWl3-v';
+export const CLIENT_SECRET = "google_client_secret";
 
 /**
- * DMProject Oauth Client Id
+ * Application Client ID
  * @type {string}
  */
-export const APP_CLIENTID = '4mOLHPfJL0zueHOlawvJXsdnImpjOv3PmLdmm3NT';
+export const APP_CLIENTID = "app_client_id";
 
 /**
- * DMProject Oauth Client secret
- *
+ * Application Client secret
  * @type {string}
  */
-export const APP_SECRET =
-    'FW4dYuZsLmE6PQHk7qrPAc4shQhdx2hknqNOh58XO3JQ6PFI8um2z6wyJubxF6hKNOOOJfZUQ67jm5ApN5HJioq4XsNAGSbCLiQZqrqfo6jiy67ddpvMOl3Be8SATFSL';
+export const APP_SECRET = "app_client_secret";
 
 /**
  * server IP (for dev purposes right now)
