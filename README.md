@@ -7,7 +7,7 @@ This project was developed as part of the "Web and Mobile Applications" course a
 | Name                | Email                                                             |
 | ------------------- | ----------------------------------------------------------------- |
 | Stefano Gavioli        | [`211805@studenti.unimore.it`](mailto:214898@studenti.unimore.it) |
-| Alberto Vitto       | [`214372@studenti.unimore.it`](mailto:214372@studenti.unimore.it) |
+| Alberto Vitto       | [`albertovitto@outlook.com`](mailto:albertovitto@outlook.com) |
 
 ## Prerequisites
 - `sudo apt install git-all`
@@ -136,19 +136,32 @@ Important: start redis and celery before anything else
 #### Celery
 When process start you should see something like:
 
-`[2020-07-15 14:48:46,275: INFO/ForkPoolWorker-3] Starting Driver Selection`
+```bash
+[2020-07-15 14:48:46,275: INFO/ForkPoolWorker-3] Starting Driver Selection
 
-`[2020-07-15 14:48:46,290: INFO/ForkPoolWorker-3] Starting Mock APCA`
+[2020-07-15 14:48:46,290: INFO/ForkPoolWorker-3] Starting Mock APCA
 
-`[2020-07-15 14:49:16,305: INFO/ForkPoolWorker-3] Saving result into DB`
+[2020-07-15 14:49:16,305: INFO/ForkPoolWorker-3] Saving result into DB
 
-`[2020-07-15 14:49:16,316: INFO/ForkPoolWorker-3] Task api.tasks.mock_algorithm_task[2b0733a7-5ec2-41ad-8cf1-8df8321dbc85] succeeded in 30.092565850000028s: None`
-
+[2020-07-15 14:49:16,316: INFO/ForkPoolWorker-3] Task api.tasks.mock_algorithm_task[2b0733a7-5ec2-41ad-8cf1-8df8321dbc85] succeeded in 30.092565850000028s: None
+```
 
 #### Authentication REST
-First get the token through google oauth through the front-end (no-idea how yet, but tested with oauth2 playground).
-do a POST on `/api/v0.1/auth/convert-token` with data: `grant_type=convert_token&client_id=p4qU0b0ACHWcjajdkYrpihJykmQTW2TELTQupwXx&client_secret=zT15kpJMkkC5b6BtZhSc9VjmVPHVLuCedk3J2h0J29YtRWOkjTwbCQjfVwCP8OdZs26h9s4E6uidZJ9hf6d0AsJr2L2j1z8wQ1QWgihEEvlfDxXdBtPH2mXcZGhWsHPl&backend=google-oauth2&token=<token>`
-This will return a `{"access_token":"<app-access-token>","expires_in":36000,"token_type":"Bearer","scope":"read write","refresh_token":"<app-refresh-token>"}`
+First get the token through google oauth through the frontend. Make a POST request on `/api/v0.1/auth/convert-token` with data:
+```bash
+grant_type=convert_token&client_id=p4qU0b0ACHWcjajdkYrpihJykmQTW2TELTQupwXx&client_secret=zT15kpJMkkC5b6BtZhSc9VjmVPHVLuCedk3J2h0J29YtRWOkjTwbCQjfVwCP8OdZs26h9s4E6uidZJ9hf6d0AsJr2L2j1z8wQ1QWgihEEvlfDxXdBtPH2mXcZGhWsHPl&backend=google-oauth2&token=<token>
+```
+This will return a 
+```bash
+{
+    "access_token":"<app-access-token>",
+    "expires_in":36000,
+    "token_type":"Bearer",
+    "scope":"read write",
+    "refresh_token":"<app-refresh-token>"
+}
+```
+
 Access token can be used to provide authorization including `Authorization: Bearer <app-access-token>` header in the request.
 
 #### Backend automated tests
@@ -219,7 +232,7 @@ Edit `android/app/build.gradle` ( NOT `android/build.gradle` ) and add the follo
 `apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"`
 
 To customize the files being copied, add the following instead:
-```
+```bash
 project.ext.vectoricons = [
     iconFontNames: [ 'MaterialIcons.ttf', 'EvilIcons.ttf' ] // Name of the font files you want to copy
 ]
@@ -274,17 +287,16 @@ If you are sure the module exists, try these steps:
 #### Screen mirror with scrcpy
 - install `scrcpy` with `Ubuntu Software`
 - plug your phone with USB
-- `ADB="/home/alberto/Android/Sdk/platform-tools/adb" scrcpy`
 - `ADB="/home/stefano/Android/Sdk/platform-tools/adb" scrcpy`
 
 #### React Native: Google API error
 Run these commands to clean caches
 ```
-# NPM
+NPM
 watchman watch-del-all
 npm cache clean
 
-# Android, 
+ANDROID 
 if you encounter `com.android.dex.DexException: Multiple dex files define Landroid/support/v7/appcompat/R$anim`,
 then clear build folder:
 cd android
