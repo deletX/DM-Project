@@ -66,11 +66,11 @@ then:
 finally http://192.168.1.12:8000/admin/
 - Log in with credential created previously
 - Go in `Django OAuth Toolkit/Applications`
-- Client id: `4mOLHPfJL0zueHOlawvJXsdnImpjOv3PmLdmm3NT`
+- Client id: `APP_CLIENT_ID`
 - User: `1` (could be different according to the numbers of superusers)
 - Client type: `Confidential`
 - Authorization grant type: `Resource owner password-based`
-- Client secret: `FW4dYuZsLmE6PQHk7qrPAc4shQhdx2hknqNOh58XO3JQ6PFI8um2z6wyJubxF6hKNOOOJfZUQ67jm5ApN5HJioq4XsNAGSbCLiQZqrqfo6jiy67ddpvMOl3Be8SATFSL`
+- Client secret: `APP_CLIENT_SECRET`
 - `Save`
 
 #### Add postgres DB to settings.py
